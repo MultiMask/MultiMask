@@ -12,7 +12,7 @@ const KEY_PASS = "wallet_pass";
 
 class Wallet {
   init() {
-    storage.get(KEY_PK).then(pk => { console.log(pk); this.pk = pk });
+    storage.get(KEY_PK).then(pk => { this.pk = pk });
     storage.get(KEY_ADDRESS).then(addr => (this.address = addr));
     storage.get(KEY_PASS).then(pass => (this.pass = pass));
   }

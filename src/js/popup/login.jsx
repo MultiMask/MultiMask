@@ -55,7 +55,7 @@ export default class Auth extends React.Component {
     return (
       <div className="login__wrapper">
         <header className="login__wrapper-header">
-          <img src="bitmask.png" />
+          <h1>MultiMask</h1>
         </header>
         <div className="login__content">
           {this.showCreate() && (

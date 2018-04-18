@@ -1,5 +1,5 @@
 import PostMessageStream from 'post-message-stream';
-import BitWeb from './libs/bitMask';
+import BitWeb from './libs/bitWeb';
 let contentStream;
 
 console.log('inpage script');
