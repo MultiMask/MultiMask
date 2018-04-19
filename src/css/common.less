@@ -1,0 +1,33 @@
+@col_primary: #00bd39;
+
+.btn {
+  text-shadow: none;
+  line-height: 1.2;
+  display: inline-block;
+  outline: 0;
+  padding: 10px 16px;
+  margin: 0 10px 0 0;
+  position: relative;
+  border-radius: 3px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none !important;
+  text-align: center;
+  font-weight: normal !important;
+  background: #999;
+  color: white;
+
+  &:hover {
+    background: #4d4d50;
+  }
+
+  &.primary {
+    background: @col_primary;
+
+    &:hover {
+      background: darken(@col_primary, 10%);
+    }
+  }
+}

@@ -12,6 +12,7 @@
     "babel-preset-es2015": "^6.24.1",
     "bip38": "^2.0.2",
     "bitcoinjs-lib": "^3.3.2",
+    "classnames": "^2.2.5",
     "emotion": "^9.0.1",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",

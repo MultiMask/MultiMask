@@ -26,9 +26,9 @@ export default class Balance extends React.Component {
   }
 
   onSendClick = () => {
-    if (this.props.onSend) {
-      this.props.onSend();
-    }
+    messaging.send({
+      type: "tx_create"
+    });
   };
 
   // transactions() {

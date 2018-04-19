@@ -2,6 +2,7 @@ import PortStream from "./port-stream";
 
 class Messaging {
   constructor(name) {
+    this.name = name;
     this.init(name);
 
     this.listeners = {};

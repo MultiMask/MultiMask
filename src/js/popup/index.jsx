@@ -1,75 +1,63 @@
 import React from "react";
 
-import Login from "./login";
+import Create from "./create";
 import Balance from "./balance";
+import Login from "./login";
 
 import messaging from "./message";
-import { isHavePass } from './../models/getter';
+import { getPass } from './../models/getter';
 
 export default class Popup extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      login: false
+      login: false,
+      isNew: false
     };
   }
 
   componentDidMount() {
-    messaging.send({
-      type: "is_auth"
-    });
+    this.addListeners();
 
-    // this.addListeners();
-    this.checkPass();
+    messaging.send({
+      type: "auth:check"
+    });
   }
+
 
   addListeners() {
-    // messaging.on("has_wallet_result", data => {
-    //   this.setState({
-    //     ...data
-    //   });
-    // });
+    messaging.on("auth:check:success", data => {
+      this.setState({ login: true })
+    });
 
-    // messaging.on("wallet_create_success", data => {
-    //   this.setState({
-    //     storage: true,
-    //     login: true
-    //   });
-    // });
-
-    // messaging.on("wallet_auth_result", res => {
-    //   if (!res) {
-    //     this.setState({ error: true });
-    //   } else {
-    //     this.setState({
-    //       storage: true,
-    //       login: true
-    //     });
-    //   }
-    // });
+    messaging.on("auth:check:failre", data => {
+      this.checkPass((passHash) => {
+        this.setState({ isNew: !passHash })
+      });
+    });
   }
 
-  checkPass() {
-    isHavePass().then(result => {
+  checkPass(cb) {
+    getPass().then(result => {
       this.setState({ login: !!result })
+      cb();
     })
   }
 
-  onSend = () => {
-    messaging.send({
-      type: "tx_create"
-    });
-  };
-
   render() {
-    return (
-      <div>
-        {!this.state.login && (
-          <Login isLogin={this.state.login} />
-        )}
-        {this.state.login && <Balance onSend={this.onSend} />}
-      </div>
-    );
+    if (this.state.login) {
+      return <Balance />;
+    }
+
+    if (this.state.isNew) {
+      return <Create />
+    }
+
+    if (!this.state.isNew) {
+      return <Login />
+    }
+
+    return null;
   }
 }

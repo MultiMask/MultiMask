@@ -1,5 +1,3 @@
 import sha256 from 'sha256';
 
-export function hash(srt) {
-    return sha256(str);
-}
+export const hash = str => sha256(str);
