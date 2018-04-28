@@ -5,16 +5,21 @@ const salt = 'multimask';
 const withSalt = pass => `${salt}${pass}`;
 
 export default {
+  accounts: [],
+
   init() {
-    getPass().then(passHash => this.passHash);
+    getPass().then(passHash => {
+      this.passHash = passHash;
+    });
   },
 
   isAuth() {
+    console.log('saved pass', this.password)
     return !!this.password;
   },
 
-  auth(pass) {
-    const isAuth = hash(withSalt(pass)) === this.passHash;
+  login(pass) {
+    const isAuth = withSalt(pass) === this.passHash;
 
     if (isAuth) {
       this.password = pass;
@@ -23,8 +28,12 @@ export default {
     return isAuth;
   },
 
-  login(pass) {
+  create(pass) {
     setPass(withSalt(pass));
     this.password = pass;
+  },
+
+  getAccounts() {
+    return this.accounts;
   }
 };

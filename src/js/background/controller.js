@@ -5,8 +5,9 @@ import App from './../models/app';
 
 class Controller {
   init() {
-    console.log("init ctrl", App);
+    // console.log("init ctrl", App);
 
+    App.init();
     wallet.init();
     messaging.init();
 

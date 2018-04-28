@@ -4,14 +4,21 @@ export default ({ messaging, wallet, App }) => {
     const isAuth = App.isAuth();
 
     if (isAuth) {
-      messaging.send({ type: 'auth:check:sucess' });
+      messaging.send({ type: 'auth:check:success' });
     } else {
       messaging.send({ type: 'auth:check:failre' });
     }
   });
 
   messaging.on('auth:init', data => {
-    console.log(data);
-    App.login(data.pass);
+    App.create(data.pass);
+  });
+
+  messaging.on('auth:login', data => {
+    const completed = App.login(data.pass);
+
+    messaging.send({ type: 'auth:login:result', payload: {
+      login: completed
+    }});
   });
 };

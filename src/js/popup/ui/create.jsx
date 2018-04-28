@@ -1,6 +1,6 @@
 import React from 'react';
 
-import messaging from './message';
+import messaging from '../message';
 
 export default class Auth extends React.Component {
   constructor(opts) {

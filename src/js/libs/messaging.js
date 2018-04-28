@@ -21,6 +21,7 @@ class Messaging {
   }
 
   fire = msg => {
+    console.log(`${this.name} recieve: `, msg);
     const { type, payload } = msg;
 
     if (this.listeners[type] && this.listeners[type].length > 0) {
@@ -37,6 +38,7 @@ class Messaging {
   }
 
   send(msg) {
+    console.log(`${this.name} send: `, msg);
     this.portStream.write(msg);
   }
 }
