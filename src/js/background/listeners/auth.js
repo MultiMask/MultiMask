@@ -11,6 +11,7 @@ export default ({ messaging, wallet, App }) => {
   });
 
   messaging.on('auth:init', data => {
+    console.log(data);
     App.login(data.pass);
   });
 };

@@ -23,6 +23,10 @@ export default class Auth extends React.Component {
     }
   };
 
+  handleDone = () => {
+    console.log('done');
+  };
+
   handleBack = () => {
     this.setState({ step: 1 });
   };
@@ -47,10 +51,10 @@ export default class Auth extends React.Component {
   };
 
   validatePass(pass) {
-    if (!pass || pass.length < 6) {
-      this.setState({ error: 'Too short password.' });
-      return false;
-    }
+    // if (!pass || pass.length < 6) {
+    //   this.setState({ error: 'Too short password.' });
+    //   return false;
+    // }
 
     this.setState({ error: null });
     return true;
@@ -110,7 +114,7 @@ export default class Auth extends React.Component {
           {this.state.step == 3 && (
             <div>
               <button
-                onClick={this.handleNext}
+                onClick={this.handleDone}
                 className="login__create btn primary"
               >
                 Done

@@ -2,7 +2,7 @@ import { getPass, setPass } from './getter';
 import { hash } from './../libs/cipher';
 
 const salt = 'multimask';
-const withSalt = pass => `${pass}${salt}`;
+const withSalt = pass => `${salt}${pass}`;
 
 export default {
   init() {
@@ -24,10 +24,7 @@ export default {
   },
 
   login(pass) {
-    console.log(pass);
-    console.log(withSalt(pass));
-    console.log(hash(withSalt(pass)));
-    // setPass(withSalt(pass));
-    // this.password = psss;
+    setPass(withSalt(pass));
+    this.password = pass;
   }
 };
