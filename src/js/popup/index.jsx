@@ -1,9 +1,10 @@
 import React from "react";
 
-import Create from "./ui/create";
+import Create from "./ui/login/create";
 import Balance from "./ui/balance";
-import Login from "./ui/login";
+import Login from "./ui/login/login";
 import Wrapper from "./ui";
+import Wallet from './ui/wallet';
 
 import messaging from "./message";
 import { getPass } from './../models/getter';
@@ -16,6 +17,7 @@ export default class Popup extends React.Component {
       login: false,
       isNew: false,
       isCreate: false,
+      creation: false,
     };
   }
 
@@ -45,16 +47,17 @@ export default class Popup extends React.Component {
   }
 
   onCreate = () => {
-    console.log('create ');
+    this.setState({ creation: true })
   }
 
   onLogin = () => {
     this.setState({ login: true });
-    console.log('login');
   }
 
   render() {
-    console.log('state', this.state);
+    if (this.state.creation) {
+      return <Wallet />;
+    }
 
     if (this.state.login) {
       return <Wrapper

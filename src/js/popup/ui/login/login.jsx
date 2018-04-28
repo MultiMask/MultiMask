@@ -1,8 +1,8 @@
 import React from 'react';
 
-import messaging from '../message';
+import messaging from '../../message';
 
-import App from '../../models/app';
+import App from '../../../models/app';
 
 export default class Auth extends React.Component {
   constructor(opts) {
