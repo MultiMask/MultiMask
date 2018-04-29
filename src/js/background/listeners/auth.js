@@ -1,4 +1,4 @@
-export default ({ messaging, wallet, App }) => {
+export default ({ messaging, App }) => {
   // Is Auth
   messaging.on('auth:check', () => {
     const isAuth = App.isAuth();

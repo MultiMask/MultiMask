@@ -1,4 +1,9 @@
-export default ({ messaging, wallet, App }) => {
+export default ({ messaging, App }) => {
+    // Get Account
+    messaging.on("account:create", account => {
+        App.addAccount(account);
+    });
+
     // Is has wallet
     // messaging.on("has_wallet", () => {
     //     wallet.isHasWallet().then(res => {

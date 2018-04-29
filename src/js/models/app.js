@@ -1,5 +1,6 @@
-import { getPass, setPass } from './getter';
+import { getPass, setPass, getAccountList, setAccountList } from './getter';
 import { hash } from './../libs/cipher';
+import AccountFactory from './accountFactory';
 
 const salt = 'multimask';
 const withSalt = pass => `${salt}${pass}`;
@@ -11,10 +12,14 @@ export default {
     getPass().then(passHash => {
       this.passHash = passHash;
     });
+
+    getAccountList().then(accounts => {
+      console.log(accounts);
+    });
   },
 
   isAuth() {
-    console.log('saved pass', this.password)
+    // console.log('saved pass', this.password)
     return !!this.password;
   },
 
@@ -35,5 +40,20 @@ export default {
 
   getAccounts() {
     return this.accounts;
+  },
+
+  addAccount(account) {
+    const fullAccount = AccountFactory.restore(account);
+
+    console.log(fullAccount);
+
+    this.accounts.push(account);
+    this.save();
+  },
+
+  save() {
+    let accs = this.accounts.map(acc => acc.name);
+
+    console.log(accs);
   }
 };

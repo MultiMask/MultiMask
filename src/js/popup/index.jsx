@@ -50,13 +50,19 @@ export default class Popup extends React.Component {
     this.setState({ creation: true })
   }
 
+  onCreated = () => {
+    this.setState({ creation: false })
+  }
+
   onLogin = () => {
     this.setState({ login: true });
   }
 
   render() {
     if (this.state.creation) {
-      return <Wallet />;
+      return <Wallet 
+        onCreated={this.onCreated}
+      />;
     }
 
     if (this.state.login) {

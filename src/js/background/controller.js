@@ -1,4 +1,4 @@
-import wallet from "../models/wallet";
+// import wallet from "../models/wallet";
 import messaging from "./message";
 import listeners from './listeners';
 import App from './../models/app';
@@ -8,10 +8,10 @@ class Controller {
     // console.log("init ctrl", App);
 
     App.init();
-    wallet.init();
+    // wallet.init();
     messaging.init();
 
-    listeners({ messaging, wallet, App });
+    listeners({ messaging, App });
   }
 }
 

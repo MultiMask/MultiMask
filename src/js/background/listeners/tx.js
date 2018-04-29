@@ -2,7 +2,7 @@ import createWindow from "../../libs/txWindow";
 
 const tx = [];
 
-export default ({ messaging, wallet, App }) => {
+export default ({ messaging, App }) => {
     // Show window with TX
     messaging.on("tx_send", data => {
         tx.push({
@@ -32,12 +32,12 @@ export default ({ messaging, wallet, App }) => {
     });
 
     // Render TX in popup
-    messaging.on("payment_submit", payload => {
-        const { id } = payload;
-        tx[id] = {
-            ...tx[id],
-            ...payload
-        };
-        wallet.createTX(tx[id]);
-    });
+    // messaging.on("payment_submit", payload => {
+    //     const { id } = payload;
+    //     tx[id] = {
+    //         ...tx[id],
+    //         ...payload
+    //     };
+    //     wallet.createTX(tx[id]);
+    // });
 };
