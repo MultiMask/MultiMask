@@ -16,19 +16,19 @@ export default class Balance extends React.Component {
 
   componentDidMount() {
     messaging.send({
-      type: 'wallet_info'
+      type: 'account:info'
     })
 
-    messaging.on('wallet_info_result', (data) => {
+    messaging.on('account:info:result', data => {
       this.setState(state => ({
         ...state,
-        ...data
+        data
       }))
     });
   }
 
   hasAccount() {
-    return App.getAccounts().length > 0;
+    return !!this.state.data;
   }
 
   onSendClick = () => {
@@ -58,6 +58,8 @@ export default class Balance extends React.Component {
   // }
 
   render() {
+    console.log(this.state);
+
     if (this.hasAccount()) {  
       return (
         <div className="balance">

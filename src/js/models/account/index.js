@@ -11,16 +11,18 @@ export default class Account {
     }
 
     create(seed) {
+        console.log('init create: ', seed);
         this.wallet.create(seed);
 
         return this.wallet.getSeed();
     }
 
-    save() {
-        
+    getInfo() {
+        console.log('get info');
+        return this.wallet.getInfo();
     }
 
-    load() {
-        
-    }
+    save() {}
+
+    load() {}
 }

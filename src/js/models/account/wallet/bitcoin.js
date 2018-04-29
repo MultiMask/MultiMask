@@ -13,48 +13,49 @@ const KEY_ADDRESS = "wallet_address";
 const KEY_PASS = "wallet_pass";
 
 const URL_NODE = 'https://testnet.blockchain.info';
+const NETWORK = "testnet";
+// const NETWORK = "livenet";
 
 export default class BitcoinWallet {
   constructor() {}
   
   create(seed) {
     console.log('seed>', seed);
+  
     this.mnemonic = new Mnemonic(seed);
-
     this.seed = this.mnemonic.toString();
-    this.priv = this.mnemonic.toHDPrivateKey().privateKey.toWIF();
 
-    console.log(this.seed);
-    console.log(this.priv);
+    const HDPrivateKey = this.mnemonic.toHDPrivateKey(null, NETWORK);
+    // console.log(HDPrivateKey);
+
+    this.priv = HDPrivateKey.privateKey.toWIF();
+    this.address = HDPrivateKey.privateKey.toAddress(NETWORK).toString();
+
+    // console.log(this.seed);
+    // console.log(this.priv);
+    // console.log(this.address);
   }
 
   getSeed() {
     return this.seed;
   }
 
-  // init() {
-  //   storage.get(KEY_PK).then(pk => { this.pk = pk });
-  //   storage.get(KEY_ADDRESS).then(addr => (this.address = addr));
-  //   storage.get(KEY_PASS).then(pass => (this.pass = pass));
-  // }
-
+  /**
+   * Depricated, Use bitcoinjs-lib
+   */
   // create(pass) {
-  //   const testnet = bitcoin.networks.bitcoin;
-  //   const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
+    // const testnet = bitcoin.networks.bitcoin;
+    // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
 
-  //   this.pk = keyPair.toWIF();
-  //   this.address = keyPair.getAddress();
-  //   this.pass = pass;
-
-  //   storage.set(KEY_PK, this.pk);
-  //   storage.set(KEY_ADDRESS, this.address);
-  //   storage.set(KEY_PASS, pass);
+    // this.pk = keyPair.toWIF();
+    // this.address = keyPair.getAddress();
+    // this.pass = pass;
   // }
 
   /**
-   * Depricated, testing
+   * Depricated, testing BIP-38
    */
-  test() {
+  // test() {
     // console.log('test');
     // const testnet = bitcoin.networks.testnet;
     // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
@@ -87,18 +88,20 @@ export default class BitcoinWallet {
     // console.log('decrypt',
     //   wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed)
     // );
-  }
+  // }
 
   getInfo() {
-
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
       const lastOUT = res.data.txs[0];
-      const outputIndex = lastOUT.out.findIndex(item => item.addr === this.address);
+      const output = lastOUT ? lastOUT.hash : null;
+      const outputIndex = lastOUT && lastOUT.out 
+        ? lastOUT.out.findIndex(item => item.addr === this.address)
+        : null;
 
       return {
         index: outputIndex,
         address: res.data.address,
-        output: lastOUT.hash,
+        output: output,
         balance: res.data.final_balance,
         txs: res.data.txs
       }

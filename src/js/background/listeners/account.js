@@ -4,6 +4,17 @@ export default ({ messaging, App }) => {
         App.addAccount(account);
     });
 
+     // Get Wallet info
+    messaging.on("account:info", () => {
+        Promise.all(App.getAccounts().map(acc => acc.getInfo()))
+            .then((payload) => {
+                messaging.send({
+                    type: "account:info:result",
+                    payload
+                });
+            })
+    });
+
     // Is has wallet
     // messaging.on("has_wallet", () => {
     //     wallet.isHasWallet().then(res => {
@@ -29,15 +40,5 @@ export default ({ messaging, App }) => {
     //         type: "wallet_auth_result",
     //         payload: wallet.auth(payload.pass)
     //     });
-    // });
-
-    // // GetWallet info
-    // messaging.on("wallet_info", () => {
-    //     wallet.getInfo().then(data => {
-    //         messaging.send({
-    //             type: "wallet_info_result",
-    //             payload: data
-    //         });
-    //     })
     // });
 };

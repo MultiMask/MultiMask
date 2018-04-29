@@ -45,9 +45,7 @@ export default {
   addAccount(account) {
     const fullAccount = AccountFactory.restore(account);
 
-    console.log(fullAccount);
-
-    this.accounts.push(account);
+    this.accounts.push(fullAccount);
     this.save();
   },
 
