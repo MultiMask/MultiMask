@@ -41,7 +41,6 @@ export default {
 
     load(accountName) {
         return getWallet(accountName).then(str => {
-            // console.log(str);
             // TODO: add decoded
             const decoded = JSON.parse(str);
     

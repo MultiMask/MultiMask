@@ -23,8 +23,6 @@ export default class Wallet extends React.Component {
         this.account = AccountFactory.create({network: this.state.network});
         const seed = this.account.create();
 
-        console.log('seed', seed);
-
         this.setState({ step: 2, seed });
     }
 

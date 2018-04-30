@@ -17,7 +17,11 @@ export default class Account {
     }
 
     getInfo() {
-        console.log('get info');
-        return this.wallet.getInfo();
+        return this.wallet.getInfo()
+            .then(info => ({
+                name: this.name,
+                network: this.network,
+                info,
+            }))
     }
 }

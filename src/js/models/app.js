@@ -19,10 +19,12 @@ export default {
   restore(accs) {
     console.log('load all accounts:', accs);
     
-    Promise.all(accs.map(accName => AccountFactory.load(accName)))
-      .then(accounts => {
-        accounts.forEach(acc => this.addRawAccount(acc));
-      })
+    if (accs && accs.length > 0) {
+      Promise.all(accs.map(accName => AccountFactory.load(accName)))
+        .then(accounts => {
+          accounts.forEach(acc => this.addRawAccount(acc));
+        })
+    }
   },
 
   clearList() {
