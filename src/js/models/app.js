@@ -13,13 +13,23 @@ export default {
       this.passHash = passHash;
     });
 
-    getAccountList().then(accounts => {
-      console.log(accounts);
-    });
+    getAccountList().then(this.restore.bind(this));
+  },
+
+  restore(accs) {
+    console.log('load all accounts:', accs);
+    
+    Promise.all(accs.map(accName => AccountFactory.load(accName)))
+      .then(accounts => {
+        accounts.forEach(acc => this.addRawAccount(acc));
+      })
+  },
+
+  clearList() {
+    setAccountList([]);
   },
 
   isAuth() {
-    // console.log('saved pass', this.password)
     return !!this.password;
   },
 
@@ -45,13 +55,22 @@ export default {
   addAccount(account) {
     const fullAccount = AccountFactory.restore(account);
 
-    this.accounts.push(fullAccount);
+    this.addRawAccount(fullAccount);
     this.save();
+  },
+
+  addRawAccount(acc) {
+    this.accounts.push(acc);
   },
 
   save() {
     let accs = this.accounts.map(acc => acc.name);
+    setAccountList(accs);
 
-    console.log(accs);
+    this.saveAccounts();
+  },
+
+  saveAccounts() {
+    this.accounts.forEach(acc => AccountFactory.save(acc))
   }
 };

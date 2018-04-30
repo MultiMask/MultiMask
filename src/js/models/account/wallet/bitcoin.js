@@ -1,16 +1,9 @@
 import bitcoin from "bitcoinjs-lib";
 import Mnemonic from "bitcore-mnemonic";
-import bip38 from "bip38";
-import wif from "wif";
+// import bip38 from "bip38";
+// import wif from "wif";
 
 import axios from 'axios';
-
-import storage from "../../storage";
-import { ENGINE_METHOD_DIGESTS } from "constants";
-
-const KEY_PK = "wallet_PK";
-const KEY_ADDRESS = "wallet_address";
-const KEY_PASS = "wallet_pass";
 
 const URL_NODE = 'https://testnet.blockchain.info';
 const NETWORK = "testnet";
@@ -20,8 +13,6 @@ export default class BitcoinWallet {
   constructor() {}
   
   create(seed) {
-    console.log('seed>', seed);
-  
     this.mnemonic = new Mnemonic(seed);
     this.seed = this.mnemonic.toString();
 
@@ -30,10 +21,6 @@ export default class BitcoinWallet {
 
     this.priv = HDPrivateKey.privateKey.toWIF();
     this.address = HDPrivateKey.privateKey.toAddress(NETWORK).toString();
-
-    // console.log(this.seed);
-    // console.log(this.priv);
-    // console.log(this.address);
   }
 
   getSeed() {
