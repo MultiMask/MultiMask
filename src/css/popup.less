@@ -123,12 +123,27 @@ body {
 }
 
 .header {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   width: 300px;
+  height: 33px;
   margin: 0 10px 10px;
   padding-top: 10px;
   padding-bottom: 10px;
 
   border-bottom: 1px solid #ccc;
+
+  &_back {
+    position: absolute;
+    top: 3px;
+    font-size: 18px;
+  }
+
+  &_add {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    font-size: 18px;
+  }
 }
