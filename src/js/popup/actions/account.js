@@ -2,6 +2,7 @@ import messaging from "../message";
 
 import {
   ACCOUNT_ACTIVE,
+  ACCOUNT_CREATE,
   ACCOUNT_BACK,
   ACCOUNT_BUY,
   ACCOUNT_INFO,
@@ -13,6 +14,12 @@ export default {
   getInfo: () => (dispatch, getState) => {
     messaging.send({
       type: ACCOUNT_INFO
+    });
+  },
+  create: account => (dispatch, getState) => {
+    messaging.send({
+      type: ACCOUNT_CREATE,
+      payload: account
     });
   },
   setAccount: accs => (dispatch, getState) => {
