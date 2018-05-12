@@ -1,6 +1,8 @@
 import React from "react";
 import moment from "moment";
 import axios from "axios";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
 
 import messaging from "../../message";
@@ -8,16 +10,22 @@ import networkImg from "../../../helpers/networkImg";
 import networkSign from "../../../helpers/networkSign";
 import App from '../../../models/app';
 
-export default class AccountInfo extends React.Component {
+class AccountInfo extends React.Component {
+
+  get choosenAccount() {
+    const { accounts, wallet } = this.props;
+
+    return accounts.find(acc => acc.name === wallet);
+  }
 
   get image() {
-    const { account } = this.props;
+    const account = this.choosenAccount;
 
     return <img src={networkImg(account)} />;
   }
 
   get balance() {
-    const { account } = this.props;
+    const account = this.choosenAccount;
 
     return `${account.info.balance} ${networkSign(account)}`;
   }
@@ -29,7 +37,7 @@ export default class AccountInfo extends React.Component {
   }
 
   render() {
-    const { account } = this.props;
+    const account = this.choosenAccount;
     console.log('account', account);
 
     return (
@@ -60,3 +68,10 @@ export default class AccountInfo extends React.Component {
     return null;
   }
 }
+
+export default connect(
+  state => ({
+    accounts: state.balance.accounts,
+    wallet: state.balance.wallet
+  }),
+)(AccountInfo);

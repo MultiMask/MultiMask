@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 
-export const rootReducer = combineReducers({
+import balance from '../reducers/balances';
 
+export const rootReducer = combineReducers({
+    balance
 })

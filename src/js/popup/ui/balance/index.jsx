@@ -19,36 +19,21 @@ class Balance extends React.Component {
     const { dispatch } = props;
 
     this.actions = bindActionCreators(actions, dispatch);
-
-    // console.log('acttion', this.actions);
-
-    this.state = {
-      loading: false,
-    }
+    this.state = {}
   }
 
   componentDidMount() {
     this.setState({ loading: true });
     this.actions.getInfo();
-
-    messaging.on('account:info:result', data => {
-      this.setState(state => ({
-        ...state,
-        loading: false,
-        response: true,
-        data
-      }))
-    });
   }
 
   chooseWallet = (walletName) => {
-    console.log('walletName', walletName);
-    this.setState({ choosenWallet: walletName });
+    this.actions.setActive(walletName);
   }
 
   get items() {
-    if (this.state.data && this.state.data.length > 0) {
-      return this.state.data.map(accInfo => {
+    if (this.props.accounts && this.props.accounts.length > 0) {
+      return this.props.accounts.map(accInfo => {
         return <Item account={accInfo} key={accInfo.name} onChoose={this.chooseWallet} />;
       })
     }
@@ -57,16 +42,17 @@ class Balance extends React.Component {
   }
 
   get choosenAccount() {
-    const { choosenWallet, data } = this.state;
+    const { choosenWallet } = this.state;
+    const { accounts } = this.props;
 
-    return data.find(acc => acc.name === choosenWallet);
+    return accounts.find(acc => acc.name === choosenWallet);
   }
 
   render() {
     console.log('state', this.state);
     console.log('props', this.props);
 
-    if (this.state.choosenWallet) {
+    if (this.props.wallet) {
       return (
         <div className="balance">
           <Details account={this.choosenAccount} />
@@ -74,7 +60,7 @@ class Balance extends React.Component {
       );
     }
 
-    if (this.state.response) {
+    if (this.props.accounts !== null) {
       return (
         <div className="balance">
           {this.items}
@@ -89,5 +75,8 @@ class Balance extends React.Component {
 }
 
 export default connect(
-  null,
+  state => ({
+    accounts: state.balance.accounts,
+    wallet: state.balance.wallet
+  }),
 )(Balance);
