@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux';
 
 import Create from "./ui/login/create";
 import Balance from "./ui/balance";
@@ -9,7 +10,7 @@ import Wallet from './ui/wallet';
 import messaging from "./message";
 import { getPass } from './../models/getter';
 
-export default class Popup extends React.Component {
+class Popup extends React.Component {
   constructor(opts) {
     super(opts);
 
@@ -60,7 +61,7 @@ export default class Popup extends React.Component {
 
   render() {
     if (this.state.creation) {
-      return <Wallet 
+      return <Wallet
         onCreated={this.onCreated}
       />;
     }
@@ -69,8 +70,8 @@ export default class Popup extends React.Component {
       return <Wrapper
         onCreate={this.onCreate}
       >
-          <Balance />
-        </Wrapper>;
+        <Balance />
+      </Wrapper>;
     }
 
     if (this.state.isNew) {
@@ -78,7 +79,7 @@ export default class Popup extends React.Component {
     }
 
     if (!this.state.isNew) {
-      return <Login 
+      return <Login
         onLogin={this.onLogin}
       />
     }
@@ -86,3 +87,5 @@ export default class Popup extends React.Component {
     return null;
   }
 }
+
+export default connect()(Popup);

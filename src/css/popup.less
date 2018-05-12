@@ -94,8 +94,14 @@ body {
     }
 
     &_info {
+      width: 220px;
+      overflow: hidden;
       padding-left: 10px;
       text-align: left;
+    }
+
+    &_net {
+      padding-left: 10px;
     }
 
     &_address {
@@ -107,9 +113,11 @@ body {
       font-size: 14px;
     }
 
-    &:hover {
-      background: #eee;
-      cursor: pointer;
+    .list {
+      &:hover {
+        background: #eee;
+        cursor: pointer;
+      }
     }
   }
 }
