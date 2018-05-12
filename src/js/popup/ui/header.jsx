@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import FontAwesome from "react-fontawesome";
 
-import actions from "../actions/balance";
+import actions from "../actions/account";
 
 class Header extends React.Component {
   constructor(props) {
@@ -14,13 +14,11 @@ class Header extends React.Component {
   }
 
   handleBack = () => {
-    console.log("back");
     this.actions.back();
   };
 
   get showBack() {
     const { wallet, buy, send } = this.props;
-
     return !!wallet || buy || send;
   }
 
@@ -41,8 +39,8 @@ class Header extends React.Component {
 }
 
 export default connect(state => ({
-  accounts: state.balance.accounts,
-  wallet: state.balance.wallet,
-  buy: state.balance.buy,
-  send: state.balance.send
+  accounts: state.account.accounts,
+  wallet: state.account.wallet,
+  buy: state.account.buy,
+  send: state.account.send
 }))(Header);

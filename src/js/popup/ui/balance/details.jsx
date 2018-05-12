@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import FontAwesome from "react-fontawesome";
 
-import actions from "../../actions/balance";
+import actions from "../../actions/account";
 
 import networkImg from "../../../helpers/networkImg";
 import networkSign from "../../../helpers/networkSign";
@@ -81,6 +81,6 @@ class AccountInfo extends React.Component {
 }
 
 export default connect(state => ({
-  accounts: state.balance.accounts,
-  wallet: state.balance.wallet
+  accounts: state.account.accounts,
+  wallet: state.account.wallet
 }))(AccountInfo);

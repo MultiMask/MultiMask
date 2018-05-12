@@ -15,6 +15,6 @@ class Buy extends React.Component {
 }
 
 export default connect(state => ({
-  accounts: state.balance.accounts,
-  wallet: state.balance.wallet
+  accounts: state.account.accounts,
+  wallet: state.account.wallet
 }))(Buy);

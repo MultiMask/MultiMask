@@ -1,6 +1,6 @@
 import { ACCOUNT_INFO_RESULT} from '../../constants/account';
 
-import action from '../actions/balance';
+import action from '../actions/account';
 import messaging from '../message';
 
 export default function ({ dispatch, getState }) {

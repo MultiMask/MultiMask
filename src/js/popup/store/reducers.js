@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import balance from '../reducers/balances';
+import account from '../reducers/account';
 
 export const rootReducer = combineReducers({
-    balance
+    account
 })

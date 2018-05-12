@@ -4,14 +4,14 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import actions from "../../actions/balance";
+import actions from "../../actions/account";
 
 import Item from "./item";
 import Details from "./details";
 import Buy from "./buy";
 import Send from "./send";
 
-class Balance extends React.Component {
+class Account extends React.Component {
   constructor(props) {
     super(props);
     const { dispatch } = props;
@@ -82,8 +82,8 @@ class Balance extends React.Component {
 }
 
 export default connect(state => ({
-  accounts: state.balance.accounts,
-  wallet: state.balance.wallet,
-  buy: state.balance.buy,
-  send: state.balance.send
-}))(Balance);
+  accounts: state.account.accounts,
+  wallet: state.account.wallet,
+  buy: state.account.buy,
+  send: state.account.send
+}))(Account);
