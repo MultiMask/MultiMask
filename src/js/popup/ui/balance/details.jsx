@@ -8,6 +8,8 @@ import actions from "../../actions/balance";
 import networkImg from "../../../helpers/networkImg";
 import networkSign from "../../../helpers/networkSign";
 
+import TXS from "./txs";
+
 class AccountInfo extends React.Component {
   constructor(props) {
     super(props);
@@ -18,25 +20,21 @@ class AccountInfo extends React.Component {
 
   get choosenAccount() {
     const { accounts, wallet } = this.props;
-
     return accounts.find(acc => acc.name === wallet);
   }
 
   get image() {
     const account = this.choosenAccount;
-
     return <img src={networkImg(account)} />;
   }
 
   get balance() {
     const account = this.choosenAccount;
-
     return `${account.info.balance} ${networkSign(account)}`;
   }
 
   handleClick = () => {
     const { account, onChoose } = this.props;
-
     onChoose(account.name);
   };
 
@@ -71,6 +69,9 @@ class AccountInfo extends React.Component {
           <div className="btn primary small" onClick={this.handleSend}>
             send
           </div>
+        </div>
+        <div>
+          <TXS account={account} />
         </div>
       </div>
     );

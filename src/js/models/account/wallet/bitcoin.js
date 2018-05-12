@@ -89,7 +89,7 @@ export default class BitcoinWallet {
         index: outputIndex,
         address: res.data.address,
         output: output,
-        balance: res.data.final_balance,
+        balance: res.data.final_balance / 1e8,
         txs: res.data.txs
       }
     });
@@ -123,7 +123,7 @@ export default class BitcoinWallet {
       txb.sign(0, keyPair);
 
       axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
-        console.log(data);
+        console.log('TX hash:', data);
       })
     })
   }
