@@ -4,7 +4,7 @@ import {
     ACCOUNT_BUY,
     ACCOUNT_SEND,
     ACCOUNT_BACK
-} from '../actions/balance';
+} from '../../constants/account';
 
 const initialState = {
     accounts: null,
