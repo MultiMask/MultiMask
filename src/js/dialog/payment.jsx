@@ -29,7 +29,7 @@ export default class Payment extends React.Component {
     return (
       <div className="dialog">
         <header className="header">
-          <img src="bitmask.png" />
+          <img src="logo.png" />
         </header>
         <div className="dialog-title">
           Send TX with params:

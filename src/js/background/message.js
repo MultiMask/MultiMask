@@ -1,11 +1,7 @@
 import PortStream from "../libs/port-stream";
-import createWindow from "../libs/txWindow";
 
 class Messaging {
-  constructor() {
-    this.listeners = {};
-    this.tx = [];
-  }
+  listeners = {}
 
   init() {
     // TODO: chrome dependency
