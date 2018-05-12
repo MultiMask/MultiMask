@@ -20,7 +20,7 @@ export default class Wallet extends React.Component {
     }
 
     handleDone = () => {
-        this.account = AccountFactory.create({network: this.state.network});
+        this.account = AccountFactory.create({ network: this.state.network });
         const seed = this.account.create();
 
         this.setState({ step: 2, seed });
@@ -37,7 +37,7 @@ export default class Wallet extends React.Component {
 
     render() {
         return (
-            <div className="header center">
+            <div className="header">
                 {this.state.step === 1 && (
                     <div>
                         <div>

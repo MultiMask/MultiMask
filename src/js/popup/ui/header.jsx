@@ -1,5 +1,6 @@
 import React from "react";
 import App from '../../models/app';
+import FontAwesome from 'react-fontawesome';
 
 export default class Header extends React.Component {
 
@@ -14,16 +15,16 @@ export default class Header extends React.Component {
                     Header
                 </div>
             );
-        } else {
-            return (
-                <div className="header center">
-                    <div className="btn primary"
-                        onClick={this.props.onCreate}    
-                    >
-                        Create new Wallet
-                    </div>
-                </div>
-            );
         }
+
+        return (
+            <div className="header">
+                <div
+                    onClick={this.props.onCreate}
+                >
+                    <FontAwesome name="plus-circle" />
+                </div>
+            </div>
+        );
     }
 }

@@ -13,12 +13,12 @@ export default class Balance extends React.Component {
     super(opts);
 
     this.state = {
-        loading: false,
+      loading: false,
     }
   }
 
   componentDidMount() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     messaging.send({
       type: 'account:info'
     })
@@ -33,10 +33,15 @@ export default class Balance extends React.Component {
     });
   }
 
+  chooseWallet = (walletName) => {
+    console.log('walletName', walletName);
+    this.setState({ choosenWallet: walletName });
+  }
+
   getItems() {
     if (this.state.data && this.state.data.length > 0) {
       return this.state.data.map(accInfo => {
-        return <Item account={accInfo}/>;
+        return <Item account={accInfo} key={accInfo.name} onChoose={this.chooseWallet} />;
       })
     }
 
@@ -44,7 +49,9 @@ export default class Balance extends React.Component {
   }
 
   render() {
-    if (this.state.response) {  
+    console.log('state', this.state);
+
+    if (this.state.response) {
       return (
         <div className="balance">
           {this.getItems()}
@@ -53,7 +60,7 @@ export default class Balance extends React.Component {
     }
 
     return (
-      <div>Loading...</div> 
+      <div>Loading...</div>
     );
   }
 }

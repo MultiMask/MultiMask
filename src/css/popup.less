@@ -84,8 +84,41 @@ body {
     margin-top: 20px;
     text-align: center;
   }
+
+  .item {
+    display: flex;
+    padding: 10px;
+
+    &_icon img {
+      height: 32px;
+    }
+
+    &_info {
+      padding-left: 10px;
+      text-align: left;
+    }
+
+    &_address {
+      font-size: 10px;
+      color: #999;
+    }
+
+    &_balance {
+      font-size: 14px;
+    }
+
+    &:hover {
+      background: #eee;
+      cursor: pointer;
+    }
+  }
 }
 
 .header {
   width: 300px;
+  margin: 0 10px 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid #ccc;
 }

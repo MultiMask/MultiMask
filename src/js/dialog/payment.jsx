@@ -2,7 +2,7 @@ import React from "react";
 
 import messaging from "./message";
 import storage from "./../models/storage";
-import "../../img/bitmask.png";
+import "../../img/logo.png";
 
 export default class Payment extends React.Component {
   constructor(opts) {
