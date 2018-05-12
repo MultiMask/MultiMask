@@ -1,30 +1,47 @@
 import React from "react";
-import App from '../../models/app';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
 
-export default class Header extends React.Component {
+import actions from '../actions/balance';
 
-    hasAccount() {
-        return App.getAccounts().length > 0;
+class Header extends React.Component {
+
+    constructor(props) {
+        super(props);
+        const { dispatch } = props;
+
+        this.actions = bindActionCreators(actions, dispatch);
+    }
+
+    handleBack = () => {
+        console.log('back');
+        this.actions.back();
+    }
+
+    get showBack() {
+        const { wallet, buy, send } = this.props;
+
+        return !!wallet || buy || send;
     }
 
     render() {
-        if (this.hasAccount()) {
-            return (
-                <div className="header">
-                    Header
-                </div>
-            );
-        }
-
         return (
             <div className="header">
-                <div
-                    onClick={this.props.onCreate}
-                >
-                    <FontAwesome name="plus-circle" />
-                </div>
-            </div>
+                {this.showBack && (
+                    <FontAwesome name="chevron-left" onClick={this.handleBack} />
+                )}
+                <FontAwesome name="plus-circle" onClick={this.props.onCreate} />
+            </div >
         );
     }
 }
+
+export default connect(
+    state => ({
+        accounts: state.balance.accounts,
+        wallet: state.balance.wallet,
+        buy: state.balance.buy,
+        send: state.balance.send,
+    }),
+)(Header);

@@ -11,6 +11,8 @@ import messaging from "../../message";
 
 import Item from './item';
 import Details from './details';
+import Buy from './buy';
+import Send from './send';
 
 class Balance extends React.Component {
 
@@ -41,16 +43,25 @@ class Balance extends React.Component {
     return null;
   }
 
-  get choosenAccount() {
-    const { choosenWallet } = this.state;
-    const { accounts } = this.props;
-
-    return accounts.find(acc => acc.name === choosenWallet);
-  }
-
   render() {
     console.log('state', this.state);
     console.log('props', this.props);
+
+    if (this.props.buy) {
+      return (
+        <div className="balance">
+          <Buy />
+        </div>
+      );
+    }
+
+    if (this.props.send) {
+      return (
+        <div className="balance">
+          <Send />
+        </div>
+      );
+    }
 
     if (this.props.wallet) {
       return (
@@ -77,6 +88,8 @@ class Balance extends React.Component {
 export default connect(
   state => ({
     accounts: state.balance.accounts,
-    wallet: state.balance.wallet
+    wallet: state.balance.wallet,
+    buy: state.balance.buy,
+    send: state.balance.send,
   }),
 )(Balance);

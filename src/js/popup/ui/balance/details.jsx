@@ -1,16 +1,21 @@
 import React from "react";
-import moment from "moment";
-import axios from "axios";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
 
-import messaging from "../../message";
+import actions from '../../actions/balance';
+
 import networkImg from "../../../helpers/networkImg";
 import networkSign from "../../../helpers/networkSign";
-import App from '../../../models/app';
 
 class AccountInfo extends React.Component {
+
+  constructor(props) {
+    super(props);
+    const { dispatch } = props;
+
+    this.actions = bindActionCreators(actions, dispatch);
+  }
 
   get choosenAccount() {
     const { accounts, wallet } = this.props;
@@ -36,9 +41,17 @@ class AccountInfo extends React.Component {
     onChoose(account.name);
   }
 
+  handleBuy = () => {
+    this.actions.buy();
+  }
+
+  handleSend = () => {
+    this.actions.send();
+  }
+
   render() {
     const account = this.choosenAccount;
-    console.log('account', account);
+    // console.log('account', account);
 
     return (
       <div>
@@ -59,8 +72,8 @@ class AccountInfo extends React.Component {
           </div>
         </div>
         <div className="actions">
-          <div className="btn primary">buy</div>
-          <div className="btn primary">send</div>
+          <div className="btn primary" onClick={this.handleBuy}>buy</div>
+          <div className="btn primary" onClick={this.handleSend}>send</div>
         </div>
       </div>
     );
