@@ -14,9 +14,9 @@ import messaging from "./message";
 import { getPass } from "./../models/getter";
 
 class Popup extends React.Component {
-  constructor(opts) {
-    super(opts);
-    const { dispatch } = this.props;
+  constructor(props) {
+    super(props);
+    const { dispatch } = props;
 
     this.state = {
       login: false,
@@ -49,10 +49,6 @@ class Popup extends React.Component {
     getPass().then(result => cb(!!result));
   }
 
-  onCreate = () => {
-    this.setState({ creation: true });
-  };
-
   onCreated = () => {
     this.setState({ creation: false });
   };
@@ -62,13 +58,15 @@ class Popup extends React.Component {
   };
 
   render() {
-    if (this.state.creation) {
+    // console.log('apps', this);
+
+    if (this.props.creation) {
       return <Wallet onCreated={this.onCreated} />;
     }
 
     if (this.state.login) {
       return (
-        <Wrapper onCreate={this.onCreate}>
+        <Wrapper>
           <Balance />
         </Wrapper>
       );
@@ -86,4 +84,6 @@ class Popup extends React.Component {
   }
 }
 
-export default connect()(Popup);
+export default connect(({ state }) => ({
+  creation: state.creation
+}))(Popup);

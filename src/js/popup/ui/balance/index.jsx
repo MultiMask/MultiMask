@@ -44,8 +44,8 @@ class Account extends React.Component {
   }
 
   render() {
-    console.log("state", this.state);
-    console.log("props", this.props);
+    console.log("Account state", this.state);
+    console.log("Account props", this.props);
 
     if (this.props.buy) {
       return (
