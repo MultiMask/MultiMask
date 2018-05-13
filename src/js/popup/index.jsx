@@ -56,7 +56,11 @@ class Popup extends React.Component {
     // console.log('apps', this);
 
     if (this.props.creation) {
-      return <Wallet />;
+      return (
+        <Wrapper>
+          <Wallet />
+        </Wrapper>
+      );
     }
 
     if (this.state.login) {

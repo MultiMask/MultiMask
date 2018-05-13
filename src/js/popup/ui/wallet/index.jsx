@@ -36,7 +36,7 @@ class Wallet extends React.Component {
 
   render() {
     return (
-      <div className="header">
+      <div className="creation">
         {this.state.step === 1 && (
           <div>
             <div>
@@ -73,6 +73,9 @@ class Wallet extends React.Component {
   }
 }
 
-export default connect(null, dispatch => bindActionCreators(actions, dispatch))(
-  Wallet
-);
+export default connect(
+  ({ state }) => ({
+    creation: state.creation
+  }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(Wallet);

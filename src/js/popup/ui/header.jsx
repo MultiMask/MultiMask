@@ -18,6 +18,7 @@ class Header extends React.Component {
   };
 
   get showBack() {
+    // TODO: refactor here
     const { wallet, buy, send } = this.props;
     return !!wallet || buy || send;
   }
@@ -30,9 +31,11 @@ class Header extends React.Component {
             <FontAwesome name="chevron-left" onClick={this.handleBack} />
           </div>
         )}
-        <div className="header_add">
-          <FontAwesome name="plus-circle" onClick={this.props.onCreate} />
-        </div>
+        {!this.props.creation && (
+          <div className="header_add">
+            <FontAwesome name="plus-circle" onClick={this.props.onCreate} />
+          </div>
+        )}
       </div>
     );
   }
@@ -42,5 +45,6 @@ export default connect(state => ({
   accounts: state.account.accounts,
   wallet: state.account.wallet,
   buy: state.account.buy,
-  send: state.account.send
+  send: state.account.send,
+  creation: state.state.creation
 }))(Header);
