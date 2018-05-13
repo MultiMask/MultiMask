@@ -4,14 +4,14 @@ import {
     ACCOUNT_BUY,
     ACCOUNT_SEND,
     ACCOUNT_BACK
-} from '../actions/balance';
+} from '../../constants/account';
 
 const initialState = {
     accounts: null,
 };
 
-export default function balances(state = initialState, action) {
-    console.log('balances reducer:', action);
+export default function accountReducer(state = initialState, action) {
+    console.log('account reducer:', action);
 
     switch (action.type) {
         case ACCOUNT_SET: {

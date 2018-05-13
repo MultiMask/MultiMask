@@ -27,6 +27,7 @@ var options = {
     content: path.join(__dirname, "src", "js", "content.js"),
     background: path.join(__dirname, "src", "js", "background.js")
   },
+  devtool: 'eval',
   output: {
     path: path.join(__dirname, "build"),
     filename: "[name].bundle.js"
