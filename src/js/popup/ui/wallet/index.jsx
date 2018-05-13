@@ -11,15 +11,12 @@ import AccountFactory from "./../../../models/accountFactory";
 class Wallet extends React.Component {
   constructor(props) {
     super(props);
-    const { dispatch } = props;
 
     this.state = {
       step: 1,
       network: "bitcoin",
       seed: null
     };
-
-    this.actions = bindActionCreators(actions, dispatch);
   }
 
   handleSelect = e => {
@@ -34,8 +31,7 @@ class Wallet extends React.Component {
   };
 
   handleSave = () => {
-    this.actions.create(this.account);
-    this.props.onCreated();
+    this.props.create(this.account);
   };
 
   render() {
@@ -77,4 +73,6 @@ class Wallet extends React.Component {
   }
 }
 
-export default connect()(Wallet);
+export default connect(null, dispatch => bindActionCreators(actions, dispatch))(
+  Wallet
+);

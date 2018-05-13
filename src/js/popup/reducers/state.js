@@ -1,5 +1,6 @@
 import {
-  STATE_CREATE
+  STATE_CREATE,
+  STATE_MAIN
 } from '../../constants/state';
 
 const initialState = {};
@@ -12,6 +13,13 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         creation: true
+      }
+      break;
+    }
+    case STATE_MAIN: {
+      return {
+        ...state,
+        creation: false
       }
       break;
     }

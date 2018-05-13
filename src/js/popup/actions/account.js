@@ -10,6 +10,10 @@ import {
   ACCOUNT_SET
 } from "./../../constants/account";
 
+import {
+  STATE_MAIN
+} from "./../../constants/state";
+
 export default {
   getInfo: () => (dispatch, getState) => {
     messaging.send({
@@ -20,6 +24,10 @@ export default {
     messaging.send({
       type: ACCOUNT_CREATE,
       payload: account
+    });
+
+    dispatch({
+      type: STATE_MAIN,
     });
   },
   setAccount: accs => (dispatch, getState) => {

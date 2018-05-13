@@ -21,8 +21,7 @@ class Popup extends React.Component {
     this.state = {
       login: false,
       isNew: false,
-      isCreate: false,
-      creation: false
+      isCreate: false
     };
 
     this.authActions = bindActionCreators(authActions, dispatch);
@@ -49,10 +48,6 @@ class Popup extends React.Component {
     getPass().then(result => cb(!!result));
   }
 
-  onCreated = () => {
-    this.setState({ creation: false });
-  };
-
   onLogin = () => {
     this.setState({ login: true });
   };
@@ -61,7 +56,7 @@ class Popup extends React.Component {
     // console.log('apps', this);
 
     if (this.props.creation) {
-      return <Wallet onCreated={this.onCreated} />;
+      return <Wallet />;
     }
 
     if (this.state.login) {
