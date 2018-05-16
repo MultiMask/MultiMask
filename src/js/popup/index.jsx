@@ -10,6 +10,12 @@ import Wallet from "./ui/wallet";
 
 import authActions from "./actions/auth";
 
+import {
+  STATE_VIEW_CREATION,
+  STATE_VIEW_MAIN,
+  STATE_VIEW_LOGIN
+} from "./../constants/state";
+
 import messaging from "./message";
 import { getPass } from "./../models/getter";
 
@@ -19,7 +25,6 @@ class Popup extends React.Component {
     const { dispatch } = props;
 
     this.state = {
-      login: false,
       isNew: false,
       isCreate: false
     };
@@ -48,35 +53,33 @@ class Popup extends React.Component {
     getPass().then(result => cb(!!result));
   }
 
-  onLogin = () => {
-    this.setState({ login: true });
-  };
-
   render() {
-    // console.log('apps', this);
+    console.log("app props:", this.props);
 
-    if (this.props.creation) {
-      return (
-        <Wrapper>
-          <Wallet />
-        </Wrapper>
-      );
-    }
+    switch (this.props.view) {
+      case STATE_VIEW_CREATION: {
+        return (
+          <Wrapper>
+            <Wallet />
+          </Wrapper>
+        );
+      }
 
-    if (this.state.login) {
-      return (
-        <Wrapper>
-          <Balance />
-        </Wrapper>
-      );
+      case STATE_VIEW_MAIN: {
+        return (
+          <Wrapper>
+            <Balance />
+          </Wrapper>
+        );
+      }
+
+      case STATE_VIEW_LOGIN: {
+        return <Login />;
+      }
     }
 
     if (this.state.isNew) {
       return <Create />;
-    }
-
-    if (!this.state.isNew) {
-      return <Login onLogin={this.onLogin} />;
     }
 
     return null;
@@ -84,5 +87,5 @@ class Popup extends React.Component {
 }
 
 export default connect(({ state }) => ({
-  creation: state.creation
+  view: state.view
 }))(Popup);

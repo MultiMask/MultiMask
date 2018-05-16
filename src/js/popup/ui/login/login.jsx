@@ -1,53 +1,27 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import messaging from '../../message';
+import authAction from "../../actions/auth";
 
-import App from '../../../models/app';
+import messaging from "../../message";
 
-export default class Auth extends React.Component {
+class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      pass: '',
-      login: false,
-      error: ''
+      pass: "",
+      error: ""
     };
-  }
-
-  componentDidMount() {
-    messaging.on('auth:login:result', ({login}) => {
-      if (login) {
-        this.setState({
-          login: true,
-          error: ''
-        }, () => {
-          this.commitLogin();
-        });
-      } else {
-        this.setState({
-          login: false,
-          error: 'Wrong password'
-        })
-      }
-    })
   }
 
   handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  commitLogin() {
-    this.props.onLogin();
-  }
-
   handleDone = () => {
-    messaging.send({
-      type: "auth:login",
-      payload: {
-        pass: this.state.pass
-      }
-    });
+    this.props.login(this.state.pass);
   };
 
   render() {
@@ -84,3 +58,8 @@ export default class Auth extends React.Component {
     );
   }
 }
+
+export default connect(
+  ({ state }) => ({}),
+  dispatch => bindActionCreators(authAction, dispatch)
+)(Auth);

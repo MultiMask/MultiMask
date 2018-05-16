@@ -1,9 +1,15 @@
 import {
   STATE_CREATE,
-  STATE_MAIN
+  STATE_MAIN,
+
+  STATE_VIEW_CREATION,
+  STATE_VIEW_LOGIN,
+  STATE_VIEW_MAIN,
 } from '../../constants/state';
 
-const initialState = {};
+const initialState = {
+  view: STATE_VIEW_LOGIN,
+};
 
 export default function accountReducer(state = initialState, action) {
   console.log('state reducer:', action);
@@ -12,14 +18,14 @@ export default function accountReducer(state = initialState, action) {
     case STATE_CREATE: {
       return {
         ...state,
-        creation: true
+        view: STATE_VIEW_CREATION,
       }
       break;
     }
     case STATE_MAIN: {
       return {
         ...state,
-        creation: false
+        view: STATE_VIEW_MAIN,
       }
       break;
     }
