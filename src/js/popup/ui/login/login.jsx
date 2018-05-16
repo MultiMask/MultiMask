@@ -20,11 +20,13 @@ class Auth extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = () => {
+  handleDone = e => {
+    e.preventDefault();
     this.props.login(this.state.pass);
   };
 
   render() {
+    console.log("login props", this.props);
     return (
       <div className="login__wrapper">
         <header className="login__wrapper-header">
@@ -32,7 +34,7 @@ class Auth extends React.Component {
           <h4>Login to your acccount</h4>
         </header>
         <div className="login__content">
-          <div>
+          <form onSubmit={this.handleDone}>
             <div className="login__create">
               <input
                 placeholder="enter password"
@@ -43,16 +45,13 @@ class Auth extends React.Component {
                 value={this.state.pass}
               />
             </div>
-            <button
-              onClick={this.handleDone}
-              className="login__create btn primary"
-            >
+            {this.props.error && (
+              <div className="login__error">Wrong password</div>
+            )}
+            <button type="submit" className="login__create btn primary">
               login
             </button>
-          </div>
-          {this.state.error && (
-            <div className="login__error">{this.state.error}</div>
-          )}
+          </form>
         </div>
       </div>
     );
@@ -60,6 +59,8 @@ class Auth extends React.Component {
 }
 
 export default connect(
-  ({ state }) => ({}),
+  ({ auth }) => ({
+    error: auth.error
+  }),
   dispatch => bindActionCreators(authAction, dispatch)
 )(Auth);

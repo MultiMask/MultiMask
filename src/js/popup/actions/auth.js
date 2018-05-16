@@ -2,7 +2,8 @@ import messaging from "../message";
 
 import {
     AUTH_CHECK,
-    AUTH_LOGIN
+    AUTH_LOGIN,
+    AUTH_LOGIN_FAIL
 } from "./../../constants/auth";
 
 import StateActions from './state';
@@ -25,6 +26,8 @@ export default {
     StateActions.goMain()(dispatch, getState);
   },
   fail: () => (dispatch, getState) => {
-    console.log('fail login');
+    dispatch({
+      type: AUTH_LOGIN_FAIL,
+    });
   },
 };
