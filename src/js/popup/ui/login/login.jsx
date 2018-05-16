@@ -26,7 +26,6 @@ class Auth extends React.Component {
   };
 
   render() {
-    console.log("login props", this.props);
     return (
       <div className="login__wrapper">
         <header className="login__wrapper-header">
