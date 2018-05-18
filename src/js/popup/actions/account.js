@@ -51,11 +51,6 @@ const AccountActions = {
   },
   send: () => (dispatch, getState) => {
     stateActions.goSend(name)(dispatch, getState);
-  },
-  back: () => (dispatch, getState) => {
-    dispatch({
-      type: ACCOUNT_BACK
-    });
   }
 };
 export default AccountActions;

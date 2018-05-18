@@ -5,28 +5,18 @@ import FontAwesome from "react-fontawesome";
 
 import { STATE_VIEW_MAIN } from "../../../constants/state";
 
-import actions from "../../actions/account";
+import actions from "../../actions/state";
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    const { dispatch } = props;
-
-    this.actions = bindActionCreators(actions, dispatch);
-  }
-
   handleBack = () => {
-    this.actions.back();
+    this.props.goBack();
   };
 
   get showBack() {
-    // TODO: refactor here
-    const { wallet, buy, send } = this.props;
-    return !!wallet || buy || (send && this.props.view !== STATE_VIEW_MAIN);
+    return this.props.view !== STATE_VIEW_MAIN;
   }
 
   render() {
-    console.log("header props", this.props);
     return (
       <div className="header">
         {this.showBack && (
@@ -44,11 +34,9 @@ class Header extends React.Component {
   }
 }
 
-export default connect(({ account, state }) => ({
-  view: state.view,
-  accounts: account.accounts,
-  wallet: account.wallet,
-  buy: account.buy,
-  send: account.send,
-  creation: state.creation
-}))(Header);
+export default connect(
+  ({ state }) => ({
+    view: state.view
+  }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(Header);
