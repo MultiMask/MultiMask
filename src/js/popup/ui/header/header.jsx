@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import FontAwesome from "react-fontawesome";
 
-import actions from "../actions/account";
+import { STATE_VIEW_MAIN } from "../../../constants/state";
+
+import actions from "../../actions/account";
 
 class Header extends React.Component {
   constructor(props) {
@@ -20,10 +22,11 @@ class Header extends React.Component {
   get showBack() {
     // TODO: refactor here
     const { wallet, buy, send } = this.props;
-    return !!wallet || buy || send;
+    return !!wallet || buy || (send && this.props.view !== STATE_VIEW_MAIN);
   }
 
   render() {
+    console.log("header props", this.props);
     return (
       <div className="header">
         {this.showBack && (
@@ -41,10 +44,11 @@ class Header extends React.Component {
   }
 }
 
-export default connect(state => ({
-  accounts: state.account.accounts,
-  wallet: state.account.wallet,
-  buy: state.account.buy,
-  send: state.account.send,
-  creation: state.state.creation
+export default connect(({ account, state }) => ({
+  view: state.view,
+  accounts: account.accounts,
+  wallet: account.wallet,
+  buy: account.buy,
+  send: account.send,
+  creation: state.creation
 }))(Header);

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import authAction from "../../actions/auth";
+import authActions from "../../actions/auth";
 
 import messaging from "../../message";
 
@@ -61,5 +61,5 @@ export default connect(
   ({ auth }) => ({
     error: auth.error
   }),
-  dispatch => bindActionCreators(authAction, dispatch)
+  dispatch => bindActionCreators(authActions, dispatch)
 )(Auth);

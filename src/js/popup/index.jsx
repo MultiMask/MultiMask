@@ -2,10 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import Login from "./ui/login";
 import Create from "./ui/login/create";
-import Balance from "./ui/balance";
-import Login from "./ui/login/login";
-import Wrapper from "./ui";
+import Account from "./ui/account";
+import Wrapper from "./ui/header";
 import Wallet from "./ui/wallet";
 
 import authActions from "./actions/auth";
@@ -22,19 +22,16 @@ import { getPass } from "./../models/getter";
 class Popup extends React.Component {
   constructor(props) {
     super(props);
-    const { dispatch } = props;
 
     this.state = {
       isNew: false,
       isCreate: false
     };
-
-    this.authActions = bindActionCreators(authActions, dispatch);
   }
 
   componentDidMount() {
     this.addListeners();
-    this.authActions.check();
+    this.props.check();
   }
 
   addListeners() {
@@ -68,7 +65,7 @@ class Popup extends React.Component {
       case STATE_VIEW_MAIN: {
         return (
           <Wrapper>
-            <Balance />
+            <Account />
           </Wrapper>
         );
       }
@@ -86,6 +83,9 @@ class Popup extends React.Component {
   }
 }
 
-export default connect(({ state }) => ({
-  view: state.view
-}))(Popup);
+export default connect(
+  ({ state }) => ({
+    view: state.view
+  }),
+  dispatch => bindActionCreators(authActions, dispatch)
+)(Popup);
