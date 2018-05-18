@@ -1,5 +1,7 @@
 import {
-    AUTH_LOGIN_FAIL
+    AUTH_LOGIN_FAIL,
+    AUTH_CHECK_SUCCESS,
+    AUTH_CHECK_FAIL,
 } from '../../constants/auth';
   
   const initialState = {
@@ -11,13 +13,17 @@ import {
     console.log('auth reducer:', action);
   
     switch (action.type) {
-      case AUTH_LOGIN_FAIL: {
+      case AUTH_LOGIN_FAIL:
         return {
           ...state,
           error: true,
         }
-        break;
-      }
+      case AUTH_CHECK_FAIL:
+        return {
+          ...state,
+          hasPass: action.hasPass,
+          check: false
+        }
     }
   
     return state;

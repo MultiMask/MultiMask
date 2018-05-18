@@ -38,15 +38,14 @@ class Popup extends React.Component {
   }
 
   addListeners() {
-    messaging.on("auth:check:success", () => {
-      this.setState({ login: true });
-    });
-
-    messaging.on("auth:check:failre", data => {
-      this.checkPass(hasHash => {
-        this.setState({ isNew: !hasHash });
-      });
-    });
+    // messaging.on("auth:check:success", () => {
+    //   this.setState({ login: true });
+    // });
+    // messaging.on("auth:check:failre", data => {
+    //   this.checkPass(hasHash => {
+    //     this.setState({ isNew: !hasHash });
+    //   });
+    // });
   }
 
   checkPass(cb) {
