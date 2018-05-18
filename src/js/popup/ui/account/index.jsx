@@ -2,8 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import accountActions from "../../actions/account";
-import stateActions from "../../actions/state";
+import {
+  STATE_VIEW_BUY,
+  STATE_VIEW_SEND,
+  STATE_VIEW_WALLET
+} from "./../../../constants/state";
 
 import List from "./list";
 import Details from "./details";
@@ -12,7 +15,7 @@ import Send from "./send";
 
 class Account extends React.Component {
   render() {
-    if (this.props.buyView) {
+    if (this.props.view === STATE_VIEW_BUY) {
       return (
         <div className="balance">
           <Buy />
@@ -20,7 +23,7 @@ class Account extends React.Component {
       );
     }
 
-    if (this.props.sendView) {
+    if (this.props.view === STATE_VIEW_SEND) {
       return (
         <div className="balance">
           <Send />
@@ -28,10 +31,10 @@ class Account extends React.Component {
       );
     }
 
-    if (this.props.walletView) {
+    if (this.props.view === STATE_VIEW_WALLET) {
       return (
         <div className="balance">
-          <Details account={this.choosenAccount} />
+          <Details />
         </div>
       );
     }
@@ -40,8 +43,6 @@ class Account extends React.Component {
   }
 }
 
-export default connect(state => ({
-  walletView: state.account.wallet,
-  buyView: state.account.buy,
-  sendView: state.account.send
+export default connect(({ state }) => ({
+  view: state.view
 }))(Account);

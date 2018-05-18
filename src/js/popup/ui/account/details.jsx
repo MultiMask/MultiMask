@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import FontAwesome from "react-fontawesome";
 
 import actions from "../../actions/account";
+import { getCurrentWallet } from "./../../select";
 
 import networkImg from "../../../helpers/networkImg";
 import networkSign from "../../../helpers/networkSign";
@@ -11,44 +12,26 @@ import networkSign from "../../../helpers/networkSign";
 import TXS from "./txs";
 
 class AccountInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    const { dispatch } = props;
-
-    this.actions = bindActionCreators(actions, dispatch);
-  }
-
-  get choosenAccount() {
-    const { accounts, wallet } = this.props;
-    return accounts.find(acc => acc.name === wallet);
-  }
-
   get image() {
-    const account = this.choosenAccount;
+    const account = this.props.account;
     return <img src={networkImg(account)} />;
   }
 
   get balance() {
-    const account = this.choosenAccount;
+    const account = this.props.account;
     return `${account.info.balance} ${networkSign(account)}`;
   }
 
-  handleClick = () => {
-    const { account, onChoose } = this.props;
-    onChoose(account.name);
-  };
-
   handleBuy = () => {
-    this.actions.buy();
+    this.props.buy();
   };
 
   handleSend = () => {
-    this.actions.send();
+    this.props.send();
   };
 
   render() {
-    const account = this.choosenAccount;
-    // console.log('account', account);
+    const account = this.props.account;
 
     return (
       <div>
@@ -80,7 +63,9 @@ class AccountInfo extends React.Component {
   }
 }
 
-export default connect(state => ({
-  accounts: state.account.accounts,
-  wallet: state.account.wallet
-}))(AccountInfo);
+export default connect(
+  state => ({
+    account: getCurrentWallet(state)
+  }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(AccountInfo);

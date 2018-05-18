@@ -47,14 +47,10 @@ const AccountActions = {
     stateActions.goWallet(name)(dispatch, getState);
   },
   buy: () => (dispatch, getState) => {
-    dispatch({
-      type: ACCOUNT_BUY
-    });
+    stateActions.goBy(name)(dispatch, getState);
   },
   send: () => (dispatch, getState) => {
-    dispatch({
-      type: ACCOUNT_SEND
-    });
+    stateActions.goSend(name)(dispatch, getState);
   },
   back: () => (dispatch, getState) => {
     dispatch({

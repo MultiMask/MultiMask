@@ -25,8 +25,6 @@ class AccountFastView extends React.Component {
 
   render() {
     const { account } = this.props;
-    console.log("props", this.props);
-    console.log("account", account);
 
     return (
       <div className="item list" onClick={this.handleClick}>

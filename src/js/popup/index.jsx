@@ -14,7 +14,9 @@ import {
   STATE_VIEW_CREATION,
   STATE_VIEW_MAIN,
   STATE_VIEW_LOGIN,
-  STATE_VIEW_WALLET
+  STATE_VIEW_WALLET,
+  STATE_VIEW_BUY,
+  STATE_VIEW_SEND
 } from "./../constants/state";
 
 import messaging from "./message";
@@ -64,6 +66,8 @@ class Popup extends React.Component {
 
       case STATE_VIEW_MAIN:
       case STATE_VIEW_WALLET:
+      case STATE_VIEW_BUY:
+      case STATE_VIEW_SEND:
         return (
           <Wrapper>
             <Account />
