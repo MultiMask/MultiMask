@@ -13,7 +13,8 @@ import authActions from "./actions/auth";
 import {
   STATE_VIEW_CREATION,
   STATE_VIEW_MAIN,
-  STATE_VIEW_LOGIN
+  STATE_VIEW_LOGIN,
+  STATE_VIEW_WALLET
 } from "./../constants/state";
 
 import messaging from "./message";
@@ -54,25 +55,23 @@ class Popup extends React.Component {
     console.log("app props:", this.props);
 
     switch (this.props.view) {
-      case STATE_VIEW_CREATION: {
+      case STATE_VIEW_CREATION:
         return (
           <Wrapper>
             <Wallet />
           </Wrapper>
         );
-      }
 
-      case STATE_VIEW_MAIN: {
+      case STATE_VIEW_MAIN:
+      case STATE_VIEW_WALLET:
         return (
           <Wrapper>
             <Account />
           </Wrapper>
         );
-      }
 
-      case STATE_VIEW_LOGIN: {
+      case STATE_VIEW_LOGIN:
         return <Login />;
-      }
     }
 
     if (this.state.isNew) {

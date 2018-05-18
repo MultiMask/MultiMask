@@ -2,10 +2,11 @@ import messaging from "../message";
 
 import {
   STATE_CREATE,
-  STATE_MAIN
+  STATE_MAIN,
+  STATE_WALLET
 } from "./../../constants/state";
 
-const StateActions ={
+const StateActions = {
   createWallet: () => (dispatch, getState) => {
     dispatch({
       type: STATE_CREATE
@@ -14,6 +15,12 @@ const StateActions ={
   goMain: () => (dispatch, getState) => {
     dispatch({
       type: STATE_MAIN
+    })
+  },
+  goWallet: name => (dispatch, getState) => {
+    dispatch({
+      type: STATE_WALLET,
+      payload: name
     })
   },
 };

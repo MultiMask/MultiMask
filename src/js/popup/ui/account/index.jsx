@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import actions from "../../actions/account";
+import accountActions from "../../actions/account";
+import stateActions from "../../actions/state";
 
 import Item from "./item";
 import Details from "./details";
@@ -10,21 +11,8 @@ import Buy from "./buy";
 import Send from "./send";
 
 class Account extends React.Component {
-  constructor(props) {
-    super(props);
-    const { dispatch } = props;
-
-    this.actions = bindActionCreators(actions, dispatch);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    this.setState({ loading: true });
-    this.actions.getInfo();
-  }
-
   chooseWallet = walletName => {
-    this.actions.setActive(walletName);
+    this.props.setActive(walletName);
   };
 
   get items() {
@@ -44,7 +32,9 @@ class Account extends React.Component {
   }
 
   render() {
-    if (this.props.buy) {
+    // console.log("account.index props", this.props);
+
+    if (this.props.buyView) {
       return (
         <div className="balance">
           <Buy />
@@ -52,7 +42,7 @@ class Account extends React.Component {
       );
     }
 
-    if (this.props.send) {
+    if (this.props.sendView) {
       return (
         <div className="balance">
           <Send />
@@ -60,7 +50,7 @@ class Account extends React.Component {
       );
     }
 
-    if (this.props.wallet) {
+    if (this.props.walletView) {
       return (
         <div className="balance">
           <Details account={this.choosenAccount} />
@@ -76,9 +66,13 @@ class Account extends React.Component {
   }
 }
 
-export default connect(state => ({
-  accounts: state.account.accounts,
-  wallet: state.account.wallet,
-  buy: state.account.buy,
-  send: state.account.send
-}))(Account);
+export default connect(
+  state => ({
+    accounts: state.account.accounts,
+    walletView: state.account.wallet,
+    buyView: state.account.buy,
+    sendView: state.account.send
+  }),
+  dispatch =>
+    bindActionCreators({ ...accountActions, ...stateActions }, dispatch)
+)(Account);

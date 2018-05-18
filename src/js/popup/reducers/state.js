@@ -1,10 +1,12 @@
 import {
   STATE_CREATE,
   STATE_MAIN,
+  STATE_WALLET,
 
   STATE_VIEW_CREATION,
   STATE_VIEW_LOGIN,
   STATE_VIEW_MAIN,
+  STATE_VIEW_WALLET,
 } from '../../constants/state';
 
 const initialState = {
@@ -26,6 +28,13 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         view: STATE_VIEW_MAIN,
+      }
+      break;
+    }
+    case STATE_WALLET: {
+      return {
+        ...state,
+        view: STATE_VIEW_WALLET,
       }
       break;
     }

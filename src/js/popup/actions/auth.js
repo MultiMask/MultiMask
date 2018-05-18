@@ -7,8 +7,9 @@ import {
 } from "./../../constants/auth";
 
 import StateActions from './state';
+import AccountActions from './account';
 
-export default {
+ const AuthActions = {
   check: () => (dispatch, getState) => {
     messaging.send({
       type: AUTH_CHECK
@@ -24,6 +25,7 @@ export default {
   },
   success: () => (dispatch, getState) => {
     StateActions.goMain()(dispatch, getState);
+    AccountActions.getInfo()(dispatch, getState);
   },
   fail: () => (dispatch, getState) => {
     dispatch({
@@ -31,3 +33,4 @@ export default {
     });
   },
 };
+export default AuthActions;

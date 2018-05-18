@@ -14,7 +14,9 @@ import {
   STATE_MAIN
 } from "./../../constants/state";
 
-export default {
+import stateActions from './state';
+
+const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     messaging.send({
       type: ACCOUNT_INFO
@@ -41,6 +43,8 @@ export default {
       type: ACCOUNT_ACTIVE,
       payload: name
     });
+
+    stateActions.goWallet(name)(dispatch, getState);
   },
   buy: () => (dispatch, getState) => {
     dispatch({
@@ -58,3 +62,4 @@ export default {
     });
   }
 };
+export default AccountActions;
