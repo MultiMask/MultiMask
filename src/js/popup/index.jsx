@@ -16,40 +16,14 @@ import {
   STATE_VIEW_LOGIN,
   STATE_VIEW_WALLET,
   STATE_VIEW_BUY,
-  STATE_VIEW_SEND
+  STATE_VIEW_SEND,
+  STATE_VIEW_INIT
 } from "./../constants/state";
 
-import messaging from "./message";
-import { getPass } from "./../models/getter";
-
 class Popup extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isNew: false,
-      isCreate: false
-    };
-  }
 
   componentDidMount() {
-    this.addListeners();
     this.props.check();
-  }
-
-  addListeners() {
-    // messaging.on("auth:check:success", () => {
-    //   this.setState({ login: true });
-    // });
-    // messaging.on("auth:check:failre", data => {
-    //   this.checkPass(hasHash => {
-    //     this.setState({ isNew: !hasHash });
-    //   });
-    // });
-  }
-
-  checkPass(cb) {
-    getPass().then(result => cb(!!result));
   }
 
   render() {
@@ -75,10 +49,9 @@ class Popup extends React.Component {
 
       case STATE_VIEW_LOGIN:
         return <Login />;
-    }
 
-    if (this.state.isNew) {
-      return <Create />;
+      case STATE_VIEW_INIT:
+        return <Create />;
     }
 
     return null;
