@@ -5,35 +5,13 @@ import { bindActionCreators } from "redux";
 import accountActions from "../../actions/account";
 import stateActions from "../../actions/state";
 
-import Item from "./item";
+import List from "./list";
 import Details from "./details";
 import Buy from "./buy";
 import Send from "./send";
 
 class Account extends React.Component {
-  chooseWallet = walletName => {
-    this.props.setActive(walletName);
-  };
-
-  get items() {
-    if (this.props.accounts && this.props.accounts.length > 0) {
-      return this.props.accounts.map(accInfo => {
-        return (
-          <Item
-            account={accInfo}
-            key={accInfo.name}
-            onChoose={this.chooseWallet}
-          />
-        );
-      });
-    }
-
-    return null;
-  }
-
   render() {
-    // console.log("account.index props", this.props);
-
     if (this.props.buyView) {
       return (
         <div className="balance">
@@ -58,21 +36,12 @@ class Account extends React.Component {
       );
     }
 
-    if (this.props.accounts !== null) {
-      return <div className="balance">{this.items}</div>;
-    }
-
-    return <div>Loading...</div>;
+    return <List />;
   }
 }
 
-export default connect(
-  state => ({
-    accounts: state.account.accounts,
-    walletView: state.account.wallet,
-    buyView: state.account.buy,
-    sendView: state.account.send
-  }),
-  dispatch =>
-    bindActionCreators({ ...accountActions, ...stateActions }, dispatch)
-)(Account);
+export default connect(state => ({
+  walletView: state.account.wallet,
+  buyView: state.account.buy,
+  sendView: state.account.send
+}))(Account);

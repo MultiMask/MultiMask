@@ -1,29 +1,31 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import networkImg from "../../../helpers/networkImg";
-import networkSign from "../../../helpers/networkSign";
+import accountActions from "../../../actions/account";
 
-export default class AccountInfo extends React.Component {
+import networkImg from "../../../../helpers/networkImg";
+import networkSign from "../../../../helpers/networkSign";
+
+class AccountFastView extends React.Component {
   get image() {
     const { account } = this.props;
-
     return <img src={networkImg(account)} />;
   }
 
   get balance() {
     const { account } = this.props;
-
     return `${account.info.balance} ${networkSign(account)}`;
   }
 
   handleClick = () => {
-    const { account, onChoose } = this.props;
-
-    onChoose(account.name);
+    const { account, setActive } = this.props;
+    setActive(account.name);
   };
 
   render() {
     const { account } = this.props;
+    console.log("props", this.props);
     console.log("account", account);
 
     return (
@@ -40,3 +42,7 @@ export default class AccountInfo extends React.Component {
     return null;
   }
 }
+
+export default connect(null, dispatch =>
+  bindActionCreators(accountActions, dispatch)
+)(AccountFastView);
