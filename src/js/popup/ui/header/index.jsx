@@ -13,7 +13,7 @@ class Wrapper extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="app-popup">
         <Header onCreate={this.onCreate} />
         {this.props.children}
       </div>

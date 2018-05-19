@@ -18,7 +18,7 @@ export default {
 
   restore(accs) {
     console.log('load all accounts:', accs);
-    
+
     if (accs && accs.length > 0) {
       Promise.all(accs.map(accName => AccountFactory.load(accName)))
         .then(accounts => {
@@ -74,5 +74,14 @@ export default {
 
   saveAccounts() {
     this.accounts.forEach(acc => AccountFactory.save(acc))
+  },
+
+  setActiveAccount(name) {
+    this.currentName = name;
+    this.currentAccount = this.accounts.find(account => account.name === name);
+  },
+
+  getActiveAccount() {
+    return this.currentAccount;
   }
 };

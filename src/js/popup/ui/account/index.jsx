@@ -25,9 +25,7 @@ class Account extends React.Component {
 
     if (this.props.view === STATE_VIEW_SEND) {
       return (
-        <div className="balance">
-          <Send />
-        </div>
+        <Send />
       );
     }
 

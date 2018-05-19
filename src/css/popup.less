@@ -13,6 +13,13 @@ body {
   height: 100%;
 }
 
+.app-popup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
 .login {
   &__wrapper {
     position: relative;
@@ -172,4 +179,29 @@ body {
 
 .creation {
   text-align: center;
+}
+
+.send {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  &_form {
+    .inputWrap {
+      display: block;
+      position: relative;
+      margin: 10px;
+      height: 40px;
+
+      input {
+        padding: 10px;
+      }
+
+      label {
+        position: absolute;
+        top: 0;
+        left: 10px;
+      }
+    }
+  }
 }

@@ -46,9 +46,9 @@ class AccountInfo extends React.Component {
           </div>
         </div>
         <div className="actions">
-          <div className="btn primary small" onClick={this.handleBuy}>
+          {/* <div className="btn primary small" onClick={this.handleBuy}>
             buy
-          </div>
+          </div> */}
           <div className="btn primary small" onClick={this.handleSend}>
             send
           </div>

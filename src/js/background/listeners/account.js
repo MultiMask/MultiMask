@@ -1,7 +1,8 @@
 import {
   ACCOUNT_INFO,
   ACCOUNT_INFO_RESULT,
-  ACCOUNT_CREATE
+  ACCOUNT_CREATE,
+  ACCOUNT_ACTIVE
 } from "../../constants/account";
 
 export default ({ messaging, App }) => {
@@ -18,6 +19,10 @@ export default ({ messaging, App }) => {
         payload
       });
     });
+  });
+
+  messaging.on(ACCOUNT_ACTIVE, name => {
+    App.setActiveAccount(name);
   });
 
   // Is has wallet

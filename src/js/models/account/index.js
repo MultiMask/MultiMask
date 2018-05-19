@@ -1,27 +1,31 @@
 export default class Account {
-    constructor(wallet, network) {
-        this.network = network;
-        this.wallet = wallet;
+  constructor(wallet, network) {
+    this.network = network;
+    this.wallet = wallet;
 
-        this.name = this.getName();
-    }
+    this.name = this.getName();
+  }
 
-    getName() {
-        return Date.now();
-    }
+  getName() {
+    return Date.now();
+  }
 
-    create(seed) {
-        this.wallet.create(seed);
+  create(seed) {
+    this.wallet.create(seed);
 
-        return this.wallet.getSeed();
-    }
+    return this.wallet.getSeed();
+  }
 
-    getInfo() {
-        return this.wallet.getInfo()
-            .then(info => ({
-                name: this.name,
-                network: this.network,
-                info,
-            }))
-    }
+  getInfo() {
+    return this.wallet.getInfo()
+      .then(info => ({
+        name: this.name,
+        network: this.network,
+        info,
+      }))
+  }
+
+  sendTX(tx) {
+    return this.wallet.createTX(tx);
+  }
 }

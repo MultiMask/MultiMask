@@ -10,8 +10,8 @@ const NETWORK = "testnet";
 // const NETWORK = "livenet";
 
 export default class BitcoinWallet {
-  constructor() {}
-  
+  constructor() { }
+
   create(seed) {
     this.mnemonic = new Mnemonic(seed);
     this.seed = this.mnemonic.toString();
@@ -31,57 +31,57 @@ export default class BitcoinWallet {
    * Depricated, Use bitcoinjs-lib
    */
   // create(pass) {
-    // const testnet = bitcoin.networks.bitcoin;
-    // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
+  // const testnet = bitcoin.networks.bitcoin;
+  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
 
-    // this.pk = keyPair.toWIF();
-    // this.address = keyPair.getAddress();
-    // this.pass = pass;
+  // this.pk = keyPair.toWIF();
+  // this.address = keyPair.getAddress();
+  // this.pass = pass;
   // }
 
   /**
    * Depricated, testing BIP-38
    */
   // test() {
-    // console.log('test');
-    // const testnet = bitcoin.networks.testnet;
-    // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
+  // console.log('test');
+  // const testnet = bitcoin.networks.testnet;
+  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
 
-    // const pass = '12345567ONE';
+  // const pass = '12345567ONE';
 
-    // this.pk = keyPair.toWIF();
-    // this.address = keyPair.getAddress();
-    // this.pass = pass;
+  // this.pk = keyPair.toWIF();
+  // this.address = keyPair.getAddress();
+  // this.pass = pass;
 
-    // // console.log(testnet);
-    // // console.log(keyPair);
-    // console.log('private: ',this.pk);
-    // // console.log(this.address);
+  // // console.log(testnet);
+  // // console.log(keyPair);
+  // console.log('private: ',this.pk);
+  // // console.log(this.address);
 
-    // let decoded = wif.decode(this.pk);
+  // let decoded = wif.decode(this.pk);
 
-    // var encryptedKey = bip38.encrypt(
-    //   decoded.privateKey,
-    //   decoded.compressed,
-    //   pass
-    // );
+  // var encryptedKey = bip38.encrypt(
+  //   decoded.privateKey,
+  //   decoded.compressed,
+  //   pass
+  // );
 
-    // console.log('encrypt', encryptedKey);
+  // console.log('encrypt', encryptedKey);
 
-    // var decryptedKey = bip38.decrypt(encryptedKey, pass, function(status) {
-    //   //   console.log(status.percent); // will print the precent every time current increases by 1000
-    // });
+  // var decryptedKey = bip38.decrypt(encryptedKey, pass, function(status) {
+  //   //   console.log(status.percent); // will print the precent every time current increases by 1000
+  // });
 
-    // console.log('decrypt',
-    //   wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed)
-    // );
+  // console.log('decrypt',
+  //   wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed)
+  // );
   // }
 
   getInfo() {
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
       const lastOUT = res.data.txs[0];
       const output = lastOUT ? lastOUT.hash : null;
-      const outputIndex = lastOUT && lastOUT.out 
+      const outputIndex = lastOUT && lastOUT.out
         ? lastOUT.out.findIndex(item => item.addr === this.address)
         : null;
 
@@ -122,9 +122,11 @@ export default class BitcoinWallet {
       txb.addOutput(this.address, SUM - amount - 5000);
       txb.sign(0, keyPair);
 
-      axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
-        console.log('TX hash:', data);
-      })
+      console.log('TX = ', txb.build().toHex());
+
+      // axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
+      //   console.log('TX hash:', data);
+      // })
     })
   }
 }

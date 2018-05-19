@@ -39,10 +39,13 @@ const AccountActions = {
     });
   },
   setActive: name => (dispatch, getState) => {
-    dispatch({
+    const action = {
       type: ACCOUNT_ACTIVE,
       payload: name
-    });
+    };
+
+    dispatch(action);
+    messaging.send(action);
 
     stateActions.goWallet(name)(dispatch, getState);
   },
