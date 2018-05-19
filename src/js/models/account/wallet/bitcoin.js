@@ -98,35 +98,41 @@ export default class BitcoinWallet {
   createTX({ to, amount, data }) {
     this.getInfo().then(({ output, balance, index }) => {
 
+      const privateKey = this.priv;
+      const address = this.address;
       // SEND signed Tx
       console.log("create TX with: ");
-      // console.log('private: ', this.pk);
-      // console.log('to: ', to);
-      // console.log('amount: ', amount);
-      // console.log('data: ', data);
-      // console.log('output: ', output);
-      // console.log('balance: ', balance);
+      console.log('to: ', to);
+      console.log('amount: ', amount);
+      console.log('data: ', data);
+      console.log('output: ', output);
+      console.log('balance: ', balance);
 
-      let SUM = balance;
+      let SUM = balance * 1e8;
 
       let testnet = bitcoin.networks.testnet;
-      let bitcoin_payload = Buffer.from(data, 'utf8');
-      let dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
-      let keyPair = bitcoin.ECPair.fromWIF(this.pk, testnet);
+      let txb = new bitcoin.TransactionBuilder(testnet);
+      let keyPair = bitcoin.ECPair.fromWIF(privateKey, testnet);
 
-      let txb = new bitcoin.TransactionBuilder(testnet)
       txb.addInput(output, index);
 
-      txb.addOutput(dataScript, 0)
+      if (data) {
+        let bitcoin_payload = Buffer.from(data, 'utf8');
+        let dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
+
+        txb.addOutput(dataScript, 0)
+      }
+
       txb.addOutput(to, amount);
-      txb.addOutput(this.address, SUM - amount - 5000);
+      txb.addOutput(address, SUM - amount - 5000);
+
       txb.sign(0, keyPair);
 
       console.log('TX = ', txb.build().toHex());
 
-      // axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
-      //   console.log('TX hash:', data);
-      // })
+      axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
+        console.log('TX hash:', data);
+      })
     })
   }
 }

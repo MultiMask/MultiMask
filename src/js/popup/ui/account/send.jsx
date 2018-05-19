@@ -43,7 +43,7 @@ class Send extends React.Component {
   formatTX({ to, amount, data }) {
     return {
       to, data,
-      amount: parseFloat(amount),
+      amount: parseFloat(amount) * 1e8,
     }
   }
 
