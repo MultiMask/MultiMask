@@ -96,8 +96,7 @@ export default class BitcoinWallet {
   }
 
   createTX({ to, amount, data }) {
-    this.getInfo().then(({ output, balance, index }) => {
-
+    return this.getInfo().then(({ output, balance, index }) => {
       const privateKey = this.priv;
       const address = this.address;
       // SEND signed Tx
@@ -130,9 +129,10 @@ export default class BitcoinWallet {
 
       console.log('TX = ', txb.build().toHex());
 
-      axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
-        console.log('TX hash:', data);
-      })
+      // return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
+      //   console.log('TX hash:', data);
+      //   done(data);
+      // })
     })
   }
 }

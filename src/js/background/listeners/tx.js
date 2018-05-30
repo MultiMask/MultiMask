@@ -1,54 +1,34 @@
 import createWindow from "../../libs/txWindow";
 
 import {
-  TX_CREATE
+  TX_CREATE,
+  TX_PAYMENT,
+  TX_PAYMENT_GET,
+  TX_PAYMENT_RESULT
 } from './../../constants/tx';
 
-const txs = [];
+let tx = null;
 
 export default ({ messaging, App }) => {
-
   // Create TX from UI
-  messaging.on(TX_CREATE, ({ tx }) => {
+  messaging.on(TX_CREATE, ({ name, tx }) => {
+    console.log(name, tx);
 
-    const newTx = {
-      ...tx,
-      id: txs.length,
-    }
-    txs.push(newTx);
-
-    const account = App.getActiveAccount();
-
-    console.log('account', account);
-    console.log('newTx', newTx);
-    account.sendTX(newTx);
+    // const account = App.getActiveAccount();
+    // account.sendTX(tx);
   });
 
-  // Show window with TX
-  // messaging.on("tx_send", data => {
-  //     tx.push({
-  //         ...data,
-  //         id: tx.length
-  //     });
+  // Payment Create TX
+  messaging.on(TX_PAYMENT, data => {
+    tx = data;
+    createWindow({});
+  });
 
-  //     createWindow({});
-  // });
-
-  // // Render TX in popup
-  // messaging.on("payment_init", data => {
-  //     messaging.send({
-  //         type: "payment_tx",
-  //         payload: tx[tx.length - 1]
-  //     });
-  // });
-
-  // Render TX in popup
-  // messaging.on("payment_submit", payload => {
-  //     const { id } = payload;
-  //     tx[id] = {
-  //         ...tx[id],
-  //         ...payload
-  //     };
-  //     wallet.createTX(tx[id]);
-  // });
+  // Return TX into popup to payment
+  messaging.on(TX_PAYMENT_GET, data => {
+    messaging.send({
+      type: TX_PAYMENT_RESULT,
+      payload: tx
+    });
+  });
 };

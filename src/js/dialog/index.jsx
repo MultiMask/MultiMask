@@ -1,7 +1,17 @@
 import React from "react";
 
 import messaging from "./message";
-import storage from "./../models/storage";
+
+import {
+  ACCOUNT_INFO,
+  ACCOUNT_INFO_RESULT
+} from './../constants/account';
+
+import {
+  TX_PAYMENT_GET,
+  TX_PAYMENT_RESULT,
+  TX_CREATE
+} from './../constants/tx';
 
 import Payment from "./payment";
 
@@ -10,41 +20,66 @@ export default class App extends React.Component {
     super(opts);
 
     this.state = {
-      isLoaded: false
+      isLoaded: false,
+      tx: {}
     };
   }
 
   componentDidMount() {
     messaging.send({
-      type: "payment_init"
+      type: TX_PAYMENT_GET
     });
 
-    messaging.on("payment_tx", data => {
+    messaging.on(TX_PAYMENT_RESULT, data => {
       this.setTxInfo(data);
+    });
+
+    messaging.send({
+      type: ACCOUNT_INFO
+    });
+
+    messaging.on(ACCOUNT_INFO_RESULT, data => {
+      this.setAccounts(data);
     });
   }
 
   setTxInfo(data) {
     this.setState(state => ({
       ...state,
-      ...data,
+      tx: data.tx,
       isLoaded: true
     }));
   }
 
+  setAccounts(data) {
+    let account;
+    if (data && data.length > 0) {
+      account = data[0].name;
+    }
+
+    this.setState({ accounts: data, account });
+  }
+
+  chooseAccount = e => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
   onSubmit = payload => {
     const { to, amount, data } = payload;
+    const { account } = this.state;
 
-    const { id } = this.state;
     messaging.send({
-      type: "payment_submit",
+      type: TX_CREATE,
       payload: {
-        id,
-        to,
-        amount,
-        data
+        name: account,
+        tx: {
+          to,
+          amount,
+          data
+        }
       }
     });
+
     window.close();
   };
 
@@ -52,18 +87,51 @@ export default class App extends React.Component {
     window.close();
   };
 
+  get options() {
+    if (this.state.accounts) {
+      return this.state.accounts.map((account, idx) => {
+        return <option value={account.name} key={idx}>{account.info.address} - {account.info.balance}</option>;
+      });
+    }
+
+    return null;
+  }
+
   render() {
+    // console.log(this.props);
+    // console.log(this.state);
     return (
-      <div>
+      <div className="dialog">
         {this.state.isLoaded && (
-          <Payment
-            to={this.state.to}
-            amount={this.state.amount}
-            data={this.state.data}
-            editable={this.state.isNew}
-            onSubmit={this.onSubmit}
-            onReject={this.onReject}
-          />
+          <div>
+            <header className="header">
+              <img src="logo.png" />
+            </header>
+
+            <div className="dialog-title">
+              Select wallet:
+            </div>
+            <div className="center">
+              <select
+                name="account"
+                value={this.state.account}
+                onChange={this.chooseAccount}
+              >
+                {this.options}
+              </select>
+            </div>
+
+            <div className="dialog-title">
+              Send TX with params:
+            </div>
+            <Payment
+              tx={this.state.tx}
+              editable={this.state.isNew}
+              onSubmit={this.onSubmit}
+              onReject={this.onReject}
+            />
+
+          </div>
         )}
       </div>
     );

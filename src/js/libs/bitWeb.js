@@ -1,18 +1,34 @@
+import {
+  TX_PAYMENT
+} from './../constants/tx';
+
+import {
+  BC_BITCOIN,
+} from './../constants/network';
+
 export default class BitWeb {
   constructor({ stream }) {
     this.stream = stream;
   }
 
+  _send(data) {
+    this.stream.write(data);
+  }
+
   isAuth() { }
   getUser() { }
   sendTransaction({ to, amount, data }) {
-    console.log("send", to, amount, data);
-    this.stream.write({
-      type: "tx_send",
+    // console.log("send", to, amount, data);
+
+    this._send({
+      type: TX_PAYMENT,
       payload: {
-        to,
-        amount,
-        data
+        blockchain: BC_BITCOIN,
+        tx: {
+          to,
+          amount,
+          data
+        }
       }
     });
   }

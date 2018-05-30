@@ -23,7 +23,7 @@ function setupInjection() {
   var container = document.head || document.documentElement;
   container.insertBefore(s, container.children[0]);
 
-  s.onload = function() {
+  s.onload = function () {
     s.remove();
   };
 }
@@ -46,10 +46,6 @@ function connectToInject() {
 
 function setupStreams() {
   injectStream.on("data", data => {
-    switch (data.type) {
-      case "tx_send": {
-        backgroundStream.write(data);
-      }
-    }
+    backgroundStream.write(data);
   });
 }

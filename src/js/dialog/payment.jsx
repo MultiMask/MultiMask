@@ -20,20 +20,15 @@ export default class Payment extends React.Component {
   };
 
   submit = () => {
-    this.props.onSubmit(this.props.editable ? this.state : this.props);
+    this.props.onSubmit(this.props.editable ? this.state : this.props.tx);
   };
 
   render() {
-    const { to, amount, data, onSubmit, onReject, editable } = this.props;
+    const { tx, onSubmit, onReject, editable } = this.props;
+    const { to, amount, data } = tx;
 
     return (
-      <div className="dialog">
-        <header className="header">
-          <img src="logo.png" />
-        </header>
-        <div className="dialog-title">
-          Send TX with params:
-        </div>
+      <div>
         <table className="table">
           <tbody>
             <tr>
@@ -57,7 +52,7 @@ export default class Payment extends React.Component {
                 {!editable && (
                   <div>
                     <span className="value">{amount / 1e8}</span>
-                    <span className="sign">BTC</span>
+                    <span className="sign">ETH</span>
                   </div>
                 )}
               </td>
@@ -81,7 +76,7 @@ export default class Payment extends React.Component {
             Submit
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

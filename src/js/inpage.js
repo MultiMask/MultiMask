@@ -7,21 +7,21 @@ console.log('inpage script');
 init();
 
 function init() {
-    conntectToContent();
-    injectScript();
+  conntectToContent();
+  injectScript();
 };
 
 function conntectToContent() {
-    contentStream = new PostMessageStream({
-        name: 'page',
-        target: 'content',
-    })
-    contentStream.on('data', (data) => console.log('recieved inpage', data))
-    contentStream.write('send from inpage');
+  contentStream = new PostMessageStream({
+    name: 'page',
+    target: 'content',
+  })
+  // contentStream.on('data', (data) => console.log('recieved inpage', data))
+  // contentStream.write('send from inpage');
 }
 
 function injectScript() {
-    window.bitWeb = new BitWeb({
-        stream: contentStream
-    });
+  window.bitWeb = new BitWeb({
+    stream: contentStream
+  });
 }
