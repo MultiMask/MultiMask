@@ -105,9 +105,10 @@ export default class BitcoinWallet {
       console.log('amount: ', amount);
       console.log('data: ', data);
       console.log('output: ', output);
-      console.log('balance: ', balance);
+      // console.log('balance: ', balance);
 
       let SUM = balance * 1e8;
+      console.log('balance:', SUM);
 
       let testnet = bitcoin.networks.testnet;
       let txb = new bitcoin.TransactionBuilder(testnet);
@@ -122,8 +123,10 @@ export default class BitcoinWallet {
         txb.addOutput(dataScript, 0)
       }
 
+      let amountToReturn = SUM - amount - 5000;
+
       txb.addOutput(to, amount);
-      txb.addOutput(address, SUM - amount - 5000);
+      txb.addOutput(address, +amountToReturn.toFixed(0));
 
       txb.sign(0, keyPair);
 
