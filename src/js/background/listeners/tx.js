@@ -12,10 +12,8 @@ let tx = null;
 export default ({ messaging, App }) => {
   // Create TX from UI
   messaging.on(TX_CREATE, ({ name, tx }) => {
-    console.log(name, tx);
-
-    // const account = App.getActiveAccount();
-    // account.sendTX(tx);
+    const account = App.getAccount(name);
+    account.sendTX(tx);
   });
 
   // Payment Create TX

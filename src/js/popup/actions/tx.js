@@ -6,9 +6,12 @@ import {
 
 const StateActions = {
   createTx: tx => (dispatch, getState) => {
+    const { account } = getState();
+
     messaging.send({
       type: TX_CREATE,
       payload: {
+        name: account.wallet,
         tx
       }
     })

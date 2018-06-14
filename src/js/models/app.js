@@ -54,6 +54,10 @@ export default {
     return this.accounts;
   },
 
+  getAccount(name) {
+    return this.accounts.find(account => account.name === name);
+  },
+
   addAccount(account) {
     const fullAccount = AccountFactory.restore(account);
 
@@ -74,14 +78,5 @@ export default {
 
   saveAccounts() {
     this.accounts.forEach(acc => AccountFactory.save(acc))
-  },
-
-  setActiveAccount(name) {
-    this.currentName = name;
-    this.currentAccount = this.accounts.find(account => account.name === name);
-  },
-
-  getActiveAccount() {
-    return this.currentAccount;
   }
 };

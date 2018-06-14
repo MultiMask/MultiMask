@@ -45,7 +45,6 @@ const AccountActions = {
     };
 
     dispatch(action);
-    messaging.send(action);
 
     stateActions.goWallet(name)(dispatch, getState);
   },

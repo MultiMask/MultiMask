@@ -21,10 +21,6 @@ export default ({ messaging, App }) => {
     });
   });
 
-  messaging.on(ACCOUNT_ACTIVE, name => {
-    App.setActiveAccount(name);
-  });
-
   // Is has wallet
   // messaging.on("has_wallet", () => {
   //     wallet.isHasWallet().then(res => {
