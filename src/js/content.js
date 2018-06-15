@@ -45,7 +45,5 @@ function connectToInject() {
 }
 
 function setupStreams() {
-  injectStream.on("data", data => {
-    backgroundStream.write(data);
-  });
+  injectStream.on("data", data => backgroundStream.write);
 }
