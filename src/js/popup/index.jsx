@@ -17,11 +17,11 @@ import {
   STATE_VIEW_WALLET,
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
-  STATE_VIEW_INIT
+  STATE_VIEW_INIT,
+  STATE_VIEW_EXPORTPK
 } from "./../constants/state";
 
 class Popup extends React.Component {
-
   componentDidMount() {
     this.props.check();
   }
@@ -41,6 +41,7 @@ class Popup extends React.Component {
       case STATE_VIEW_WALLET:
       case STATE_VIEW_BUY:
       case STATE_VIEW_SEND:
+      case STATE_VIEW_EXPORTPK:
         return (
           <Wrapper>
             <Account />

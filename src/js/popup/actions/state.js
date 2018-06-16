@@ -6,10 +6,11 @@ import {
   STATE_WALLET,
   STATE_BUY,
   STATE_SEND,
+  STATE_EXPORTPK,
 
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
-
+  STATE_VIEW_EXPORTPK
 } from "./../../constants/state";
 
 const StateActions = {
@@ -39,6 +40,11 @@ const StateActions = {
       type: STATE_SEND
     })
   },
+  goExportPK: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_EXPORTPK
+    })
+  },
   goBack: () => (dispatch, getState) => {
     const { state, account } = getState();
     const { view } = state;
@@ -46,6 +52,7 @@ const StateActions = {
     switch (view) {
       case STATE_VIEW_BUY:
       case STATE_VIEW_SEND:
+      case STATE_VIEW_EXPORTPK:
         StateActions.goWallet(account.name)(dispatch, getState);
         break;
       default:

@@ -6,6 +6,7 @@ import {
   STATE_LOGIN,
   STATE_CREATE,
   STATE_WALLET,
+  STATE_EXPORTPK,
 
   STATE_VIEW_BUY,
   STATE_VIEW_INIT,
@@ -14,6 +15,7 @@ import {
   STATE_VIEW_CREATION,
   STATE_VIEW_LOGIN,
   STATE_VIEW_WALLET,
+  STATE_VIEW_EXPORTPK
 } from '../../constants/state';
 
 const initialState = {
@@ -21,8 +23,6 @@ const initialState = {
 };
 
 export default function accountReducer(state = initialState, action) {
-  console.log('state reducer:', action);
-
   switch (action.type) {
     case STATE_BUY:
       return {
@@ -58,6 +58,11 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         view: STATE_VIEW_WALLET,
+      }
+    case STATE_EXPORTPK:
+      return {
+        ...state,
+        view: STATE_VIEW_EXPORTPK,
       }
   }
 
