@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import accountActions from "../../../actions/account";
+import stateActions from "../../../actions/state";
 
 import Item from "./item";
 
@@ -14,7 +14,16 @@ class AccountList extends React.Component {
       });
     }
 
-    return null;
+    return (
+      <div className="balance__empty">
+        <div className="title">
+          <span>No walletes</span>
+        </div>
+        <div className="action">
+          <div onClick={this.props.createWallet}>Create new</div>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -22,6 +31,9 @@ class AccountList extends React.Component {
   }
 }
 
-export default connect(({ account }) => ({
-  accounts: account.accounts
-}))(AccountList);
+export default connect(
+  ({ account }) => ({
+    accounts: account.accounts
+  }),
+  dispatch => bindActionCreators(stateActions, dispatch)
+)(AccountList);

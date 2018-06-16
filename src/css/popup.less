@@ -57,6 +57,8 @@ body {
 }
 
 .balance {
+  flex-grow: 1;
+
   &__header {
     height: 30px;
   }
@@ -85,6 +87,21 @@ body {
 
     .sign {
       margin-left: 10px;
+    }
+  }
+
+  &__empty {
+    height: 100%;
+    text-align: center;
+
+    .title {
+      margin-top: 180px;
+    }
+
+    .action {
+      margin-top: 200px;
+      color: @col_blue;
+      cursor: pointer;
     }
   }
 

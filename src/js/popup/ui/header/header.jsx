@@ -26,7 +26,7 @@ class Header extends React.Component {
         )}
         {!this.props.creation && (
           <div className="header_add">
-            <FontAwesome name="plus-circle" onClick={this.props.onCreate} />
+            <FontAwesome name="plus-circle" onClick={this.props.createWallet} />
           </div>
         )}
       </div>

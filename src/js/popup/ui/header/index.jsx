@@ -2,25 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import actions from "../../actions/state";
-
 import Header from "./header";
 
 class Wrapper extends React.Component {
-  onCreate = () => {
-    this.props.createWallet();
-  };
-
   render() {
     return (
       <div className="app-popup">
-        <Header onCreate={this.onCreate} />
+        <Header />
         {this.props.children}
       </div>
     );
   }
 }
 
-export default connect(null, dispatch => bindActionCreators(actions, dispatch))(
-  Wrapper
-);
+export default connect(null)(Wrapper);
