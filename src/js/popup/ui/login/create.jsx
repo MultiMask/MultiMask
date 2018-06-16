@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import messaging from '../../message';
+import messaging from "../../message";
 
 export default class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      passStep1: '',
-      passStep2: '',
+      passStep1: "",
+      passStep2: "",
       step: 1
     };
   }
@@ -24,7 +24,7 @@ export default class Auth extends React.Component {
   };
 
   handleDone = () => {
-    console.log('done');
+    console.log("done");
   };
 
   handleBack = () => {
@@ -34,7 +34,7 @@ export default class Auth extends React.Component {
   handleSubmit = () => {
     if (this.isPassCorrect()) {
       messaging.send({
-        type: 'auth:init',
+        type: "auth:init",
         payload: {
           pass: this.state.passStep1
         }
@@ -51,6 +51,7 @@ export default class Auth extends React.Component {
   };
 
   validatePass(pass) {
+    // For test allow easy pswds
     // if (!pass || pass.length < 6) {
     //   this.setState({ error: 'Too short password.' });
     //   return false;
