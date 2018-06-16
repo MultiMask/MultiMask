@@ -7,8 +7,4 @@ export default function ({ dispatch, getState }) {
     messaging.on(ACCOUNT_INFO_RESULT, data => {
         accountAction.setAccount(data)(dispatch, getState);
     });
-
-    // messaging.on("auth:check:success", () => {
-    //     stateAction.goMain()(dispatch, getState);
-    // });
 }

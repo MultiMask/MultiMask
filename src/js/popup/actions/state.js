@@ -29,7 +29,7 @@ const StateActions = {
       payload: name
     })
   },
-  goBy: () => (dispatch, getState) => {
+  goBuy: () => (dispatch, getState) => {
     dispatch({
       type: STATE_BUY
     })
