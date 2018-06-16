@@ -1,6 +1,7 @@
 import messaging from "../message";
 
 import {
+  AUTH_INIT,
   AUTH_CHECK,
   AUTH_CHECK_SUCCESS,
   AUTH_CHECK_FAIL,
@@ -18,6 +19,14 @@ import StateActions from './state';
 import AccountActions from './account';
 
 const AuthActions = {
+  init: pass => (dispatch, getState) => {
+      messaging.send({
+        type: AUTH_INIT,
+        payload: {
+          pass: pass
+        }
+      });
+  },
   check: () => (dispatch, getState) => {
     messaging.send({
       type: AUTH_CHECK

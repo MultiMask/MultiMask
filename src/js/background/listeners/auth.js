@@ -1,4 +1,5 @@
 import {
+  AUTH_INIT,
   AUTH_CHECK,
   AUTH_CHECK_SUCCESS,
   AUTH_CHECK_FAIL,
@@ -8,7 +9,7 @@ import {
 
 export default ({ messaging, App }) => {
   
-  messaging.on('auth:init', data => {
+  messaging.on(AUTH_INIT, data => {
     App.create(data.pass);
   });
 

@@ -1,8 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import messaging from "../../message";
+import authActions from "../../actions/auth";
 
-export default class Auth extends React.Component {
+class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
@@ -23,25 +25,19 @@ export default class Auth extends React.Component {
     }
   };
 
-  handleDone = () => {
-    console.log("done");
+  handleSubmit = () => {
+    if (this.isPassCorrect()) {
+      this.props.init(this.state.passStep1);
+      this.setState({ step: 3 });
+    }
   };
 
   handleBack = () => {
     this.setState({ step: 1 });
   };
 
-  handleSubmit = () => {
-    if (this.isPassCorrect()) {
-      messaging.send({
-        type: "auth:init",
-        payload: {
-          pass: this.state.passStep1
-        }
-      });
-
-      this.setState({ step: 3 });
-    }
+  handleDone = () => {
+    this.props.success();
   };
 
   isPassCorrect = () => {
@@ -52,6 +48,7 @@ export default class Auth extends React.Component {
 
   validatePass(pass) {
     // For test allow easy pswds
+    //
     // if (!pass || pass.length < 6) {
     //   this.setState({ error: 'Too short password.' });
     //   return false;
@@ -61,11 +58,19 @@ export default class Auth extends React.Component {
     return true;
   }
 
+  get title() {
+    if (this.state.step !== 3) {
+      return "Create new account";
+    } else {
+      return "Account created";
+    }
+  }
+
   render() {
     return (
       <div className="login__wrapper">
         <header className="login__wrapper-header">
-          <h3>Create new account</h3>
+          <h3>{this.title}</h3>
         </header>
         <div className="login__content">
           {this.state.step == 1 && (
@@ -130,3 +135,8 @@ export default class Auth extends React.Component {
     );
   }
 }
+
+export default connect(
+  () => ({}),
+  dispatch => bindActionCreators(authActions, dispatch)
+)(Auth);

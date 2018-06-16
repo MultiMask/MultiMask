@@ -1,3 +1,4 @@
+export const AUTH_INIT = 'auth:init';
 export const AUTH_LOGIN = 'auth:login';
 export const AUTH_LOGIN_RESULT = 'auth:login:result';
 export const AUTH_LOGIN_FAIL = 'auth:login:fail';
