@@ -7,7 +7,9 @@ import {
   ACCOUNT_BUY,
   ACCOUNT_INFO,
   ACCOUNT_SEND,
-  ACCOUNT_SET
+  ACCOUNT_SET,
+  ACCOUNT_GETSEED,
+  ACCOUNT_GETSEED_RESULT,
 } from "./../../constants/account";
 
 import {
@@ -53,6 +55,18 @@ const AccountActions = {
   },
   send: () => (dispatch, getState) => {
     stateActions.goSend(name)(dispatch, getState);
+  },
+  getSeed: (pass, name) => (dispatch, getState) => {
+    messaging.send({
+      type: ACCOUNT_GETSEED,
+      payload: { pass, name }
+    });
+  },
+  showSeed: seed => (dispatch, getState) => {
+    dispatch({
+      type: ACCOUNT_GETSEED_RESULT,
+      payload: { seed }
+    })
   }
 };
 export default AccountActions;

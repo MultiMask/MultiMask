@@ -2,21 +2,33 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import NeedAuth from './../components/NeedAuth';
+import { getCurrentWallet } from '../../select';
+import actions from './../../actions/account';
 
 class ExportPK extends React.Component {
+
+  componentDidMount() {
+    const { getSeed, pass, wallet } = this.props;
+
+    getSeed(pass, wallet.name);
+  }
+
   render() {
     return <div>
-      <NeedAuth>
-        <h1>
-          export PK
+      <h1>
+        export PK
         </h1>
-      </NeedAuth>
+      <h2>
+        {this.props.seed}
+      </h2>
     </div>;
   }
 }
 
-export default connect(state => ({
-  accounts: state.account.accounts,
-  wallet: state.account.wallet
-}))(ExportPK);
+export default connect(
+  state => ({
+    wallet: getCurrentWallet(state),
+    seed: state.account.seed
+  }),
+  dispatch => bindActionCreators(actions, dispatch)
+)(ExportPK);

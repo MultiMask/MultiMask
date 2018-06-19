@@ -3,11 +3,13 @@ import {
   ACCOUNT_ACTIVE,
   ACCOUNT_BUY,
   ACCOUNT_SEND,
-  ACCOUNT_BACK
+  ACCOUNT_BACK,
+  ACCOUNT_GETSEED_RESULT,
 } from "../../constants/account";
 
 const initialState = {
-  accounts: null
+  accounts: null,
+  seed: null,
 };
 
 export default function accountReducer(state = initialState, action) {
@@ -17,28 +19,24 @@ export default function accountReducer(state = initialState, action) {
         ...state,
         accounts: action.payload
       };
-      break;
     }
     case ACCOUNT_ACTIVE: {
       return {
         ...state,
         wallet: action.payload
       };
-      break;
     }
     case ACCOUNT_BUY: {
       return {
         ...state,
         buy: true
       };
-      break;
     }
     case ACCOUNT_SEND: {
       return {
         ...state,
         send: true
       };
-      break;
     }
     case ACCOUNT_BACK: {
       if (state.buy || state.send) {
@@ -53,7 +51,12 @@ export default function accountReducer(state = initialState, action) {
           wallet: undefined
         };
       }
-      break;
+    }
+    case ACCOUNT_GETSEED_RESULT: {
+      return {
+        ...state,
+        seed: action.payload.seed
+      }
     }
   }
 

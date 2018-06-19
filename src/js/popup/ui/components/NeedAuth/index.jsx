@@ -14,12 +14,14 @@ class NeedAuth extends React.Component {
     e.preventDefault();
 
     const json = formToJson(new FormData(e.target));
-    this.props.check(json.password);
+    this.pass = json.password;
+
+    this.props.check(this.pass);
   }
 
   render() {
     if (this.props.isAuth) {
-      return this.props.children;
+      return React.cloneElement(this.props.children, { pass: this.pass });
     }
 
     return (

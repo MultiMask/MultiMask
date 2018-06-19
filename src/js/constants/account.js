@@ -7,3 +7,6 @@ export const ACCOUNT_ACTIVE = 'account:set:active';
 export const ACCOUNT_SEND = 'account:send';
 export const ACCOUNT_BUY = 'account:buy';
 export const ACCOUNT_BACK = 'account:back';
+
+export const ACCOUNT_GETSEED = 'account:seed';
+export const ACCOUNT_GETSEED_RESULT = 'account:seed:result';

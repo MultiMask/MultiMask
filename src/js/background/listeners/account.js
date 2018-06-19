@@ -2,7 +2,8 @@ import {
   ACCOUNT_INFO,
   ACCOUNT_INFO_RESULT,
   ACCOUNT_CREATE,
-  ACCOUNT_ACTIVE
+  ACCOUNT_GETSEED,
+  ACCOUNT_GETSEED_RESULT
 } from "../../constants/account";
 
 export default ({ messaging, App }) => {
@@ -15,6 +16,20 @@ export default ({ messaging, App }) => {
   // Get Wallet info
   messaging.on(ACCOUNT_INFO, () => {
     sendAccountsInfo(App, messaging);
+  });
+
+  // Get Seed to show on front
+  messaging.on(ACCOUNT_GETSEED, ({ pass, name }) => {
+    const rawWallet = App.getSeed({ pass, name });
+
+    if (rawWallet) {
+      const seed = rawWallet.wallet.seed;
+
+      messaging.send({
+        type: ACCOUNT_GETSEED_RESULT,
+        payload: { seed }
+      });
+    }
   });
 };
 

@@ -9,6 +9,8 @@ import {
   STATE_VIEW_EXPORTPK
 } from "./../../../constants/state";
 
+import NeedAuth from './../components/NeedAuth';
+
 import List from "./list";
 import Details from "./details";
 import Buy from "./buy";
@@ -40,7 +42,9 @@ class Account extends React.Component {
     if (this.props.view === STATE_VIEW_EXPORTPK) {
       return (
         <div className="balance">
-          <ExportPK />
+          <NeedAuth>
+            <ExportPK />
+          </NeedAuth>
         </div>
       );
     }

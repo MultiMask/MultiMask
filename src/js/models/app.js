@@ -78,5 +78,11 @@ export default {
 
   saveAccounts() {
     this.accounts.forEach(acc => AccountFactory.save(acc))
+  },
+
+  getSeed({ pass, name }) {
+    if (this.login(pass)) {
+      return this.getAccount(name);
+    }
   }
 };

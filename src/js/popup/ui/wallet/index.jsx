@@ -2,10 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { ACCOUNT_CREATE } from "./../../../constants/account";
 import actions from "./../../actions/account";
-
-import messaging from "../../message";
 import AccountFactory from "./../../../models/accountFactory";
 
 class Wallet extends React.Component {
