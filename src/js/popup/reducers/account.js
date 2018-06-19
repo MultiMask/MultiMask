@@ -1,9 +1,6 @@
 import {
   ACCOUNT_SET,
   ACCOUNT_ACTIVE,
-  ACCOUNT_BUY,
-  ACCOUNT_SEND,
-  ACCOUNT_BACK,
   ACCOUNT_GETSEED_RESULT,
 } from "../../constants/account";
 
@@ -25,32 +22,6 @@ export default function accountReducer(state = initialState, action) {
         ...state,
         wallet: action.payload
       };
-    }
-    case ACCOUNT_BUY: {
-      return {
-        ...state,
-        buy: true
-      };
-    }
-    case ACCOUNT_SEND: {
-      return {
-        ...state,
-        send: true
-      };
-    }
-    case ACCOUNT_BACK: {
-      if (state.buy || state.send) {
-        return {
-          ...state,
-          send: false,
-          buy: false
-        };
-      } else {
-        return {
-          ...state,
-          wallet: undefined
-        };
-      }
     }
     case ACCOUNT_GETSEED_RESULT: {
       return {
