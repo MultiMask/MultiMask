@@ -1,38 +1,28 @@
-import { getPass, setPass, getAccountList, setAccountList } from './getter';
+import { getPass, setPass } from './getter';
 import { hash } from './../libs/cipher';
-import AccountFactory from './accountFactory';
+import AccountManager from './accountManager';
 
 const salt = 'multimask';
 const withSalt = pass => `${salt}${pass}`;
 
 export default {
-  accounts: [],
+  accountManager: new AccountManager(),
 
   init() {
     getPass().then(passHash => {
       this.passHash = passHash;
     });
 
-    getAccountList().then(this.restore.bind(this));
-  },
-
-  restore(accs) {
-    console.log('load all accounts:', accs);
-
-    if (accs && accs.length > 0) {
-      Promise.all(accs.map(accName => AccountFactory.load(accName)))
-        .then(accounts => {
-          accounts.forEach(acc => this.addRawAccount(acc));
-        })
-    }
-  },
-
-  clearList() {
-    setAccountList([]);
+    this.accountManager.restoreWallets();
   },
 
   isAuth() {
     return !!this.password;
+  },
+
+  create(pass) {
+    setPass(withSalt(pass));
+    this.password = pass;
   },
 
   login(pass) {
@@ -43,46 +33,5 @@ export default {
     }
 
     return isAuth;
-  },
-
-  create(pass) {
-    setPass(withSalt(pass));
-    this.password = pass;
-  },
-
-  getAccounts() {
-    return this.accounts;
-  },
-
-  getAccount(name) {
-    return this.accounts.find(account => account.name === name);
-  },
-
-  addAccount(account) {
-    const fullAccount = AccountFactory.restore(account);
-
-    this.addRawAccount(fullAccount);
-    this.save();
-  },
-
-  addRawAccount(acc) {
-    this.accounts.push(acc);
-  },
-
-  save() {
-    let accs = this.accounts.map(acc => acc.name);
-    setAccountList(accs);
-
-    this.saveAccounts();
-  },
-
-  saveAccounts() {
-    this.accounts.forEach(acc => AccountFactory.save(acc))
-  },
-
-  getSeed({ pass, name }) {
-    if (this.login(pass)) {
-      return this.getAccount(name);
-    }
   }
 };

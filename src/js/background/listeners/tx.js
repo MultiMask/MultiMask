@@ -12,7 +12,7 @@ let tx = null;
 export default ({ messaging, App }) => {
   // Create TX from UI
   messaging.on(TX_CREATE, ({ name, tx }) => {
-    const account = App.getAccount(name);
+    const account = App.accountManager.getAccount(name);
     account.sendTX(tx);
   });
 
