@@ -10,4 +10,4 @@ export const rootReducer = combineReducers({
   auth,
   state,
   ui
-})
+});
