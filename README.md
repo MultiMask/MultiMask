@@ -1,26 +1,25 @@
 # MultiMask
 
-MultiMask это расширение для браузера Chrome, которое является кошельком для блокчейна Bitcoin.
-Позволяет смотреть историю транзакций и переселать токены другим пользователям.
+MultiMask is browser extension based wallet for Bitcoin. You can see transaction history and send transaction.
 
 ### Установка
 
-Для сборки приложения необходимо установить необходимые пакеты.
+Install project
 
 ```javascript
     npm install
 ```
 
-После этого для билда проекта выполнить команду:
+Build project
 
 ```javascript
     npm run build
 ```
 
-или для режима разработки:
+Start in dev mode:
 
 ```javascript
     npm run start
 ```
 
-Приложение будет собрано и доступно в папке ./build. Для добавление его в Chrome можно воспользоваться [инструкцией](https://developer.chrome.com/extensions/getstarted#unpacked).
+You can see app in ./build after build. To add extension in chrome you need see [instruction](https://developer.chrome.com/extensions/getstarted#unpacked).

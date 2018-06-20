@@ -18,7 +18,7 @@
     "date-fns": "^1.29.0",
     "debug": "^3.1.0",
     "emotion": "^9.0.1",
-    "less": "^3.0.1",
+    "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "moment": "^2.20.1",
     "post-message-stream": "^3.0.0",
