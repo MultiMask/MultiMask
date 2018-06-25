@@ -1,4 +1,4 @@
-import BitcoinWallet from "./account/wallet/bitcoin";
+import BitcoinWallet from './account/wallet/bitcoin';
 import Account from './account';
 
 import { getWallet, setWallet } from './getter';
@@ -12,6 +12,8 @@ export default {
 
     return new Account(wallet, network);
   },
+
+  createFromSeed({ seed }) {},
 
   restore(account) {
     console.log('Restore wallet:>', account.name, account.network);
@@ -29,13 +31,11 @@ export default {
   },
 
   save(account) {
-    // console.log('save account raw:', account);
     const str = JSON.stringify(account);
     // TODO: Add encoding
     const encodedWallet = str;
 
     // console.log('save account raw:', encodedWallet);
-
     setWallet(account.name, encodedWallet);
   },
 
@@ -45,10 +45,6 @@ export default {
       const decoded = JSON.parse(str);
 
       return this.restore(decoded);
-    })
-  },
-
-  remove(accountName) {
-    setWallet(account.name, undefined);
+    });
   }
-}
+};

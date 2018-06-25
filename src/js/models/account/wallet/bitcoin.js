@@ -1,16 +1,16 @@
-import bitcoin from "bitcoinjs-lib";
-import Mnemonic from "bitcore-mnemonic";
+import bitcoin from 'bitcoinjs-lib';
+import Mnemonic from 'bitcore-mnemonic';
 // import bip38 from "bip38";
 // import wif from "wif";
 
 import axios from 'axios';
 
 const URL_NODE = 'https://testnet.blockchain.info';
-const NETWORK = "testnet";
+const NETWORK = 'testnet';
 // const NETWORK = "livenet";
 
 export default class BitcoinWallet {
-  constructor() { }
+  constructor() {}
 
   create(seed) {
     this.mnemonic = new Mnemonic(seed);
@@ -81,9 +81,7 @@ export default class BitcoinWallet {
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
       const lastOUT = res.data.txs[0];
       const output = lastOUT ? lastOUT.hash : null;
-      const outputIndex = lastOUT && lastOUT.out
-        ? lastOUT.out.findIndex(item => item.addr === this.address)
-        : null;
+      const outputIndex = lastOUT && lastOUT.out ? lastOUT.out.findIndex(item => item.addr === this.address) : null;
 
       return {
         index: outputIndex,
@@ -91,7 +89,7 @@ export default class BitcoinWallet {
         output: output,
         balance: res.data.final_balance / 1e8,
         txs: res.data.txs
-      }
+      };
     });
   }
 
@@ -100,7 +98,7 @@ export default class BitcoinWallet {
       const privateKey = this.priv;
       const address = this.address;
       // SEND signed Tx
-      console.log("create TX with: ");
+      console.log('create TX with: ');
       console.log('to: ', to);
       console.log('amount: ', amount);
       console.log('data: ', data);
@@ -120,7 +118,7 @@ export default class BitcoinWallet {
         let bitcoin_payload = Buffer.from(data, 'utf8');
         let dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
 
-        txb.addOutput(dataScript, 0)
+        txb.addOutput(dataScript, 0);
       }
 
       let amountToReturn = SUM - amount - 5000;
@@ -136,6 +134,6 @@ export default class BitcoinWallet {
       //   console.log('TX hash:', data);
       //   done(data);
       // })
-    })
+    });
   }
 }

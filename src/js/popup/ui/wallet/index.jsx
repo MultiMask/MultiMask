@@ -1,78 +1,70 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import actions from "./../../actions/account";
-import AccountFactory from "./../../../models/accountFactory";
+import { formToJson } from './../../helpers';
 
-class Wallet extends React.Component {
-  constructor(props) {
-    super(props);
+import ChooseNetwork from './chooseNetwork';
+import CreateWallet from './create';
+import ImportWallet from './import';
 
-    this.state = {
-      step: 1,
-      network: "bitcoin",
-      seed: null
-    };
-  }
-
-  handleSelect = e => {
-    this.setState({ network: e.target.value });
+class WalletCreate extends React.Component {
+  state = {
+    step: 0
   };
 
-  handleDone = () => {
-    this.account = AccountFactory.create({ network: this.state.network });
-    const seed = this.account.create();
+  onSubmit = e => {
+    e.preventDefault();
+    const data = formToJson(e.target);
 
-    this.setState({ step: 2, seed });
+    this.setState({ step: data.step });
   };
 
-  handleSave = () => {
-    this.props.create(this.account);
+  goBack = () => {
+    this.setState({ step: 0 });
   };
 
   render() {
+    if (this.state.step == 1) {
+      return (
+        <ChooseNetwork>
+          <CreateWallet onBack={this.goBack} />
+        </ChooseNetwork>
+      );
+    }
+
+    if (this.state.step == 2) {
+      return <ImportWallet onBack={this.goBack} />;
+    }
+
     return (
       <div className="creation">
-        {this.state.step === 1 && (
+        <form onSubmit={this.onSubmit}>
           <div>
-            <div>
-              <h4>Choose network:</h4>
-              <select onChange={this.handleSelect} value={this.state.network}>
-                <option value="bicoin">Bitcoin</option>
-                <option value="karma">Karma</option>
-              </select>
-            </div>
-            <button
-              onClick={this.handleDone}
-              className="login__create btn primary"
-            >
-              create
-            </button>
+            <label>
+              <input type="radio" value="1" name="step" />
+              Create Wallet
+            </label>
           </div>
-        )}
-        {this.state.step === 2 && (
           <div>
-            <div>
-              <h3>Save seed save:</h3>
-              <div>{this.state.seed}</div>
-            </div>
-            <button
-              onClick={this.handleSave}
-              className="login__create btn primary"
-            >
-              I saved Seed
-            </button>
+            <label>
+              <input type="radio" value="2" name="step" />
+              Import Seed Phrase
+            </label>
           </div>
-        )}
+          {/* <div>
+            <label>
+              <input type="radio" value="3" name="step" />
+              Import Private Key
+            </label>
+          </div> */}
+          <div>
+            <button type="submit">Next</button>
+          </div>
+        </form>
       </div>
     );
   }
 }
 
-export default connect(
-  ({ state }) => ({
-    creation: state.creation
-  }),
-  dispatch => bindActionCreators(actions, dispatch)
-)(Wallet);
+export default connect()(WalletCreate);
