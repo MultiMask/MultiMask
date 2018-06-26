@@ -1,11 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import FontAwesome from "react-fontawesome";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import FontAwesome from 'react-fontawesome';
 
-import { STATE_VIEW_MAIN } from "../../../constants/state";
+import { STATE_VIEW_MAIN } from '../../../constants/state';
 
-import actions from "../../actions/state";
+import stateActions from '../../actions/state';
+import authAction from '../../actions/auth';
 
 class Header extends React.Component {
   handleBack = () => {
@@ -17,6 +18,7 @@ class Header extends React.Component {
   }
 
   render() {
+    console.log('header props', this.props);
     return (
       <div className="header">
         {this.showBack && (
@@ -27,6 +29,7 @@ class Header extends React.Component {
         {!this.props.creation && (
           <div className="header_add">
             <FontAwesome name="plus-circle" onClick={this.props.createWallet} />
+            <FontAwesome name="sign-out-alt" onClick={this.props.logout} />
           </div>
         )}
       </div>
@@ -38,5 +41,5 @@ export default connect(
   ({ state }) => ({
     view: state.view
   }),
-  dispatch => bindActionCreators(actions, dispatch)
+  dispatch => bindActionCreators({ ...stateActions, ...authAction }, dispatch)
 )(Header);
