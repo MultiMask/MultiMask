@@ -1,11 +1,11 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import accountActions from "../../../actions/account";
+import accountActions from '../../../actions/account';
 
-import networkImg from "../../../../helpers/networkImg";
-import networkSign from "../../../../helpers/networkSign";
+import networkImg from '../../../../helpers/networkImg';
+import networkSign from '../../../../helpers/networkSign';
 
 class AccountFastView extends React.Component {
   get image() {
@@ -41,6 +41,7 @@ class AccountFastView extends React.Component {
   }
 }
 
-export default connect(null, dispatch =>
-  bindActionCreators(accountActions, dispatch)
+export default connect(
+  null,
+  dispatch => bindActionCreators(accountActions, dispatch)
 )(AccountFastView);

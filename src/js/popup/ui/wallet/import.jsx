@@ -7,64 +7,90 @@ import AccountFactory from './../../../models/accountFactory';
 
 class Wallet extends React.Component {
   state = {
-    step: 1,
-    network: 'bitcoin',
     seed: ''
-  };
-
-  handleSelect = e => {
-    this.setState({ network: e.target.value });
   };
 
   handleInput = e => {
     this.setState({ seed: e.target.value });
   };
 
-  handleDone = () => {
-    this.setState({ step: 2 });
+  handleCheck = e => {
+    this.createAccount();
+    this.getInfo();
   };
 
   handleSave = () => {
     this.props.create(this.account);
   };
 
+  createAccount() {
+    const { blockchain, network } = this.props;
+
+    try {
+      this.account = AccountFactory.create({
+        blockchain,
+        network,
+        seed: this.state.seed
+      });
+    } catch (e) {
+      this.setState({
+        error: 'Wrong wordlist'
+      });
+    }
+  }
+
+  getInfo() {
+    if (this.account) {
+      this.account.getInfo().then(data => {
+        this.setState({
+          address: data.info.address,
+          balance: data.info.balance,
+          success: true
+        });
+      });
+    }
+  }
+
   render() {
     return (
       <div className="creation">
-        {this.state.step === 1 && (
+        <div>
           <div>
-            <div>
-              <h4>Choose network:</h4>
-              <select onChange={this.handleSelect} value={this.state.network}>
-                <option value="bicoin">Bitcoin</option>
-              </select>
-            </div>
-            <div>
-              <button onClick={this.props.onBack} className="btn">
-                Back
-              </button>
-              <button onClick={this.handleDone} className="login__create btn primary">
-                create
-              </button>
-            </div>
+            <h3>Input seed:</h3>
+            <textarea name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
           </div>
-        )}
-        {this.state.step === 2 && (
+          {this.state.address &&
+            this.state.balance && (
+              <div>
+                <div>
+                  <dl>
+                    <dd>Address:</dd>
+                    <dt>{this.state.address}</dt>
+                  </dl>
+                </div>
+                <div>
+                  <dl>
+                    <dd>Balance:</dd>
+                    <dt>{this.state.balance}</dt>
+                  </dl>
+                </div>
+              </div>
+            )}
+          {this.state.error && <div>{this.state.error}</div>}
           <div>
-            <div>
-              <h3>Input seed:</h3>
-              <input name="seed" type="text" value={this.state.seed} onChange={this.handleInput} />
-            </div>
-            <div>
-              <button onClick={this.props.onBack} className="btn">
-                Back
-              </button>
+            <button onClick={this.props.onBack} className="btn">
+              Back
+            </button>
+            <button onClick={this.handleCheck} className="login__create btn primary">
+              Check
+            </button>
+            {this.state.success && (
               <button onClick={this.handleSave} className="login__create btn primary">
-                Done
+                Import
               </button>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -72,5 +98,11 @@ class Wallet extends React.Component {
 
 export default connect(
   () => ({}),
-  dispatch => bindActionCreators(actions, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        create: actions.create
+      },
+      dispatch
+    )
 )(Wallet);

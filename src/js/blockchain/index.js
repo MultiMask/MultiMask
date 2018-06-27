@@ -1,5 +1,5 @@
-export default [
-  {
+export default {
+  BTC: {
     name: 'Bitcoin',
     sign: 'BTC',
     network: [
@@ -9,4 +9,4 @@ export default [
       }
     ]
   }
-];
+};

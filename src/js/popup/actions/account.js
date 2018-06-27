@@ -1,4 +1,4 @@
-import messaging from "../message";
+import messaging from '../message';
 
 import {
   ACCOUNT_ACTIVE,
@@ -6,12 +6,10 @@ import {
   ACCOUNT_INFO,
   ACCOUNT_SET,
   ACCOUNT_GETSEED,
-  ACCOUNT_GETSEED_RESULT,
-} from "./../../constants/account";
+  ACCOUNT_GETSEED_RESULT
+} from './../../constants/account';
 
-import {
-  STATE_MAIN
-} from "./../../constants/state";
+import { STATE_MAIN } from './../../constants/state';
 
 import stateActions from './state';
 
@@ -28,7 +26,7 @@ const AccountActions = {
     });
 
     dispatch({
-      type: STATE_MAIN,
+      type: STATE_MAIN
     });
   },
   setAccount: accs => (dispatch, getState) => {
@@ -48,10 +46,10 @@ const AccountActions = {
     stateActions.goWallet(name)(dispatch, getState);
   },
   buy: () => (dispatch, getState) => {
-    stateActions.goBy(name)(dispatch, getState);
+    stateActions.goBy()(dispatch, getState);
   },
   send: () => (dispatch, getState) => {
-    stateActions.goSend(name)(dispatch, getState);
+    stateActions.goSend()(dispatch, getState);
   },
   getSeed: (pass, name) => (dispatch, getState) => {
     messaging.send({
@@ -63,7 +61,7 @@ const AccountActions = {
     dispatch({
       type: ACCOUNT_GETSEED_RESULT,
       payload: { seed }
-    })
+    });
   }
 };
 export default AccountActions;
