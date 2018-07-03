@@ -3,6 +3,9 @@
     "react-app",
     "plugin:prettier/recommended"
   ],
+  "env": {
+    "webextensions": true
+  },
   "rules": {
     "quotes": [
       2,

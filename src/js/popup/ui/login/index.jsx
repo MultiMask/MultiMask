@@ -1,18 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import authActions from "../../actions/auth";
+import authActions from '../../actions/auth';
 
-import messaging from "../../message";
+import messaging from '../../message';
 
 class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      pass: "",
-      error: ""
+      pass: '',
+      error: ''
     };
   }
 
@@ -44,9 +44,7 @@ class Auth extends React.Component {
                 value={this.state.pass}
               />
             </div>
-            {this.props.error && (
-              <div className="login__error">Wrong password</div>
-            )}
+            {this.props.error && <div className="login__error">Wrong password</div>}
             <button type="submit" className="login__create btn primary">
               login
             </button>

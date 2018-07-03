@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import Login from "./ui/login";
-import Create from "./ui/login/create";
-import Account from "./ui/account";
-import Wrapper from "./ui/header";
-import Wallet from "./ui/wallet";
+import Login from './ui/login';
+import Create from './ui/login/create';
+import Account from './ui/account';
+import Wrapper from './ui/header';
+import Wallet from './ui/wallet';
 
-import authActions from "./actions/auth";
+import authActions from './actions/auth';
 
 import {
   STATE_VIEW_CREATION,
@@ -19,7 +19,7 @@ import {
   STATE_VIEW_SEND,
   STATE_VIEW_INIT,
   STATE_VIEW_EXPORTPK
-} from "./../constants/state";
+} from './../constants/state';
 
 class Popup extends React.Component {
   componentDidMount() {
@@ -27,7 +27,7 @@ class Popup extends React.Component {
   }
 
   render() {
-    console.log("app props:", this.props);
+    console.log('app props:', this.props);
 
     switch (this.props.view) {
       case STATE_VIEW_CREATION:
@@ -53,9 +53,11 @@ class Popup extends React.Component {
 
       case STATE_VIEW_INIT:
         return <Create />;
-    }
 
-    return null;
+      // TODO: make error page or logger
+      default:
+        return null;
+    }
   }
 }
 
