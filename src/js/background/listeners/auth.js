@@ -17,7 +17,6 @@ export default ({ messaging, App }) => {
 
   messaging.on(AUTH_LOGIN, data => {
     const completed = App.login(data.pass);
-    console.log('test');
     messaging.send({
       type: AUTH_LOGIN_RESULT,
       payload: {
@@ -29,7 +28,11 @@ export default ({ messaging, App }) => {
   messaging.on(AUTH_LOGOUT, () => {
     const isLogout = App.logout();
 
-    messaging.send({ type: AUTH_LOGOUT_SUCCESS });
+    if (isLogout) {
+      messaging.send({ type: AUTH_LOGOUT_SUCCESS });
+    } else {
+      messaging.send({ type: AUTH_LOGOUT_FAIL });
+    }
   });
 
   messaging.on(AUTH_CHECK, () => {

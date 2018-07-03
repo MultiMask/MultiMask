@@ -36,8 +36,6 @@ export default {
   },
 
   logout() {
-    const isLogout = remPass();
-    console.log('models logout', isLogout);
-    return isLogout;
+    return delete this.password;
   }
 };

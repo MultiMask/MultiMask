@@ -12,7 +12,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from './../../constants/auth';
 
-import { STATE_MAIN, STATE_INIT, STATE_LOGIN } from './../../constants/state';
+import { STATE_INIT, STATE_LOGIN } from './../../constants/state';
 
 import StateActions from './state';
 import AccountActions from './account';
@@ -74,7 +74,14 @@ const AuthActions = {
       type: AUTH_LOGOUT_SUCCESS
     });
 
-    AuthActions.success()(dispatch, getState);
+    dispatch({
+      type: STATE_LOGIN
+    });
+  },
+  logoutFail: () => (dispatch, getState) => {
+    dispatch({
+      type: AUTH_LOGOUT_FAIL
+    });
   },
   success: () => (dispatch, getState) => {
     StateActions.goMain()(dispatch, getState);

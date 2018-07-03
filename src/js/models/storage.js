@@ -22,20 +22,6 @@ class Storage {
       });
     });
   }
-
-  remove(key) {
-    console.log('remove>', key);
-    return new Promise((resolve, reject) => {
-      chrome.storage.local.remove([key], function() {
-        console.log('remove: done');
-        const error = chrome.runtime.lastError;
-        if (error) {
-          reject(false);
-        }
-        resolve(true);
-      });
-    });
-  }
 }
 
 const storage = new Storage();

@@ -18,7 +18,6 @@ class Header extends React.Component {
   }
 
   render() {
-    console.log('header props', this.props);
     return (
       <div className="header">
         {this.showBack && (
