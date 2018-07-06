@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import { css } from 'emotion';
+import TextField from '../TextField';
+import Button from '../Button';
 import authActions from '../../actions/auth';
 
-import messaging from '../../message';
+const styles = {
+  button: css`
+    margin-top: 50px;
+  `
+};
 
 class Auth extends React.Component {
   constructor(opts) {
@@ -27,30 +33,21 @@ class Auth extends React.Component {
 
   render() {
     return (
-      <div className="login__wrapper">
-        <header className="login__wrapper-header">
-          <h2>MultiMask</h2>
-          <h4>Login to your acccount</h4>
-        </header>
-        <div className="login__content">
-          <form onSubmit={this.handleDone}>
-            <div className="login__create">
-              <input
-                placeholder="enter password"
-                className="login__input"
-                type="password"
-                name="pass"
-                onChange={this.handleInput}
-                value={this.state.pass}
-              />
-            </div>
-            {this.props.error && <div className="login__error">Wrong password</div>}
-            <button type="submit" className="login__create btn primary">
-              login
-            </button>
-          </form>
-        </div>
-      </div>
+      <React.Fragment>
+        <form onSubmit={this.handleDone}>
+          <TextField
+            label="enter password"
+            type="password"
+            name="pass"
+            onChange={this.handleInput}
+            value={this.state.pass}
+          />
+          {this.props.error && <div className="login__error">Wrong password</div>}
+          <Button className={styles.button} type="submit">
+            Login
+          </Button>
+        </form>
+      </React.Fragment>
     );
   }
 }

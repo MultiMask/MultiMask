@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import AuthLayout from './layouts/AuthLayout';
 import Login from './ui/login';
 import Create from './ui/login/create';
 import Account from './ui/account';
@@ -49,7 +50,11 @@ class Popup extends React.Component {
         );
 
       case STATE_VIEW_LOGIN:
-        return <Login />;
+        return (
+          <AuthLayout>
+            <Login />
+          </AuthLayout>
+        );
 
       case STATE_VIEW_INIT:
         return <Create />;
