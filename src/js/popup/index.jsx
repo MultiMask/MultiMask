@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AuthLayout from './layouts/AuthLayout';
+import MainLayout from './layouts/MainLayout';
 import Login from './pages/login';
 import Create from './pages/login/create';
 import Account from './pages/account';
@@ -44,9 +45,9 @@ class Popup extends React.Component {
       case STATE_VIEW_SEND:
       case STATE_VIEW_EXPORTPK:
         return (
-          <Wrapper>
+          <MainLayout>
             <Account />
-          </Wrapper>
+          </MainLayout>
         );
       // TODO: make more beautifully using layout and routing
       case STATE_VIEW_LOGIN:
