@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AuthLayout from './layouts/AuthLayout';
-import Login from './ui/login';
-import Create from './ui/login/create';
-import Account from './ui/account';
+import Login from './pages/login';
+import Create from './pages/login/create';
+import Account from './pages/account';
 import Wrapper from './ui/header';
-import Wallet from './ui/wallet';
+import Wallet from './pages/wallet';
 
 import authActions from './actions/auth';
 

@@ -1,16 +1,16 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import authActions from "../../actions/auth";
+import authActions from '../../actions/auth';
 
 class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      passStep1: "",
-      passStep2: "",
+      passStep1: '',
+      passStep2: '',
       step: 1
     };
   }
@@ -60,9 +60,9 @@ class Auth extends React.Component {
 
   get title() {
     if (this.state.step !== 3) {
-      return "Create new account";
+      return 'Create new account';
     } else {
-      return "Account created";
+      return 'Account created';
     }
   }
 
@@ -85,10 +85,7 @@ class Auth extends React.Component {
                   value={this.state.passStep1}
                 />
               </div>
-              <button
-                onClick={this.handleNext}
-                className="login__create btn primary"
-              >
+              <button onClick={this.handleNext} className="login__create btn primary">
                 next
               </button>
             </div>
@@ -119,17 +116,12 @@ class Auth extends React.Component {
           )}
           {this.state.step == 3 && (
             <div>
-              <button
-                onClick={this.handleDone}
-                className="login__create btn primary"
-              >
+              <button onClick={this.handleDone} className="login__create btn primary">
                 Done
               </button>
             </div>
           )}
-          {this.state.error && (
-            <div className="login__error">{this.state.error}</div>
-          )}
+          {this.state.error && <div className="login__error">{this.state.error}</div>}
         </div>
       </div>
     );

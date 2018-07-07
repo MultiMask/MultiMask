@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
-import TextField from '../TextField';
-import Button from '../Button';
+import TextField from '../../ui/TextField';
+import Button from '../../ui/Button';
 import authActions from '../../actions/auth';
 
 const styles = {
