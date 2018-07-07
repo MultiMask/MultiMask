@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { getCurrentWallet } from '../../select';
 import actions from './../../actions/account';
 
-import { decode } from './../../../libs/cipher';
+import { decode, hidePass } from './../../../libs/cipher';
 
 class ExportPK extends React.Component {
   state = {
@@ -21,7 +21,7 @@ class ExportPK extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.pass && nextProps.seed) {
       return {
-        seed: decode(nextProps.pass, nextProps.seed)
+        seed: decode(hidePass(nextProps.pass), nextProps.seed)
       };
     }
 

@@ -1,4 +1,5 @@
 import messaging from '../message';
+import {hidePass} from './../../libs/cipher';
 
 import {
   ACCOUNT_ACTIVE,
@@ -52,9 +53,11 @@ const AccountActions = {
     stateActions.goSend()(dispatch, getState);
   },
   getSeed: (pass, name) => (dispatch, getState) => {
+    const hiddenPass = hidePass(pass);
+    
     messaging.send({
       type: ACCOUNT_GETSEED,
-      payload: { pass, name }
+      payload: { pass: hiddenPass, name }
     });
   },
   showSeed: seed => (dispatch, getState) => {

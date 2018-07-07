@@ -5,8 +5,8 @@ import {
 } from "../../../constants/ui/needauth";
 
 export default ({ messaging, App }) => {
-  messaging.on(NEEDAUTH_CHECK, data => {
-    const completed = App.login(data.pass);
+  messaging.on(NEEDAUTH_CHECK, async data => {
+    const completed = await App.login(data.pass);
 
     messaging.send({
       type: completed ? NEEDAUTH_SUCCESS : NEEDAUTH_FAIL

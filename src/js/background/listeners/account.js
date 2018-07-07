@@ -19,8 +19,8 @@ export default ({ messaging, App }) => {
   });
 
   // Get Seed to show on front
-  messaging.on(ACCOUNT_GETSEED, ({ pass, name }) => {
-    if (App.login(pass)) {
+  messaging.on(ACCOUNT_GETSEED, async ({ pass, name }) => {
+    if (await App.login(pass)) {
       const seed = App.accountManager.getSeed({ name });
 
       if (seed) {
