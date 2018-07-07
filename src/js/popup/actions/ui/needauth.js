@@ -1,4 +1,5 @@
 import messaging from "../../message";
+import { hidePass } from './../../../libs/cipher';
 
 import {
   NEEDAUTH_START,
@@ -14,9 +15,11 @@ const NeedAuthActions = {
     });
   },
   check: pass => (dispatch, getState) => {
+    const hiddenPass = hidePass(pass);
+    
     messaging.send({
       type: NEEDAUTH_CHECK,
-      payload: { pass }
+      payload: { pass: hiddenPass }
     })
   },
   success: () => (dispatch, getState) => {

@@ -22,6 +22,16 @@ class Storage {
       });
     });
   }
+
+  remove(key) {
+    // console.log('remove:', key);
+    return new Promise(resolve => {
+      chrome.storage.local.remove(key, function() {
+        // console.log('remove: done');
+        resolve();
+      });
+    });
+  }
 }
 
 const storage = new Storage();

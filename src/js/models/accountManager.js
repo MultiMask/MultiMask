@@ -39,16 +39,22 @@ export default class AccountManager {
   }
 
   getAccounts() {
-    return this.accounts;
+    if (this.App.isAuth()) {
+      return this.accounts;
+    }
+
+    return [];
   }
 
   getSeed({ name }) {
-    const account = this.getAccount(name);
+    if (this.App.isAuth()) {
+      const account = this.getAccount(name);
 
-    if (account) {
-      const seed = account.wallet.seed;
+      if (account) {
+        const seed = account.wallet.seed;
 
-      return encode(this.App.password, seed);
+        return encode(this.App.password, seed);
+      }
     }
   
     return null;

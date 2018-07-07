@@ -15,8 +15,9 @@ export default ({ messaging, App }) => {
     App.create(data.pass);
   });
 
-  messaging.on(AUTH_LOGIN, data => {
-    const completed = App.login(data.pass);
+  messaging.on(AUTH_LOGIN, async data => {
+    const completed = await App.login(data.pass);
+    
     messaging.send({
       type: AUTH_LOGIN_RESULT,
       payload: {
