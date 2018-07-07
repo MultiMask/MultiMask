@@ -1,11 +1,16 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { getCurrentWallet } from '../../select';
 import actions from './../../actions/account';
 
+import { decode } from './../../../libs/cipher';
+
 class ExportPK extends React.Component {
+  state = {
+    seed: ''
+  };
 
   componentDidMount() {
     const { getSeed, pass, wallet } = this.props;
@@ -13,15 +18,25 @@ class ExportPK extends React.Component {
     getSeed(pass, wallet.name);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.pass && nextProps.seed) {
+      return {
+        seed: decode(nextProps.pass, nextProps.seed)
+      };
+    }
+
+    return {
+      seed: ''
+    };
+  }
+
   render() {
-    return <div>
-      <h1>
-        export PK
-        </h1>
-      <h2>
-        {this.props.seed}
-      </h2>
-    </div>;
+    return (
+      <div>
+        <h1>export PK</h1>
+        <h2>{this.state.seed}</h2>
+      </div>
+    );
   }
 }
 

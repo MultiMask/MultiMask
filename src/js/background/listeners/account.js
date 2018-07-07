@@ -21,11 +21,9 @@ export default ({ messaging, App }) => {
   // Get Seed to show on front
   messaging.on(ACCOUNT_GETSEED, ({ pass, name }) => {
     if (App.login(pass)) {
-      const rawWallet = App.accountManager.getSeed({ name });
+      const seed = App.accountManager.getSeed({ name });
 
-      if (rawWallet) {
-        const seed = rawWallet.wallet.seed;
-
+      if (seed) {
         messaging.send({
           type: ACCOUNT_GETSEED_RESULT,
           payload: { seed }
