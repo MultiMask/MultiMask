@@ -15,21 +15,21 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   text-align: center;
-  padding-top: 100px;
+  padding-top: ${props => (props.login ? '100px' : '50px')};
   flex-direction: column;
 `;
 
 const Image = styled('img')`
-  margin-top: ${props => (props.default ? '16px' : 0)};
+  margin-top: 16px};
 `;
 
-const AuthLayout = ({ children }) => (
+const AuthLayout = ({ login, children }) => (
   <Container>
     <Header>
       <Image alt="logo" src={logo} />
-      <Image default src={label} />
+      <Image alt="label" src={label} />
       <Typography color="main" variant="title">
-        Login to your acccount
+        {login ? 'Login to your acccount' : 'Create new account'}
       </Typography>
     </Header>
     {children}
@@ -37,7 +37,7 @@ const AuthLayout = ({ children }) => (
 );
 
 AuthLayout.defaultProps = {
-  default: false
+  login: false
 };
 
 export default AuthLayout;

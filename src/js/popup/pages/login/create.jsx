@@ -1,17 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { css } from 'emotion';
+
+import TextField from '../../ui/TextField';
+import Button from '../../ui/Button';
 
 import authActions from '../../actions/auth';
+
+const styles = {
+  textField: css`
+    margin: 44px 0 33px 0;
+  `,
+  button: css`
+    margin-top: 60px;
+  `
+};
 
 class Auth extends React.Component {
   constructor(opts) {
     super(opts);
 
     this.state = {
-      passStep1: '',
-      passStep2: '',
-      step: 1
+      password: '',
+      confirmPassword: '',
+      errors: {}
     };
   }
 
@@ -19,111 +32,63 @@ class Auth extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleNext = () => {
-    if (this.validatePass(this.state.passStep1)) {
-      this.setState({ step: 2 });
-    }
-  };
+  handleSubmit = event => {
+    event.preventDefault();
+    const errors = this.validate(this.state);
 
-  handleSubmit = () => {
-    if (this.isPassCorrect()) {
-      this.props.init(this.state.passStep1);
-      this.setState({ step: 3 });
-    }
-  };
-
-  handleBack = () => {
-    this.setState({ step: 1 });
-  };
-
-  handleDone = () => {
-    this.props.success();
-  };
-
-  isPassCorrect = () => {
-    const { passStep1, passStep2 } = this.state;
-
-    return passStep1 === passStep2;
-  };
-
-  validatePass(pass) {
-    // For test allow easy pswds
-    //
-    // if (!pass || pass.length < 6) {
-    //   this.setState({ error: 'Too short password.' });
-    //   return false;
-    // }
-
-    this.setState({ error: null });
-    return true;
-  }
-
-  get title() {
-    if (this.state.step !== 3) {
-      return 'Create new account';
+    if (Object.keys(errors).length === 0) {
+      this.props.init(this.state.password);
+      this.props.success();
     } else {
-      return 'Account created';
+      this.setState({ errors });
     }
-  }
+  };
+
+  validate = values => {
+    const errors = {};
+
+    if (!values.password) {
+      errors.password = 'Required';
+    }
+    if (!values.confirmPassword) {
+      errors.confirmPassword = 'Required';
+    } else if (values.confirmPassword !== values.password) {
+      errors.confirmPassword = 'Password mismatched';
+    }
+
+    return errors;
+  };
 
   render() {
+    const {
+      password,
+      errors: { password: passwordError, confirmPassword: confirmPasswordError },
+      confirmPassword
+    } = this.state;
+
     return (
-      <div className="login__wrapper">
-        <header className="login__wrapper-header">
-          <h3>{this.title}</h3>
-        </header>
-        <div className="login__content">
-          {this.state.step == 1 && (
-            <div>
-              <div className="login__create">
-                <input
-                  placeholder="enter password"
-                  className="login__input"
-                  type="password"
-                  name="passStep1"
-                  onChange={this.handleInput}
-                  value={this.state.passStep1}
-                />
-              </div>
-              <button onClick={this.handleNext} className="login__create btn primary">
-                next
-              </button>
-            </div>
-          )}
-          {this.state.step == 2 && (
-            <div>
-              <div className="login__create">
-                <input
-                  placeholder="repeat password"
-                  className="login__input"
-                  type="password"
-                  name="passStep2"
-                  onChange={this.handleInput}
-                  value={this.state.passStep2}
-                />
-              </div>
-              <div onClick={this.handleBack} className="login__create btn">
-                back
-              </div>
-              <button
-                onClick={this.handleSubmit}
-                className="login__create btn primary"
-                disabled={!this.isPassCorrect()}
-              >
-                create
-              </button>
-            </div>
-          )}
-          {this.state.step == 3 && (
-            <div>
-              <button onClick={this.handleDone} className="login__create btn primary">
-                Done
-              </button>
-            </div>
-          )}
-          {this.state.error && <div className="login__error">{this.state.error}</div>}
-        </div>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <TextField
+          className={styles.textField}
+          label="New Password"
+          type="password"
+          name="password"
+          onChange={this.handleInput}
+          value={password}
+          error={passwordError}
+        />
+        <TextField
+          label="Confirm Password"
+          type="password"
+          name="confirmPassword"
+          onChange={this.handleInput}
+          value={confirmPassword}
+          error={confirmPasswordError}
+        />
+        <Button className={styles.button} type="submit">
+          Create
+        </Button>
+      </form>
     );
   }
 }

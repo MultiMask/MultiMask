@@ -33,21 +33,19 @@ class Auth extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <form onSubmit={this.handleDone}>
-          <TextField
-            label="Enter password"
-            type="password"
-            name="pass"
-            onChange={this.handleInput}
-            value={this.state.pass}
-          />
-          {this.props.error && <div className="login__error">Wrong password</div>}
-          <Button className={styles.button} type="submit">
-            Login
-          </Button>
-        </form>
-      </React.Fragment>
+      <form onSubmit={this.handleDone}>
+        <TextField
+          label="Enter password"
+          type="password"
+          name="pass"
+          onChange={this.handleInput}
+          value={this.state.pass}
+        />
+        {this.props.error && <div className="login__error">Wrong password</div>}
+        <Button className={styles.button} type="submit">
+          Login
+        </Button>
+      </form>
     );
   }
 }

@@ -26,13 +26,27 @@ const Label = styled.label`
   background-color: white;
 `;
 
-const TextField = ({ label, name, ...props }) => {
+const Error = styled.div`
+  display: ${props => (props.error ? 'block' : 'none')};
+  color: ${props => props.theme.colors.error};
+  font-size: 14px;
+  text-align: left;
+  padding-left: 13px;
+  padding-top: 4px;
+`;
+
+const TextField = ({ className, label, name, error, ...props }) => {
   return (
-    <InputContainer>
+    <InputContainer className={className}>
       <Label for={name}>{label}</Label>
       <Input id={name} name={name} {...props} />
+      <Error error>{error}</Error>
     </InputContainer>
   );
+};
+
+TextField.defaultProps = {
+  error: null
 };
 
 export default TextField;

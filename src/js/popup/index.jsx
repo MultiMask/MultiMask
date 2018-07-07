@@ -48,16 +48,20 @@ class Popup extends React.Component {
             <Account />
           </Wrapper>
         );
-
+      // TODO: make more beautifully using layout and routing
       case STATE_VIEW_LOGIN:
         return (
-          <AuthLayout>
+          <AuthLayout login>
             <Login />
           </AuthLayout>
         );
 
       case STATE_VIEW_INIT:
-        return <Create />;
+        return (
+          <AuthLayout>
+            <Create />
+          </AuthLayout>
+        );
 
       // TODO: make error page or logger
       default:
