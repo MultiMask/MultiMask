@@ -39,7 +39,11 @@ export default class AccountManager {
   }
 
   getAccounts() {
-    return this.accounts;
+    if (this.App.isAuth()) {
+      return this.accounts;
+    }
+
+    return [];
   }
 
   getSeed({ name }) {
