@@ -6,21 +6,22 @@ import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
 
 const URL_NODE = 'https://testnet.blockchain.info';
-const NETWORK = 'testnet';
+// const NETWORK = 'testnet';
 // const NETWORK = "livenet";
 
 export default class BitcoinWallet {
-  constructor() {}
+  constructor(network) {
+    this.network = network;
+  }
 
   create(seed) {
     this.mnemonic = new Mnemonic(seed);
     this.seed = this.mnemonic.toString();
 
-    const HDPrivateKey = this.mnemonic.toHDPrivateKey(null, NETWORK);
-    // console.log(HDPrivateKey);
+    const HDPrivateKey = this.mnemonic.toHDPrivateKey(null, this.network);
 
     this.priv = HDPrivateKey.privateKey.toWIF();
-    this.address = HDPrivateKey.privateKey.toAddress(NETWORK).toString();
+    this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
   }
 
   getSeed() {
@@ -130,10 +131,10 @@ export default class BitcoinWallet {
 
       console.log('TX = ', txb.build().toHex());
 
-      // return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then((data) => {
-      //   console.log('TX hash:', data);
-      //   done(data);
-      // })
+      return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(data => {
+        console.log('TX hash:', data);
+        // done(data);
+      });
     });
   }
 }

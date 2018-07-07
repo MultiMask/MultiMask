@@ -2,7 +2,7 @@
 
 MultiMask is browser extension based wallet for Bitcoin. You can see transaction history and send transaction.
 
-### Установка
+### Installation
 
 Install project
 

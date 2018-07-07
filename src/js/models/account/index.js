@@ -1,9 +1,11 @@
 export default class Account {
-  constructor(wallet, network) {
+  constructor({ wallet, network, blockchain, name, seed }) {
     this.network = network;
     this.wallet = wallet;
+    this.blockchain = blockchain;
 
-    this.name = this.getName();
+    this.name = name ? name : this.getName();
+    this.create(seed);
   }
 
   getName() {
@@ -12,17 +14,19 @@ export default class Account {
 
   create(seed) {
     this.wallet.create(seed);
+  }
 
+  getSeed() {
     return this.wallet.getSeed();
   }
 
   getInfo() {
-    return this.wallet.getInfo()
-      .then(info => ({
-        name: this.name,
-        network: this.network,
-        info,
-      }))
+    return this.wallet.getInfo().then(info => ({
+      name: this.name,
+      blockchain: this.blockchain,
+      network: this.network,
+      info
+    }));
   }
 
   sendTX(tx) {

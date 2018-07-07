@@ -1,14 +1,12 @@
-import { getPass, setPass } from './getter';
-import { hash } from './../libs/cipher';
+import { getPass, setPass, checkPass } from './getter';
 import AccountManager from './accountManager';
 
-const salt = 'multimask';
-const withSalt = pass => `${salt}${pass}`;
-
 export default {
-  accountManager: new AccountManager(),
+  accountManager: null,
 
   init() {
+    this.accountManager = new AccountManager({App: this});
+
     getPass().then(passHash => {
       this.passHash = passHash;
     });
@@ -21,17 +19,21 @@ export default {
   },
 
   create(pass) {
-    setPass(withSalt(pass));
+    setPass(pass);
     this.password = pass;
   },
 
-  login(pass) {
-    const isAuth = withSalt(pass) === this.passHash;
+  async login(pass) {
+    const isAuth = await checkPass(pass);
 
     if (isAuth) {
       this.password = pass;
     }
 
     return isAuth;
+  },
+
+  logout() {
+    return delete this.password;
   }
 };

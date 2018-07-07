@@ -1,8 +1,13 @@
 import { getAccountList, setAccountList } from './getter';
+import {encode} from './../libs/cipher';
 import AccountFactory from './accountFactory';
 
 export default class AccountManager {
   accounts = [];
+
+  constructor({App}) {
+    this.App = App;
+  }
 
   restoreWallets() {
     getAccountList().then(this.restore.bind(this));
@@ -12,10 +17,9 @@ export default class AccountManager {
     console.log('load all accounts:', accs);
 
     if (accs && accs.length > 0) {
-      Promise.all(accs.map(accName => AccountFactory.load(accName)))
-        .then(accounts => {
-          accounts.forEach(acc => this.addRawAccount(acc));
-        })
+      Promise.all(accs.map(accName => AccountFactory.load(accName))).then(accounts => {
+        accounts.forEach(acc => this.addRawAccount(acc));
+      });
     }
   }
 
@@ -35,11 +39,25 @@ export default class AccountManager {
   }
 
   getAccounts() {
-    return this.accounts;
+    if (this.App.isAuth()) {
+      return this.accounts;
+    }
+
+    return [];
   }
 
   getSeed({ name }) {
-    return this.getAccount(name);
+    if (this.App.isAuth()) {
+      const account = this.getAccount(name);
+
+      if (account) {
+        const seed = account.wallet.seed;
+
+        return encode(this.App.password, seed);
+      }
+    }
+  
+    return null;
   }
 
   save() {
@@ -50,7 +68,7 @@ export default class AccountManager {
   }
 
   saveAccounts() {
-    this.accounts.forEach(acc => AccountFactory.save(acc))
+    this.accounts.forEach(acc => AccountFactory.save(acc));
   }
 
   clearList() {

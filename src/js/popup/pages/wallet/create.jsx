@@ -10,20 +10,16 @@ class Wallet extends React.Component {
     super(props);
 
     this.state = {
-      step: 1,
-      network: 'bitcoin',
       seed: null
     };
   }
 
   componentDidMount() {
     const { blockchain, network } = this.props;
-    console.log('CHAIN', blockchain, network);
 
-    this.account = AccountFactory.create({ network: this.state.network });
-    const seed = this.account.create();
+    this.account = AccountFactory.create({ blockchain, network });
 
-    this.setState({ step: 2, seed });
+    this.setState({ seed: this.account.getSeed() });
   }
 
   handleSave = () => {
@@ -31,8 +27,6 @@ class Wallet extends React.Component {
   };
 
   render() {
-    console.log('create props', this.props);
-
     return (
       <div className="creation">
         <div>

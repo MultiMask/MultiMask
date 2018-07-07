@@ -2,32 +2,35 @@ import BitcoinWallet from './account/wallet/bitcoin';
 import Account from './account';
 
 import { getWallet, setWallet } from './getter';
+import networks from './../blockchain';
 
 export default {
-  create({ network }) {
+  create({ blockchain, network, seed }) {
     let wallet;
-    if (network === 'bitcoin') {
-      wallet = new BitcoinWallet();
+
+    if (blockchain === networks.BTC.sign) {
+      wallet = new BitcoinWallet(network);
     }
 
-    return new Account(wallet, network);
+    return new Account({ wallet, network, blockchain, seed });
   },
 
-  createFromSeed({ seed }) {},
-
   restore(account) {
-    console.log('Restore wallet:>', account.name, account.network);
+    const { name, wallet, blockchain, network } = account;
+    console.log('Restore wallet:>', name, blockchain, network);
 
-    let wallet;
-    if (account.network === 'bitcoin') {
-      wallet = new BitcoinWallet();
+    let walletInstance;
+    if (blockchain === networks.BTC.sign) {
+      walletInstance = new BitcoinWallet(network);
     }
 
-    const acc = new Account(wallet, account.network);
-    acc.name = account.name;
-    acc.create(account.wallet.seed);
-
-    return acc;
+    return new Account({
+      wallet: walletInstance,
+      seed: wallet.seed,
+      name,
+      blockchain,
+      network
+    });
   },
 
   save(account) {

@@ -6,6 +6,8 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from './popup/store';
 
+import { ThemeProvider } from 'emotion-theming';
+import { theme } from './config/theme';
 import App from './popup/index.jsx';
 import Listeners from './popup/listeners';
 import '../css/popup.less';
@@ -18,7 +20,9 @@ Listeners({
 
 render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Provider>,
   window.document.getElementById('app-container')
 );
