@@ -5,15 +5,16 @@ import { css } from 'emotion';
 
 import TextField from '../../ui/TextField';
 import Button from '../../ui/Button';
+import Typography from '../../ui/Typography';
 
 import authActions from '../../actions/auth';
 
 const styles = {
   textField: css`
-    margin: 44px 0 33px 0;
+    margin: 20px 0 20px 0;
   `,
   button: css`
-    margin-top: 60px;
+    margin-top: 30px;
   `
 };
 
@@ -67,28 +68,33 @@ class Auth extends React.Component {
     } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <TextField
-          className={styles.textField}
-          label="New Password"
-          type="password"
-          name="password"
-          onChange={this.handleInput}
-          value={password}
-          error={passwordError}
-        />
-        <TextField
-          label="Confirm Password"
-          type="password"
-          name="confirmPassword"
-          onChange={this.handleInput}
-          value={confirmPassword}
-          error={confirmPasswordError}
-        />
-        <Button className={styles.button} type="submit">
-          Create
-        </Button>
-      </form>
+      <React.Fragment>
+        <Typography color="main" variant="subheading" align="center">
+          Create new account
+        </Typography>
+        <form onSubmit={this.handleSubmit}>
+          <TextField
+            className={styles.textField}
+            label="New Password"
+            type="password"
+            name="password"
+            onChange={this.handleInput}
+            value={password}
+            error={passwordError}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            onChange={this.handleInput}
+            value={confirmPassword}
+            error={confirmPasswordError}
+          />
+          <Button className={styles.button} type="submit">
+            Create
+          </Button>
+        </form>
+      </React.Fragment>
     );
   }
 }

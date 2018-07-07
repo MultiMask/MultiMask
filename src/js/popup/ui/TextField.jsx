@@ -11,8 +11,8 @@ const Input = styled.input`
   width: 100%;
   outline: none;
   padding: 10px;
-  height: 50px;
-  font-size: 26px;
+  height: 40px;
+  font-size: 17px;
   box-sizing: border-box;
 `;
 
@@ -22,14 +22,14 @@ const Label = styled.label`
   top: -8px;
   left: 7px;
   padding: 0 4px;
-  font-size: 14px;
+  font-size: 10px;
   background-color: white;
 `;
 
 const Error = styled.div`
   display: ${props => (props.error ? 'block' : 'none')};
   color: ${props => props.theme.colors.error};
-  font-size: 14px;
+  font-size: 10px;
   text-align: left;
   padding-left: 13px;
   padding-top: 4px;

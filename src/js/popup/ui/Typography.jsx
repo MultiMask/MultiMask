@@ -4,7 +4,8 @@ import styled from 'react-emotion';
 
 const Typography = ({ children, headlineMapping, variant, ...props }) => {
   const Component = styled(headlineMapping[variant])(props => ({
-    color: props.theme.colors[props.color]
+    color: props.theme.colors[props.color],
+    textAlign: props.align
   }));
   return <Component {...props}>{children}</Component>;
 };
@@ -18,7 +19,8 @@ Typography.defaultProps = {
     body2: 'aside',
     body1: 'p'
   },
-  variant: 'body1'
+  variant: 'body1',
+  align: 'inherit'
 };
 
 export default Typography;
