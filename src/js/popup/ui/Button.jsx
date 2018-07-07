@@ -6,7 +6,7 @@ const ButtonBase = styled.button`
   border-radius: 4px;
   width: 100%;
   line-height: 22px;
-  font-size: 16px;
+  font-size: 17px;
   padding: 16px;
   color: white;
   background-color: ${props => props.theme.colors.primary};
@@ -14,7 +14,6 @@ const ButtonBase = styled.button`
 `;
 
 const Button = ({ children, ...props }) => {
-  console.log(...props);
   return (
     <ButtonBase {...props}>
       <span>{children}</span>

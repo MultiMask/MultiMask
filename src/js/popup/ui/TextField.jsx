@@ -6,7 +6,7 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-  border: 1px solid ${props => props.theme.colors.secondary};
+  border: 1px solid ${props => props.theme.colors.hint};
   box-shadow: ${props => props.theme.shadows[0]};
   width: 100%;
   outline: none;
@@ -22,6 +22,7 @@ const Label = styled.label`
   top: -8px;
   left: 7px;
   padding: 0 4px;
+  font-size: 14px;
   background-color: white;
 `;
 

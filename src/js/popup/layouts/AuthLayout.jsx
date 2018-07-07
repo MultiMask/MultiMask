@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'react-emotion';
 import logo from '../../../img/logo.png';
 import label from '../../../img/label.svg';
+import Typography from '../ui/Typography';
 
 const Container = styled.div`
   width: 450px;
@@ -27,7 +28,9 @@ const AuthLayout = ({ children }) => (
     <Header>
       <Image alt="logo" src={logo} />
       <Image default src={label} />
-      <h4>Login to your acccount</h4>
+      <Typography color="main" variant="title">
+        Login to your acccount
+      </Typography>
     </Header>
     {children}
   </Container>

@@ -36,7 +36,7 @@ class Auth extends React.Component {
       <React.Fragment>
         <form onSubmit={this.handleDone}>
           <TextField
-            label="enter password"
+            label="Enter password"
             type="password"
             name="pass"
             onChange={this.handleInput}
