@@ -1,11 +1,5 @@
-export default function ({ network }) {
-    let sign;
-    switch (network) {
-        case 'bitcoin': {
-            sign = 'BTC';
-            break;
-        }
-    }
+import networks from './../blockchain';
 
-    return sign;
+export default function({ blockchain }) {
+  return networks[blockchain].sign;
 }

@@ -13,25 +13,24 @@ export default class ChooseNetwork extends Component {
   };
 
   handleBlockchain = e => {
-    const data = processForm(e);
-
     this.setState({
-      ...data,
+      ...processForm(e),
       step: 1
     });
   };
 
   handleNetwork = e => {
-    const data = processForm(e);
-
     this.setState({
-      ...data,
+      ...processForm(e),
       step: 2
     });
   };
 
   get blockchains() {
-    return networks.map((blockchain, idx) => {
+    const blocks = Object.entries(networks);
+    return blocks.map((item, idx) => {
+      const [sign, blockchain] = item;
+
       return (
         <option value={blockchain.sign} key={idx}>
           {blockchain.name}
@@ -41,7 +40,7 @@ export default class ChooseNetwork extends Component {
   }
 
   get networks() {
-    const blockchain = networks.find(item => item.sign === this.state.blockchain);
+    const blockchain = networks[this.state.blockchain];
     return blockchain.network.map((item, idx) => {
       return (
         <option value={item.sign} key={idx}>

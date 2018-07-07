@@ -1,4 +1,4 @@
-import { getPass, setPass } from './getter';
+import { getPass, setPass, remPass } from './getter';
 import { hash } from './../libs/cipher';
 import AccountManager from './accountManager';
 
@@ -33,5 +33,9 @@ export default {
     }
 
     return isAuth;
+  },
+
+  logout() {
+    return delete this.password;
   }
 };

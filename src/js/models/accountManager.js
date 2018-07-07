@@ -12,10 +12,9 @@ export default class AccountManager {
     console.log('load all accounts:', accs);
 
     if (accs && accs.length > 0) {
-      Promise.all(accs.map(accName => AccountFactory.load(accName)))
-        .then(accounts => {
-          accounts.forEach(acc => this.addRawAccount(acc));
-        })
+      Promise.all(accs.map(accName => AccountFactory.load(accName))).then(accounts => {
+        accounts.forEach(acc => this.addRawAccount(acc));
+      });
     }
   }
 
@@ -50,7 +49,7 @@ export default class AccountManager {
   }
 
   saveAccounts() {
-    this.accounts.forEach(acc => AccountFactory.save(acc))
+    this.accounts.forEach(acc => AccountFactory.save(acc));
   }
 
   clearList() {

@@ -1,13 +1,10 @@
+import networks from './../blockchain';
 import '../../img/btc.png';
 
-export default function ({ network }) {
-    let src;
-    switch (network) {
-        case 'bitcoin': {
-            src = './btc.png';
-            break;
-        }
+export default function({ blockchain }) {
+  switch (blockchain) {
+    case networks.BTC.sign: {
+      return './btc.png';
     }
-
-    return src;
+  }
 }

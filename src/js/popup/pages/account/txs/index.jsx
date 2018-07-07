@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import Bitcoin from "./bitcoin";
+import networks from './../../../../blockchain';
+import Bitcoin from './bitcoin';
 
 export default class TXS extends React.Component {
   get txComponent() {
     const { account } = this.props;
-    switch (account.network) {
-      case "bitcoin": {
+    switch (account.blockchain) {
+      case networks.BTC.sign: {
         return <Bitcoin account={account} />;
       }
     }

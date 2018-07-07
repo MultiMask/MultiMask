@@ -1,16 +1,16 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import FontAwesome from "react-fontawesome";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import FontAwesome from 'react-fontawesome';
 
-import accountActions from "../../actions/account";
-import stateActions from "../../actions/state";
-import { getCurrentWallet } from "./../../select";
+import accountActions from '../../actions/account';
+import stateActions from '../../actions/state';
+import { getCurrentWallet } from './../../select';
 
-import networkImg from "../../../helpers/networkImg";
-import networkSign from "../../../helpers/networkSign";
+import networkImg from '../../../helpers/networkImg';
+import networkSign from '../../../helpers/networkSign';
 
-import TXS from "./txs";
+import TXS from './txs';
 
 class AccountInfo extends React.Component {
   state = {
@@ -48,6 +48,7 @@ class AccountInfo extends React.Component {
 
   render() {
     const account = this.props.account;
+    console.log(account);
 
     return (
       <div>

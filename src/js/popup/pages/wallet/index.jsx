@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import { formToJson } from './../../helpers';
+import { processForm } from './../../helpers';
 
 import ChooseNetwork from './chooseNetwork';
 import CreateWallet from './create';
@@ -14,8 +13,7 @@ class WalletCreate extends React.Component {
   };
 
   onSubmit = e => {
-    e.preventDefault();
-    const data = formToJson(e.target);
+    const data = processForm(e);
 
     this.setState({ step: data.step });
   };
@@ -34,7 +32,11 @@ class WalletCreate extends React.Component {
     }
 
     if (this.state.step == 2) {
-      return <ImportWallet onBack={this.goBack} />;
+      return (
+        <ChooseNetwork>
+          <ImportWallet onBack={this.goBack} />
+        </ChooseNetwork>
+      );
     }
 
     return (

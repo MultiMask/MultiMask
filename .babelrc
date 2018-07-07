@@ -1,9 +1,14 @@
 {
   "presets": ["react", "es2015", "stage-0"],
-  "plugins": ["emotion"],
   "env": {
     "development": {
-      "presets": ["react-hmre"]
+      "presets": ["react-hmre"],
+      "plugins": [
+        ["emotion", { "sourceMap": true, "autoLabel": true }]
+      ]
+    },
+    "production": {
+      "plugins": [["emotion", { "hoist": true }]]
     }
   }
 }
