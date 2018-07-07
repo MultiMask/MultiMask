@@ -6,9 +6,11 @@ const salt = 'multimask';
 const withSalt = pass => `${salt}${pass}`;
 
 export default {
-  accountManager: new AccountManager(),
+  accountManager: null,
 
   init() {
+    this.accountManager = new AccountManager({App: this});
+
     getPass().then(passHash => {
       this.passHash = passHash;
     });

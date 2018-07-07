@@ -1,8 +1,13 @@
 import { getAccountList, setAccountList } from './getter';
+import {encode} from './../libs/cipher';
 import AccountFactory from './accountFactory';
 
 export default class AccountManager {
   accounts = [];
+
+  constructor({App}) {
+    this.App = App;
+  }
 
   restoreWallets() {
     getAccountList().then(this.restore.bind(this));
@@ -38,7 +43,15 @@ export default class AccountManager {
   }
 
   getSeed({ name }) {
-    return this.getAccount(name);
+    const account = this.getAccount(name);
+
+    if (account) {
+      const seed = account.wallet.seed;
+
+      return encode(this.App.password, seed);
+    }
+  
+    return null;
   }
 
   save() {
