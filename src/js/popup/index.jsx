@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Login from './ui/login';
-import Create from './ui/login/create';
-import Account from './ui/account';
+import AuthLayout from './layouts/AuthLayout';
+import Login from './pages/login';
+import Create from './pages/login/create';
+import Account from './pages/account';
 import Wrapper from './ui/header';
-import Wallet from './ui/wallet';
+import Wallet from './pages/wallet';
 
 import authActions from './actions/auth';
 
@@ -47,12 +48,20 @@ class Popup extends React.Component {
             <Account />
           </Wrapper>
         );
-
+      // TODO: make more beautifully using layout and routing
       case STATE_VIEW_LOGIN:
-        return <Login />;
+        return (
+          <AuthLayout login>
+            <Login />
+          </AuthLayout>
+        );
 
       case STATE_VIEW_INIT:
-        return <Create />;
+        return (
+          <AuthLayout>
+            <Create />
+          </AuthLayout>
+        );
 
       // TODO: make error page or logger
       default:
