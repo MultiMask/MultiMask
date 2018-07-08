@@ -1,8 +1,9 @@
+import { getWallet, setWallet } from './getter';
+import { encode, decode } from './../libs/cipher';
+import networks from './../blockchain';
+
 import BitcoinWallet from './account/wallet/bitcoin';
 import Account from './account';
-
-import { getWallet, setWallet } from './getter';
-import networks from './../blockchain';
 
 export default {
   create({ blockchain, network, seed }) {
@@ -33,19 +34,16 @@ export default {
     });
   },
 
-  save(account) {
+  save(pass, account) {
     const str = JSON.stringify(account);
-    // TODO: Add encoding
-    const encodedWallet = str;
+    const encodedWallet = encode(pass, str);
 
-    // console.log('save account raw:', encodedWallet);
     setWallet(account.name, encodedWallet);
   },
 
-  load(accountName) {
+  load(pass, accountName) {
     return getWallet(accountName).then(str => {
-      // TODO: add decoded
-      const decoded = JSON.parse(str);
+      const decoded = JSON.parse(decode(pass, str));
 
       return this.restore(decoded);
     });

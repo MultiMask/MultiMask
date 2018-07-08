@@ -4,7 +4,7 @@ import {
   ACCOUNT_CREATE,
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT
-} from "../../constants/account";
+} from '../../constants/account';
 
 export default ({ messaging, App }) => {
   // Get Account
@@ -19,8 +19,8 @@ export default ({ messaging, App }) => {
   });
 
   // Get Seed to show on front
-  messaging.on(ACCOUNT_GETSEED, async ({ pass, name }) => {
-    if (await App.login(pass)) {
+  messaging.on(ACCOUNT_GETSEED, async ({ hashPass, name }) => {
+    if (await App.check(hashPass)) {
       const seed = App.accountManager.getSeed({ name });
 
       if (seed) {
@@ -41,4 +41,4 @@ const sendAccountsInfo = (App, messaging) => {
       payload
     });
   });
-}
+};
