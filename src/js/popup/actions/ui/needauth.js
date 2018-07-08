@@ -1,12 +1,7 @@
-import messaging from "../../message";
+import messaging from '../../message';
 import { hidePass } from './../../../libs/cipher';
 
-import {
-  NEEDAUTH_START,
-  NEEDAUTH_CHECK,
-  NEEDAUTH_SUCCESS,
-  NEEDAUTH_FAIL,
-} from './../../../constants/ui/needauth';
+import { NEEDAUTH_START, NEEDAUTH_CHECK, NEEDAUTH_SUCCESS, NEEDAUTH_FAIL } from './../../../constants/ui/needauth';
 
 const NeedAuthActions = {
   start: () => (dispatch, getState) => {
@@ -15,26 +10,26 @@ const NeedAuthActions = {
     });
   },
   check: pass => (dispatch, getState) => {
-    const hiddenPass = hidePass(pass);
-    
+    const hashPass = hidePass(pass);
+
     messaging.send({
       type: NEEDAUTH_CHECK,
-      payload: { pass: hiddenPass }
-    })
+      payload: { hashPass }
+    });
   },
   success: () => (dispatch, getState) => {
     dispatch({
       type: NEEDAUTH_SUCCESS
-    })
+    });
   },
   fail: () => (dispatch, getState) => {
     dispatch({
       type: NEEDAUTH_FAIL,
       payload: {
-        error: "Wrong password"
+        error: 'Wrong password'
       }
-    })
-  },
+    });
+  }
 };
 
 export default NeedAuthActions;

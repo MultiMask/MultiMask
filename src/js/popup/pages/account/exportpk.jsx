@@ -21,7 +21,7 @@ class ExportPK extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.pass && nextProps.seed) {
       return {
-        seed: decode(hidePass(nextProps.pass), nextProps.seed)
+        seed: decode(nextProps.pass, nextProps.seed)
       };
     }
 
