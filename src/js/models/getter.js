@@ -1,15 +1,14 @@
 import config from '../config';
 import storage from '../models/storage';
-import { hidePass } from '../libs/cipher';
 
 export const getPass = () => storage.get(config.passKey);
 export const setPass = pass => storage.set(config.passKey, pass);
 
 export const checkPass = pass => {
-    return getPass().then(savedPassHash => {
-        return pass === savedPassHash;
-    });
-}
+  return getPass().then(savedPassHash => {
+    return pass === savedPassHash;
+  });
+};
 
 export const getAccountList = () => storage.get(config.accList);
 export const setAccountList = list => storage.set(config.accList, list);
