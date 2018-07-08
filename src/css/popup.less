@@ -1,5 +1,7 @@
 @import "common.less";
 
+@headerHeight: 33px;
+
 html,
 body {
   margin: 0;
@@ -57,6 +59,7 @@ body {
 }
 
 .balance {
+  position: relative;
   flex-grow: 1;
 
   &__header {
@@ -90,21 +93,6 @@ body {
     }
   }
 
-  &__empty {
-    height: 100%;
-    text-align: center;
-
-    .title {
-      margin-top: 180px;
-    }
-
-    .action {
-      margin-top: 200px;
-      color: @col_blue;
-      cursor: pointer;
-    }
-  }
-
   .actions {
     margin-top: 10px;
     text-align: right;
@@ -113,10 +101,6 @@ body {
   .item {
     display: flex;
     padding: 10px;
-
-    &_icon img {
-      height: 32px;
-    }
 
     &_info {
       width: 220px;
@@ -165,6 +149,126 @@ body {
   }
 }
 
+.Wallets {
+  padding: 0 25px 65px;
+  overflow-y: auto;
+  height: calc(100vh - @headerHeight);
+  box-sizing: border-box;
+
+  &-Items {}
+
+  &-Item {
+    border: 0 solid #dee3ec;
+  }
+
+  &-Item + &-Item {
+    border-width: 1px 0 0;
+  }
+
+  &-Total {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0; left: 0;
+    padding: 25px 25px 5px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(44, 66, 119, 0.05);
+    background-color: white;
+    box-sizing: border-box;
+  }
+
+  &-Label {
+    font-size: 17px;
+    color: #c7ccd7;
+  }
+
+  &-Value {
+    font-size: 17px;
+    color: #32325d;
+  }
+}
+
+.Wallet {
+  margin: 0 -25px;
+  padding: 15px 25px;
+  width: 350px;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:hover {
+    background-color: rgba(199, 204, 215, 0.1);
+  }
+
+  &-Inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  &-Icon {
+    height: 35px;
+    width: 35px;
+    margin-right: 20px;
+  }
+  &-Info {
+    flex-grow: 1;
+    margin-right: 20px;
+    width: auto;
+    overflow: hidden;
+  }
+  &-Address {
+    color: #c7ccd7;
+    font-size: 10px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &-Balance {
+    color: #32325d;
+  }
+  &-Balance-USD {
+    color: #c7ccd7;
+  }
+  &-Network {
+    padding: 0.5em;
+    color: #bdc2ce;
+    border-radius: 3px;
+    background-color: #ebeef5;
+  }
+}
+
+.NoWallets {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 300px;
+  text-align: center;
+  box-sizing: border-box;
+
+  &-Icon {
+    margin-top: 45%;
+  }
+
+  &-Title {
+    margin-top: 8%;
+    text-align: center;
+  }
+
+  &-Actions {
+    margin-top: 30%;
+  }
+}
+
+.Link {
+  color: @col_blue;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .tx {
   margin: 10px 10px;
   padding: 10px 20px;
@@ -191,7 +295,7 @@ body {
   display: flex;
   justify-content: space-between;
   width: 300px;
-  height: 33px;
+  height: @headerHeight;
   margin: 0 10px 10px;
   padding-top: 10px;
   padding-bottom: 10px;

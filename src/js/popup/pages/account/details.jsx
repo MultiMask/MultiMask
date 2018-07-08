@@ -2,10 +2,10 @@ import React from 'react';
 import FontAwesome from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import networkImg from '../../../helpers/networkImg';
 import networkSign from '../../../helpers/networkSign';
 import accountActions from '../../actions/account';
 import stateActions from '../../actions/state';
+import Icon from '../../ui/components/Icon';
 import { getCurrentWallet } from './../../select';
 import TXS from './txs';
 
@@ -35,7 +35,8 @@ class AccountInfo extends React.Component {
 
   get image() {
     const account = this.props.account;
-    return <img src={networkImg(account)} />;
+
+    return account.blockchain ? <Icon type={account.blockchain} size="s" /> : null;
   }
 
   get balance() {
