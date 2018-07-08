@@ -3,16 +3,14 @@ import { hidePass } from './../libs/cipher';
 import AccountManager from './accountManager';
 
 export default {
+  inited: false,
   accountManager: null,
 
   init() {
     this.accountManager = new AccountManager({ App: this });
-
-    getPass().then(passHash => {
-      this.passHash = passHash;
-    });
-
     this.accountManager.restoreWallets();
+
+    this.inited = true;
   },
 
   isAuth() {
@@ -24,11 +22,19 @@ export default {
     this.password = pass;
   },
 
+  getPass() {
+    return this.password;
+  },
+
   async login(pass) {
     const isAuth = await checkPass(hidePass(pass));
 
     if (isAuth) {
       this.password = pass;
+
+      if (!this.inited) {
+        this.init();
+      }
     }
 
     return isAuth;
