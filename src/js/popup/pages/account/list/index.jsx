@@ -1,10 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-
-import stateActions from "../../../actions/state";
-
-import Item from "./item";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import stateActions from '../../../actions/state';
+import Item from './item';
 
 class AccountList extends React.Component {
   get items() {

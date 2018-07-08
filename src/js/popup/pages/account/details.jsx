@@ -1,15 +1,12 @@
 import React from 'react';
+import FontAwesome from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FontAwesome from 'react-fontawesome';
-
+import networkImg from '../../../helpers/networkImg';
+import networkSign from '../../../helpers/networkSign';
 import accountActions from '../../actions/account';
 import stateActions from '../../actions/state';
 import { getCurrentWallet } from './../../select';
-
-import networkImg from '../../../helpers/networkImg';
-import networkSign from '../../../helpers/networkSign';
-
 import TXS from './txs';
 
 class AccountInfo extends React.Component {

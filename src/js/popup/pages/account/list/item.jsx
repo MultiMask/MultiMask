@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import accountActions from '../../../actions/account';
-
 import networkImg from '../../../../helpers/networkImg';
 import networkSign from '../../../../helpers/networkSign';
+import accountActions from '../../../actions/account';
 
 class AccountFastView extends React.Component {
   get image() {
