@@ -13,12 +13,12 @@ export default class AccountManager {
     getAccountList().then(this.restore.bind(this));
   }
 
-  restore(accs) {
-    console.log('load all accounts:', accs);
+  restore(accounts) {
+    console.log('load all accounts:', accounts);
 
-    if (accs && accs.length > 0) {
-      this.loadAccounts(accs).then(accounts => {
-        accounts.forEach(acc => this.addRawAccount(acc));
+    if (accounts && accounts.length > 0) {
+      this.loadAccounts(accounts).then(accounts => {
+        accounts.forEach(this.addRawAccount);
       });
     }
   }
@@ -30,9 +30,9 @@ export default class AccountManager {
     this.save();
   }
 
-  addRawAccount(acc) {
-    this.accounts.push(acc);
-  }
+  addRawAccount = account => {
+    this.accounts.push(account);
+  };
 
   getAccount(name) {
     return this.accounts.find(account => account.name === name);
