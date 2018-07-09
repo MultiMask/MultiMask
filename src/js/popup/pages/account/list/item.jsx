@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import accountActions from '../../../actions/account';
-
-import networkImg from '../../../../helpers/networkImg';
 import networkSign from '../../../../helpers/networkSign';
+import accountActions from '../../../actions/account';
+import Icon from '../../../ui/components/Icon';
 
 class AccountFastView extends React.Component {
   get image() {
     const { account } = this.props;
-    return <img src={networkImg(account)} />;
+
+    return account.blockchain ? <Icon type={account.blockchain} /> : null;
   }
 
   get balance() {
@@ -20,6 +19,7 @@ class AccountFastView extends React.Component {
 
   handleClick = () => {
     const { account, setActive } = this.props;
+
     setActive(account.name);
   };
 
@@ -27,13 +27,18 @@ class AccountFastView extends React.Component {
     const { account } = this.props;
 
     return (
-      <div className="item list" onClick={this.handleClick}>
-        <div className="item_icon">{this.image}</div>
-        <div className="item_info">
-          <div className="item_address">{account.info.address}</div>
-          <div className="item_balance">{this.balance}</div>
+      <div className="Wallet" onClick={this.handleClick}>
+        <div className="Wallet-Inner">
+          <div className="Wallet-Icon">{this.image}</div>
+          <div className="Wallet-Info">
+            <div className="Wallet-Address" title={account.info.address}>
+              {account.info.address}
+            </div>
+            <div className="Wallet-Balance">{this.balance}</div>
+            <div className="Wallet-Balance-USD">? USD</div>
+          </div>
+          <div className="Wallet-Network">{account.network}</div>
         </div>
-        <div className="item_net" />
       </div>
     );
 

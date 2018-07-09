@@ -8,5 +8,10 @@ export default {
         sign: 'testnet'
       }
     ]
+  },
+  DVC: {
+    name: 'Devcoin',
+    sign: 'DVC',
+    network: []
   }
 };
