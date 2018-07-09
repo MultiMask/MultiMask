@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AuthLayout from './layouts/AuthLayout';
+import MainLayout from './layouts/MainLayout';
 import Login from './pages/login';
 import Create from './pages/login/create';
 import Account from './pages/account';
-import Wrapper from './ui/header';
 import Wallet from './pages/wallet';
 
 import authActions from './actions/auth';
@@ -33,9 +33,9 @@ class Popup extends React.Component {
     switch (this.props.view) {
       case STATE_VIEW_CREATION:
         return (
-          <Wrapper>
+          <MainLayout>
             <Wallet />
-          </Wrapper>
+          </MainLayout>
         );
 
       case STATE_VIEW_MAIN:
@@ -44,9 +44,9 @@ class Popup extends React.Component {
       case STATE_VIEW_SEND:
       case STATE_VIEW_EXPORTPK:
         return (
-          <Wrapper>
+          <MainLayout>
             <Account />
-          </Wrapper>
+          </MainLayout>
         );
       // TODO: make more beautifully using layout and routing
       case STATE_VIEW_LOGIN:
