@@ -6,22 +6,24 @@ import Icon from '../../../ui/components/Icon';
 import Item from './item';
 
 class AccountList extends React.Component {
-  get items() {
+  render() {
     if (this.props.accounts && this.props.accounts.length > 0) {
       let total = { balance: 0 };
 
       return (
-        <div className="Wallets">
-          <div className="Wallets-Items">
-            {this.props.accounts.map(account => {
-              total.balance += account.info.balance;
+        <React.Fragment>
+          <div className="Wallets">
+            <div className="Wallets-Items">
+              {this.props.accounts.map(account => {
+                total.balance += account.info.balance;
 
-              return (
-                <div key={account.name} className="Wallets-Item">
-                  <Item account={account} />
-                </div>
-              );
-            })}
+                return (
+                  <div key={account.name} className="Wallets-Item">
+                    <Item account={account} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div className="Wallets-Total">
             <div className="Wallets-Label">Total:</div>
@@ -33,7 +35,7 @@ class AccountList extends React.Component {
               ?<br />USD
             </div>
           </div>
-        </div>
+        </React.Fragment>
       );
     }
 
@@ -52,10 +54,6 @@ class AccountList extends React.Component {
         </div>
       </div>
     );
-  }
-
-  render() {
-    return <div className="balance">{this.items}</div>;
   }
 }
 
