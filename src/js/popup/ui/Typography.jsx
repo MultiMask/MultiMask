@@ -1,5 +1,4 @@
 import React from 'react';
-import { css } from 'emotion';
 import styled from 'react-emotion';
 
 const Typography = ({ children, headlineMapping, variant, ...props }) => {
@@ -7,6 +6,9 @@ const Typography = ({ children, headlineMapping, variant, ...props }) => {
   const Component = styled(headline)`
     color: ${props => props.theme.colors[props.color]};
     text-align: ${props.align};
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   `;
 
   return <Component {...props}>{children}</Component>;

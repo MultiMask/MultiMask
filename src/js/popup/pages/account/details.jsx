@@ -1,5 +1,4 @@
 import React from 'react';
-import FontAwesome from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import networkSign from '../../../helpers/networkSign';
@@ -8,6 +7,30 @@ import stateActions from '../../actions/state';
 import Icon from '../../ui/components/Icon';
 import { getCurrentWallet } from './../../select';
 import TXS from './txs';
+
+import Menu from '../../ui/menu';
+import MenuItem from '../../ui/MenuItem';
+import Typography from '../../ui/Typography';
+import Button from '../../ui/Button';
+import styled from 'react-emotion';
+import { css } from 'emotion';
+
+const WalletContainer = styled.div`
+  padding: 10px 20px;
+  background-color: #fff;
+`;
+
+const WalletHeader = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const WalletContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10px;
+`;
 
 class AccountInfo extends React.Component {
   state = {
@@ -49,39 +72,52 @@ class AccountInfo extends React.Component {
     console.log(account);
 
     return (
-      <div>
-        <div className="item">
-          <div className="item_icon">{this.image}</div>
-          <div className="item_info">
-            <div className="item_address">{account.info.address}</div>
-            <div className="item_balance">{this.balance}</div>
-          </div>
-          <div className="item_net" onClick={this.handleMenu}>
-            <FontAwesome name="ellipsis-h" />
-          </div>
-          {this.state.isViewMenu && (
-            <div className="menu">
-              <div className="menu__item" onClick={this.handleExportPK}>
-                Export Private Key
-              </div>
+      <React.Fragment>
+        <WalletContainer className="item">
+          <WalletHeader>
+            {this.image}
+            <Typography
+              className={css`
+                padding: 0 12px;
+              `}
+              color="secondary"
+            >
+              {account.info.address}
+            </Typography>
+            <Menu
+              className={css`
+                margin-left: auto;
+              `}
+              iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
+            >
+              <MenuItem>View Account</MenuItem>
+              <MenuItem>Show QR-code</MenuItem>
+              <MenuItem onClick={this.handleExportPK}>Export Private Key</MenuItem>
+            </Menu>
+          </WalletHeader>
+          <WalletContent>
+            <div>
+              <Typography
+                className={css`
+                  display: block;
+                  margin-bottom: 5px;
+                `}
+                color="main"
+              >
+                {this.balance}
+              </Typography>
+              <Typography color="secondary">? USDT</Typography>
             </div>
-          )}
-        </div>
-        <div className="actions">
-          {/* <div className="btn primary small" onClick={this.handleBuy}>
-            buy
-          </div> */}
-          <div className="btn primary small" onClick={this.handleSend}>
-            send
-          </div>
-        </div>
-        <div>
-          <TXS account={account} />
-        </div>
-      </div>
+            <div>
+              <Button outlined small onClick={this.handleSend}>
+                Send
+              </Button>
+            </div>
+          </WalletContent>
+        </WalletContainer>
+        <TXS account={account} />
+      </React.Fragment>
     );
-
-    return null;
   }
 }
 

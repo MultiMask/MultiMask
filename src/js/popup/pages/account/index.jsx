@@ -27,11 +27,7 @@ class Account extends React.Component {
     }
 
     if (this.props.view === STATE_VIEW_WALLET) {
-      return (
-        <div className="balance">
-          <Details />
-        </div>
-      );
+      return <Details />;
     }
 
     if (this.props.view === STATE_VIEW_EXPORTPK) {

@@ -10,6 +10,7 @@ const dynamicStyle = props =>
 
 const Icon = styled(FontAwesome)`
   ${dynamicStyle};
+  font-size: 16px;
 `;
 
 // TODO: make IconButton with fading color for hover

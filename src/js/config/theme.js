@@ -11,6 +11,11 @@ export const theme = {
   shadows: {
     0: '0px 0px 40px 0px rgba(44,66,119,0.05)',
     1: '20px 0px 40px 0px rgba(44,66,119,0.05);'
+  },
+  typography: {
+    small: '14px',
+    medium: '15px',
+    large: '17px'
   }
 };
 
@@ -24,5 +29,9 @@ injectGlobal`
 
   #app-container {
     width: 100%;
+  }
+
+  input[type="button"]{
+    outline:none;
   }
 `;
