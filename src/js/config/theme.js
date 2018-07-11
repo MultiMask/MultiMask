@@ -6,7 +6,7 @@ export const theme = {
     main: '#32325D',
     secondary: '#C7CCD7',
     hint: '#DEE3EC',
-    background: '#FEFEFE',
+    background: '#FBFBFB',
     error: '#FF3433'
   },
   shadows: {

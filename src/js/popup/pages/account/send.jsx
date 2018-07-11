@@ -1,16 +1,26 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import FontAwesome from "react-fontawesome";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import styled from 'react-emotion';
+import { css } from 'emotion';
+import TextField from '../../ui/TextField';
+import Button from '../../ui/Button';
+import Wallet from './common/Wallet';
 
-import networkImg from "../../../helpers/networkImg";
-import networkSign from "../../../helpers/networkSign";
+import txActions from '../../actions/tx';
+import { getCurrentWallet } from './../../select';
+import Typography from '../../ui/Typography';
 
-import txActions from "../../actions/tx";
-import { getCurrentWallet } from "./../../select";
+const Form = styled.form`
+  background-color: ${props => props.theme.colors.background};
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
 class Send extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -21,16 +31,6 @@ class Send extends React.Component {
     };
   }
 
-  get image() {
-    const account = this.props.account;
-    return <img src={networkImg(account)} />;
-  }
-
-  get balance() {
-    const account = this.props.account;
-    return `${account.info.balance} ${networkSign(account)}`;
-  }
-
   handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -38,67 +38,52 @@ class Send extends React.Component {
   handleDone = e => {
     e.preventDefault();
     this.props.createTx(this.formatTX(this.state));
-  }
+  };
 
   formatTX({ to, amount, data }) {
     return {
-      to, data,
-      amount: parseFloat(amount) * 1e8,
-    }
+      to,
+      data,
+      amount: parseFloat(amount) * 1e8
+    };
   }
 
   render() {
     const { account } = this.props;
 
-    return <div className="send">
-      <div className='balance'>
-        <div className="item">
-          <div className="item_icon">{this.image}</div>
-          <div className="item_info">
-            <div className="item_address">{account.info.address}</div>
-            <div className="item_balance">{this.balance}</div>
-          </div>
-        </div>
-      </div>
-      <div className="send_form grow">
-        <form onSubmit={this.handleDone}>
-          {/* <div className="tobuy_text">Send Transaction</div> */}
-          <div className="inputWrap">
-            <label>
-              Recipient address
-              <input
-                name="to"
-                value={this.state.to}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <div className="inputWrap">
-            <label>
-              Amount
-              <input
-                name="amount"
-                value={this.state.amount}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <div className="inputWrap">
-            <label>
-              Data
-            <input
-                name="data"
-                value={this.state.data}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <button className="center">
-            Next
-          </button>
-        </form>
-      </div>
-    </div>;
+    return (
+      <React.Fragment>
+        <Wallet data={account} />
+        <Form onSubmit={this.handleDone}>
+          <Typography
+            color="main"
+            className={css`
+              margin-bottom: 10px;
+            `}
+          >
+            Send transaction
+          </Typography>
+          <TextField
+            label="Recipient address"
+            type="text"
+            name="to"
+            onChange={this.handleInput}
+            value={this.state.to}
+          />
+          <TextField label="Amount" type="text" name="amount" onChange={this.handleInput} value={this.state.amount} />
+          <Typography
+            color="main"
+            className={css`
+              margin-bottom: 10px;
+            `}
+          >
+            Transaction data (optional)
+          </Typography>
+          <TextField label="Data" type="text" name="data" onChange={this.handleInput} value={this.state.data} />
+          <Button>Next</Button>
+        </Form>
+      </React.Fragment>
+    );
   }
 }
 
