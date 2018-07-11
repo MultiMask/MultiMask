@@ -1,14 +1,19 @@
 import { getPass, setPass, checkPass } from './getter';
 import { hidePass } from './../libs/cipher';
 import AccountManager from './accountManager';
+import ProfileManager from './profileManager';
 
 export default {
   inited: false,
   accountManager: null,
+  profileManager: null,
 
   init() {
     this.accountManager = new AccountManager({ App: this });
+    this.profileManager = new ProfileManager({ App: this, accountManager: this.accountManager });
+
     this.accountManager.restoreWallets();
+    this.profileManager.init();
 
     this.inited = true;
   },

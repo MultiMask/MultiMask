@@ -9,7 +9,11 @@ export const checkPass = pass => {
 };
 
 export const getProfiles = () => storage.get(config.profiles);
-export const getProfile = id => storage.get(id);
+export const setProfiles = list => storage.set(config.profiles, list);
+
+export const getEntity = id => storage.get(id);
+export const setEntity = (key, entity) => storage.set(key, entity);
+export const removeEntity = key => storage.remove(key);
 
 export const getAccountList = () => storage.get(config.accList);
 export const setAccountList = list => storage.set(config.accList, list);

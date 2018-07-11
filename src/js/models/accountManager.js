@@ -17,8 +17,10 @@ export default class AccountManager {
     console.log('load all accounts:', accounts);
 
     if (accounts && accounts.length > 0) {
-      this.loadAccounts(accounts).then(accounts => {
+      return this.loadAccounts(accounts).then(accounts => {
         accounts.forEach(this.addRawAccount);
+
+        return this.accounts;
       });
     }
   }
@@ -76,6 +78,6 @@ export default class AccountManager {
   }
 
   clearList() {
-    setAccountList([]);
+    this.accounts = [];
   }
 }
