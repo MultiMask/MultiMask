@@ -34,11 +34,12 @@ const Header = styled.div`
 const findAmount = ({ out, addr }) => {
   const output = out.find(oneOut => oneOut.addr === addr);
   if (output) {
+    // 1e8 only for BTC
     return output.value / 1e8;
   }
 };
 
-const BitcoinTXS = ({
+const TXList = ({
   data: {
     info: { txs, address },
     blockchain
@@ -66,4 +67,4 @@ const BitcoinTXS = ({
     </Root>
   ));
 
-export default BitcoinTXS;
+export default TXList;
