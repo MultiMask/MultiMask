@@ -51,7 +51,7 @@ class Auth extends React.Component {
             value={this.state.pass}
           />
           {this.props.error && <div className="login__error">Wrong password</div>}
-          <Button className={styles.button} type="submit">
+          <Button fullWidth className={styles.button} type="submit">
             Login
           </Button>
         </form>

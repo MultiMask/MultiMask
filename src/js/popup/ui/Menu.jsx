@@ -9,7 +9,6 @@ const Root = styled.div`
 const MenuContainer = styled.div`
   min-width: 100px;
   position: absolute;
-  top: calc(100% + 4px);
   right: 0;
   border: 1px solid ${props => props.theme.colors.secondary};
   border-radius: 6px;

@@ -90,7 +90,7 @@ class Auth extends React.Component {
             value={confirmPassword}
             error={confirmPasswordError}
           />
-          <Button className={styles.button} type="submit">
+          <Button fullWidth className={styles.button} type="submit">
             Create
           </Button>
         </form>
