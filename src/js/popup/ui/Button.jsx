@@ -20,6 +20,7 @@ const ButtonBase = styled.button`
   background-color: ${props => props.theme.colors.primary};
   box-shadow: 10px 5px 40px 0px #b8cefd;
   border: none;
+  cursor: pointer;
   ${dynamicStyle};
   ${props => props.small && SmallStyle};
 `;

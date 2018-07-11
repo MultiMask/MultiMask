@@ -14,7 +14,10 @@ import Menu from '../ui/Menu';
 import MenuItem from '../ui/MenuItem';
 import Icon from '../ui/Icon';
 
-const Container = styled(BaseContainer)``;
+const Container = styled(BaseContainer)`
+  display: flex;
+  flex-direction: column;
+`;
 
 const Header = styled.div`
   display: flex;

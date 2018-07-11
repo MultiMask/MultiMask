@@ -6,6 +6,7 @@ import FontAwesome from 'react-fontawesome';
 const dynamicStyle = props =>
   css`
     color: ${props.theme.colors[props.color] || props.theme.colors.primary};
+    cursor: ${props.button && 'pointer'};
   `;
 
 const Icon = styled(FontAwesome)`
