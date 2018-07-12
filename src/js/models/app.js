@@ -1,7 +1,7 @@
 import { getPass, setPass, checkPass } from './getter';
 import { hidePass } from './../libs/cipher';
-import AccountManager from './accountManager';
-import ProfileManager from './profileManager';
+
+import Interfaces from './interfaces';
 
 export default {
   inited: false,
@@ -9,11 +9,13 @@ export default {
   profileManager: null,
 
   init() {
-    this.accountManager = new AccountManager({ App: this });
-    this.profileManager = new ProfileManager({ App: this, accountManager: this.accountManager });
+    this.io = Interfaces({ App: this });
 
-    this.accountManager.restoreWallets();
-    this.profileManager.init();
+    // this.accountManager = new AccountManager({ App: this });
+    // this.profileManager = new ProfileManager({ App: this, accountManager: this.accountManager });
+
+    // this.accountManager.restoreWallets();
+    // this.profileManager.init();
 
     this.inited = true;
   },

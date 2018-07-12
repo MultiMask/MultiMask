@@ -22,6 +22,8 @@ export default class AccountManager {
 
         return this.accounts;
       });
+    } else {
+      return Promise.resolve([]);
     }
   }
 
