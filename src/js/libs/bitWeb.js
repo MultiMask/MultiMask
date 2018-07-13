@@ -1,12 +1,8 @@
-import {
-  TX_PAYMENT
-} from './../constants/tx';
+import { TX_PAYMENT } from './../constants/tx';
 
-import {
-  BC_BITCOIN,
-} from './../constants/network';
+import { BC_BITCOIN } from './../constants/network';
 
-export default class BitWeb {
+export default class MultiWeb {
   constructor({ stream }) {
     this.stream = stream;
   }
@@ -15,10 +11,10 @@ export default class BitWeb {
     this.stream.write(data);
   }
 
-  isAuth() { }
-  getUser() { }
+  isAuth() {}
+  getUser() {}
   sendTransaction({ to, amount, data }) {
-    // console.log("send", to, amount, data);
+    // console.log('send', to, amount, data);
 
     this._send({
       type: TX_PAYMENT,
@@ -32,5 +28,5 @@ export default class BitWeb {
       }
     });
   }
-  sendVote(to) { }
+  sendVote(to) {}
 }
