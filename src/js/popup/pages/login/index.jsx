@@ -52,8 +52,9 @@ class Auth extends React.Component {
             name="pass"
             onChange={this.handleInput}
             value={this.state.pass}
+            error={this.props.error}
+            fullWidth
           />
-          {this.props.error && <div className="login__error">Wrong password</div>}
           <Button fullWidth className={styles.button} type="submit">
             Login
           </Button>

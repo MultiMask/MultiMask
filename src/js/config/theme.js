@@ -27,6 +27,7 @@ injectGlobal`
     padding: 0;
     width: 100%;
     height: 500px;
+    background-color: inherit;
   }
 
   #app-container {
@@ -35,5 +36,11 @@ injectGlobal`
 
   input[type="button"]:focus{
     outline:none;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;

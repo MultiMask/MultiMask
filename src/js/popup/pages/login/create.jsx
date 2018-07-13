@@ -84,6 +84,7 @@ class Auth extends React.Component {
             onChange={this.handleInput}
             value={password}
             error={passwordError}
+            fullWidth
           />
           <TextField
             label="Confirm Password"
@@ -92,6 +93,7 @@ class Auth extends React.Component {
             onChange={this.handleInput}
             value={confirmPassword}
             error={confirmPasswordError}
+            fullWidth
           />
           <Button fullWidth className={styles.button} type="submit">
             Create

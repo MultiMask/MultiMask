@@ -6,7 +6,7 @@ import stateActions from '../../actions/state';
 import { getCurrentWallet } from './../../select';
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
-import Menu from '../../ui/menu';
+import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import Button from '../../ui/Button';
 import Icon from '../../ui/Icon';
@@ -59,14 +59,13 @@ class AccountInfo extends React.Component {
                   `}
                   name="clone"
                   color="secondary"
-                  button
                 />
               </CopyToClipboard>
               <Menu
                 className={css`
                   margin-left: auto;
                 `}
-                iconProps={{ color: 'secondary', name: 'ellipsis-h', button: true }}
+                iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
               >
                 <MenuItem>View Account</MenuItem>
                 <MenuItem>Show QR-code</MenuItem>

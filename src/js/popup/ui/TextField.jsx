@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 const InputContainer = styled.div`
   position: relative;
   background-color: inherit;
+  width: ${props => props.fullWidth && '100%'};
 `;
 
 const Input = styled.input`
@@ -37,9 +38,9 @@ const Error = styled.div`
   padding-top: 4px;
 `;
 
-const TextField = ({ className, label, name, error, ...props }) => {
+const TextField = ({ className, label, name, error, fullWidth, ...props }) => {
   return (
-    <InputContainer className={className}>
+    <InputContainer className={className} fullWidth>
       <Label for={name}>{label}</Label>
       <Input id={name} name={name} {...props} />
       <Error error>{error}</Error>
@@ -48,7 +49,8 @@ const TextField = ({ className, label, name, error, ...props }) => {
 };
 
 TextField.defaultProps = {
-  error: null
+  error: null,
+  fullWidth: false
 };
 
 export default TextField;

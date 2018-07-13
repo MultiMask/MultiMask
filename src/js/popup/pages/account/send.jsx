@@ -18,8 +18,26 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 `;
 
+const styles = {
+  title: css`
+    margin-bottom: 10px;
+    width: 100%;
+  `,
+  sign: css`
+    margin: 0 10px;
+    line-height: 40px;
+  `,
+  rowContainer: css`
+    display: flex;
+    background-color: inherit;
+  `,
+  button: css`
+    width: 75%;
+  `
+};
 class Send extends React.Component {
   constructor(props) {
     super(props);
@@ -82,42 +100,38 @@ class Send extends React.Component {
       <React.Fragment>
         <Wallet data={account} />
         <Form onSubmit={this.handleDone}>
-          <Typography
-            variant="subheading"
-            color="main"
-            className={css`
-              margin-bottom: 10px;
-            `}
-          >
+          <Typography variant="subheading" color="main" className={styles.title}>
             Send transaction
           </Typography>
           <TextField
             label="Recipient address"
             type="text"
             name="to"
+            fullWidth
             onChange={this.handleInput}
             value={to}
             error={toError}
           />
-          <TextField
-            label="Amount"
-            type="text"
-            name="amount"
-            onChange={this.handleInput}
-            value={amount}
-            error={amountError}
-          />
-          <Typography
-            variant="subheading"
-            color="main"
-            className={css`
-              margin-bottom: 10px;
-            `}
-          >
+          <div className={styles.rowContainer}>
+            <TextField
+              label="Amount"
+              type="number"
+              name="amount"
+              onChange={this.handleInput}
+              value={amount}
+              error={amountError}
+            />
+            <Typography variant="subheading" color="main" className={styles.sign}>
+              =
+            </Typography>
+
+            <TextField type="text" name="usd" value={`${amount} USD`} readOnly />
+          </div>
+          <Typography variant="subheading" color="main" className={styles.title}>
             Transaction data (optional)
           </Typography>
-          <TextField label="Data" type="text" name="data" onChange={this.handleInput} value={data} />
-          <Button>Next</Button>
+          <TextField fullWidth label="Data" type="text" name="data" onChange={this.handleInput} value={data} />
+          <Button className={styles.button}>Next</Button>
         </Form>
       </React.Fragment>
     );
