@@ -1,10 +1,11 @@
 export default class AccountInterfaces {
-  constructor({ accountManager }) {
-    this.am = accountManager;
+  constructor({ accountController, profileController }) {
+    this.am = accountController;
+    this.pc = profileController;
   }
 
   addAccount(account) {
-    return this.am.addAccount(account);
+    return this.pc.addAccount(account);
   }
 
   getAccounts() {

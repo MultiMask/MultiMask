@@ -1,12 +1,14 @@
-import AccountManager from '../accountManager';
-import ProfileManager from '../profileManager';
+import AccountController from '../account/accountController';
+import ProfileController from '../profiles/profileController';
 
 import AccountInterfaces from './accounts';
 
 export default ({ App }) => {
-  const accountManager = new AccountManager({ App });
+  const accountController = new AccountController({ App });
+  const profileController = new ProfileController({ App, accountController });
+  profileController.init();
 
   return {
-    accounts: new AccountInterfaces({ accountManager })
+    accounts: new AccountInterfaces({ accountController, profileController })
   };
 };

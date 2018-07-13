@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import actions from './../../actions/account';
-import AccountFactory from './../../../models/accountFactory';
+import AccountFactory from './../../../models/account/accountFactory';
 
 class Wallet extends React.Component {
   state = {

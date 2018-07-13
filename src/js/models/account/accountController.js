@@ -1,8 +1,8 @@
-import { getAccountList, setAccountList, getPass } from './getter';
-import { encode } from './../libs/cipher';
+import { getAccountList, setAccountList, getPass } from '../getter';
+import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
-export default class AccountManager {
+export default class AccountController {
   accounts = [];
 
   constructor({ App }) {

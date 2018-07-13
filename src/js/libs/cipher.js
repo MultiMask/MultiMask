@@ -7,4 +7,4 @@ export const decode = (key, text) => aes256.decrypt(key, text);
 
 const salt = 'multimask';
 const withSalt = pass => `${salt}${pass}`;
-export const hidePass = pass => hash(withSalt(pass)); 
+export const hidePass = pass => hash(withSalt(pass));

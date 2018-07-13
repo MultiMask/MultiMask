@@ -1,5 +1,5 @@
-import { getPass, setPass, checkPass } from './getter';
-import { hidePass } from './../libs/cipher';
+import { setPass, checkPass } from './getter';
+import { hidePass } from '../libs/cipher';
 
 import Interfaces from './interfaces';
 
@@ -10,13 +10,6 @@ export default {
 
   init() {
     this.io = Interfaces({ App: this });
-
-    // this.accountManager = new AccountManager({ App: this });
-    // this.profileManager = new ProfileManager({ App: this, accountManager: this.accountManager });
-
-    // this.accountManager.restoreWallets();
-    // this.profileManager.init();
-
     this.inited = true;
   },
 

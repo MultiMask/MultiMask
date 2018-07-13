@@ -1,9 +1,9 @@
-import { getWallet, setWallet } from './getter';
-import { encode, decode } from './../libs/cipher';
-import networks from './../blockchain';
+import { getWallet, setWallet } from '../getter';
+import { encode, decode } from '../../libs/cipher';
+import networks from '../../blockchain';
 
-import BitcoinWallet from './account/wallet/bitcoin';
-import Account from './account';
+import BitcoinWallet from './wallet/bitcoin';
+import Account from '.';
 
 export default {
   create({ blockchain, network, seed }) {
@@ -16,8 +16,7 @@ export default {
     return new Account({ wallet, network, blockchain, seed });
   },
 
-  restore(account) {
-    const { name, wallet, blockchain, network } = account;
+  restore({ name, wallet, blockchain, network }) {
     console.log('Restore wallet:>', name, blockchain, network);
 
     let walletInstance;
