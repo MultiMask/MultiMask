@@ -6,7 +6,7 @@ export const theme = {
     main: '#32325D',
     secondary: '#C7CCD7',
     hint: '#DEE3EC',
-    background: '#FEFEFE',
+    background: '#FBFBFB',
     error: '#FF3433'
   },
   shadows: {
@@ -26,13 +26,21 @@ injectGlobal`
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 500px;
+    background-color: inherit;
   }
 
   #app-container {
     width: 100%;
   }
 
-  input[type="button"]{
+  input[type="button"]:focus{
     outline:none;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;

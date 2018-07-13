@@ -7,6 +7,7 @@ const Item = styled(Typography)``;
 const Root = styled.div`
   border-radius: 2px;
   padding: 4px 8px;
+  cursor: pointer;
   &:hover {
     background-color: ${props => props.theme.colors.hint};
   }
