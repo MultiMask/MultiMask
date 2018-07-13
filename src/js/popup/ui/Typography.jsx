@@ -1,12 +1,16 @@
 import React from 'react';
-import { css } from 'emotion';
 import styled from 'react-emotion';
 
 const Typography = ({ children, headlineMapping, variant, ...props }) => {
-  const Component = styled(headlineMapping[variant])(props => ({
-    color: props.theme.colors[props.color],
-    textAlign: props.align
-  }));
+  const headline = headlineMapping[variant] || 'span';
+  const Component = styled(headline)`
+    color: ${props => props.theme.colors[props.color]};
+    text-align: ${props.align};
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  `;
+
   return <Component {...props}>{children}</Component>;
 };
 
@@ -19,7 +23,6 @@ Typography.defaultProps = {
     body2: 'aside',
     body1: 'p'
   },
-  variant: 'body1',
   align: 'inherit'
 };
 

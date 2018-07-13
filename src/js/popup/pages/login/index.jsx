@@ -13,6 +13,9 @@ const styles = {
   `,
   button: css`
     margin-top: 30px;
+  `,
+  form: css`
+    background-color: inherit;
   `
 };
 
@@ -41,7 +44,7 @@ class Auth extends React.Component {
         <Typography color="main" variant="subheading" align="center">
           Login to your acccount
         </Typography>
-        <form onSubmit={this.handleDone}>
+        <form onSubmit={this.handleDone} className={styles.form}>
           <TextField
             className={styles.textField}
             label="Enter password"
@@ -49,9 +52,10 @@ class Auth extends React.Component {
             name="pass"
             onChange={this.handleInput}
             value={this.state.pass}
+            error={this.props.error}
+            fullWidth
           />
-          {this.props.error && <div className="login__error">Wrong password</div>}
-          <Button className={styles.button} type="submit">
+          <Button fullWidth className={styles.button} type="submit">
             Login
           </Button>
         </form>

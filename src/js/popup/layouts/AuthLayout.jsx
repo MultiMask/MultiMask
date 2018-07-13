@@ -3,10 +3,10 @@ import styled from 'react-emotion';
 import logo from '../../../img/logo.svg';
 import Typography from '../ui/Typography';
 
-const Container = styled.div`
-  width: 350px;
+import { BaseContainer } from './BaseContainer';
+
+const Container = styled(BaseContainer)`
   padding: 55px;
-  box-sizing: border-box;
 `;
 
 const Header = styled.header`

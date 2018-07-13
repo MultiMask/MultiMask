@@ -1,11 +1,6 @@
-import createWindow from "../../libs/txWindow";
+import createWindow from '../../libs/txWindow';
 
-import {
-  TX_CREATE,
-  TX_PAYMENT,
-  TX_PAYMENT_GET,
-  TX_PAYMENT_RESULT
-} from './../../constants/tx';
+import { TX_CREATE, TX_PAYMENT, TX_PAYMENT_GET, TX_PAYMENT_RESULT } from './../../constants/tx';
 
 let tx = null;
 

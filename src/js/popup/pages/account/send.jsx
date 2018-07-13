@@ -1,104 +1,140 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import FontAwesome from "react-fontawesome";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import styled from 'react-emotion';
+import { css } from 'emotion';
+import TextField from '../../ui/TextField';
+import Button from '../../ui/Button';
+import Wallet from './common/Wallet';
 
-import networkImg from "../../../helpers/networkImg";
-import networkSign from "../../../helpers/networkSign";
+import txActions from '../../actions/tx';
+import { getCurrentWallet } from './../../select';
+import Typography from '../../ui/Typography';
 
-import txActions from "../../actions/tx";
-import { getCurrentWallet } from "./../../select";
+const Form = styled.form`
+  background-color: ${props => props.theme.colors.background};
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`;
 
+const styles = {
+  title: css`
+    margin-bottom: 10px;
+    width: 100%;
+  `,
+  sign: css`
+    margin: 0 10px;
+    line-height: 40px;
+  `,
+  rowContainer: css`
+    display: flex;
+    background-color: inherit;
+  `,
+  button: css`
+    width: 75%;
+  `
+};
 class Send extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       to: '',
       amount: '',
-      data: ''
+      data: '',
+      errors: {}
     };
-  }
-
-  get image() {
-    const account = this.props.account;
-    return <img src={networkImg(account)} />;
-  }
-
-  get balance() {
-    const account = this.props.account;
-    return `${account.info.balance} ${networkSign(account)}`;
   }
 
   handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = e => {
-    e.preventDefault();
-    this.props.createTx(this.formatTX(this.state));
-  }
+  handleDone = event => {
+    event.preventDefault();
+
+    const errors = this.validate(this.state);
+
+    if (Object.keys(errors).length === 0) {
+      this.props.createTx(this.formatTX(this.state));
+    } else {
+      this.setState({ errors });
+    }
+  };
 
   formatTX({ to, amount, data }) {
     return {
-      to, data,
-      amount: parseFloat(amount) * 1e8,
-    }
+      to,
+      data,
+      amount: parseFloat(amount) * 1e8
+    };
   }
+
+  validate = values => {
+    const errors = {};
+
+    if (!values.to) {
+      errors.to = 'Required';
+    }
+    if (!values.amount) {
+      errors.amount = 'Required';
+    }
+
+    return errors;
+  };
 
   render() {
     const { account } = this.props;
+    const {
+      errors: { to: toError, amount: amountError },
+      to,
+      amount,
+      data
+    } = this.state;
 
-    return <div className="send">
-      <div className='balance'>
-        <div className="item">
-          <div className="item_icon">{this.image}</div>
-          <div className="item_info">
-            <div className="item_address">{account.info.address}</div>
-            <div className="item_balance">{this.balance}</div>
+    return (
+      <React.Fragment>
+        <Wallet data={account} />
+        <Form onSubmit={this.handleDone}>
+          <Typography variant="subheading" color="main" className={styles.title}>
+            Send transaction
+          </Typography>
+          <TextField
+            label="Recipient address"
+            type="text"
+            name="to"
+            fullWidth
+            onChange={this.handleInput}
+            value={to}
+            error={toError}
+          />
+          <div className={styles.rowContainer}>
+            <TextField
+              label="Amount"
+              type="number"
+              name="amount"
+              onChange={this.handleInput}
+              value={amount}
+              error={amountError}
+            />
+            <Typography variant="subheading" color="main" className={styles.sign}>
+              =
+            </Typography>
+
+            <TextField type="text" name="usd" value={`${amount} USD`} readOnly />
           </div>
-        </div>
-      </div>
-      <div className="send_form grow">
-        <form onSubmit={this.handleDone}>
-          {/* <div className="tobuy_text">Send Transaction</div> */}
-          <div className="inputWrap">
-            <label>
-              Recipient address
-              <input
-                name="to"
-                value={this.state.to}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <div className="inputWrap">
-            <label>
-              Amount
-              <input
-                name="amount"
-                value={this.state.amount}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <div className="inputWrap">
-            <label>
-              Data
-            <input
-                name="data"
-                value={this.state.data}
-                onChange={this.handleInput}
-              />
-            </label>
-          </div>
-          <button className="center">
-            Next
-          </button>
-        </form>
-      </div>
-    </div>;
+          <Typography variant="subheading" color="main" className={styles.title}>
+            Transaction data (optional)
+          </Typography>
+          <TextField fullWidth label="Data" type="text" name="data" onChange={this.handleInput} value={data} />
+          <Button className={styles.button}>Next</Button>
+        </Form>
+      </React.Fragment>
+    );
   }
 }
 

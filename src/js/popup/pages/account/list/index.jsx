@@ -1,33 +1,59 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-
-import stateActions from "../../../actions/state";
-
-import Item from "./item";
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import stateActions from '../../../actions/state';
+import Icon from '../../../ui/components/Icon';
+import Item from './item';
 
 class AccountList extends React.Component {
-  get items() {
+  render() {
     if (this.props.accounts && this.props.accounts.length > 0) {
-      return this.props.accounts.map(account => {
-        return <Item account={account} key={account.name} />;
-      });
+      let total = { balance: 0 };
+
+      return (
+        <React.Fragment>
+          <div className="Wallets">
+            <div className="Wallets-Items">
+              {this.props.accounts.map(account => {
+                total.balance += account.info.balance;
+
+                return (
+                  <div key={account.name} className="Wallets-Item">
+                    <Item account={account} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="Wallets-Total">
+            <div className="Wallets-Label">Total:</div>
+            <div className="Wallets-Value">
+              {total.balance}
+              <br />BTC
+            </div>
+            <div className="Wallets-Label">
+              ?<br />USD
+            </div>
+          </div>
+        </React.Fragment>
+      );
     }
 
     return (
-      <div className="balance__empty">
-        <div className="title">
-          <span>No walletes</span>
+      <div className="NoWallets">
+        <div className="NoWallets-Icon">
+          <Icon className="Icon" type="no-wallets" size="xl" />
         </div>
-        <div className="action">
-          <div onClick={this.props.createWallet}>Create new</div>
+        <div className="NoWallets-Title">
+          <span>No wallets</span>
+        </div>
+        <div className="NoWallets-Actions">
+          <a className="Link" onClick={this.props.createWallet}>
+            Create new
+          </a>
         </div>
       </div>
     );
-  }
-
-  render() {
-    return <div className="balance">{this.items}</div>;
   }
 }
 
