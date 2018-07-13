@@ -15,6 +15,9 @@ const styles = {
   `,
   button: css`
     margin-top: 30px;
+  `,
+  form: css`
+    background-color: inherit;
   `
 };
 
@@ -72,7 +75,7 @@ class Auth extends React.Component {
         <Typography color="main" variant="subheading" align="center">
           Create new account
         </Typography>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className={styles.form}>
           <TextField
             className={styles.textField}
             label="New Password"

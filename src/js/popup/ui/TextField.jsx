@@ -3,6 +3,7 @@ import styled from 'react-emotion';
 
 const InputContainer = styled.div`
   position: relative;
+  background-color: inherit;
 `;
 
 const Input = styled.input`
@@ -14,6 +15,7 @@ const Input = styled.input`
   height: 40px;
   font-size: 17px;
   box-sizing: border-box;
+  background-color: inherit;
 `;
 
 const Label = styled.label`
@@ -23,7 +25,7 @@ const Label = styled.label`
   left: 7px;
   padding: 0 4px;
   font-size: 10px;
-  background-color: white;
+  background-color: inherit;
 `;
 
 const Error = styled.div`

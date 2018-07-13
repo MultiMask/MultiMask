@@ -27,7 +27,8 @@ class Send extends React.Component {
     this.state = {
       to: '',
       amount: '',
-      data: ''
+      data: '',
+      errors: {}
     };
   }
 
@@ -35,9 +36,16 @@ class Send extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = e => {
-    e.preventDefault();
-    this.props.createTx(this.formatTX(this.state));
+  handleDone = event => {
+    event.preventDefault();
+
+    const errors = this.validate(this.state);
+
+    if (Object.keys(errors).length === 0) {
+      this.props.createTx(this.formatTX(this.state));
+    } else {
+      this.setState({ errors });
+    }
   };
 
   formatTX({ to, amount, data }) {
@@ -48,14 +56,34 @@ class Send extends React.Component {
     };
   }
 
+  validate = values => {
+    const errors = {};
+
+    if (!values.to) {
+      errors.to = 'Required';
+    }
+    if (!values.amount) {
+      errors.amount = 'Required';
+    }
+
+    return errors;
+  };
+
   render() {
     const { account } = this.props;
+    const {
+      errors: { to: toError, amount: amountError },
+      to,
+      amount,
+      data
+    } = this.state;
 
     return (
       <React.Fragment>
         <Wallet data={account} />
         <Form onSubmit={this.handleDone}>
           <Typography
+            variant="subheading"
             color="main"
             className={css`
               margin-bottom: 10px;
@@ -68,10 +96,19 @@ class Send extends React.Component {
             type="text"
             name="to"
             onChange={this.handleInput}
-            value={this.state.to}
+            value={to}
+            error={toError}
           />
-          <TextField label="Amount" type="text" name="amount" onChange={this.handleInput} value={this.state.amount} />
+          <TextField
+            label="Amount"
+            type="text"
+            name="amount"
+            onChange={this.handleInput}
+            value={amount}
+            error={amountError}
+          />
           <Typography
+            variant="subheading"
             color="main"
             className={css`
               margin-bottom: 10px;
@@ -79,7 +116,7 @@ class Send extends React.Component {
           >
             Transaction data (optional)
           </Typography>
-          <TextField label="Data" type="text" name="data" onChange={this.handleInput} value={this.state.data} />
+          <TextField label="Data" type="text" name="data" onChange={this.handleInput} value={data} />
           <Button>Next</Button>
         </Form>
       </React.Fragment>
