@@ -7,7 +7,7 @@ import Item from './item';
 
 class AccountList extends React.Component {
   render() {
-    if (this.props.accounts && this.props.accounts.length > 0) {
+    if (Array.isArray(this.props.accounts) && this.props.accounts.length) {
       let total = { balance: 0 };
 
       return (
@@ -24,15 +24,10 @@ class AccountList extends React.Component {
                 );
               })}
             </div>
-          </div>
-          <div className="Wallets-Total">
-            <div className="Wallets-Label">Total:</div>
-            <div className="Wallets-Value">
-              {total.balance}
-              <br />BTC
-            </div>
-            <div className="Wallets-Label">
-              ?<br />USD
+            <div className="Wallets-Total">
+              <div className="Wallets-Label">total:</div>
+              <div className="Wallets-Value">{total.balance} BTC</div>
+              <div className="Wallets-Label">? USD</div>
             </div>
           </div>
         </React.Fragment>
