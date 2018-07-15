@@ -1,5 +1,4 @@
-import { getProfiles, setProfiles, getEntity } from '../getter';
-import { decode } from '../../libs/cipher';
+import { getProfiles, setProfiles } from '../getter';
 
 import ProfileFactory from './profileFactory';
 

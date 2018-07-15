@@ -3,6 +3,7 @@ import ProfileController from '../profiles/profileController';
 
 import Auth from './auth';
 import AccountInterfaces from './accounts';
+import TX from './tx';
 
 export default ({ App }) => {
   const accountController = new AccountController({ App });
@@ -10,6 +11,7 @@ export default ({ App }) => {
 
   return {
     accounts: new AccountInterfaces({ profileController }),
-    auth: Auth({ profileController })
+    auth: Auth({ profileController }),
+    tx: TX({ profileController })
   };
 };

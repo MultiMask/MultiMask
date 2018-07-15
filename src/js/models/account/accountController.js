@@ -54,12 +54,7 @@ export default class AccountController {
     return null;
   }
 
-  _save(accountInstance, pass) {
-    AccountFactory.save(pass, accountInstance);
-  }
-
   loadAccountsByIds(pass, ids) {
-    console.log('load account list > ', ids);
     return AccountFactory.loadListByIds(pass, ids);
   }
 

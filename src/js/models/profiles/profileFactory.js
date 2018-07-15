@@ -1,4 +1,4 @@
-import { getProfiles, setProfiles, getEntity, setEntity, removeEntity } from '../getter';
+import { getEntity, setEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import uuid from 'uuid/v4';
 

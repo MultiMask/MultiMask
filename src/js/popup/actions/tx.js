@@ -1,20 +1,16 @@
-import messaging from "../message";
+import messaging from '../message';
 
-import {
-  TX_CREATE
-} from "./../../constants/tx";
+import { TX_CREATE } from './../../constants/tx';
 
 const StateActions = {
-  createTx: tx => (dispatch, getState) => {
-    const { account } = getState();
-
+  createTx: ({ id, tx }) => (dispatch, getState) => {
     messaging.send({
       type: TX_CREATE,
       payload: {
-        name: account.wallet,
+        id,
         tx
       }
-    })
+    });
   }
 };
 export default StateActions;

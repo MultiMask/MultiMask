@@ -18,15 +18,11 @@ export default class ProfileController {
 
   init() {
     return this.plc.get().then(profiles => {
-      console.log('profiles>', profiles);
-
       if (profiles && profiles.length > 0) {
         const firstProfile = profiles[0];
-        console.log('first profile', firstProfile);
 
         return this.setCurrrent(firstProfile);
       } else {
-        console.log('create default');
         return this.createDefault();
       }
     });
@@ -56,8 +52,6 @@ export default class ProfileController {
     const profile = this.getCurrent();
     const account = AccountFactory.create(accountData);
 
-    console.log('profile controller > addAccount > ', profile, account, accountData);
-
     return profile.addAccount(this.getPass(), account).then(() => {
       AccountFactory.save(this.getPass(), account);
       this.ac.addAccountInstance(account);
@@ -68,33 +62,13 @@ export default class ProfileController {
     return this.ac.getAccounts();
   }
 
-  // _getProfile(id) {
-  //   return this.profiles.find(pro => pro.id === this.id);
-  // }
+  dropProfile(id) {}
 
-  // _dropProfile(id) {
-  //   if (id === this.currentProfileId) {
-  //     this.accountManager.clearList();
-  //   }
-  // }
+  add(profile) {}
 
-  // add(profile) {
-  //   this.profiles.push(profile);
-  //   return this.profiles;
-  // }
+  remove(id) {}
 
-  // _getList() {
-  //   return this.profiles;
-  // }
+  export(pass, id) {}
 
-  // _saveList() {
-  //   const list = this.profiles.map(profile => profile.id);
-  //   setProfiles(list);
-  // }
-
-  // remove() {}
-
-  // export(id, pass) {}
-
-  // import(profile) {}
+  import(pass, profile) {}
 }

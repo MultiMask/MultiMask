@@ -16,8 +16,6 @@ export default class Profile {
   addAccount(pass, account) {
     this.data.accounts.push(account.id);
     this.increaceVerion();
-
-    console.log('after add', this);
     return this.save(pass);
   }
 

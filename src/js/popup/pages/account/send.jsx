@@ -60,7 +60,10 @@ class Send extends React.Component {
     const errors = this.validate(this.state);
 
     if (Object.keys(errors).length === 0) {
-      this.props.createTx(this.formatTX(this.state));
+      this.props.createTx({
+        tx: this.formatTX(this.state),
+        id: this.props.account.id
+      });
     } else {
       this.setState({ errors });
     }

@@ -20,12 +20,6 @@ export default {
     return new Account({ wallet: _wallet, network, blockchain, seed: _seed, id: uuid() });
   },
 
-  // createFromPlain({ id, name, blockchain, network, secret }) {
-  //   let wallet = createWallet({ blockchain, network });
-
-  //   return new Account({ wallet, network, blockchain, seed: secret.seed, id });
-  // },
-
   restore({ name, wallet, blockchain, network, id }) {
     console.log('Restore wallet >', name, blockchain, network);
 
