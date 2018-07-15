@@ -1,4 +1,3 @@
-import { getAccountList, setAccountList, getPass } from '../getter';
 import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
@@ -9,16 +8,12 @@ export default class AccountController {
     this.App = App;
   }
 
-  restoreWallets() {
-    getAccountList().then(this.restore.bind(this));
-  }
-
-  restore(accounts) {
-    console.log('load all accounts:', accounts);
+  restore(accounts, pass) {
+    console.log('AccountController > load all accounts > ', accounts);
 
     if (accounts && accounts.length > 0) {
-      return this.loadAccounts(accounts).then(accounts => {
-        accounts.forEach(this.addRawAccount);
+      return this.loadAccountsByIds(pass, accounts).then(accounts => {
+        accounts.forEach(this.addAccountInstance);
 
         return this.accounts;
       });
@@ -27,19 +22,14 @@ export default class AccountController {
     }
   }
 
-  addAccount(account) {
-    const fullAccount = AccountFactory.restore(account);
-
-    this.addRawAccount(fullAccount);
-    this.save();
-  }
-
-  addRawAccount = account => {
-    this.accounts.push(account);
+  addAccountInstance = account => {
+    if (!this.getAccountById(account.id)) {
+      this.accounts.push(account);
+    }
   };
 
-  getAccount(name) {
-    return this.accounts.find(account => account.name === name);
+  getAccountById(id) {
+    return this.accounts.find(account => account.id === id);
   }
 
   getAccounts() {
@@ -50,9 +40,9 @@ export default class AccountController {
     return [];
   }
 
-  getSeed({ name }) {
+  getSeed({ id }) {
     if (this.App.isAuth()) {
-      const account = this.getAccount(name);
+      const account = this.getAccountById(id);
 
       if (account) {
         const seed = account.wallet.seed;
@@ -64,19 +54,13 @@ export default class AccountController {
     return null;
   }
 
-  save() {
-    let accs = this.accounts.map(acc => acc.name);
-    setAccountList(accs);
-
-    this.saveAccounts();
+  _save(accountInstance, pass) {
+    AccountFactory.save(pass, accountInstance);
   }
 
-  saveAccounts() {
-    this.accounts.forEach(account => AccountFactory.save(this.App.getPass(), account));
-  }
-
-  loadAccounts(accounts) {
-    return Promise.all(accounts.map(accountName => AccountFactory.load(this.App.getPass(), accountName)));
+  loadAccountsByIds(pass, ids) {
+    console.log('load account list > ', ids);
+    return AccountFactory.loadListByIds(pass, ids);
   }
 
   clearList() {

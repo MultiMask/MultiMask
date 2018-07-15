@@ -5,8 +5,6 @@ import Interfaces from './interfaces';
 
 export default {
   inited: false,
-  accountManager: null,
-  profileManager: null,
 
   init() {
     this.io = Interfaces({ App: this });
@@ -18,8 +16,10 @@ export default {
   },
 
   create(pass) {
-    setPass(pass);
+    setPass(hidePass(pass));
     this.password = pass;
+
+    this.init();
   },
 
   getPass() {

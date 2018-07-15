@@ -17,14 +17,18 @@ export default class ProfileListController {
 
     return getProfiles()
       .then(ids => {
-        return Promise.all(
-          ids.map(id => {
-            return ProfileFactory.load(this.App.getPass(), id);
-          })
-        );
+        if (ids && ids.length > 0) {
+          return Promise.all(
+            ids.map(id => {
+              return ProfileFactory.load(this.App.getPass(), id);
+            })
+          );
+        } else {
+          return [];
+        }
       })
       .then(profiles => {
-        this.list = profiles;
+        this.list = profiles || [];
         return this.list;
       });
   }
@@ -40,5 +44,9 @@ export default class ProfileListController {
     const profileIds = this.list.map(profile => profile.getId());
 
     return setProfiles(profileIds);
+  }
+
+  findById(id) {
+    return this.list.find(profile => profile.getId() === id);
   }
 }

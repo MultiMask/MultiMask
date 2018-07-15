@@ -9,8 +9,9 @@ import {
 export default ({ messaging, App }) => {
   // Get Account
   messaging.on(ACCOUNT_CREATE, account => {
-    App.io.accounts.addAccount(account);
-    sendAccountsInfo(App, messaging);
+    App.io.accounts.addAccount(account).then(() => {
+      sendAccountsInfo(App, messaging);
+    });
   });
 
   // Get Wallet info
@@ -19,9 +20,9 @@ export default ({ messaging, App }) => {
   });
 
   // Get Seed to show on front
-  messaging.on(ACCOUNT_GETSEED, async ({ hashPass, name }) => {
+  messaging.on(ACCOUNT_GETSEED, async ({ hashPass, id }) => {
     if (await App.check(hashPass)) {
-      const seed = App.io.accounts.getSeed({ name });
+      const seed = App.io.accounts.getSeed({ id });
 
       if (seed) {
         messaging.send({

@@ -1,6 +1,5 @@
 export default class AccountInterfaces {
-  constructor({ accountController, profileController }) {
-    this.am = accountController;
+  constructor({ profileController }) {
     this.pc = profileController;
   }
 
@@ -9,10 +8,10 @@ export default class AccountInterfaces {
   }
 
   getAccounts() {
-    return this.am.getAccounts();
+    return this.pc.getAccounts();
   }
 
-  getSeed({ name }) {
-    return this.am.getSeed({ name });
+  getSeed({ id }) {
+    return this.pc.ac.getSeed({ id });
   }
 }

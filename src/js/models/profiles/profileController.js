@@ -4,54 +4,68 @@ import ProfileFactory from './profileFactory';
 import AccountFactory from './../account/accountFactory';
 
 export default class ProfileController {
-  profiles = [];
   currentProfileId = null;
 
   constructor({ App, accountController }) {
     this.App = App;
-    this.accountController = accountController;
-    this.pc = new ProfileListController({ App });
+    this.ac = accountController;
+    this.plc = new ProfileListController({ App });
+  }
+
+  getPass() {
+    return this.App.getPass();
   }
 
   init() {
-    return this.pc.get().then(profiles => {
+    return this.plc.get().then(profiles => {
       console.log('profiles>', profiles);
 
       if (profiles && profiles.length > 0) {
         const firstProfile = profiles[0];
+        console.log('first profile', firstProfile);
 
-        // this.restoreOne(firstProfile);
-        this.setCurrrent(firstProfile);
+        return this.setCurrrent(firstProfile);
       } else {
-        this.createDefault();
+        console.log('create default');
+        return this.createDefault();
       }
     });
   }
 
   createDefault() {
-    return ProfileFactory.createDefault(this).then(profile => {
-      // this.profiles.push(defaultProfile);
-      // this.setCurrrent(defaultProfile.id);
-      // this._save(defaultProfile);
-      // this._saveList();
-    });
+    const profile = ProfileFactory.createDefault();
+
+    ProfileFactory.create(this.getPass(), profile);
+    this.plc.add(profile);
+
+    return this.setCurrrent(profile);
   }
 
   setCurrrent(profile) {
     this.currentProfileId = profile.getId();
 
-    this.accountController.clearList();
-    this.accountController.restore(profile.accounts);
+    this.ac.clearList();
+    return this.ac.restore(profile.getAccounts(), this.getPass());
   }
 
   getCurrent() {
-    return this.profiles.find(this.currentProfileId);
+    return this.plc.findById(this.currentProfileId);
   }
 
   addAccount(accountData) {
-    console.log('profile controller>addAccount>', accountData);
+    const profile = this.getCurrent();
     const account = AccountFactory.create(accountData);
-    // pro
+
+    console.log('profile controller > addAccount > ', profile, account, accountData);
+
+    return profile.addAccount(this.getPass(), account).then(() => {
+      AccountFactory.save(this.getPass(), account);
+      this.ac.addAccountInstance(account);
+    });
+  }
+
+  getAccounts() {
+    return this.ac.getAccounts();
   }
 
   // _getProfile(id) {

@@ -52,12 +52,12 @@ const AccountActions = {
   send: () => (dispatch, getState) => {
     stateActions.goSend()(dispatch, getState);
   },
-  getSeed: (pass, name) => (dispatch, getState) => {
+  getSeed: (pass, id) => (dispatch, getState) => {
     const hashPass = hidePass(pass);
 
     messaging.send({
       type: ACCOUNT_GETSEED,
-      payload: { hashPass, name }
+      payload: { hashPass, id }
     });
   },
   showSeed: seed => (dispatch, getState) => {

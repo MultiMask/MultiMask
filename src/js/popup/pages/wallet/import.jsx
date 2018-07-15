@@ -34,7 +34,7 @@ class Wallet extends React.Component {
       });
     } catch (e) {
       this.setState({
-        error: 'Wrong wordlist'
+        error: `Wrong wordlist: ${e}`
       });
     }
   }

@@ -7,7 +7,12 @@ import Profile from './Profile';
 export default class ProfileFactory {
   static save(pass, profile) {
     const key = profile.getId();
-    const encodedProfile = encode(pass, JSON.stringify(profile));
+    const dataToSave = profile._serialize();
+
+    // eslint-disable-next-line
+    const encodedProfile = encryptEntities ? encode(pass, JSON.stringify(dataToSave)) : JSON.stringify(dataToSave);
+
+    console.log('Save Profile > ', encodedProfile);
 
     return setEntity(key, encodedProfile);
   }
@@ -17,28 +22,37 @@ export default class ProfileFactory {
       let profileData;
 
       try {
-        const decodedStr = decode(pass, encodedStr);
+        // eslint-disable-next-line
+        const decodedStr = encryptEntities ? decode(pass, encodedStr) : encodedStr;
         profileData = JSON.parse(decodedStr);
       } catch (e) {
         throw new Error('Can`t decode profile from storage');
       }
+
+      console.log('Load Profile > ', profileData);
 
       return new Profile(profileData);
     });
   }
 
   static create(pass, data) {
-    const profile = new Profile(data);
+    let profile;
+    if (data instanceof Profile) {
+      profile = data;
+    } else {
+      profile = new Profile(ProfileFactory.createDefault(data));
+    }
 
     return ProfileFactory.save(pass, profile);
   }
 
-  static createDefault(pass) {
-    return ProfileFactory.create(pass, {
+  static createDefault(data) {
+    return new Profile({
       id: uuid(),
       name: 'Default profile',
-      version: 1,
-      accounts: []
+      version: 0,
+      accounts: [],
+      ...data
     });
   }
 }
