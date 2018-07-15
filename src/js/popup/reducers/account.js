@@ -1,12 +1,8 @@
-import {
-  ACCOUNT_SET,
-  ACCOUNT_ACTIVE,
-  ACCOUNT_GETSEED_RESULT,
-} from "../../constants/account";
+import { ACCOUNT_SET, ACCOUNT_ACTIVE, ACCOUNT_GETSEED_RESULT } from '../../constants/account';
 
 const initialState = {
   accounts: null,
-  seed: null,
+  seed: null
 };
 
 export default function accountReducer(state = initialState, action) {
@@ -27,7 +23,7 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         seed: action.payload.seed
-      }
+      };
     }
   }
 

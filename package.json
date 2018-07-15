@@ -22,6 +22,7 @@
     "emotion-theming": "^9.2.4",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "lodash": "^4.17.10",
     "moment": "^2.20.1",
     "post-message-stream": "^3.0.0",
     "prop-types": "^15.6.2",
@@ -37,6 +38,7 @@
     "reselect": "^3.0.1",
     "sha256": "^0.2.0",
     "styled-components": "^3.1.6",
+    "uuid": "^3.3.2",
     "wif": "^2.0.6"
   },
   "devDependencies": {

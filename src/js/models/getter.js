@@ -1,18 +1,16 @@
 import config from '../config';
-import storage from '../models/storage';
+import storage from './storage';
 
 export const getPass = () => storage.get(config.passKey);
 export const setPass = pass => storage.set(config.passKey, pass);
 
 export const checkPass = pass => {
-  return getPass().then(savedPassHash => {
-    return pass === savedPassHash;
-  });
+  return getPass().then(savedPassHash => pass === savedPassHash);
 };
 
-export const getAccountList = () => storage.get(config.accList);
-export const setAccountList = list => storage.set(config.accList, list);
+export const getProfiles = () => storage.get(config.profiles);
+export const setProfiles = list => storage.set(config.profiles, list);
 
-const getWalletName = walletName => `${config.walletPrefix}${walletName}`;
-export const getWallet = walletName => storage.get(getWalletName(walletName));
-export const setWallet = (walletName, wallet) => storage.set(getWalletName(walletName), wallet);
+export const getEntity = id => storage.get(id);
+export const setEntity = (key, entity) => storage.set(key, entity);
+export const removeEntity = key => storage.remove(key);

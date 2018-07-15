@@ -13,10 +13,12 @@ import {
 export default ({ messaging, App }) => {
   messaging.on(AUTH_INIT, data => {
     App.create(data.pass);
+    App.io.auth.init();
   });
 
   messaging.on(AUTH_LOGIN, async data => {
     const completed = await App.login(data.pass);
+    await App.io.auth.init();
 
     messaging.send({
       type: AUTH_LOGIN_RESULT,

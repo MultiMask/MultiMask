@@ -15,7 +15,7 @@ class ExportPK extends React.Component {
   componentDidMount() {
     const { getSeed, pass, wallet } = this.props;
 
-    getSeed(pass, wallet.name);
+    getSeed(pass, wallet.id);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

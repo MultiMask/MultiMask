@@ -6,9 +6,10 @@ let tx = null;
 
 export default ({ messaging, App }) => {
   // Create TX from UI
-  messaging.on(TX_CREATE, ({ name, tx }) => {
-    const account = App.accountManager.getAccount(name);
-    account.sendTX(tx);
+  messaging.on(TX_CREATE, ({ id, tx }) => {
+    App.io.tx.sendTX({ id, tx });
+    // const account = App.accountManager.getAccount(name);
+    // account.sendTX(tx);
   });
 
   // Payment Create TX

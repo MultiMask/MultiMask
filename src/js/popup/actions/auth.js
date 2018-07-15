@@ -1,5 +1,4 @@
 import messaging from '../message';
-import { hidePass } from './../../libs/cipher';
 
 import {
   AUTH_INIT,
@@ -20,7 +19,7 @@ import AccountActions from './account';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
-    const hiddenPass = hidePass(pass);
+    const hiddenPass = pass;
 
     messaging.send({
       type: AUTH_INIT,
