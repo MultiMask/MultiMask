@@ -8,6 +8,7 @@ import Login from './pages/login';
 import Create from './pages/login/create';
 import Account from './pages/account';
 import Wallet from './pages/wallet';
+import Profile from './pages/profile';
 
 import authActions from './actions/auth';
 
@@ -19,7 +20,8 @@ import {
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
   STATE_VIEW_INIT,
-  STATE_VIEW_EXPORTPK
+  STATE_VIEW_EXPORTPK,
+  STATE_VIEW_PROFILES
 } from './../constants/state';
 
 class Popup extends React.Component {
@@ -31,6 +33,13 @@ class Popup extends React.Component {
     console.log('app props:', this.props);
 
     switch (this.props.view) {
+      case STATE_VIEW_PROFILES:
+        return (
+          <MainLayout>
+            <Profile />
+          </MainLayout>
+        );
+
       case STATE_VIEW_CREATION:
         return (
           <MainLayout>

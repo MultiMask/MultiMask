@@ -24,7 +24,7 @@ const Header = styled.div`
   flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
-  padding 10px 0;
+  padding: 10px 0;
   margin: 0 20px;
   border-bottom: 1px solid ${props => props.theme.colors.secondary};
 `;
@@ -56,7 +56,7 @@ class MainLayout extends React.Component {
   }
 
   render() {
-    const { createWallet, logout, children, creation } = this.props;
+    const { createWallet, logout, children, creation, goProfile } = this.props;
     return (
       <Container>
         <Header>
@@ -64,6 +64,7 @@ class MainLayout extends React.Component {
             <HeaderItem color="secondary">
               <Icon className={styles.icon} name="plus-circle" onClick={createWallet} />
               <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+                <MenuItem onClick={goProfile}>Profiles</MenuItem>
                 <MenuItem>Settings</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
