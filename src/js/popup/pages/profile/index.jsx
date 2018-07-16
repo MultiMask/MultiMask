@@ -59,11 +59,13 @@ export default connect(
 )(Profiles);
 
 const Wrapper = styled.div`
-  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const List = styled.div`
-  height: calc(100% - 36px);
+  flex-grow: 1;
   padding: 20px 10px;
 `;
 
