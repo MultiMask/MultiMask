@@ -71,11 +71,6 @@ export default function accountReducer(state = initialState, action) {
         view: STATE_VIEW_PROFILES
       };
     default:
-      return {
-        ...state,
-        view: STATE_VIEW_MAIN
-      };
+      return state;
   }
-
-  return state;
 }

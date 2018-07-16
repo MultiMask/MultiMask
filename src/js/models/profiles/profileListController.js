@@ -48,4 +48,8 @@ export default class ProfileListController {
   findById(id) {
     return this.list.find(profile => profile.getId() === id);
   }
+
+  getList() {
+    return this.list.map(profile => profile._serialize());
+  }
 }
