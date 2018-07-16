@@ -1,4 +1,10 @@
-import { PROFILE_ADD, PROFILE_REMOVE, PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
+import {
+  PROFILE_ADD,
+  PROFILE_REMOVE,
+  PROFILE_EXPORT,
+  PROFILE_GETLIST,
+  PROFILE_GETLIST_RESULT
+} from './../../constants/profile';
 
 export default ({ messaging, App }) => {
   messaging.on(PROFILE_GETLIST, () => {
@@ -15,6 +21,8 @@ export default ({ messaging, App }) => {
     App.io.profile.remove(id);
     sendList({ messaging, App });
   });
+
+  messaging.on(PROFILE_EXPORT, ({ id }) => {});
 };
 
 const sendList = ({ messaging, App }) => {

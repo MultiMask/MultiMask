@@ -4,10 +4,14 @@ export default ({ profileController }) => ({
   },
 
   add: () => {
-    return profileController.createDefault();
+    return profileController.add();
   },
 
   remove: id => {
     return profileController.remove(id);
+  },
+
+  export: id => {
+    return profileController.export(id);
   }
 });

@@ -62,9 +62,13 @@ export default class ProfileController {
     return this.ac.getAccounts();
   }
 
-  dropProfile(id) {}
+  getFullInfo(id) {
+    const profile = this.plc.findById(id);
+  }
 
-  add(profile) {}
+  add() {
+    this.createDefault();
+  }
 
   remove(id) {
     if (id !== this.currentProfileId) {
@@ -72,7 +76,7 @@ export default class ProfileController {
     }
   }
 
-  export(pass, id) {}
+  export(id) {}
 
   import(pass, profile) {}
 }

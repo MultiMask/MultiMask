@@ -21,18 +21,23 @@ class Profiles extends React.Component {
     this.props.remove(id);
   };
 
+  onExport = id => {
+    this.props.export(id);
+  };
+
   get list() {
     const { list } = this.props;
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
+      const onExport = this.onExport.bind(this, profile.id);
 
       return (
         <Item key={profile.id}>
           <Label>{profile.name}</Label>
           <Actions>
             <Icon name="edit" />
-            <Icon name="upload" />
+            <Icon name="upload" onClick={onExport} />
             <Icon name="trash" onClick={onRemove} />
           </Actions>
         </Item>
