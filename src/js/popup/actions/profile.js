@@ -1,6 +1,6 @@
 import messaging from '../message';
 
-import { PROFILE_ADD, PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
+import { PROFILE_ADD, PROFILE_REMOVE, PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
 
 const ProfileActions = {
   getList: () => (dispatch, getState) => {
@@ -17,6 +17,12 @@ const ProfileActions = {
   add: () => (dispatch, getState) => {
     messaging.send({
       type: PROFILE_ADD
+    });
+  },
+  remove: id => (dispatch, getState) => {
+    messaging.send({
+      type: PROFILE_REMOVE,
+      payload: { id }
     });
   }
 };

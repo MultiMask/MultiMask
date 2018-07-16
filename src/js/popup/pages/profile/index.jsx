@@ -17,17 +17,23 @@ class Profiles extends React.Component {
     this.props.add();
   };
 
+  onRemove = id => {
+    this.props.remove(id);
+  };
+
   get list() {
     const { list } = this.props;
 
     return list.map(profile => {
+      const onRemove = this.onRemove.bind(this, profile.id);
+
       return (
         <Item key={profile.id}>
           <Label>{profile.name}</Label>
           <Actions>
             <Icon name="edit" />
             <Icon name="upload" />
-            <Icon name="trash" />
+            <Icon name="trash" onClick={onRemove} />
           </Actions>
         </Item>
       );

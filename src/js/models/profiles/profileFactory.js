@@ -1,4 +1,4 @@
-import { getEntity, setEntity } from '../getter';
+import { getEntity, setEntity, removeEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import uuid from 'uuid/v4';
 
@@ -33,6 +33,10 @@ export default class ProfileFactory {
 
       return new Profile(profileData);
     });
+  }
+
+  static remove(id) {
+    return removeEntity(id);
   }
 
   static create(pass, data) {

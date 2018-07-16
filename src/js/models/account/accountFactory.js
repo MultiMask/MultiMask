@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import { getEntity, setEntity } from '../getter';
+import { getEntity, setEntity, removeEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
 
@@ -45,6 +45,10 @@ export default {
     console.log('Account Save > ', encodedWallet);
 
     setEntity(id, encodedWallet);
+  },
+
+  removeList(ids) {
+    return Promise.all(ids.map(id => removeEntity(id)));
   },
 
   load(pass, id) {

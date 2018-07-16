@@ -66,7 +66,11 @@ export default class ProfileController {
 
   add(profile) {}
 
-  remove(id) {}
+  remove(id) {
+    if (id !== this.currentProfileId) {
+      this.plc.remove(id);
+    }
+  }
 
   export(pass, id) {}
 

@@ -5,5 +5,9 @@ export default ({ profileController }) => ({
 
   add: () => {
     return profileController.createDefault();
+  },
+
+  remove: id => {
+    return profileController.remove(id);
   }
 });
