@@ -1,14 +1,24 @@
-import { PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
+import { PROFILE_ADD, PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
 
 export default ({ messaging, App }) => {
   messaging.on(PROFILE_GETLIST, () => {
-    const list = App.io.profile.getList();
+    sendList({ messaging, App });
+  });
 
-    messaging.send({
-      type: PROFILE_GETLIST_RESULT,
-      payload: {
-        list
-      }
+  messaging.on(PROFILE_ADD, () => {
+    App.io.profile.add().then(() => {
+      sendList({ messaging, App });
     });
+  });
+};
+
+const sendList = ({ messaging, App }) => {
+  const list = App.io.profile.getList();
+
+  messaging.send({
+    type: PROFILE_GETLIST_RESULT,
+    payload: {
+      list
+    }
   });
 };

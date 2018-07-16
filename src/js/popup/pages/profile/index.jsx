@@ -13,6 +13,10 @@ class Profiles extends React.Component {
     this.props.getList();
   }
 
+  onAdd = () => {
+    this.props.add();
+  };
+
   get list() {
     const { list } = this.props;
 
@@ -35,7 +39,7 @@ class Profiles extends React.Component {
       <Wrapper>
         <List>{this.list}</List>
         <Bottom>
-          <Button>
+          <Button onClick={this.onAdd}>
             <Typography color="main" align="center">
               Add
             </Typography>

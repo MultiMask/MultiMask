@@ -1,6 +1,6 @@
 import messaging from '../message';
 
-import { PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
+import { PROFILE_ADD, PROFILE_GETLIST, PROFILE_GETLIST_RESULT } from './../../constants/profile';
 
 const ProfileActions = {
   getList: () => (dispatch, getState) => {
@@ -12,6 +12,11 @@ const ProfileActions = {
     dispatch({
       type: PROFILE_GETLIST_RESULT,
       payload: { list }
+    });
+  },
+  add: () => (dispatch, getState) => {
+    messaging.send({
+      type: PROFILE_ADD
     });
   }
 };
