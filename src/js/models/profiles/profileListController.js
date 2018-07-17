@@ -64,6 +64,6 @@ export default class ProfileListController {
   }
 
   getList() {
-    return this.list.map(profile => profile._serialize());
+    return this.list.map(profile => profile.serialize());
   }
 }

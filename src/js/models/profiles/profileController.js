@@ -62,8 +62,18 @@ export default class ProfileController {
     return this.ac.getAccounts();
   }
 
-  getFullInfo(id) {
+  async getFullInfo(id) {
     const profile = this.plc.findById(id);
+
+    if (profile) {
+      return this.ac.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
+        profile.wallets = accounts;
+
+        return profile;
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   add() {
@@ -76,7 +86,11 @@ export default class ProfileController {
     }
   }
 
-  export(id) {}
+  export(id) {
+    return this.getFullInfo(id).then(profile => {
+      return ProfileFactory.encryptFullProfile(this.getPass(), profile);
+    });
+  }
 
   import(pass, profile) {}
 }

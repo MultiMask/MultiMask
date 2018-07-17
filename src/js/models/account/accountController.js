@@ -22,6 +22,12 @@ export default class AccountController {
     }
   }
 
+  getAccountsSerialized(accounts, pass) {
+    return this.loadAccountsByIds(pass, accounts).then(result => {
+      return result.map(account => account.serialize());
+    });
+  }
+
   addAccountInstance = account => {
     if (!this.getAccountById(account.id)) {
       this.accounts.push(account);

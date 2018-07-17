@@ -27,7 +27,7 @@ export default class Profile {
     return ProfileFactory.save(pass, this);
   }
 
-  _serialize() {
+  serialize() {
     return {
       ...this.data
     };

@@ -7,7 +7,7 @@ import Profile from './Profile';
 export default class ProfileFactory {
   static save(pass, profile) {
     const key = profile.getId();
-    const dataToSave = profile._serialize();
+    const dataToSave = profile.serialize();
 
     // eslint-disable-next-line
     const encodedProfile = encryptEntities ? encode(pass, JSON.stringify(dataToSave)) : JSON.stringify(dataToSave);
@@ -58,5 +58,11 @@ export default class ProfileFactory {
       accounts: [],
       ...data
     });
+  }
+
+  static encryptFullProfile(pass, fullProfile) {
+    const str = JSON.stringify(fullProfile);
+
+    return encode(pass, str);
   }
 }

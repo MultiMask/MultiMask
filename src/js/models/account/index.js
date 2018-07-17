@@ -34,4 +34,16 @@ export default class Account {
   sendTX(tx) {
     return this.wallet.createTX(tx);
   }
+
+  serialize() {
+    return {
+      id: this.id,
+      name: this.name,
+      blockchain: this.blockchain,
+      network: this.network,
+      secret: {
+        seed: this.wallet.seed
+      }
+    };
+  }
 }
