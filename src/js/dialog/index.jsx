@@ -1,19 +1,12 @@
-import React from "react";
-
-import messaging from "./message";
-
-import {
-  ACCOUNT_INFO,
-  ACCOUNT_INFO_RESULT
-} from './../constants/account';
-
-import {
-  TX_PAYMENT_GET,
-  TX_PAYMENT_RESULT,
-  TX_CREATE
-} from './../constants/tx';
-
-import Payment from "./payment";
+import React from 'react';
+import { css } from 'emotion';
+import messaging from './message';
+import { ACCOUNT_INFO, ACCOUNT_INFO_RESULT } from './../constants/account';
+import { TX_PAYMENT_GET, TX_PAYMENT_RESULT, TX_CREATE } from './../constants/tx';
+import Payment from './payment';
+import AuthLayout from '../popup/layouts/AuthLayout';
+import Typography from '../popup/ui/Typography';
+import Select from '../popup/ui/Select';
 
 export default class App extends React.Component {
   constructor(opts) {
@@ -61,8 +54,8 @@ export default class App extends React.Component {
   }
 
   chooseAccount = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
+    this.setState({ account: e.target.value });
+  };
 
   onSubmit = payload => {
     const { to, amount, data } = payload;
@@ -90,50 +83,57 @@ export default class App extends React.Component {
   get options() {
     if (this.state.accounts) {
       return this.state.accounts.map((account, idx) => {
-        return <option value={account.name} key={idx}>{account.info.address} - {account.info.balance}</option>;
+        return { value: account.name, label: `${account.info.address} - ${account.info.balance}` };
       });
     }
 
-    return null;
+    return [];
   }
 
   render() {
     // console.log(this.props);
     // console.log(this.state);
+
+    const options = [
+      { value: 'chocolate', label: 'Chocolate' },
+      { value: 'strawberry', label: 'Strawberry' },
+      { value: 'vanilla', label: 'Vanilla' }
+    ];
+
     return (
-      <div className="dialog">
+      <AuthLayout>
         {this.state.isLoaded && (
-          <div>
-            <header className="header">
-              <img src="logo.png" />
-            </header>
-
-            <div className="dialog-title">
-              Select wallet:
-            </div>
-            <div className="center">
-              <select
-                name="account"
-                value={this.state.account}
-                onChange={this.chooseAccount}
+          <React.Fragment>
+            <div
+              className={css`
+                display: flex;
+                flex-direction: column;
+              `}
+            >
+              <Typography
+                className={css`
+                  margin-right: 10px;
+                `}
+                color="main"
+                variant="title"
               >
-                {this.options}
-              </select>
+                Select wallet:
+              </Typography>
+              <Select options={options} onChange={this.chooseAccount} />
             </div>
-
-            <div className="dialog-title">
+            <Typography color="main" variant="title">
               Send TX with params:
-            </div>
+            </Typography>
             <Payment
               tx={this.state.tx}
+              account={this.state.accounts}
               editable={this.state.isNew}
               onSubmit={this.onSubmit}
               onReject={this.onReject}
             />
-
-          </div>
+          </React.Fragment>
         )}
-      </div>
+      </AuthLayout>
     );
   }
 }
