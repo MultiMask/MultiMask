@@ -1,6 +1,7 @@
 import { getProfiles, setProfiles } from '../getter';
 
 import ProfileFactory from './profileFactory';
+import AccountFactory from './../account/accountFactory';
 
 export default class ProfileListController {
   list = null;
@@ -39,6 +40,19 @@ export default class ProfileListController {
     return this.list;
   }
 
+  remove(id) {
+    const profile = this.findById(id);
+    const idx = this.list.findIndex(profile => profile.getId() === id);
+
+    if (idx > -1) {
+      this.list.splice(idx, 1);
+      this.save();
+
+      ProfileFactory.remove(id);
+      AccountFactory.removeList(profile.getAccounts());
+    }
+  }
+
   save() {
     const profileIds = this.list.map(profile => profile.getId());
 
@@ -47,5 +61,9 @@ export default class ProfileListController {
 
   findById(id) {
     return this.list.find(profile => profile.getId() === id);
+  }
+
+  getList() {
+    return this.list.map(profile => profile.serialize());
   }
 }

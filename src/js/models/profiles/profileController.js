@@ -62,13 +62,35 @@ export default class ProfileController {
     return this.ac.getAccounts();
   }
 
-  dropProfile(id) {}
+  async getFullInfo(id) {
+    const profile = this.plc.findById(id);
 
-  add(profile) {}
+    if (profile) {
+      return this.ac.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
+        profile.wallets = accounts;
 
-  remove(id) {}
+        return profile;
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
 
-  export(pass, id) {}
+  add() {
+    this.createDefault();
+  }
+
+  remove(id) {
+    if (id !== this.currentProfileId) {
+      this.plc.remove(id);
+    }
+  }
+
+  export(id) {
+    return this.getFullInfo(id).then(profile => {
+      return ProfileFactory.encryptFullProfile(this.getPass(), profile);
+    });
+  }
 
   import(pass, profile) {}
 }
