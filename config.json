@@ -1,3 +1,4 @@
 {
-    "encryptEntities": false
+  "encryptEntities": false,
+  "logLevel": 0
 }

@@ -1,6 +1,7 @@
 import { getEntity, setEntity, removeEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import uuid from 'uuid/v4';
+import log from 'loglevel';
 
 import Profile from './Profile';
 
@@ -12,7 +13,7 @@ export default class ProfileFactory {
     // eslint-disable-next-line
     const encodedProfile = encryptEntities ? encode(pass, JSON.stringify(dataToSave)) : JSON.stringify(dataToSave);
 
-    console.log('Save Profile > ', encodedProfile);
+    log.debug('Save Profile > ', encodedProfile);
 
     return setEntity(key, encodedProfile);
   }
@@ -29,7 +30,7 @@ export default class ProfileFactory {
         throw new Error('Can`t decode profile from storage');
       }
 
-      console.log('Load Profile > ', profileData);
+      log.debug('Load Profile > ', profileData);
 
       return new Profile(profileData);
     });
