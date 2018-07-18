@@ -1,6 +1,8 @@
 import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
+import log from 'loglevel';
+
 export default class AccountController {
   accounts = [];
 
@@ -9,7 +11,7 @@ export default class AccountController {
   }
 
   restore(accounts, pass) {
-    console.log('AccountController > load all accounts > ', accounts);
+    log.info('AccountController > load all accounts > ', accounts);
 
     if (accounts && accounts.length > 0) {
       return this.loadAccountsByIds(pass, accounts).then(accounts => {

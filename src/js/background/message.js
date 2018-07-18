@@ -1,4 +1,5 @@
 import PortStream from '../libs/port-stream';
+import log from 'loglevel';
 
 class Messaging {
   listeners = {};
@@ -13,7 +14,7 @@ class Messaging {
   }
 
   fire = msg => {
-    console.log('back', msg);
+    log.info('receive message > ', msg);
     const { type, payload } = msg;
 
     if (this.listeners[type] && this.listeners[type].length > 0) {
@@ -30,7 +31,7 @@ class Messaging {
   }
 
   send(msg) {
-    console.log('send mesg', msg);
+    log.info('send message > ', msg);
     this.stream.write(msg);
   }
 }

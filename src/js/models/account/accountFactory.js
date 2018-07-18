@@ -2,6 +2,7 @@ import uuid from 'uuid/v4';
 import { getEntity, setEntity, removeEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
+import log from 'loglevel';
 
 import BitcoinWallet from './wallet/bitcoin';
 import Account from '.';
@@ -21,7 +22,7 @@ export default {
   },
 
   restore({ name, wallet, blockchain, network, id }) {
-    console.log('Restore wallet >', name, blockchain, network);
+    log.debug('Restore wallet >', name, blockchain, network);
 
     let walletInstance = createWallet({ blockchain, network });
 
@@ -36,13 +37,13 @@ export default {
   },
 
   save(pass, account) {
-    console.log('save account > ', pass, account);
+    log.debug('save account > ', pass, account);
     const id = account.id;
     const str = JSON.stringify(account);
     // eslint-disable-next-line
     const encodedWallet = encryptEntities ? encode(pass, str) : str;
 
-    console.log('Account Save > ', encodedWallet);
+    log.debug('Account Save > ', encodedWallet);
 
     setEntity(id, encodedWallet);
   },
@@ -53,11 +54,11 @@ export default {
 
   load(pass, id) {
     return getEntity(id).then(str => {
-      console.log('Account Load > raw >', str, id);
+      log.debug('Account Load > raw >', str, id);
       // eslint-disable-next-line
       const decoded =  encryptEntities ? JSON.parse(decode(pass, str)) : JSON.parse(str);
 
-      console.log('Account Load > ', decoded);
+      log.debug('Account Load > ', decoded);
 
       return this.restore(decoded);
     });
