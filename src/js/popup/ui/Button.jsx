@@ -23,12 +23,17 @@ const ButtonBase = styled.button`
   cursor: pointer;
   ${dynamicStyle};
   ${props => props.small && SmallStyle};
+  ${props => props.large && LargeStyle};
 `;
 
 const SmallStyle = css`
   line-height: 10px;
   font-size: 10px;
   padding: 7px 12px;
+`;
+
+const LargeStyle = css`
+  padding: 7px 25px;
 `;
 
 const Button = ({ children, ...props }) => {

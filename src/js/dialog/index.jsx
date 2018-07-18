@@ -1,12 +1,21 @@
 import React from 'react';
 import { css } from 'emotion';
+import styled from 'react-emotion';
 import messaging from './message';
 import { ACCOUNT_INFO, ACCOUNT_INFO_RESULT } from './../constants/account';
 import { TX_PAYMENT_GET, TX_PAYMENT_RESULT, TX_CREATE } from './../constants/tx';
-import Payment from './payment';
-import AuthLayout from '../popup/layouts/AuthLayout';
+import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
 import Select from '../popup/ui/Select';
+import Info from './Info';
+import Divider from '../popup/ui/Divider';
+import Button from '../popup/ui/Button';
+
+const Actions = styled.div`
+  display: flex;
+  margin: 20px 20px 0 20px;
+  justify-content: space-between;
+`;
 
 export default class App extends React.Component {
   constructor(opts) {
@@ -14,7 +23,10 @@ export default class App extends React.Component {
 
     this.state = {
       isLoaded: false,
-      tx: {}
+      tx: {},
+      accounts: [],
+      account: {},
+      selectValue: ''
     };
   }
 
@@ -39,22 +51,26 @@ export default class App extends React.Component {
   setTxInfo(data) {
     this.setState(state => ({
       ...state,
-      tx: data.tx,
-      isLoaded: true
+      tx: data.tx
     }));
   }
 
   setAccounts(data) {
     let account;
     if (data && data.length > 0) {
-      account = data[0].name;
+      account = data[0];
     }
 
-    this.setState({ accounts: data, account });
+    this.setState({ accounts: data, account, selectValue: this.getOption(account), isLoaded: true });
   }
 
-  chooseAccount = e => {
-    this.setState({ account: e.target.value });
+  getOption = account => {
+    return { value: account.id, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
+  };
+
+  handleChooseAccount = e => {
+    const { accounts } = this.state;
+    this.setState({ account: accounts.find(account => account.id === e.value), selectValue: e });
   };
 
   onSubmit = payload => {
@@ -64,7 +80,7 @@ export default class App extends React.Component {
     messaging.send({
       type: TX_CREATE,
       payload: {
-        name: account,
+        name: account.name,
         tx: {
           to,
           amount,
@@ -83,7 +99,7 @@ export default class App extends React.Component {
   get options() {
     if (this.state.accounts) {
       return this.state.accounts.map((account, idx) => {
-        return { value: account.name, label: `${account.info.address} - ${account.info.balance}` };
+        return this.getOption(account);
       });
     }
 
@@ -91,49 +107,59 @@ export default class App extends React.Component {
   }
 
   render() {
-    // console.log(this.props);
-    // console.log(this.state);
+    console.log(this.props, 'props');
+    console.log(this.state, 'state');
 
-    const options = [
-      { value: 'chocolate', label: 'Chocolate' },
-      { value: 'strawberry', label: 'Strawberry' },
-      { value: 'vanilla', label: 'Vanilla' }
-    ];
+    //TODO: return loader
+    if (!this.state.isLoaded) return null;
+
+    const {
+      account: {
+        info: { address, balance },
+        blockchain,
+        id
+      },
+      tx: { to, amount, data },
+      selectValue
+    } = this.state;
 
     return (
-      <AuthLayout>
-        {this.state.isLoaded && (
-          <React.Fragment>
-            <div
-              className={css`
-                display: flex;
-                flex-direction: column;
-              `}
-            >
-              <Typography
-                className={css`
-                  margin-right: 10px;
-                `}
-                color="main"
-                variant="title"
-              >
-                Select wallet:
-              </Typography>
-              <Select options={options} onChange={this.chooseAccount} />
-            </div>
-            <Typography color="main" variant="title">
-              Send TX with params:
-            </Typography>
-            <Payment
-              tx={this.state.tx}
-              account={this.state.accounts}
-              editable={this.state.isNew}
-              onSubmit={this.onSubmit}
-              onReject={this.onReject}
-            />
-          </React.Fragment>
-        )}
-      </AuthLayout>
+      <DialogLayout>
+        <div
+          className={css`
+            display: flex;
+            flex-direction: column;
+          `}
+        >
+          <Typography
+            className={css`
+              margin-right: 10px;
+            `}
+            color="main"
+            variant="subheading"
+          >
+            Select wallet:
+          </Typography>
+          <Select options={this.options} onChange={value => this.handleChooseAccount(value)} value={selectValue} />
+        </div>
+        <Typography color="main" variant="subheading">
+          Send TX with params:
+        </Typography>
+        <Info labelColor="primary" label="From:" content={[address, `${balance} ${blockchain}`, '? USD']} />
+        <Info labelColor="primary" label="To:" content={to} />
+        <Divider />
+        <Info label="Amount:" center content={[amount / 1e8, 'ETH', '? USD']} />
+        <Divider />
+        {data && <Info label="Data:" content={data} />}
+        <Actions>
+          <Button large outlined onClick={this.onReject}>
+            Reject
+          </Button>
+          <Button large onClick={this.onSubmit}>
+            Submit
+          </Button>
+        </Actions>
+      </DialogLayout>
     );
   }
 }

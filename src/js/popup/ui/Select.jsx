@@ -1,6 +1,5 @@
 import React from 'react';
 import BaseSelect from 'react-select';
-import styled from 'react-emotion';
 import { withTheme } from 'emotion-theming';
 
 const Select = props => {
