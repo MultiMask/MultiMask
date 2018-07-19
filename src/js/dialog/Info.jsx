@@ -22,6 +22,7 @@ const Content = styled.div`
 const styles = {
   block: css`
     display: block;
+    margin: 0;
   `
 };
 
@@ -31,7 +32,8 @@ const Info = ({ label, content, labelColor, center }) => {
     <Content center>
       {content.map((item, index) => (
         <Typography
-          color={index === 1 || (center && index <= 1) ? 'main' : 'secondary'}
+          color={index === 1 || (center && index < 1) ? 'main' : 'secondary'}
+          variant={center && 'subheading'}
           className={styles.block}
           key={index}
         >
@@ -45,7 +47,7 @@ const Info = ({ label, content, labelColor, center }) => {
 
   return (
     <Container multi={multi}>
-      <FirstItem color={labelColor}>{label}</FirstItem>
+      <FirstItem color="primary">{label}</FirstItem>
       {rows}
     </Container>
   );

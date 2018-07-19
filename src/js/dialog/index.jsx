@@ -145,10 +145,10 @@ export default class App extends React.Component {
         <Typography color="main" variant="subheading">
           Send TX with params:
         </Typography>
-        <Info labelColor="primary" label="From:" content={[address, `${balance} ${blockchain}`, '? USD']} />
-        <Info labelColor="primary" label="To:" content={to} />
+        <Info label="From:" content={[address, `${balance} ${blockchain}`, '? USD']} />
+        <Info label="To:" content={to} />
         <Divider />
-        <Info label="Amount:" center content={[amount / 1e8, 'ETH', '? USD']} />
+        <Info label="Amount:" center content={[`${amount / 1e8} ETH`, '? USD']} />
         <Divider />
         {data && <Info label="Data:" content={data} />}
         <Actions>
