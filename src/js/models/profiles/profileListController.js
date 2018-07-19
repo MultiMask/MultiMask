@@ -12,7 +12,7 @@ export default class ProfileListController {
 
   get() {
     if (this.list) {
-      return this.list;
+      return Promise.resolve(this.list);
     }
 
     return getProfiles()
