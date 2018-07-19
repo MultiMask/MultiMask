@@ -7,13 +7,13 @@ import { BaseContainer } from './BaseContainer';
 
 const Container = styled(BaseContainer)`
   padding: 20px;
+  height: 600px;
 `;
 
 const Header = styled.header`
   display: flex;
   align-items: center;
   text-align: center;
-  padding-top: ${props => (props.login ? '50px' : 0)};
   flex-direction: column;
 `;
 
@@ -21,7 +21,7 @@ const Image = styled('img')`
   width: 90px;
 `;
 
-const AuthLayout = ({ login, children }) => (
+const DialogLayout = ({ children }) => (
   <Container>
     <Header>
       <Image alt="logo" src={logo} />
@@ -33,8 +33,4 @@ const AuthLayout = ({ login, children }) => (
   </Container>
 );
 
-AuthLayout.defaultProps = {
-  login: false
-};
-
-export default AuthLayout;
+export default DialogLayout;
