@@ -9,6 +9,7 @@ import Create from './pages/login/create';
 import Account from './pages/account';
 import Wallet from './pages/wallet';
 import Profile from './pages/profile';
+import Settings from './pages/settings';
 
 import authActions from './actions/auth';
 
@@ -21,7 +22,8 @@ import {
   STATE_VIEW_SEND,
   STATE_VIEW_INIT,
   STATE_VIEW_EXPORTPK,
-  STATE_VIEW_PROFILES
+  STATE_VIEW_PROFILES,
+  STATE_VIEW_SETTINGS
 } from './../constants/state';
 
 class Popup extends React.Component {
@@ -70,6 +72,13 @@ class Popup extends React.Component {
           <AuthLayout>
             <Create />
           </AuthLayout>
+        );
+
+      case STATE_VIEW_SETTINGS:
+        return (
+          <MainLayout>
+            <Settings />
+          </MainLayout>
         );
 
       // TODO: make error page or logger

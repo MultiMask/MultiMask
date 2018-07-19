@@ -56,7 +56,8 @@ class MainLayout extends React.Component {
   }
 
   render() {
-    const { createWallet, logout, children, creation, goProfile } = this.props;
+    const { createWallet, logout, children, creation, goProfile, goToSettings } = this.props;
+
     return (
       <Container>
         <Header>
@@ -65,7 +66,7 @@ class MainLayout extends React.Component {
               <Icon className={styles.icon} name="plus-circle" onClick={createWallet} />
               <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
                 <MenuItem onClick={goProfile}>Profiles</MenuItem>
-                <MenuItem>Settings</MenuItem>
+                <MenuItem onClick={goToSettings}>Settings</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </HeaderItem>

@@ -17,3 +17,4 @@ export const STATE_VIEW_CREATION = 'creation';
 export const STATE_VIEW_WALLET = 'wallet';
 export const STATE_VIEW_PROFILES = 'profiles';
 export const STATE_VIEW_EXPORTPK = 'exportpk';
+export const STATE_VIEW_SETTINGS = 'state:view:settings';

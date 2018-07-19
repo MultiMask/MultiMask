@@ -8,7 +8,8 @@ import {
   STATE_EXPORTPK,
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
-  STATE_VIEW_EXPORTPK
+  STATE_VIEW_EXPORTPK,
+  STATE_VIEW_SETTINGS
 } from './../../constants/state';
 
 const StateActions = {
@@ -46,6 +47,11 @@ const StateActions = {
   goProfile: () => (dispatch, getState) => {
     dispatch({
       type: STATE_PROFILES
+    });
+  },
+  goToSettings: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_VIEW_SETTINGS
     });
   },
   goBack: () => (dispatch, getState) => {
