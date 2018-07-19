@@ -57,8 +57,6 @@ class Settings extends Component {
     }
   };
 
-  onExportKeyFile = () => {};
-
   get debug() {
     return <pre>{JSON.stringify(this.state, null, 4)}</pre>;
   }
