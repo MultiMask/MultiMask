@@ -36,7 +36,9 @@ export default class App extends React.Component {
     });
 
     messaging.on(TX_PAYMENT_RESULT, data => {
-      this.setTxInfo(data);
+      this.setState({
+        tx: data.tx
+      });
     });
 
     messaging.send({
@@ -46,13 +48,6 @@ export default class App extends React.Component {
     messaging.on(ACCOUNT_INFO_RESULT, data => {
       this.setAccounts(data);
     });
-  }
-
-  setTxInfo(data) {
-    this.setState(state => ({
-      ...state,
-      tx: data.tx
-    }));
   }
 
   setAccounts(data) {
@@ -73,19 +68,14 @@ export default class App extends React.Component {
     this.setState({ account: accounts.find(account => account.id === e.value), selectValue: e });
   };
 
-  onSubmit = payload => {
-    const { to, amount, data } = payload;
-    const { account } = this.state;
+  onSubmit = () => {
+    const { account, tx } = this.state;
 
     messaging.send({
       type: TX_CREATE,
       payload: {
-        name: account.name,
-        tx: {
-          to,
-          amount,
-          data
-        }
+        name: account.id,
+        tx: tx
       }
     });
 
