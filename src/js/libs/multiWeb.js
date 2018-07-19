@@ -1,6 +1,6 @@
-import { TX_PAYMENT } from './../constants/tx';
+import { TX_PAYMENT } from '../constants/tx';
 
-import { BC_BITCOIN } from './../constants/network';
+import { BC_BITCOIN } from '../constants/network';
 
 export default class MultiWeb {
   constructor({ stream }) {

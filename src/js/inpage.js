@@ -1,5 +1,5 @@
 import PostMessageStream from 'post-message-stream';
-import BitWeb from './libs/bitWeb';
+import MultiWeb from './libs/multiWeb';
 let contentStream;
 
 console.log('inpage script');
@@ -21,7 +21,7 @@ function conntectToContent() {
 }
 
 function injectScript() {
-  window.multiWeb = new BitWeb({
+  window.multiWeb = new MultiWeb({
     stream: contentStream
   });
 }
