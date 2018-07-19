@@ -1,6 +1,6 @@
 import { TX_PAYMENT } from '../constants/tx';
 
-import { BC_BITCOIN } from '../constants/network';
+import networks from './../blockchain';
 
 export default class MultiWeb {
   constructor({ stream }) {
@@ -19,7 +19,7 @@ export default class MultiWeb {
     this._send({
       type: TX_PAYMENT,
       payload: {
-        blockchain: BC_BITCOIN,
+        blockchain: networks.BTC.sign,
         tx: {
           to,
           amount,
