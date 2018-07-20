@@ -1,5 +1,6 @@
-import { TX_PAYMENT } from '../constants/tx';
+import web3 from './plugins/eth';
 
+import { TX_PAYMENT } from '../constants/tx';
 import networks from './../blockchain';
 
 export default class MultiWeb {
@@ -28,5 +29,7 @@ export default class MultiWeb {
       }
     });
   }
-  sendVote(to) {}
+  getWeb3() {
+    return web3;
+  }
 }
