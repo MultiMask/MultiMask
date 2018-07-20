@@ -27,6 +27,12 @@ export default class Profile {
     return ProfileFactory.save(pass, this);
   }
 
+  update(pass, newData) {
+    this.data = { ...this.data, ...newData };
+    this.increaceVerion();
+    return this.save(pass);
+  }
+
   serialize() {
     return {
       ...this.data

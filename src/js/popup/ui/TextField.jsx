@@ -38,11 +38,11 @@ const Error = styled.div`
   padding-top: 4px;
 `;
 
-const TextField = ({ className, label, name, error, fullWidth, ...props }) => {
+const TextField = ({ className, label, name, error, fullWidth, inputRef, ...props }) => {
   return (
     <InputContainer className={className} fullWidth>
       <Label for={name}>{label}</Label>
-      <Input id={name} name={name} {...props} />
+      <Input id={name} ref={inputRef} name={name} {...props} />
       <Error error>{error}</Error>
     </InputContainer>
   );
