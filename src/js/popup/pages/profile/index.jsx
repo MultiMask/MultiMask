@@ -58,10 +58,10 @@ class Profiles extends React.Component {
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
       const onExport = this.onExport.bind(this, profile.id);
-
+      const isEdit = editProfileId === profile.id;
       return (
         <Item key={profile.id}>
-          {editProfileId === profile.id ? (
+          {isEdit ? (
             <TextField
               inputRef={this.textInput}
               autoFocus
@@ -74,7 +74,9 @@ class Profiles extends React.Component {
               {profile.name}
             </Typography>
           )}
-          <ItemDescription color="hint">{profile.accounts.length} wallets</ItemDescription>
+          <ItemDescription isEdit={isEdit} color="hint">
+            {profile.accounts.length} wallets
+          </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
             <MenuItem onClick={onExport}>Export</MenuItem>
@@ -142,6 +144,6 @@ const Item = styled.div`
 
 const ItemDescription = styled(Typography)`
   position: absolute;
-  bottom: 10px;
+  bottom: ${props => (props.isEdit ? 0 : '10px')};
   left: 0;
 `;
