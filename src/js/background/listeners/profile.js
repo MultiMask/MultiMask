@@ -4,7 +4,8 @@ import {
   PROFILE_EXPORT,
   PROFILE_EXPORT_RESULT,
   PROFILE_GETLIST,
-  PROFILE_GETLIST_RESULT
+  PROFILE_GETLIST_RESULT,
+  PROFILE_UPDATE
 } from './../../constants/profile';
 
 export default ({ messaging, App }) => {
@@ -32,6 +33,11 @@ export default ({ messaging, App }) => {
         }
       });
     });
+  });
+
+  messaging.on(PROFILE_UPDATE, ({ id, data }) => {
+    App.io.profile.update(id, data);
+    sendList({ messaging, App });
   });
 };
 

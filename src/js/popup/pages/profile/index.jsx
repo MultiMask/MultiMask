@@ -6,10 +6,16 @@ import Typography from '../../ui/Typography';
 import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
+import TextField from '../../ui/TextField';
 
 import profileActions from './../../actions/profile';
 
 class Profiles extends React.Component {
+  state = {
+    editProfileId: false,
+    profileName: ''
+  };
+
   componentDidMount() {
     this.props.getList();
   }
@@ -26,21 +32,53 @@ class Profiles extends React.Component {
     this.props.export(id);
   };
 
+  handleEdit = ({ name, id }) => () => {
+    this.setState({ editProfileId: id, profileName: name });
+  };
+
+  handleProfileNameChange = event => {
+    this.setState({ profileName: event.target.value });
+  };
+
+  handleOnBlurInput = (profile, name) => () => {
+    const { id, name: oldName } = profile;
+
+    if (oldName !== name) {
+      const { update } = this.props;
+      update(id, { name });
+    }
+
+    this.setState({ editProfileId: null });
+  };
+
   get list() {
     const { list } = this.props;
+    const { editProfileId, profileName } = this.state;
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
       const onExport = this.onExport.bind(this, profile.id);
-
+      const isEdit = editProfileId === profile.id;
       return (
         <Item key={profile.id}>
-          <Typography color="main" variant="subheading">
-            {profile.name}
-          </Typography>
-          <ItemDescription color="hint">{profile.accounts.length} wallets</ItemDescription>
+          {isEdit ? (
+            <TextField
+              inputRef={this.textInput}
+              autoFocus
+              onChange={this.handleProfileNameChange}
+              value={profileName}
+              onBlur={this.handleOnBlurInput(profile, profileName)}
+            />
+          ) : (
+            <Typography color="main" variant="subheading">
+              {profile.name}
+            </Typography>
+          )}
+          <ItemDescription isEdit={isEdit} color="hint">
+            {profile.accounts.length} wallets
+          </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
-            <MenuItem>Edit</MenuItem>
+            <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
             <MenuItem onClick={onExport}>Export</MenuItem>
             <MenuItem onClick={onRemove}>Delete</MenuItem>
           </Menu>
@@ -106,6 +144,6 @@ const Item = styled.div`
 
 const ItemDescription = styled(Typography)`
   position: absolute;
-  bottom: 10px;
+  bottom: ${props => (props.isEdit ? 0 : '10px')};
   left: 0;
 `;
