@@ -8,6 +8,7 @@ var webpack = require('webpack'),
   WriteFilePlugin = require('write-file-webpack-plugin');
 
 var config = require('./config.json');
+var apiKeys = require('./api-keys.json');
 
 function getConfigParams(params) {
   return Object.keys(params).reduce((res, key) => {
@@ -80,7 +81,8 @@ var options = {
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
-      ...getConfigParams(config)
+      ...getConfigParams(config),
+      ...getConfigParams(apiKeys)
     }),
     new CopyWebpackPlugin([
       {
