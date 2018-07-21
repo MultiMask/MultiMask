@@ -53,6 +53,15 @@ export default class ProfileListController {
     }
   }
 
+  update(pass, id, data) {
+    const idx = this.list.findIndex(profile => profile.getId() === id);
+    if (idx > -1) {
+      this.list[idx].update(pass, data);
+
+      this.save();
+    }
+  }
+
   save() {
     const profileIds = this.list.map(profile => profile.getId());
 

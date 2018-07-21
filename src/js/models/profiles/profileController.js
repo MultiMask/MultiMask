@@ -92,5 +92,9 @@ export default class ProfileController {
     });
   }
 
+  update(id, data) {
+    this.plc.update(this.getPass(), id, data);
+  }
+
   import(pass, profile) {}
 }
