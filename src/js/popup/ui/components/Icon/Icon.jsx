@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 
 const iconTypes = {
   BTC: require('./Icon_type_btc.svg'),
+  ETH: require('./Icon_type_eth.svg'),
   DVC: require('./Icon_type_dvc.svg'),
   'no-wallets': require('./Icon_type_no-wallets.png')
 };
@@ -48,7 +49,7 @@ export class Icon extends React.Component {
   };
 
   static propTypes = {
-    type: PropTypes.oneOf(['BTC', 'DVC', 'no-wallets']).isRequired,
+    type: PropTypes.oneOf(['BTC', 'DVC', 'ETH', 'no-wallets']).isRequired,
     size: PropTypes.oneOf(['s', 'm', 'l', 'xl'])
   };
 }
