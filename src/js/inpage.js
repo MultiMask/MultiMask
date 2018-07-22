@@ -1,14 +1,20 @@
+import log from 'loglevel';
+
 import PostMessageStream from 'post-message-stream';
 import MultiWeb from './libs/multiWeb';
-let contentStream;
 
-console.log('inpage script');
+let contentStream;
 
 init();
 
 function init() {
+  // eslint-disable-next-line
+  log.setLevel(logLevel);
+
   conntectToContent();
   injectScript();
+
+  log.info('MultiMask - injected handler');
 }
 
 function conntectToContent() {
@@ -16,8 +22,6 @@ function conntectToContent() {
     name: 'page',
     target: 'content'
   });
-  // contentStream.on('data', data => console.log('recieved inpage', data));
-  // contentStream.write('send from inpage');
 }
 
 function injectScript() {

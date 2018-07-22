@@ -1,6 +1,7 @@
 import log from 'loglevel';
 import PortStream from './libs/port-stream';
 import PostMessageStream from 'post-message-stream';
+
 let backgroundStream;
 let injectStream;
 
@@ -15,6 +16,8 @@ function init() {
   connectToInject();
 
   setupStreams();
+
+  log.info('MultiMask - start listening events');
 }
 
 function setupInjection() {
@@ -26,7 +29,6 @@ function setupInjection() {
 
   s.onload = function() {
     s.remove();
-    log.info('MultiMask - injected handler');
   };
 }
 
@@ -43,7 +45,6 @@ function connectToInject() {
 }
 
 function setupStreams() {
-  log.info('MultiMask - start listening events');
   injectStream.on('data', data => {
     backgroundStream.write(data);
   });
