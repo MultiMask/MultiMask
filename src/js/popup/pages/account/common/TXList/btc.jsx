@@ -1,50 +1,19 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { css } from 'emotion';
-import styled from 'react-emotion';
-import Typography from '../../../ui/Typography';
-import Icon from '../../../ui/Icon';
+import Typography from '../../../../ui/Typography';
+import Icon from '../../../../ui/Icon';
 
-const DATE_FORMAT = 'D MMMM YYYY HH:mm';
-
-const styles = {
-  rowItem: css`
-    margin-right: 5px;
-  `,
-  icon: css`
-    cursor: pointer;
-  `
-};
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0 30px 0 20px;
-  padding: 15px 0 15px 5px;
-  border-bottom: 1px solid ${props => props.theme.colors.hint};
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-`;
+import { DATE_FORMAT, Header, Root, styles } from './elements';
 
 const findAmount = ({ out, addr }) => {
   const output = out.find(oneOut => oneOut.addr === addr);
   if (output) {
-    // 1e8 only for BTC
     return output.value / 1e8;
   }
 };
 
-const TXList = ({
-  data: {
-    info: { txs, address },
-    blockchain
-  }
-}) =>
+const BTCList = ({ txs, address }) =>
   txs.map(tx => (
     <Root key={tx.hash}>
       <Header>
@@ -61,10 +30,10 @@ const TXList = ({
           {findAmount({ out: tx.out, addr: address })}
         </Typography>
         <Typography className={styles.rowItem} color="primary">
-          {blockchain}
+          BTC
         </Typography>
       </div>
     </Root>
   ));
 
-export default TXList;
+export default BTCList;
