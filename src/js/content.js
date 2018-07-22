@@ -1,6 +1,7 @@
 import log from 'loglevel';
 import PortStream from './libs/port-stream';
 import PostMessageStream from 'post-message-stream';
+import pump from 'pump';
 
 let backgroundStream;
 let injectStream;
@@ -45,7 +46,5 @@ function connectToInject() {
 }
 
 function setupStreams() {
-  injectStream.on('data', data => {
-    backgroundStream.write(data);
-  });
+  pump(backgroundStream, injectStream, backgroundStream);
 }
