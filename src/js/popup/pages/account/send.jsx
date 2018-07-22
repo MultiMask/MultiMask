@@ -73,7 +73,7 @@ class Send extends React.Component {
     return {
       to,
       data,
-      amount: parseFloat(amount) * 1e8
+      amount: parseFloat(amount)
     };
   }
 

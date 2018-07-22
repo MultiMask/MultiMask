@@ -53,6 +53,7 @@ export default class BitcoinWallet {
       console.log('output: ', output);
       // console.log('balance: ', balance);
 
+      let amountInSatoshi = amount * 1e8;
       let SUM = balance * 1e8;
       console.log('balance:', SUM);
 
@@ -69,9 +70,9 @@ export default class BitcoinWallet {
         txb.addOutput(dataScript, 0);
       }
 
-      let amountToReturn = SUM - amount - 5000;
+      let amountToReturn = SUM - amountInSatoshi - 5000;
 
-      txb.addOutput(to, amount);
+      txb.addOutput(to, amountInSatoshi);
       txb.addOutput(address, +amountToReturn.toFixed(0));
 
       txb.sign(0, keyPair);
