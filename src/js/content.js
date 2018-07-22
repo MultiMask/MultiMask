@@ -1,11 +1,15 @@
+import log from 'loglevel';
 import PortStream from './libs/port-stream';
 import PostMessageStream from 'post-message-stream';
 let backgroundStream;
 let injectStream;
 
-console.log('content js');
+init();
 
 function init() {
+  // eslint-disable-next-line
+  log.setLevel(logLevel);
+
   setupInjection();
   connectToBackend();
   connectToInject();
@@ -22,14 +26,13 @@ function setupInjection() {
 
   s.onload = function() {
     s.remove();
+    log.info('MultiMask - injected handler');
   };
 }
 
 function connectToBackend() {
   let backPort = chrome.extension.connect({ name: 'content' });
   backgroundStream = new PortStream(backPort);
-  // backgroundStream.write('hello from content');
-  // backgroundStream.on('data', data => console.log('recieved content: ', data));
 }
 
 function connectToInject() {
@@ -37,16 +40,11 @@ function connectToInject() {
     name: 'content',
     target: 'page'
   });
-  // injectStream.on('data', data => console.log('recieved content', data));
-  // injectStream.write('send from content');
 }
 
 function setupStreams() {
-  console.log('setup');
+  log.info('MultiMask - start listening events');
   injectStream.on('data', data => {
     backgroundStream.write(data);
   });
 }
-
-// Inject inpage script
-init();
