@@ -24,7 +24,10 @@ export default class Engine {
     // eslint-disable-next-line
     const addrNode = root.derive("m/44'/60'/0'/0/0");
 
-    return ethUtil.bufferToHex(addrNode._privateKey);
+    return {
+      priv: ethUtil.bufferToHex(addrNode._privateKey),
+      privHex: addrNode._privateKey
+    };
   }
 
   getEthereumAddress(privKey) {
@@ -36,13 +39,11 @@ export default class Engine {
     return ethUtil.privateToPublic(privKey);
   }
 
-  signEthTx(privKey, amount, receiverAddress) {
-    let senderAddress = this.getEthereumAddress(privKey);
-
+  signEthTx({ privKey, amount, from, to }) {
     const tx = new ethTx({
-      to: receiverAddress,
-      from: senderAddress,
-      value: Web3.utils.toHex(amount),
+      to,
+      from,
+      value: Web3.utils.toHex(Web3.utils.toBN(amount)),
       gasLimit: Web3.utils.toHex(Web3.utils.toBN('21000')),
       gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
       nonce: Web3.utils.toHex(0)

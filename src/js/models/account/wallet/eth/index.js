@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import log from 'loglevel';
 import EthEngine from './engine';
 
 const testnet = 'https://ropsten.infura.io/';
@@ -12,7 +13,9 @@ export default class EthWallet {
 
   create(seed) {
     this.seed = seed || this.engine.generateMnemonic();
-    this.priv = this.engine.getPrivKeyFromSeed(this.seed);
+    let { priv, privHex } = this.engine.getPrivKeyFromSeed(this.seed);
+    this.priv = priv;
+    this.privHex = privHex;
 
     this.public = this.engine.getPublic(this.priv);
     this.address = this.engine.getEthereumAddress(this.priv);
@@ -34,5 +37,27 @@ export default class EthWallet {
     );
   }
 
-  createTX() {}
+  createTX({ to, amount, data }) {
+    const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
+
+    const tx = this.engine.signEthTx({
+      privKey: this.privHex,
+      amount: amountInWei,
+      to,
+      from: this.address
+    });
+
+    log.info(tx);
+
+    return new Promise((res, rej) => {
+      web3.eth.sendSignedTransaction(tx, function(err, transactionHash) {
+        if (err) {
+          rej(err);
+        }
+
+        log.info('Transaction success > ', transactionHash);
+        res(transactionHash);
+      });
+    });
+  }
 }

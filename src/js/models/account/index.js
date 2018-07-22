@@ -34,7 +34,7 @@ export default class Account {
   }
 
   sendTX(tx) {
-    log.info('Sending tx > ', this.name, tx);
+    log.info('Sending tx > ', this.blockchain, this.network, this.name, tx);
     return this.wallet.createTX(tx);
   }
 
