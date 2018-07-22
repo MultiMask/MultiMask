@@ -2,6 +2,8 @@ import bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
 
+import log from 'loglevel';
+
 const URL_NODE = 'https://testnet.blockchain.info';
 // const NETWORK = 'testnet';
 // const NETWORK = "livenet";
@@ -46,16 +48,16 @@ export default class BitcoinWallet {
       const privateKey = this.priv;
       const address = this.address;
       // SEND signed Tx
-      console.log('create TX with: ');
-      console.log('to: ', to);
-      console.log('amount: ', amount);
-      console.log('data: ', data);
-      console.log('output: ', output);
+      log.info('create TX with: ');
+      log.info('to: ', to);
+      log.info('amount: ', amount);
+      log.info('data: ', data);
+      log.info('output: ', output);
       // console.log('balance: ', balance);
 
       let amountInSatoshi = amount * 1e8;
       let SUM = balance * 1e8;
-      console.log('balance:', SUM);
+      log.info('balance:', SUM);
 
       let testnet = bitcoin.networks.testnet;
       let txb = new bitcoin.TransactionBuilder(testnet);
@@ -77,11 +79,12 @@ export default class BitcoinWallet {
 
       txb.sign(0, keyPair);
 
-      console.log('TX = ', txb.build().toHex());
+      log.info('TX = ', txb.build().toHex());
 
-      return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(data => {
-        console.log('TX hash:', data);
-        // done(data);
+      return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(hash => {
+        log.info('TX hash:', hash);
+
+        return { hash };
       });
     });
   }
