@@ -1,8 +1,5 @@
 import bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
-// import bip38 from "bip38";
-// import wif from "wif";
-
 import axios from 'axios';
 
 const URL_NODE = 'https://testnet.blockchain.info';
@@ -27,56 +24,6 @@ export default class BitcoinWallet {
   getSeed() {
     return this.seed;
   }
-
-  /**
-   * Depricated, Use bitcoinjs-lib
-   */
-  // create(pass) {
-  // const testnet = bitcoin.networks.bitcoin;
-  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
-
-  // this.pk = keyPair.toWIF();
-  // this.address = keyPair.getAddress();
-  // this.pass = pass;
-  // }
-
-  /**
-   * Depricated, testing BIP-38
-   */
-  // test() {
-  // console.log('test');
-  // const testnet = bitcoin.networks.testnet;
-  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
-
-  // const pass = '12345567ONE';
-
-  // this.pk = keyPair.toWIF();
-  // this.address = keyPair.getAddress();
-  // this.pass = pass;
-
-  // // console.log(testnet);
-  // // console.log(keyPair);
-  // console.log('private: ',this.pk);
-  // // console.log(this.address);
-
-  // let decoded = wif.decode(this.pk);
-
-  // var encryptedKey = bip38.encrypt(
-  //   decoded.privateKey,
-  //   decoded.compressed,
-  //   pass
-  // );
-
-  // console.log('encrypt', encryptedKey);
-
-  // var decryptedKey = bip38.decrypt(encryptedKey, pass, function(status) {
-  //   //   console.log(status.percent); // will print the precent every time current increases by 1000
-  // });
-
-  // console.log('decrypt',
-  //   wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed)
-  // );
-  // }
 
   getInfo() {
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
