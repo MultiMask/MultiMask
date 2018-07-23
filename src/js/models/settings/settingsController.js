@@ -1,4 +1,4 @@
-import {} from '../getter';
+import { getSettings, setSettings } from '../getter';
 
 import priceProviders from './priceProviders';
 
@@ -61,6 +61,10 @@ export default class SettingsController {
 
   get checkAuth() {
     return this.App && this.App.isAuth();
+  }
+
+  getPriceProviders() {
+    return Object.entries(this.priceProviders).map(ent => ({ value: ent[0], label: ent[1].title }));
   }
 
   settings = {};

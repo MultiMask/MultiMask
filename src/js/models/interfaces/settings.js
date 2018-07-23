@@ -3,6 +3,10 @@ export default ({ settingsController }) => ({
     return settingsController.loadPrice(sign);
   },
 
+  getPriceProviders() {
+    return settingsController.getPriceProviders();
+  },
+
   getAll() {
     return settingsController.getAll();
   },

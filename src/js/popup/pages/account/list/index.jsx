@@ -25,11 +25,13 @@ class AccountList extends React.Component {
                 );
               })}
             </div>
-            <div className="Wallets-Total">
-              <div className="Wallets-Label">total:</div>
-              <div className="Wallets-Value">{total.balance} BTC</div>
-              <div className="Wallets-Label">{getPrice(this.props.settings.prices, 'BTC', total.balance)} USD</div>
-            </div>
+            {this.props.settings.show_total ? (
+              <div className="Wallets-Total">
+                <div className="Wallets-Label">total:</div>
+                <div className="Wallets-Value">{total.balance} BTC</div>
+                <div className="Wallets-Label">{getPrice(this.props.settings.prices, 'BTC', total.balance)} USD</div>
+              </div>
+            ) : null}
           </div>
         </React.Fragment>
       );
