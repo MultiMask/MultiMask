@@ -4,10 +4,13 @@ import ui from './ui';
 import tx from './tx';
 import profile from './profile';
 
-export default ({ messaging, wallet, App }) => {
-  account({ messaging, wallet, App });
-  auth({ messaging, wallet, App });
-  ui({ messaging, wallet, App });
-  tx({ messaging, wallet, App });
-  profile({ messaging, wallet, App });
+import eth from './eth';
+
+export default ({ messaging, App }) => {
+  account({ messaging, App });
+  auth({ messaging, App });
+  ui({ messaging, App });
+  tx({ messaging, App });
+  profile({ messaging, App });
+  eth({ messaging, App });
 };
