@@ -14,3 +14,6 @@ export const setProfiles = list => storage.set(config.profiles, list);
 export const getEntity = id => storage.get(id);
 export const setEntity = (key, entity) => storage.set(key, entity);
 export const removeEntity = key => storage.remove(key);
+
+export const getSettings = () => storage.get(config.settings);
+export const setSettings = nextSettings => storage.set(config.settings, nextSettings);

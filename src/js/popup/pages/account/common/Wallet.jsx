@@ -1,9 +1,10 @@
+import { css } from 'emotion';
 import React from 'react';
+import styled from 'react-emotion';
+import getPrice from '../../../../helpers/getPrice';
 import networkSign from '../../../../helpers/networkSign';
 import Icon from '../../../ui/components/Icon';
 import Typography from '../../../ui/Typography';
-import styled from 'react-emotion';
-import { css } from 'emotion';
 
 const WalletContainer = styled.div`
   padding: 10px 20px;
@@ -29,7 +30,8 @@ const Wallet = ({
     blockchain
   },
   menu,
-  actions
+  actions,
+  settings
 }) => (
   <WalletContainer className="item">
     <WalletHeader>
@@ -55,7 +57,7 @@ const Wallet = ({
         >
           {`${balance} ${networkSign({ blockchain })}`}
         </Typography>
-        <Typography color="secondary">? USDT</Typography>
+        <Typography color="secondary">{getPrice(settings && settings.prices, blockchain, balance)} USD</Typography>
       </div>
       {actions}
     </WalletContent>

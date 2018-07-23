@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import getPrice from '../../../../helpers/getPrice';
 import stateActions from '../../../actions/state';
 import Icon from '../../../ui/components/Icon';
 import Item from './item';
@@ -19,7 +20,7 @@ class AccountList extends React.Component {
 
                 return (
                   <div key={account.name} className="Wallets-Item">
-                    <Item account={account} />
+                    <Item account={account} prices={this.prices} />
                   </div>
                 );
               })}
@@ -27,7 +28,7 @@ class AccountList extends React.Component {
             <div className="Wallets-Total">
               <div className="Wallets-Label">total:</div>
               <div className="Wallets-Value">{total.balance} BTC</div>
-              <div className="Wallets-Label">? USD</div>
+              <div className="Wallets-Label">{getPrice(this.props.settings.prices, 'BTC', total.balance)} USD</div>
             </div>
           </div>
         </React.Fragment>
@@ -50,11 +51,29 @@ class AccountList extends React.Component {
       </div>
     );
   }
+
+  getUSDbyTotal(total) {
+    if (!this.priceInUSD('BTC')) {
+      return '?';
+    }
+
+    const usd = total * this.priceInUSD('BTC');
+    return isNaN(usd) ? '?' : usd.toFixed(2);
+  }
+
+  priceInUSD(sign) {
+    return this.prices && this.prices[sign] && this.prices[sign].USD;
+  }
+
+  get prices() {
+    return (this.props.settings && this.props.settings.prices) || {};
+  }
 }
 
 export default connect(
-  ({ account }) => ({
-    accounts: account.accounts
+  ({ account, settings }) => ({
+    accounts: account.accounts,
+    settings
   }),
   dispatch => bindActionCreators(stateActions, dispatch)
 )(AccountList);

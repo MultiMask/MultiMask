@@ -11,9 +11,9 @@ class Settings extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { settings: { show_total: true, currencies_data_provider: 3 } };
+    this.state = { settings: { show_total: true, price_provider: 3 } };
 
-    this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'currencies_data_provider');
+    this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'price_provider');
   }
 
   currenciesDataProviders = 'some data'.split('').map((val, key) => ({
@@ -24,7 +24,7 @@ class Settings extends Component {
   get selectedDataProvider() {
     const { settings } = this.state;
 
-    return this.currenciesDataProviders.find(i => i.value === settings.currencies_data_provider);
+    return this.currenciesDataProviders.find(i => i.value === settings.price_provider);
   }
 
   onChange = e => {
@@ -58,7 +58,7 @@ class Settings extends Component {
   };
 
   get debug() {
-    return <pre>{JSON.stringify(this.state, null, 4)}</pre>;
+    return <pre>{JSON.stringify({ state: this.state, props: this.props }, null, 4)}</pre>;
   }
 
   render() {
@@ -85,7 +85,7 @@ class Settings extends Component {
 }
 
 export default connect(
-  () => ({}),
+  ({ settings }) => ({ settings }),
   dispatch => bindActionCreators(settingsActions, dispatch)
 )(Settings);
 
