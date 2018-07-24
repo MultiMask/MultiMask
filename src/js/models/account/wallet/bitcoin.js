@@ -1,9 +1,8 @@
 import bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
-// import bip38 from "bip38";
-// import wif from "wif";
-
 import axios from 'axios';
+
+import log from 'loglevel';
 
 const URL_NODE = 'https://testnet.blockchain.info';
 // const NETWORK = 'testnet';
@@ -28,56 +27,6 @@ export default class BitcoinWallet {
     return this.seed;
   }
 
-  /**
-   * Depricated, Use bitcoinjs-lib
-   */
-  // create(pass) {
-  // const testnet = bitcoin.networks.bitcoin;
-  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
-
-  // this.pk = keyPair.toWIF();
-  // this.address = keyPair.getAddress();
-  // this.pass = pass;
-  // }
-
-  /**
-   * Depricated, testing BIP-38
-   */
-  // test() {
-  // console.log('test');
-  // const testnet = bitcoin.networks.testnet;
-  // const keyPair = bitcoin.ECPair.makeRandom({ network: testnet });
-
-  // const pass = '12345567ONE';
-
-  // this.pk = keyPair.toWIF();
-  // this.address = keyPair.getAddress();
-  // this.pass = pass;
-
-  // // console.log(testnet);
-  // // console.log(keyPair);
-  // console.log('private: ',this.pk);
-  // // console.log(this.address);
-
-  // let decoded = wif.decode(this.pk);
-
-  // var encryptedKey = bip38.encrypt(
-  //   decoded.privateKey,
-  //   decoded.compressed,
-  //   pass
-  // );
-
-  // console.log('encrypt', encryptedKey);
-
-  // var decryptedKey = bip38.decrypt(encryptedKey, pass, function(status) {
-  //   //   console.log(status.percent); // will print the precent every time current increases by 1000
-  // });
-
-  // console.log('decrypt',
-  //   wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed)
-  // );
-  // }
-
   getInfo() {
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
       const lastOUT = res.data.txs[0];
@@ -99,15 +48,16 @@ export default class BitcoinWallet {
       const privateKey = this.priv;
       const address = this.address;
       // SEND signed Tx
-      console.log('create TX with: ');
-      console.log('to: ', to);
-      console.log('amount: ', amount);
-      console.log('data: ', data);
-      console.log('output: ', output);
+      log.info('create TX with: ');
+      log.info('to: ', to);
+      log.info('amount: ', amount);
+      log.info('data: ', data);
+      log.info('output: ', output);
       // console.log('balance: ', balance);
 
+      let amountInSatoshi = amount * 1e8;
       let SUM = balance * 1e8;
-      console.log('balance:', SUM);
+      log.info('balance:', SUM);
 
       let testnet = bitcoin.networks.testnet;
       let txb = new bitcoin.TransactionBuilder(testnet);
@@ -122,18 +72,19 @@ export default class BitcoinWallet {
         txb.addOutput(dataScript, 0);
       }
 
-      let amountToReturn = SUM - amount - 5000;
+      let amountToReturn = SUM - amountInSatoshi - 5000;
 
-      txb.addOutput(to, amount);
+      txb.addOutput(to, amountInSatoshi);
       txb.addOutput(address, +amountToReturn.toFixed(0));
 
       txb.sign(0, keyPair);
 
-      console.log('TX = ', txb.build().toHex());
+      log.info('TX = ', txb.build().toHex());
 
-      return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(data => {
-        console.log('TX hash:', data);
-        // done(data);
+      return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(hash => {
+        log.info('TX hash:', hash);
+
+        return { hash };
       });
     });
   }

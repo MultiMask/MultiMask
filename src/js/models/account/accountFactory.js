@@ -4,12 +4,17 @@ import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
 import log from 'loglevel';
 
-import BitcoinWallet from './wallet/bitcoin';
 import Account from '.';
+import BitcoinWallet from './wallet/bitcoin';
+import EthWallet from './wallet/eth';
 
 const createWallet = ({ blockchain, network }) => {
   if (blockchain === networks.BTC.sign) {
     return new BitcoinWallet(network);
+  }
+
+  if (blockchain === networks.ETH.sign) {
+    return new EthWallet({ network });
   }
 };
 

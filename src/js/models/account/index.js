@@ -1,3 +1,5 @@
+import log from 'loglevel';
+
 export default class Account {
   constructor({ wallet, network, blockchain, name, seed, id }) {
     this.network = network;
@@ -32,6 +34,7 @@ export default class Account {
   }
 
   sendTX(tx) {
+    log.info('Sending tx > ', this.blockchain, this.network, this.name, tx);
     return this.wallet.createTX(tx);
   }
 

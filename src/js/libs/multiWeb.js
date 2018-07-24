@@ -1,10 +1,14 @@
-import { TX_PAYMENT } from './../constants/tx';
-
-import { BC_BITCOIN } from './../constants/network';
+import { TX_PAYMENT } from '../constants/tx';
+import networks from './../blockchain';
+import Web3Provider from './plugins/eth';
 
 export default class MultiWeb {
   constructor({ stream }) {
     this.stream = stream;
+
+    this.web3 = new Web3Provider({ stream });
+    this.web3.listeners();
+    this.web3.init();
   }
 
   _send(data) {
@@ -14,12 +18,10 @@ export default class MultiWeb {
   isAuth() {}
   getUser() {}
   sendTransaction({ to, amount, data }) {
-    // console.log('send', to, amount, data);
-
     this._send({
       type: TX_PAYMENT,
       payload: {
-        blockchain: BC_BITCOIN,
+        blockchain: networks.BTC.sign,
         tx: {
           to,
           amount,
@@ -28,5 +30,8 @@ export default class MultiWeb {
       }
     });
   }
-  sendVote(to) {}
+
+  getWeb3Provider() {
+    return this.web3;
+  }
 }

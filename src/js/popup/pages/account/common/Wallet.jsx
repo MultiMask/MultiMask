@@ -55,7 +55,7 @@ const Wallet = ({
         >
           {`${balance} ${networkSign({ blockchain })}`}
         </Typography>
-        <Typography color="secondary">? USDT</Typography>
+        <Typography color="secondary">? USD</Typography>
       </div>
       {actions}
     </WalletContent>

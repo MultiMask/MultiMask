@@ -1,4 +1,4 @@
-import PortStream from "./port-stream";
+import PortStream from './port-stream';
 
 class Messaging {
   constructor(name) {
@@ -17,7 +17,7 @@ class Messaging {
   connectRemote(remotePort) {
     this.portStream = new PortStream(remotePort);
 
-    this.portStream.on("data", this.fire);
+    this.portStream.on('data', this.fire);
   }
 
   fire = msg => {
