@@ -13,5 +13,9 @@ export default ({ profileController }) => ({
 
   export: id => {
     return profileController.export(id);
+  },
+
+  update: (id, data) => {
+    return profileController.update(id, data);
   }
 });

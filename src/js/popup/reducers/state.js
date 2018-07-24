@@ -16,7 +16,8 @@ import {
   STATE_VIEW_LOGIN,
   STATE_VIEW_WALLET,
   STATE_VIEW_EXPORTPK,
-  STATE_VIEW_PROFILES
+  STATE_VIEW_PROFILES,
+  STATE_VIEW_SETTINGS
 } from '../../constants/state';
 
 const initialState = {
@@ -69,6 +70,11 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         view: STATE_VIEW_PROFILES
+      };
+    case STATE_VIEW_SETTINGS:
+      return {
+        ...state,
+        view: STATE_VIEW_SETTINGS
       };
     default:
       return state;

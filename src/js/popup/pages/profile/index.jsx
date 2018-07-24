@@ -3,12 +3,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import Typography from '../../ui/Typography';
-
-import FA from 'react-fontawesome';
+import Menu from '../../ui/Menu';
+import MenuItem from '../../ui/MenuItem';
+import BaseButton from '../../ui/Button';
+import TextField from '../../ui/TextField';
 
 import profileActions from './../../actions/profile';
 
 class Profiles extends React.Component {
+  state = {
+    editProfileId: false,
+    profileName: ''
+  };
+
   componentDidMount() {
     this.props.getList();
   }
@@ -25,41 +32,71 @@ class Profiles extends React.Component {
     this.props.export(id);
   };
 
+  handleEdit = ({ name, id }) => () => {
+    this.setState({ editProfileId: id, profileName: name });
+  };
+
+  handleProfileNameChange = event => {
+    this.setState({ profileName: event.target.value });
+  };
+
+  handleOnBlurInput = (profile, name) => () => {
+    const { id, name: oldName } = profile;
+
+    if (oldName !== name) {
+      const { update } = this.props;
+      update(id, { name });
+    }
+
+    this.setState({ editProfileId: null });
+  };
+
   get list() {
     const { list } = this.props;
+    const { editProfileId, profileName } = this.state;
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
       const onExport = this.onExport.bind(this, profile.id);
-
+      const isEdit = editProfileId === profile.id;
       return (
         <Item key={profile.id}>
-          <Label>{profile.name}</Label>
-          <Actions>
-            <Icon name="edit" />
-            <Icon name="upload" onClick={onExport} />
-            <Icon name="trash" onClick={onRemove} />
-          </Actions>
+          {isEdit ? (
+            <TextField
+              inputRef={this.textInput}
+              autoFocus
+              onChange={this.handleProfileNameChange}
+              value={profileName}
+              onBlur={this.handleOnBlurInput(profile, profileName)}
+            />
+          ) : (
+            <Typography color="main" variant="subheading">
+              {profile.name}
+            </Typography>
+          )}
+          <ItemDescription isEdit={isEdit} color="hint">
+            {profile.accounts.length} wallets
+          </ItemDescription>
+          <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
+            <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
+            <MenuItem onClick={onExport}>Export</MenuItem>
+            <MenuItem onClick={onRemove}>Delete</MenuItem>
+          </Menu>
         </Item>
       );
     });
   }
 
   render() {
+    console.log(this.props);
     return (
       <Wrapper>
         <List>{this.list}</List>
         <Bottom>
-          <Button onClick={this.onAdd}>
-            <Typography color="main" align="center">
-              Add
-            </Typography>
+          <Button outlined onClick={this.onAdd}>
+            Add
           </Button>
-          <Button>
-            <Typography color="main" align="center">
-              Import
-            </Typography>
-          </Button>
+          <Button>Import</Button>
         </Bottom>
       </Wrapper>
     );
@@ -81,32 +118,32 @@ const Wrapper = styled.div`
 
 const List = styled.div`
   flex-grow: 1;
-  padding: 20px 10px;
+  padding: 0 20px;
+  overflow-y: auto;
 `;
 
 const Bottom = styled.div`
-  height: 36px;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  padding: 20px 0;
 `;
 
-const Button = styled.div`
-  flex-grow: 1;
-  text-align: center;
-  cursor: pointer;
+const Button = styled(BaseButton)`
+  min-width: 80px;
 `;
 
 const Item = styled.div`
-  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  position: relative;
+  padding: 10px 0;
 `;
 
-const Label = styled.span`
-  width: 70%;
-  display: inline-block;
-`;
-const Actions = styled.span``;
-const Icon = styled(FA)`
-  margin-left: 7px;
-  font-size: 120%;
-  cursor: pointer;
+const ItemDescription = styled(Typography)`
+  position: absolute;
+  bottom: ${props => (props.isEdit ? 0 : '10px')};
+  left: 0;
 `;
