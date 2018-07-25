@@ -11,6 +11,7 @@ import { STATE_VIEW_EXPORT_PROFILE } from './../../../constants/state';
 import NeedAuth from '../../ui/components/NeedAuth';
 import profileActions from './../../actions/profile';
 import stateActions from '../../actions/state';
+import { readFile } from '../../helpers/index';
 
 class Profiles extends React.Component {
   state = {
@@ -68,6 +69,14 @@ class Profiles extends React.Component {
     goExport();
   };
 
+  handleImportProfile = () => {
+    const onImport = encryptedProfile => {
+      this.props.import(encryptedProfile);
+    };
+
+    readFile(onImport);
+  };
+
   get list() {
     const { list } = this.props;
     const { editProfileId, profileName } = this.state;
@@ -118,7 +127,7 @@ class Profiles extends React.Component {
           <Button outlined onClick={this.onAdd}>
             Add
           </Button>
-          <Button>Import</Button>
+          <Button onClick={this.handleImportProfile}>Import</Button>
         </Bottom>
       </Wrapper>
     );

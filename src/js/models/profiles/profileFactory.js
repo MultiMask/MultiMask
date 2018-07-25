@@ -56,4 +56,8 @@ export default class ProfileFactory {
   static encryptFullProfile(pass, fullProfile) {
     return blockCipher.encrypt(pass, fullProfile);
   }
+
+  static decryptFullProfile(fullProfile, pass) {
+    return blockCipher.decrypt(fullProfile, pass);
+  }
 }

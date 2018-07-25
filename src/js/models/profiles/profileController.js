@@ -2,6 +2,7 @@ import ProfileListController from './profileListController';
 import ProfileFactory from './profileFactory';
 
 import AccountFactory from './../account/accountFactory';
+import Profile from './Profile';
 
 export default class ProfileController {
   currentProfileId = null;
@@ -96,5 +97,15 @@ export default class ProfileController {
     this.plc.update(this.getPass(), id, data);
   }
 
-  import(pass, profile) {}
+  import(encryptedProfile, pass) {
+    const decryptProfile = ProfileFactory.decryptFullProfile(this.getPass(), encryptedProfile);
+
+    if (this.plc.findById(decryptProfile.data.id)) return;
+
+    const profile = new Profile(decryptProfile.data);
+
+    ProfileFactory.create(this.getPass(), profile);
+
+    this.plc.add(profile);
+  }
 }
