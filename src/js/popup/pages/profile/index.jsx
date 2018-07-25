@@ -57,8 +57,8 @@ class Profiles extends React.Component {
   handleNeedAuth = exportFunc => {
     const { goBack } = this.props;
     const { handleExportProfile } = this.state;
-    goBack();
     handleExportProfile();
+    goBack();
   };
 
   handleConfirmPassword = handleExportProfile => () => {
