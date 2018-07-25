@@ -20,8 +20,13 @@ class NeedAuth extends React.Component {
   };
 
   render() {
-    if (this.props.isAuth) {
-      return React.cloneElement(this.props.children, { pass: this.pass });
+    const { onSubmit, children, isAuth, error } = this.props;
+    if (isAuth) {
+      if (onSubmit) {
+        onSubmit();
+      } else {
+        return React.cloneElement(children, { pass: this.pass });
+      }
     }
 
     return (
@@ -31,11 +36,15 @@ class NeedAuth extends React.Component {
           <input name="password" placeholder="password" type="password" />
           <button type="submit">Check</button>
         </form>
-        <div>{this.props.error}</div>
+        <div>{error}</div>
       </div>
     );
   }
 }
+
+NeedAuth.defaultProps = {
+  onSubmit: null
+};
 
 export default connect(
   ({ ui }) => ({

@@ -9,14 +9,15 @@ class BlockCipher {
     this.sign = 'MM';
   }
 
-  encrypt(key, data) {
+  encrypt(key, profile) {
     try {
       // encryptEntities setting in config.json
       // eslint-disable-next-line
       if (encryptEntities) return JSON.stringify(data);
-      const stringifyData = JSON.stringify(data);
+      const iv = `${this.sign}:${profile.data.version}:${this.type}:`;
+      const stringifyData = JSON.stringify(profile);
       const cipher = this.ciphers[this.type];
-      const encrypted = cipher.encrypt(key, stringifyData);
+      const encrypted = `${iv}${cipher.encrypt(key, stringifyData)}`;
 
       return encrypted;
     } catch (exception) {
@@ -29,8 +30,17 @@ class BlockCipher {
       // eslint-disable-next-line
       if (encryptEntities) return JSON.parse(data);
 
-      const decipher = this.ciphers[this.type];
-      var decrypted = decipher.decode(key, data);
+      // [sign, version, decipherType, profile ]
+      let dataParts = data.split(':');
+
+      if (dataParts[0] !== this.sign) throw new Error('Incorrect sign to Multimask Profile File');
+
+      const decipherType = dataParts[2];
+      const decipher = this.ciphers[decipherType];
+
+      const encryptedProfile = dataParts[3];
+      const decrypted = decipher.decrypt(key, encryptedProfile);
+
       return JSON.parse(decrypted);
     } catch (exception) {
       throw new Error(exception);
