@@ -45,10 +45,10 @@ const ProfileActions = {
       payload: { id, data }
     });
   },
-  import: encryptedProfile => (dispatch, getState) => {
+  import: (pass, encryptedProfile) => (dispatch, getState) => {
     messaging.send({
       type: PROFILE_IMPORT,
-      payload: { encryptedProfile }
+      payload: { pass, encryptedProfile }
     });
   }
 };

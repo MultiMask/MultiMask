@@ -97,8 +97,10 @@ export default class ProfileController {
     this.plc.update(this.getPass(), id, data);
   }
 
-  import(encryptedProfile, pass) {
-    const decryptProfile = ProfileFactory.decryptFullProfile(this.getPass(), encryptedProfile);
+  import(pass, encryptedProfile) {
+    const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
+
+    if (!decryptProfile) return null;
 
     if (this.plc.findById(decryptProfile.data.id)) return;
 

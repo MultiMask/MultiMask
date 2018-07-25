@@ -6,6 +6,7 @@ import {
   STATE_SEND,
   STATE_PROFILES,
   STATE_EXPORT_PROFILE,
+  STATE_IMPORT_PROFILE,
   STATE_EXPORTPK,
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
@@ -48,6 +49,11 @@ const StateActions = {
   goExportProfile: () => (dispatch, getState) => {
     dispatch({
       type: STATE_EXPORT_PROFILE
+    });
+  },
+  goImportProfile: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_IMPORT_PROFILE
     });
   },
   goProfile: () => (dispatch, getState) => {

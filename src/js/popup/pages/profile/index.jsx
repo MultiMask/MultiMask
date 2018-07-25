@@ -7,11 +7,12 @@ import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
-import { STATE_VIEW_EXPORT_PROFILE } from './../../../constants/state';
+import { STATE_VIEW_EXPORT_PROFILE, STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
 import NeedAuth from '../../ui/components/NeedAuth';
+import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from './../../actions/profile';
 import stateActions from '../../actions/state';
-import { readFile } from '../../helpers/index';
+import { readFile, formToJson } from '../../helpers/index';
 
 class Profiles extends React.Component {
   state = {
@@ -55,7 +56,7 @@ class Profiles extends React.Component {
     this.setState({ editProfileId: null });
   };
 
-  handleNeedAuth = exportFunc => {
+  handleNeedAuthExport = exportFunc => {
     const { goBack } = this.props;
     const { handleExportProfile } = this.state;
     handleExportProfile();
@@ -70,8 +71,20 @@ class Profiles extends React.Component {
   };
 
   handleImportProfile = () => {
+    const { goImport } = this.props;
+
+    goImport();
+  };
+
+  handleNeedAuthImport = e => {
+    e.preventDefault();
+
+    const json = formToJson(e.target);
+    this.pass = json.password;
+
     const onImport = encryptedProfile => {
-      this.props.import(encryptedProfile);
+      this.props.import(this.pass, encryptedProfile);
+      this.props.goBack();
     };
 
     readFile(onImport);
@@ -117,7 +130,11 @@ class Profiles extends React.Component {
     const { view } = this.props;
 
     if (view === STATE_VIEW_EXPORT_PROFILE) {
-      return <NeedAuth onSubmit={this.handleNeedAuth} />;
+      return <NeedAuth onSubmit={this.handleNeedAuthExport} />;
+    }
+
+    if (view === STATE_VIEW_IMPORT_PROFILE) {
+      return <AuthForm handleSubmit={this.handleNeedAuthImport} />;
     }
 
     return (
@@ -144,6 +161,7 @@ export default connect(
       {
         ...profileActions,
         goExport: stateActions.goExportProfile,
+        goImport: stateActions.goImportProfile,
         goBack: stateActions.goBack
       },
       dispatch

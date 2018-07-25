@@ -1,25 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import TextField from '../../TextField';
-import Button from '../../Button';
-import Typography from '../../Typography';
-import { css } from 'emotion';
-
+import AuthForm from './AuthForm';
 import needAuthActions from '../../../actions/ui/needauth';
 import { formToJson } from './../../../helpers';
 
-const styles = {
-  form: css`
-    padding: 20px;
-  `,
-  textField: css`
-    margin-top: 20px;
-  `,
-  button: css`
-    margin-top: 30px;
-  `
-};
 class NeedAuth extends React.Component {
   componentDidMount() {
     this.props.start();
@@ -44,17 +29,7 @@ class NeedAuth extends React.Component {
       }
     }
 
-    return (
-      <form onSubmit={this.handleSubmit} className={styles.form}>
-        <Typography color="main" variant="subheading" align="center">
-          Confirm password:
-        </Typography>
-        <TextField className={styles.textField} name="password" label="Password" type="password" error={error} />
-        <Button className={styles.button} type="submit" fullWidth>
-          Check
-        </Button>
-      </form>
-    );
+    return <AuthForm handleSubmit={this.handleSubmit} error={error} />;
   }
 }
 

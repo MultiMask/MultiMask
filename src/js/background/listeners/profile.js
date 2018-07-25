@@ -41,9 +41,10 @@ export default ({ messaging, App }) => {
     sendList({ messaging, App });
   });
 
-  messaging.on(PROFILE_IMPORT, ({ encryptedProfile }) => {
-    App.io.profile.import(encryptedProfile);
-    sendList({ messaging, App });
+  messaging.on(PROFILE_IMPORT, ({ pass, encryptedProfile }) => {
+    const isImport = App.io.profile.import(pass, encryptedProfile);
+
+    if (isImport !== null) sendList({ messaging, App });
   });
 };
 

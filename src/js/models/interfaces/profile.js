@@ -15,8 +15,8 @@ export default ({ profileController }) => ({
     return profileController.export(id);
   },
 
-  import: data => {
-    return profileController.import(data);
+  import: (pass, data) => {
+    return profileController.import(pass, data);
   },
 
   update: (id, data) => {

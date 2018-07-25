@@ -44,7 +44,8 @@ class BlockCipher {
 
       return JSON.parse(decrypted);
     } catch (exception) {
-      throw new Error(exception);
+      console.log(exception);
+      return false;
     }
   }
 }
