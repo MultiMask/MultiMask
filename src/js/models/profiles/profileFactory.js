@@ -53,11 +53,11 @@ export default class ProfileFactory {
     });
   }
 
-  static encryptFullProfile(pass, fullProfile) {
-    return blockCipher.encrypt(pass, fullProfile);
+  static encryptFullProfile(pass, fullProfile, full) {
+    return blockCipher.encrypt(pass, fullProfile, full);
   }
 
-  static decryptFullProfile(fullProfile, pass) {
-    return blockCipher.decrypt(fullProfile, pass);
+  static decryptFullProfile(pass, fullProfile) {
+    return blockCipher.decrypt(pass, fullProfile);
   }
 }

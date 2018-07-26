@@ -38,6 +38,13 @@ export default class ProfileController {
     return this.setCurrrent(profile);
   }
 
+  create(data) {
+    const profile = new Profile(data);
+
+    ProfileFactory.create(this.getPass(), profile);
+    this.plc.add(profile);
+  }
+
   setCurrrent(profile) {
     this.currentProfileId = profile.getId();
 
@@ -89,7 +96,7 @@ export default class ProfileController {
 
   export(id) {
     return this.getFullInfo(id).then(profile => {
-      return ProfileFactory.encryptFullProfile(this.getPass(), profile);
+      return ProfileFactory.encryptFullProfile(this.getPass(), profile, true);
     });
   }
 
@@ -100,14 +107,18 @@ export default class ProfileController {
   import(pass, encryptedProfile) {
     const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
 
-    if (!decryptProfile) return null;
+    if (!decryptProfile) return;
 
-    if (this.plc.findById(decryptProfile.data.id)) return;
+    const oldProfile = this.plc.findById(decryptProfile.data.id);
 
-    const profile = new Profile(decryptProfile.data);
+    if (!oldProfile) {
+      return this.create(decryptProfile.data);
+    }
 
-    ProfileFactory.create(this.getPass(), profile);
+    if (oldProfile.data.version < decryptProfile.data.version) {
+      return this.update(oldProfile.data.id, decryptProfile.data);
+    }
 
-    this.plc.add(profile);
+    return;
   }
 }

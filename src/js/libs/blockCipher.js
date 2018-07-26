@@ -9,13 +9,13 @@ class BlockCipher {
     this.sign = 'MM';
   }
 
-  encrypt(key, profile) {
+  encrypt(key, profile, full = false) {
     try {
       // encryptEntities setting in config.json
       // eslint-disable-next-line
       if (encryptEntities) return JSON.stringify(data);
 
-      const iv = `${this.sign}:${profile.version}:${this.type}:`;
+      const iv = `${this.sign}:${full ? profile.data.version : profile.version}:${this.type}:`;
       const stringifyData = JSON.stringify(profile);
       const cipher = this.ciphers[this.type];
       const encrypted = `${iv}${cipher.encrypt(key, stringifyData)}`;
