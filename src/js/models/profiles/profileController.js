@@ -115,6 +115,15 @@ export default class ProfileController {
       return this.create(decryptProfile.data);
     }
 
+    if (decryptProfile.wallets.length) {
+      decryptProfile.wallets.map(wallet => {
+        if (this.ac.getAccountById(wallet.id)) {
+          AccountFactory.save(this.getPass(), wallet);
+          this.ac.addAccountInstance(wallet);
+        }
+      });
+    }
+
     if (oldProfile.data.version < decryptProfile.data.version) {
       return this.update(oldProfile.data.id, decryptProfile.data);
     }
