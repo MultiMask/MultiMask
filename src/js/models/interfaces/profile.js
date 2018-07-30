@@ -1,4 +1,8 @@
 export default ({ profileController }) => ({
+  getData: () => {
+    return profileController.getData();
+  },
+
   getList: () => {
     return profileController.plc.getList();
   },
@@ -21,5 +25,9 @@ export default ({ profileController }) => ({
 
   update: (id, data) => {
     return profileController.update(id, data);
+  },
+
+  select: profileId => {
+    return profileController.select(profileId);
   }
 });
