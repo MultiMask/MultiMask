@@ -13,7 +13,7 @@ class BlockCipher {
     try {
       // encryptEntities setting in config.json
       // eslint-disable-next-line
-      if (encryptEntities) return JSON.stringify(data);
+      if (encryptEntities) return JSON.stringify(profile);
 
       const iv = `${this.sign}:${full ? profile.data.version : profile.version}:${this.type}:`;
       const stringifyData = JSON.stringify(profile);
