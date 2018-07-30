@@ -1,50 +1,63 @@
+import { EncryptedStream } from 'extension-streams';
+import IdGenerator from './libs/IdGenerator';
 import log from 'loglevel';
-import PortStream from './libs/port-stream';
-import PostMessageStream from 'post-message-stream';
-import pump from 'pump';
 
-let backgroundStream;
-let injectStream;
+import { CONTENT_APP, INPAGE_APP } from './constants/apps';
 
-init();
+const INJECT_FILENAME = 'inpage.bundle.js';
 
-function init() {
-  // eslint-disable-next-line
-  log.setLevel(logLevel);
+class Content {
+  stream;
 
-  setupInjection();
-  connectToBackend();
-  connectToInject();
+  constructor() {
+    // eslint-disable-next-line
+    log.setLevel(logLevel);
 
-  setupStreams();
+    this.setupInpageStream();
+    this.injectScript();
 
-  log.info('MultiMask - start listening events');
+    //
+    this.stream.send(
+      {
+        type: 'try',
+        payload: {}
+      },
+      INPAGE_APP
+    );
+
+    log.info('MultiMask - start listening events');
+  }
+
+  /**
+   * Create encrypted strem to inject script in user page
+   */
+  setupInpageStream() {
+    this.stream = new EncryptedStream(CONTENT_APP, IdGenerator.text(256));
+    this.stream.listenWith(msg => this.contentListener(msg));
+
+    this.stream.onSync(() => {});
+  }
+
+  /**
+   * Inject script to user page
+   */
+  injectScript() {
+    const s = document.createElement('script');
+    const container = document.head || document.documentElement;
+
+    s.src = chrome.extension.getURL(INJECT_FILENAME);
+    container.insertBefore(s, container.children[0]);
+
+    s.onload = () => s.remove();
+  }
+
+  /**
+   * Listing injected messages
+   * @param {MessageType} msg
+   */
+  contentListener(msg) {
+    log.info(msg);
+  }
 }
 
-function setupInjection() {
-  var s = document.createElement('script');
-  s.src = chrome.extension.getURL('inpage.bundle.js');
-
-  var container = document.head || document.documentElement;
-  container.insertBefore(s, container.children[0]);
-
-  s.onload = function() {
-    s.remove();
-  };
-}
-
-function connectToBackend() {
-  let backPort = chrome.extension.connect({ name: 'content' });
-  backgroundStream = new PortStream(backPort);
-}
-
-function connectToInject() {
-  injectStream = new PostMessageStream({
-    name: 'content',
-    target: 'page'
-  });
-}
-
-function setupStreams() {
-  pump(backgroundStream, injectStream, backgroundStream);
-}
+new Content();

@@ -12,7 +12,7 @@ export default class MultiWeb {
   }
 
   _send(data) {
-    this.stream.write(data);
+    this.stream.send(data);
   }
 
   isAuth() {}
