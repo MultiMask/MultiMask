@@ -19,7 +19,8 @@ class Profiles extends React.Component {
   state = {
     editProfileId: false,
     profileName: '',
-    handleExportProfile: null
+    handleExportProfile: null,
+    encryptedProfile: null
   };
 
   componentDidMount() {
@@ -71,21 +72,25 @@ class Profiles extends React.Component {
     goExport();
   };
 
-  handleImportProfile = () => {
-    const { goImport } = this.props;
-
-    goImport();
-  };
-
   handleNeedAuthImport = e => {
     e.preventDefault();
+    const { encryptedProfile } = this.state;
 
     const json = formToJson(e.target);
     this.pass = json.password;
 
+    this.props.import(this.pass, encryptedProfile);
+    this.props.goBack();
+
+    this.setState({ encryptedProfile: null });
+  };
+
+  handleImportProfile = () => {
+    const { goImport } = this.props;
+
     const onImport = encryptedProfile => {
-      this.props.import(this.pass, encryptedProfile);
-      this.props.goBack();
+      this.setState({ encryptedProfile });
+      goImport();
     };
 
     readFile(onImport);
