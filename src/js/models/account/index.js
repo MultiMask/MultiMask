@@ -1,12 +1,16 @@
+import uuid from 'uuid/v4';
+
 export default class Account {
-  constructor({ wallet, network, blockchain, name, seed, id }) {
-    this.network = network;
+  constructor({ wallet, network, blockchain, name, secret = { seed: null }, id = uuid() }) {
     this.wallet = wallet;
+
+    this.network = network;
     this.blockchain = blockchain;
     this.id = id;
+    this.secret = secret;
 
     this.name = name ? name : this.createName();
-    this.create(seed);
+    this.create(secret.seed);
   }
 
   createName() {
@@ -18,7 +22,7 @@ export default class Account {
   }
 
   getSeed() {
-    return this.wallet.getSeed();
+    return this.secret.seed;
   }
 
   getInfo() {
@@ -42,7 +46,7 @@ export default class Account {
       blockchain: this.blockchain,
       network: this.network,
       secret: {
-        seed: this.wallet.seed
+        seed: this.secret.seed
       }
     };
   }

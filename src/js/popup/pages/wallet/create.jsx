@@ -23,7 +23,7 @@ class Wallet extends React.Component {
   }
 
   handleSave = () => {
-    this.props.create(this.account);
+    this.props.create(this.account.serialize());
   };
 
   render() {
