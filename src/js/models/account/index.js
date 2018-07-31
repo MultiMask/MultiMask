@@ -1,4 +1,5 @@
 import uuid from 'uuid/v4';
+import log from 'level';
 
 export default class Account {
   constructor({ wallet, network, blockchain, name, secret = { seed: null }, id = uuid() }) {
@@ -36,6 +37,7 @@ export default class Account {
   }
 
   sendTX(tx) {
+    log.info('Sending tx > ', this.blockchain, this.network, this.name, tx);
     return this.wallet.createTX(tx);
   }
 

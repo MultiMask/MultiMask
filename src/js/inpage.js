@@ -1,14 +1,20 @@
-import PostMessageStream from 'post-message-stream';
-import BitWeb from './libs/bitWeb';
-let contentStream;
+import log from 'loglevel';
 
-console.log('inpage script');
+import PostMessageStream from 'post-message-stream';
+import MultiWeb from './libs/multiWeb';
+
+let contentStream;
 
 init();
 
 function init() {
+  // eslint-disable-next-line
+  log.setLevel(logLevel);
+
   conntectToContent();
   injectScript();
+
+  log.info('MultiMask - injected handler');
 }
 
 function conntectToContent() {
@@ -16,12 +22,10 @@ function conntectToContent() {
     name: 'page',
     target: 'content'
   });
-  // contentStream.on('data', data => console.log('recieved inpage', data));
-  // contentStream.write('send from inpage');
 }
 
 function injectScript() {
-  window.multiWeb = new BitWeb({
+  window.multiWeb = new MultiWeb({
     stream: contentStream
   });
 }

@@ -3,3 +3,4 @@ build
 build.crx
 secrets.*.js
 *.pem
+api-keys.json
