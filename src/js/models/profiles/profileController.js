@@ -2,6 +2,7 @@ import ProfileListController from './profileListController';
 import ProfileFactory from './profileFactory';
 
 import AccountFactory from './../account/accountFactory';
+import Profile from './Profile';
 
 export default class ProfileController {
   currentProfileId = null;
@@ -35,6 +36,13 @@ export default class ProfileController {
     this.plc.add(profile);
 
     return this.setCurrrent(profile);
+  }
+
+  create(data) {
+    const profile = new Profile(data);
+
+    ProfileFactory.create(this.getPass(), profile);
+    this.plc.add(profile);
   }
 
   setCurrrent(profile) {
@@ -88,7 +96,7 @@ export default class ProfileController {
 
   export(id) {
     return this.getFullInfo(id).then(profile => {
-      return ProfileFactory.encryptFullProfile(this.getPass(), profile);
+      return ProfileFactory.encryptFullProfile(this.getPass(), profile, true);
     });
   }
 
@@ -96,5 +104,33 @@ export default class ProfileController {
     this.plc.update(this.getPass(), id, data);
   }
 
-  import(pass, profile) {}
+  import(pass, encryptedProfile) {
+    const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
+
+    if (!decryptProfile) return;
+
+    const oldProfile = this.plc.findById(decryptProfile.data.id);
+
+    if (!oldProfile) {
+      decryptProfile.wallets.map(wallet => this.ac.import(this.getPass(), wallet));
+      return this.create(decryptProfile.data);
+    }
+
+    if (oldProfile.data.version < decryptProfile.data.version) {
+      decryptProfile.wallets.map(wallet => this.ac.import(this.getPass(), wallet));
+      return this.update(oldProfile.data.id, decryptProfile.data);
+    }
+
+    return;
+  }
+
+  select(id) {
+    const selectedProfile = this.plc.findById(id);
+    this.setCurrrent(selectedProfile);
+  }
+
+  getData() {
+    const profileList = this.plc.getList();
+    return { list: profileList, profileId: this.currentProfileId };
+  }
 }

@@ -1,4 +1,8 @@
 export default ({ profileController }) => ({
+  getData: () => {
+    return profileController.getData();
+  },
+
   getList: () => {
     return profileController.plc.getList();
   },
@@ -15,7 +19,15 @@ export default ({ profileController }) => ({
     return profileController.export(id);
   },
 
+  import: (pass, data) => {
+    return profileController.import(pass, data);
+  },
+
   update: (id, data) => {
     return profileController.update(id, data);
+  },
+
+  select: profileId => {
+    return profileController.select(profileId);
   }
 });

@@ -36,6 +36,15 @@ export default class AccountController {
     }
   };
 
+  import = (pass, accountRaw) => {
+    if (!this.getAccountById(accountRaw.id)) {
+      const accountModel = AccountFactory.create(accountRaw);
+
+      AccountFactory.save(pass, accountModel);
+      this.addAccountInstance(accountModel);
+    }
+  };
+
   getAccountById(id) {
     return this.accounts.find(account => account.id === id);
   }

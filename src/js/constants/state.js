@@ -7,6 +7,8 @@ export const STATE_CREATE = 'state:create';
 export const STATE_WALLET = 'state:wallet';
 export const STATE_PROFILES = 'state:profiles';
 export const STATE_EXPORTPK = 'state:exportpk';
+export const STATE_EXPORT_PROFILE = 'state:profile:export';
+export const STATE_IMPORT_PROFILE = 'state:profile:import';
 
 export const STATE_VIEW_BUY = 'buy';
 export const STATE_VIEW_INIT = 'init';
@@ -16,5 +18,7 @@ export const STATE_VIEW_LOGIN = 'login';
 export const STATE_VIEW_CREATION = 'creation';
 export const STATE_VIEW_WALLET = 'wallet';
 export const STATE_VIEW_PROFILES = 'profiles';
+export const STATE_VIEW_EXPORT_PROFILE = 'profiles:export';
+export const STATE_VIEW_IMPORT_PROFILE = 'profiles:import';
 export const STATE_VIEW_EXPORTPK = 'exportpk';
 export const STATE_VIEW_SETTINGS = 'state:view:settings';

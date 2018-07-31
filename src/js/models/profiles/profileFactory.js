@@ -1,17 +1,17 @@
 import { getEntity, setEntity, removeEntity } from '../getter';
-import { encode, decode } from '../../libs/cipher';
+import BlockCipher, { cipherTypes } from '../../libs/blockCipher';
 import uuid from 'uuid/v4';
 import log from 'loglevel';
 
 import Profile from './Profile';
 
+const blockCipher = new BlockCipher(cipherTypes.AES256);
+
 export default class ProfileFactory {
   static save(pass, profile) {
     const key = profile.getId();
-    const dataToSave = profile.serialize();
 
-    // eslint-disable-next-line
-    const encodedProfile = encryptEntities ? encode(pass, JSON.stringify(dataToSave)) : JSON.stringify(dataToSave);
+    const encodedProfile = blockCipher.encrypt(pass, profile.serialize());
 
     log.debug('Save Profile > ', encodedProfile);
 
@@ -20,15 +20,7 @@ export default class ProfileFactory {
 
   static load(pass, key) {
     return getEntity(key).then(encodedStr => {
-      let profileData;
-
-      try {
-        // eslint-disable-next-line
-        const decodedStr = encryptEntities ? decode(pass, encodedStr) : encodedStr;
-        profileData = JSON.parse(decodedStr);
-      } catch (e) {
-        throw new Error('Can`t decode profile from storage');
-      }
+      const profileData = blockCipher.decrypt(pass, encodedStr);
 
       log.debug('Load Profile > ', profileData);
 
@@ -61,9 +53,11 @@ export default class ProfileFactory {
     });
   }
 
-  static encryptFullProfile(pass, fullProfile) {
-    const str = JSON.stringify(fullProfile);
+  static encryptFullProfile(pass, fullProfile, full) {
+    return blockCipher.encrypt(pass, fullProfile, full);
+  }
 
-    return encode(pass, str);
+  static decryptFullProfile(pass, fullProfile) {
+    return blockCipher.decrypt(pass, fullProfile);
   }
 }

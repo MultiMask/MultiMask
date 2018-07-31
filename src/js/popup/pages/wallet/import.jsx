@@ -30,7 +30,9 @@ class Wallet extends React.Component {
       this.account = AccountFactory.create({
         blockchain,
         network,
-        seed: this.state.seed
+        secret: {
+          seed: this.state.seed
+        }
       });
     } catch (e) {
       this.setState({

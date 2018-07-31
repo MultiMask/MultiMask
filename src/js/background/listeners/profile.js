@@ -5,23 +5,26 @@ import {
   PROFILE_EXPORT_RESULT,
   PROFILE_GETLIST,
   PROFILE_GETLIST_RESULT,
-  PROFILE_UPDATE
+  PROFILE_UPDATE,
+  PROFILE_IMPORT,
+  PROFILE_SELECT,
+  PROFILE_SELECT_RESULT
 } from './../../constants/profile';
 
 export default ({ messaging, App }) => {
   messaging.on(PROFILE_GETLIST, () => {
-    sendList({ messaging, App });
+    sendData({ messaging, App });
   });
 
   messaging.on(PROFILE_ADD, () => {
     App.io.profile.add().then(() => {
-      sendList({ messaging, App });
+      sendData({ messaging, App });
     });
   });
 
   messaging.on(PROFILE_REMOVE, ({ id }) => {
     App.io.profile.remove(id);
-    sendList({ messaging, App });
+    sendData({ messaging, App });
   });
 
   messaging.on(PROFILE_EXPORT, ({ id }) => {
@@ -37,17 +40,29 @@ export default ({ messaging, App }) => {
 
   messaging.on(PROFILE_UPDATE, ({ id, data }) => {
     App.io.profile.update(id, data);
-    sendList({ messaging, App });
+    sendData({ messaging, App });
+  });
+
+  messaging.on(PROFILE_IMPORT, ({ pass, encryptedProfile }) => {
+    const isImport = App.io.profile.import(pass, encryptedProfile);
+
+    if (isImport !== null) sendData({ messaging, App });
+  });
+
+  messaging.on(PROFILE_SELECT, ({ profileId }) => {
+    App.io.profile.select(profileId);
+
+    messaging.send({
+      type: PROFILE_SELECT_RESULT,
+      payload: { profileId }
+    });
   });
 };
 
-const sendList = ({ messaging, App }) => {
-  const list = App.io.profile.getList();
-
+const sendData = ({ messaging, App }) => {
+  const data = App.io.profile.getData();
   messaging.send({
     type: PROFILE_GETLIST_RESULT,
-    payload: {
-      list
-    }
+    payload: data
   });
 };
