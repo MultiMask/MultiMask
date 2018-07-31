@@ -23,6 +23,8 @@ import {
   STATE_VIEW_INIT,
   STATE_VIEW_EXPORTPK,
   STATE_VIEW_PROFILES,
+  STATE_VIEW_EXPORT_PROFILE,
+  STATE_VIEW_IMPORT_PROFILE,
   STATE_VIEW_SETTINGS
 } from './../constants/state';
 
@@ -36,6 +38,8 @@ class Popup extends React.Component {
 
     switch (this.props.view) {
       case STATE_VIEW_PROFILES:
+      case STATE_VIEW_EXPORT_PROFILE:
+      case STATE_VIEW_IMPORT_PROFILE:
         return (
           <MainLayout>
             <Profile />

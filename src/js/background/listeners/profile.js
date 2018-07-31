@@ -5,7 +5,8 @@ import {
   PROFILE_EXPORT_RESULT,
   PROFILE_GETLIST,
   PROFILE_GETLIST_RESULT,
-  PROFILE_UPDATE
+  PROFILE_UPDATE,
+  PROFILE_IMPORT
 } from './../../constants/profile';
 
 export default ({ messaging, App }) => {
@@ -38,6 +39,12 @@ export default ({ messaging, App }) => {
   messaging.on(PROFILE_UPDATE, ({ id, data }) => {
     App.io.profile.update(id, data);
     sendList({ messaging, App });
+  });
+
+  messaging.on(PROFILE_IMPORT, ({ pass, encryptedProfile }) => {
+    const isImport = App.io.profile.import(pass, encryptedProfile);
+
+    if (isImport !== null) sendList({ messaging, App });
   });
 };
 

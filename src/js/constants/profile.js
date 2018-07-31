@@ -8,3 +8,5 @@ export const PROFILE_GETLIST = 'profile:getlist';
 export const PROFILE_GETLIST_RESULT = 'profile:getlist:result';
 
 export const PROFILE_UPDATE = 'profile:update';
+
+export const PROFILE_IMPORT = 'profile:import';

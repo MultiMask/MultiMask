@@ -8,6 +8,8 @@ import {
   STATE_WALLET,
   STATE_EXPORTPK,
   STATE_PROFILES,
+  STATE_EXPORT_PROFILE,
+  STATE_IMPORT_PROFILE,
   STATE_VIEW_BUY,
   STATE_VIEW_INIT,
   STATE_VIEW_MAIN,
@@ -17,6 +19,8 @@ import {
   STATE_VIEW_WALLET,
   STATE_VIEW_EXPORTPK,
   STATE_VIEW_PROFILES,
+  STATE_VIEW_EXPORT_PROFILE,
+  STATE_VIEW_IMPORT_PROFILE,
   STATE_VIEW_SETTINGS
 } from '../../constants/state';
 
@@ -66,6 +70,17 @@ export default function accountReducer(state = initialState, action) {
         ...state,
         view: STATE_VIEW_EXPORTPK
       };
+    case STATE_EXPORT_PROFILE:
+      return {
+        ...state,
+        view: STATE_VIEW_EXPORT_PROFILE
+      };
+    case STATE_IMPORT_PROFILE: {
+      return {
+        ...state,
+        view: STATE_VIEW_IMPORT_PROFILE
+      };
+    }
     case STATE_PROFILES:
       return {
         ...state,

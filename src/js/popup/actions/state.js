@@ -5,11 +5,15 @@ import {
   STATE_BUY,
   STATE_SEND,
   STATE_PROFILES,
+  STATE_EXPORT_PROFILE,
+  STATE_IMPORT_PROFILE,
   STATE_EXPORTPK,
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
   STATE_VIEW_EXPORTPK,
-  STATE_VIEW_SETTINGS
+  STATE_VIEW_SETTINGS,
+  STATE_VIEW_EXPORT_PROFILE,
+  STATE_VIEW_IMPORT_PROFILE
 } from './../../constants/state';
 
 const StateActions = {
@@ -44,6 +48,16 @@ const StateActions = {
       type: STATE_EXPORTPK
     });
   },
+  goExportProfile: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_EXPORT_PROFILE
+    });
+  },
+  goImportProfile: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_IMPORT_PROFILE
+    });
+  },
   goProfile: () => (dispatch, getState) => {
     dispatch({
       type: STATE_PROFILES
@@ -63,6 +77,10 @@ const StateActions = {
       case STATE_VIEW_SEND:
       case STATE_VIEW_EXPORTPK:
         StateActions.goWallet(account.name)(dispatch, getState);
+        break;
+      case STATE_VIEW_EXPORT_PROFILE:
+      case STATE_VIEW_IMPORT_PROFILE:
+        StateActions.goProfile()(dispatch, getState);
         break;
       default:
         StateActions.goMain()(dispatch, getState);

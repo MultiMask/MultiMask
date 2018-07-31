@@ -6,7 +6,8 @@ import {
   PROFILE_EXPORT,
   PROFILE_GETLIST,
   PROFILE_GETLIST_RESULT,
-  PROFILE_UPDATE
+  PROFILE_UPDATE,
+  PROFILE_IMPORT
 } from './../../constants/profile';
 
 const ProfileActions = {
@@ -42,6 +43,12 @@ const ProfileActions = {
     messaging.send({
       type: PROFILE_UPDATE,
       payload: { id, data }
+    });
+  },
+  import: (pass, encryptedProfile) => (dispatch, getState) => {
+    messaging.send({
+      type: PROFILE_IMPORT,
+      payload: { pass, encryptedProfile }
     });
   }
 };
