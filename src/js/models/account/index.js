@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import log from 'level';
+import log from 'loglevel';
 
 export default class Account {
   constructor({ wallet, network, blockchain, name, secret = { seed: null }, id = uuid() }) {
