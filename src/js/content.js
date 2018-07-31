@@ -1,5 +1,6 @@
 import { EncryptedStream } from 'extension-streams';
 import IdGenerator from './libs/IdGenerator';
+import InternalMessage from './libs/InternalMessage';
 import log from 'loglevel';
 
 import { CONTENT_APP, INPAGE_APP } from './constants/apps';
@@ -15,15 +16,6 @@ class Content {
 
     this.setupInpageStream();
     this.injectScript();
-
-    //
-    this.stream.send(
-      {
-        type: 'try',
-        payload: {}
-      },
-      INPAGE_APP
-    );
 
     log.info('MultiMask - start listening events');
   }
@@ -53,10 +45,22 @@ class Content {
 
   /**
    * Listing injected messages
-   * @param {MessageType} msg
+   * @param {MessageType} message
    */
-  contentListener(msg) {
-    log.info(msg);
+  contentListener(message) {
+    log.info('send', message);
+    InternalMessage.payload(message.type, message.payload)
+      .send()
+      .then(res => this.respond(message, res));
+  }
+
+  /**
+   * Response from background
+   * @param {Message} message
+   * @param {Message} response
+   */
+  respond(message, response) {
+    log.info('response', message, response);
   }
 }
 

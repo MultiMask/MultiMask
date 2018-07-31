@@ -2,6 +2,8 @@ import { TX_PAYMENT } from '../constants/tx';
 import networks from './../blockchain';
 import Web3Provider from './plugins/eth';
 
+import { CONTENT_APP } from '../constants/apps';
+
 export default class MultiWeb {
   constructor({ stream }) {
     this.stream = stream;
@@ -12,7 +14,7 @@ export default class MultiWeb {
   }
 
   _send(data) {
-    this.stream.send(data);
+    this.stream.send(data, CONTENT_APP);
   }
 
   isAuth() {}

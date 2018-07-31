@@ -41,7 +41,6 @@ class Inpage {
     stream.listenWith(msg => {
       // if (msg && msg.hasOwnProperty('type') && msg.type === NetworkMessageTypes.PUSH_SCATTER)
       //   window.scatter = new Scatterdapp(stream, msg.payload);
-      log.info('get msg', msg);
       window.multiWeb = new MultiWeb({ stream });
     });
 
