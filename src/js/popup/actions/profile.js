@@ -7,7 +7,9 @@ import {
   PROFILE_GETLIST,
   PROFILE_GETLIST_RESULT,
   PROFILE_UPDATE,
-  PROFILE_IMPORT
+  PROFILE_IMPORT,
+  PROFILE_SELECT,
+  PROFILE_SELECT_RESULT
 } from './../../constants/profile';
 
 const ProfileActions = {
@@ -16,10 +18,10 @@ const ProfileActions = {
       type: PROFILE_GETLIST
     });
   },
-  getListResult: list => (dispatch, getState) => {
+  getListResult: ({ list, profileId }) => (dispatch, getState) => {
     dispatch({
       type: PROFILE_GETLIST_RESULT,
-      payload: { list }
+      payload: { list, profileId }
     });
   },
   add: () => (dispatch, getState) => {
@@ -49,6 +51,18 @@ const ProfileActions = {
     messaging.send({
       type: PROFILE_IMPORT,
       payload: { pass, encryptedProfile }
+    });
+  },
+  select: profileId => (dispatch, getState) => {
+    messaging.send({
+      type: PROFILE_SELECT,
+      payload: { profileId }
+    });
+  },
+  getSelectResult: profileId => (dispatch, getState) => {
+    dispatch({
+      type: PROFILE_SELECT_RESULT,
+      payload: { profileId }
     });
   }
 };

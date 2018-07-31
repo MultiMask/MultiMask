@@ -36,10 +36,12 @@ export default class AccountController {
     }
   };
 
-  import = (pass, account) => {
-    if (this.getAccountById(account.id)) {
-      AccountFactory.save(pass, account);
-      this.addAccountInstance(account);
+  import = (pass, accountRaw) => {
+    if (!this.getAccountById(accountRaw.id)) {
+      const accountModel = AccountFactory.create(accountRaw);
+
+      AccountFactory.save(pass, accountModel);
+      this.addAccountInstance(accountModel);
     }
   };
 

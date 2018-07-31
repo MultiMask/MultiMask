@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { css } from 'emotion';
 import Typography from '../../ui/Typography';
 import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
@@ -18,7 +19,8 @@ class Profiles extends React.Component {
   state = {
     editProfileId: false,
     profileName: '',
-    handleExportProfile: null
+    handleExportProfile: null,
+    encryptedProfile: null
   };
 
   componentDidMount() {
@@ -70,28 +72,39 @@ class Profiles extends React.Component {
     goExport();
   };
 
-  handleImportProfile = () => {
-    const { goImport } = this.props;
-
-    goImport();
-  };
-
   handleNeedAuthImport = e => {
     e.preventDefault();
+    const { encryptedProfile } = this.state;
 
     const json = formToJson(e.target);
     this.pass = json.password;
 
+    this.props.import(this.pass, encryptedProfile);
+    this.props.goBack();
+
+    this.setState({ encryptedProfile: null });
+  };
+
+  handleImportProfile = () => {
+    const { goImport } = this.props;
+
     const onImport = encryptedProfile => {
-      this.props.import(this.pass, encryptedProfile);
-      this.props.goBack();
+      this.setState({ encryptedProfile });
+      goImport();
     };
 
     readFile(onImport);
   };
 
+  handleSelect = profileId => event => {
+    event.preventDefault();
+    const { select } = this.props;
+
+    select(profileId);
+  };
+
   get list() {
-    const { list } = this.props;
+    const { list, selectedProfileId } = this.props;
     const { editProfileId, profileName } = this.state;
 
     return list.map(profile => {
@@ -109,7 +122,14 @@ class Profiles extends React.Component {
               onBlur={this.handleOnBlurInput(profile, profileName)}
             />
           ) : (
-            <Typography color="main" variant="subheading">
+            <Typography
+              className={css`
+                cursor: pointer;
+              `}
+              onClick={this.handleSelect(profile.id)}
+              color={profile.id === selectedProfileId ? 'primary' : 'main'}
+              variant="subheading"
+            >
               {profile.name}
             </Typography>
           )}
@@ -154,6 +174,7 @@ class Profiles extends React.Component {
 export default connect(
   ({ profile, state }) => ({
     list: profile.list,
+    selectedProfileId: profile.selectedId,
     view: state.view
   }),
   dispatch =>

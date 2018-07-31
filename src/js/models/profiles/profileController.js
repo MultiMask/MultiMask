@@ -123,4 +123,14 @@ export default class ProfileController {
 
     return;
   }
+
+  select(id) {
+    const selectedProfile = this.plc.findById(id);
+    this.setCurrrent(selectedProfile);
+  }
+
+  getData() {
+    const profileList = this.plc.getList();
+    return { list: profileList, profileId: this.currentProfileId };
+  }
 }
