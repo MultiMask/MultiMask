@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import { processForm } from './../../helpers';
+import styled from 'react-emotion';
 
 import ChooseNetwork from './chooseNetwork';
 import CreateWallet from './create';
 import ImportWallet from './import';
+import Button from '../../ui/Button';
+import Typography from '../../ui/Typography';
 
 class WalletCreate extends React.Component {
   state = {
@@ -13,9 +14,13 @@ class WalletCreate extends React.Component {
   };
 
   onSubmit = e => {
-    const data = processForm(e);
+    const { step } = this.state;
 
-    this.setState({ step: data.step });
+    this.setState({ step: step });
+  };
+
+  handleChange = event => {
+    this.setState({ step: event.target.value });
   };
 
   goBack = () => {
@@ -40,33 +45,28 @@ class WalletCreate extends React.Component {
     }
 
     return (
-      <div className="creation">
-        <form onSubmit={this.onSubmit}>
-          <div>
-            <label>
-              <input type="radio" value="1" name="step" />
-              Create Wallet
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="radio" value="2" name="step" />
-              Import Seed Phrase
-            </label>
-          </div>
-          {/* <div>
-            <label>
-              <input type="radio" value="3" name="step" />
-              Import Private Key
-            </label>
-          </div> */}
-          <div>
-            <button type="submit">Next</button>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={this.onSubmit}>
+        <Typography color="main" variant="title">
+          Choose variant:
+        </Typography>
+        <label>
+          <input onChange={this.handleChange} type="radio" value="1" name="step" />
+          <Typography color="main">Create Wallet</Typography>
+        </label>
+        <label>
+          <input onChange={this.handleChange} type="radio" value="2" name="step" />
+          <Typography color="main">Import Seed Phrase</Typography>
+        </label>
+        <Button type="submit">Next</Button>
+      </form>
     );
   }
 }
 
 export default connect()(WalletCreate);
+
+const Wrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
