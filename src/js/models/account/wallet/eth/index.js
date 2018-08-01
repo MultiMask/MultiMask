@@ -11,18 +11,14 @@ export default class EthWallet {
     this.network = network;
   }
 
-  create(seed) {
-    this.seed = seed || this.engine.generateMnemonic();
-    let { priv, privHex } = this.engine.getPrivKeyFromSeed(this.seed);
-    this.priv = priv;
-    this.privHex = privHex;
+  create(_seed) {
+    const seed = _seed || this.engine.generateMnemonic();
+    ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(seed));
 
     this.public = this.engine.getPublic(this.priv);
     this.address = this.engine.getEthereumAddress(this.priv);
-  }
 
-  getSeed() {
-    return this.seed;
+    return seed;
   }
 
   getInfo() {

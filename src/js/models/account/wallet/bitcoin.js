@@ -14,17 +14,14 @@ export default class BitcoinWallet {
   }
 
   create(seed) {
-    this.mnemonic = new Mnemonic(seed);
-    this.seed = this.mnemonic.toString();
+    const mnemonic = new Mnemonic(seed);
 
-    const HDPrivateKey = this.mnemonic.toHDPrivateKey(null, this.network);
+    const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
 
     this.priv = HDPrivateKey.privateKey.toWIF();
     this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
-  }
 
-  getSeed() {
-    return this.seed;
+    return mnemonic.toString();
   }
 
   getInfo() {
