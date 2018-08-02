@@ -3,8 +3,8 @@ import styled from 'react-emotion';
 import Button from '../../ui/Button';
 import Typography from '../../ui/Typography';
 
-const FormLayout = ({ children, title }) => (
-  <Container>
+const FormLayout = ({ children, title, onSubmit, onBack, submitButtonTitle }) => (
+  <Container onSubmit={onSubmit}>
     <Content>
       <Typography color="main" variant="title">
         {title}
@@ -13,13 +13,20 @@ const FormLayout = ({ children, title }) => (
     </Content>
 
     <Actions>
-      <Button outlined onClick={this.onAdd}>
-        Add
-      </Button>
-      <Button onClick={this.handleImportProfile}>Next</Button>
+      {onBack && (
+        <Button onClick={onBack} outlined>
+          Back
+        </Button>
+      )}
+      <Button onSubmit={onSubmit}>{submitButtonTitle}</Button>
     </Actions>
   </Container>
 );
+
+FormLayout.defaultProps = {
+  onBack: null,
+  submitButtonTitle: 'Next'
+};
 
 export default FormLayout;
 
@@ -33,6 +40,8 @@ const Content = styled.div`
   flex-grow: 1;
   padding: 0 20px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Actions = styled.div`

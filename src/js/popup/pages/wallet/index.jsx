@@ -1,22 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 
 import ChooseNetwork from './chooseNetwork';
 import CreateWallet from './create';
 import ImportWallet from './import';
-import Button from '../../ui/Button';
-import Typography from '../../ui/Typography';
+
+import TypeImportingStep from './TypeImportingStep';
 
 class WalletCreate extends React.Component {
   state = {
-    step: 0
+    type: ''
   };
 
-  onSubmit = e => {
+  onNext = () => {
     const { step } = this.state;
 
     this.setState({ step: step });
+  };
+
+  handleChooseTypeImporting = type => {
+    this.setState({ type });
   };
 
   handleChange = event => {
@@ -24,49 +27,28 @@ class WalletCreate extends React.Component {
   };
 
   goBack = () => {
-    this.setState({ step: 0 });
+    this.setState({ type: '' });
   };
 
   render() {
-    if (this.state.step == 1) {
+    if (this.state.type === 'create') {
       return (
-        <ChooseNetwork>
-          <CreateWallet onBack={this.goBack} />
+        <ChooseNetwork onBack={this.goBack}>
+          <CreateWallet />
         </ChooseNetwork>
       );
     }
 
-    if (this.state.step == 2) {
+    if (this.state.type === 'import') {
       return (
-        <ChooseNetwork>
-          <ImportWallet onBack={this.goBack} />
+        <ChooseNetwork onBack={this.goBack}>
+          <ImportWallet />
         </ChooseNetwork>
       );
     }
 
-    return (
-      <form onSubmit={this.onSubmit}>
-        <Typography color="main" variant="title">
-          Choose variant:
-        </Typography>
-        <label>
-          <input onChange={this.handleChange} type="radio" value="1" name="step" />
-          <Typography color="main">Create Wallet</Typography>
-        </label>
-        <label>
-          <input onChange={this.handleChange} type="radio" value="2" name="step" />
-          <Typography color="main">Import Seed Phrase</Typography>
-        </label>
-        <Button type="submit">Next</Button>
-      </form>
-    );
+    return <TypeImportingStep onSubmit={this.handleChooseTypeImporting} />;
   }
 }
 
 export default connect()(WalletCreate);
-
-const Wrapper = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
