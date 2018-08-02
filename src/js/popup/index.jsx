@@ -34,8 +34,6 @@ class Popup extends React.Component {
   }
 
   render() {
-    console.log('app props:', this.props);
-
     switch (this.props.view) {
       case STATE_VIEW_PROFILES:
       case STATE_VIEW_EXPORT_PROFILE:
