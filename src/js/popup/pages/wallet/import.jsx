@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import FormLayout from './FormLayout';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
 
@@ -55,45 +55,32 @@ class Wallet extends React.Component {
 
   render() {
     return (
-      <div className="creation">
-        <div>
-          <div>
-            <h3>Input seed:</h3>
-            <textarea name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
-          </div>
-          {this.state.address &&
-            this.state.balance && (
+      <FormLayout onSubmit={this.handleCheck} title="Input seed:" onBack={this.props.onBack}>
+        <textarea name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
+        {this.state.address &&
+          this.state.balance && (
+            <div>
               <div>
-                <div>
-                  <dl>
-                    <dd>Address:</dd>
-                    <dt>{this.state.address}</dt>
-                  </dl>
-                </div>
-                <div>
-                  <dl>
-                    <dd>Balance:</dd>
-                    <dt>{this.state.balance}</dt>
-                  </dl>
-                </div>
+                <dl>
+                  <dd>Address:</dd>
+                  <dt>{this.state.address}</dt>
+                </dl>
               </div>
-            )}
-          {this.state.error && <div>{this.state.error}</div>}
-          <div>
-            <button onClick={this.props.onBack} className="btn">
-              Back
-            </button>
-            <button onClick={this.handleCheck} className="login__create btn primary">
-              Check
-            </button>
-            {this.state.success && (
-              <button onClick={this.handleSave} className="login__create btn primary">
-                Import
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+              <div>
+                <dl>
+                  <dd>Balance:</dd>
+                  <dt>{this.state.balance}</dt>
+                </dl>
+              </div>
+            </div>
+          )}
+        {this.state.error && <div>{this.state.error}</div>}
+        {this.state.success && (
+          <button onClick={this.handleSave} className="login__create btn primary">
+            Import
+          </button>
+        )}
+      </FormLayout>
     );
   }
 }

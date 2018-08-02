@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { processForm } from './../../helpers';
 import networks from './../../../blockchain';
+import FormLayout from './FormLayout';
 
 export default class ChooseNetwork extends Component {
   state = {
@@ -51,52 +52,31 @@ export default class ChooseNetwork extends Component {
   }
 
   render() {
-    if (this.state.step == 2) {
+    if (this.state.step === 2) {
       return React.cloneElement(this.props.children, {
         blockchain: this.state.blockchain,
-        network: this.state.network
+        network: this.state.network,
+        onBack: this.props.onBack
       });
     }
 
     return (
-      <div>
-        {this.state.step == 0 && (
-          <div>
-            <form onSubmit={this.handleBlockchain}>
-              <h4>Choose blockchain:</h4>
-              <select onChange={this.handleInput} value={this.state.network} name="blockchain">
-                {this.blockchains}
-              </select>
-              <div>
-                <button onClick={this.props.onBack} className="btn">
-                  Back
-                </button>
-                <button className="login__create btn primary" type="submit">
-                  Next
-                </button>
-              </div>
-            </form>
-          </div>
+      <React.Fragment>
+        {this.state.step === 0 && (
+          <FormLayout onSubmit={this.handleBlockchain} title="Choose blockchain:" onBack={this.props.onBack}>
+            <select onChange={this.handleInput} value={this.state.network} name="blockchain">
+              {this.blockchains}
+            </select>
+          </FormLayout>
         )}
-        {this.state.step == 1 && (
-          <div>
-            <form onSubmit={this.handleNetwork}>
-              <h4>Choose network:</h4>
-              <select onChange={this.handleInput} value={this.state.network} name="network">
-                {this.networks}
-              </select>
-              <div>
-                <button onClick={this.handleBack} className="btn">
-                  Back
-                </button>
-                <button className="login__create btn primary" type="submit">
-                  Next
-                </button>
-              </div>
-            </form>
-          </div>
+        {this.state.step === 1 && (
+          <FormLayout onSubmit={this.handleNetwork} title="Choose network:" onBack={this.handleBack}>
+            <select onChange={this.handleInput} value={this.state.network} name="network">
+              {this.networks}
+            </select>
+          </FormLayout>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

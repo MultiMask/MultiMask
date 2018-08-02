@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import FormLayout from './FormLayout';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
 
@@ -28,18 +28,14 @@ class Wallet extends React.Component {
 
   render() {
     return (
-      <div className="creation">
-        <div>
-          <h3>Save seed save:</h3>
-          <div>{this.state.seed}</div>
-        </div>
-        <button onClick={this.props.onBack} className="btn">
-          Back
-        </button>
-        <button onClick={this.handleSave} className="login__create btn primary">
-          I saved Seed
-        </button>
-      </div>
+      <FormLayout
+        onSubmit={this.handleSave}
+        title="Save seed save:"
+        onBack={this.props.onBack}
+        submitButtonTitle="I saved Seed"
+      >
+        <div>{this.state.seed}</div>
+      </FormLayout>
     );
   }
 }
