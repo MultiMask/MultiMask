@@ -1,79 +1,75 @@
 import React, { Component } from 'react';
-
-import { processForm } from './../../helpers';
 import networks from './../../../blockchain';
 import FormLayout from './FormLayout';
+import Select from '../../ui/Select';
 
 export default class ChooseNetwork extends Component {
   state = {
-    step: 0
+    step: 0,
+    selectedBlockchain: '',
+    selectedNetwork: ''
   };
 
   handleBack = () => {
     this.setState({ step: 0 });
   };
 
-  handleBlockchain = e => {
+  handleNext = () => {
+    const { step } = this.state;
     this.setState({
-      ...processForm(e),
-      step: 1
+      step: step + 1
     });
   };
 
-  handleNetwork = e => {
-    this.setState({
-      ...processForm(e),
-      step: 2
-    });
+  handleSelectBlockchains = selectedItem => {
+    this.setState({ selectedBlockchain: selectedItem });
+  };
+
+  handleSelectNetwork = selectedItem => {
+    this.setState({ selectedNetwork: selectedItem });
+  };
+
+  getOption = item => {
+    return { value: item.sign, label: item.name };
   };
 
   get blockchains() {
     const blocks = Object.entries(networks);
     return blocks.map((item, idx) => {
       const [sign, blockchain] = item;
-
-      return (
-        <option value={blockchain.sign} key={idx}>
-          {blockchain.name}
-        </option>
-      );
+      return this.getOption(blockchain);
     });
   }
 
   get networks() {
-    const blockchain = networks[this.state.blockchain];
+    const blockchain = networks[this.state.selectedBlockchain.value];
     return blockchain.network.map((item, idx) => {
-      return (
-        <option value={item.sign} key={idx}>
-          {item.name}
-        </option>
-      );
+      return this.getOption(item);
     });
   }
 
   render() {
-    if (this.state.step === 2) {
-      return React.cloneElement(this.props.children, {
-        blockchain: this.state.blockchain,
-        network: this.state.network,
-        onBack: this.props.onBack
+    const { selectedBlockchain, selectedNetwork, step } = this.state;
+    const { children, onBack } = this.props;
+
+    if (step === 2) {
+      return React.cloneElement(children, {
+        blockchain: selectedBlockchain.value,
+        network: selectedNetwork.value,
+        onBack: onBack
       });
     }
 
     return (
       <React.Fragment>
-        {this.state.step === 0 && (
-          <FormLayout onSubmit={this.handleBlockchain} title="Choose blockchain:" onBack={this.props.onBack}>
-            <select onChange={this.handleInput} value={this.state.network} name="blockchain">
-              {this.blockchains}
-            </select>
+        {step === 0 && (
+          <FormLayout onSubmit={this.handleNext} title="Choose blockchain:" onBack={this.props.onBack}>
+            <Select options={this.blockchains} value={selectedBlockchain} onChange={this.handleSelectBlockchains} />
           </FormLayout>
         )}
-        {this.state.step === 1 && (
-          <FormLayout onSubmit={this.handleNetwork} title="Choose network:" onBack={this.handleBack}>
-            <select onChange={this.handleInput} value={this.state.network} name="network">
-              {this.networks}
-            </select>
+        {step === 1 && (
+          <FormLayout onSubmit={this.handleNext} title="Choose network:" onBack={this.handleBack}>
+            <Select options={this.networks} onChange={this.handleSelectNetwork} value={selectedNetwork} />
           </FormLayout>
         )}
       </React.Fragment>

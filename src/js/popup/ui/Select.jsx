@@ -9,10 +9,6 @@ const Select = props => {
     option: (base, state) => ({
       ...base
     }),
-    container: (base, state) => ({
-      ...base,
-      flexGrow: 1
-    }),
     control: (base, state) => ({
       ...base,
       border: `1px solid ${theme.colors.primary}`
