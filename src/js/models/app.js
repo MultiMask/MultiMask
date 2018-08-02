@@ -8,6 +8,7 @@ export default {
 
   init() {
     this.io = Interfaces({ App: this });
+    this.io.auth.init();
     this.inited = true;
   },
 

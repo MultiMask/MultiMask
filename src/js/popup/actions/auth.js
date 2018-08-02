@@ -1,4 +1,5 @@
 import messaging from '../message';
+import InternalMessage from '../../libs/InternalMessage';
 
 import {
   AUTH_INIT,
@@ -13,77 +14,74 @@ import {
 } from './../../constants/auth';
 
 import { STATE_INIT, STATE_LOGIN } from './../../constants/state';
+import { getPass } from './../../models/getter';
 
 import StateActions from './state';
 import AccountActions from './account';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
-    const hiddenPass = pass;
-
-    messaging.send({
-      type: AUTH_INIT,
-      payload: {
-        pass: hiddenPass
-      }
-    });
+    InternalMessage.payload(AUTH_INIT, { pass })
+      .send()
+      .then(() => {
+        AuthActions.success()(dispatch, getState);
+      });
   },
   check: () => (dispatch, getState) => {
-    messaging.send({
-      type: AUTH_CHECK
-    });
-  },
-  checkSuccess: () => (dispatch, getState) => {
-    dispatch({
-      type: AUTH_CHECK_SUCCESS
-    });
+    InternalMessage.signal(AUTH_CHECK)
+      .send()
+      .then(({ payload: { isAuth } }) => {
+        if (isAuth) {
+          dispatch({
+            type: AUTH_CHECK_SUCCESS
+          });
 
-    AuthActions.success()(dispatch, getState);
-  },
-  checkFail: hasPass => (dispatch, getState) => {
-    dispatch({
-      type: AUTH_CHECK_FAIL,
-      payload: {
-        hasPass
-      }
-    });
+          AuthActions.success()(dispatch, getState);
+        } else {
+          checkPass(hasPass => {
+            dispatch({
+              type: AUTH_CHECK_FAIL,
+              payload: {
+                hasPass
+              }
+            });
 
-    if (hasPass) {
-      dispatch({
-        type: STATE_LOGIN
+            dispatch({
+              type: hasPass ? STATE_LOGIN : STATE_INIT
+            });
+          });
+        }
       });
-    } else {
-      dispatch({
-        type: STATE_INIT
-      });
-    }
   },
   login: pass => (dispatch, getState) => {
-    messaging.send({
-      type: AUTH_LOGIN,
-      payload: {
-        pass: pass
-      }
-    });
+    InternalMessage.payload(AUTH_LOGIN, { pass })
+      .send()
+      .then(({ payload: { login } }) => {
+        if (login) {
+          AuthActions.success()(dispatch, getState);
+        } else {
+          AuthActions.fail()(dispatch, getState);
+        }
+      });
   },
   logout: () => (dispatch, getState) => {
-    messaging.send({
-      type: AUTH_LOGOUT
-    });
-  },
-  logoutSucces: () => (dispatch, getState) => {
-    dispatch({
-      type: AUTH_LOGOUT_SUCCESS
-    });
+    InternalMessage.signal(AUTH_LOGOUT)
+      .send()
+      .then(({ payload: { isLogout } }) => {
+        if (isLogout) {
+          dispatch({
+            type: AUTH_LOGOUT_SUCCESS
+          });
 
-    dispatch({
-      type: STATE_LOGIN
-    });
-  },
-  logoutFail: () => (dispatch, getState) => {
-    dispatch({
-      type: AUTH_LOGOUT_FAIL
-    });
+          dispatch({
+            type: STATE_LOGIN
+          });
+        } else {
+          dispatch({
+            type: AUTH_LOGOUT_FAIL
+          });
+        }
+      });
   },
   success: () => (dispatch, getState) => {
     StateActions.goMain()(dispatch, getState);
@@ -96,3 +94,7 @@ const AuthActions = {
   }
 };
 export default AuthActions;
+
+function checkPass(cb) {
+  getPass().then(result => cb(!!result));
+}

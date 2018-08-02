@@ -16,9 +16,9 @@ import stateActions from './state';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
-    messaging.send({
-      type: ACCOUNT_INFO
-    });
+    // messaging.send({
+    //   type: ACCOUNT_INFO
+    // });
   },
   create: account => (dispatch, getState) => {
     messaging.send({
