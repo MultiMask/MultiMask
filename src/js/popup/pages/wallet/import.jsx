@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
+import styled from 'react-emotion';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
 
@@ -56,7 +57,7 @@ class Wallet extends React.Component {
   render() {
     return (
       <FormLayout onSubmit={this.handleCheck} title="Input seed:" onBack={this.props.onBack}>
-        <textarea name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
+        <Textaria name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
         {this.state.address &&
           this.state.balance && (
             <div>
@@ -95,3 +96,10 @@ export default connect(
       dispatch
     )
 )(Wallet);
+
+const Textaria = styled.textarea`
+  outline: none;
+  border: 1px solid ${props => props.theme.colors.secondary};
+  border-radius: 5px;
+  resize: none;
+`;
