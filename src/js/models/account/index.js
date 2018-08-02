@@ -11,7 +11,7 @@ export default class Account {
     this.secret = secret;
 
     this.name = name ? name : this.createName();
-    this.create(secret.seed);
+    this.secret.seed = this.create(secret.seed);
   }
 
   createName() {
@@ -19,7 +19,7 @@ export default class Account {
   }
 
   create(seed) {
-    this.wallet.create(seed);
+    return this.wallet.create(seed);
   }
 
   getSeed() {
