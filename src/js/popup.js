@@ -9,14 +9,10 @@ import { configureStore } from './popup/store';
 import { ThemeProvider } from 'emotion-theming';
 import { theme } from './config/theme';
 import App from './popup/index.jsx';
-import Listeners from './popup/listeners';
 import '../css/popup.less';
 import '../img/logo.png';
 
 const store = configureStore();
-Listeners({
-  dispatch: store.dispatch.bind(store)
-});
 
 render(
   <Provider store={store}>
