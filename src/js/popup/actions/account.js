@@ -1,3 +1,4 @@
+import InternalMessage from '../../libs/InternalMessage';
 import messaging from '../message';
 import { hidePass } from './../../libs/cipher';
 
@@ -16,9 +17,9 @@ import stateActions from './state';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
-    // messaging.send({
-    //   type: ACCOUNT_INFO
-    // });
+    InternalMessage.signal(ACCOUNT_INFO)
+      .send()
+      .then(console.log);
   },
   create: account => (dispatch, getState) => {
     messaging.send({
