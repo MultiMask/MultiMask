@@ -16,7 +16,7 @@ import stateActions from './state';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
-    InternalMessage.signal(ACCOUNT_INFO)
+    return InternalMessage.signal(ACCOUNT_INFO)
       .send()
       .then(({ payload }) => {
         AccountActions.setAccount(payload)(dispatch, getState);

@@ -13,7 +13,7 @@ export default opts => (...args) => {
 
   auth(opts)(...args);
   account(opts)(...args);
-  // profile(opts)(...args);
+  profile(opts)(...args);
 
   ui(opts)(...args);
 

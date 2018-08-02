@@ -11,58 +11,72 @@ import {
   PROFILE_SELECT_RESULT
 } from './../../constants/profile';
 
-export default ({ messaging, App }) => {
-  messaging.on(PROFILE_GETLIST, () => {
-    sendData({ messaging, App });
-  });
+export default ({ App }) => ({ type, payload }, sendResponse) => {
+  switch (type) {
+    case PROFILE_GETLIST: {
+      sendData({ sendResponse, App });
+      break;
+    }
 
-  messaging.on(PROFILE_ADD, () => {
-    App.io.profile.add().then(() => {
-      sendData({ messaging, App });
-    });
-  });
-
-  messaging.on(PROFILE_REMOVE, ({ id }) => {
-    App.io.profile.remove(id);
-    sendData({ messaging, App });
-  });
-
-  messaging.on(PROFILE_EXPORT, ({ id }) => {
-    App.io.profile.export(id).then(encodedProfile => {
-      messaging.send({
-        type: PROFILE_EXPORT_RESULT,
-        payload: {
-          encodedProfile
-        }
+    case PROFILE_ADD: {
+      App.io.profile.add().then(() => {
+        sendData({ sendResponse, App });
       });
-    });
-  });
+      break;
+    }
 
-  messaging.on(PROFILE_UPDATE, ({ id, data }) => {
-    App.io.profile.update(id, data);
-    sendData({ messaging, App });
-  });
+    case PROFILE_REMOVE: {
+      App.io.profile.remove(payload.id);
+      sendData({ sendResponse, App });
+      break;
+    }
 
-  messaging.on(PROFILE_IMPORT, ({ pass, encryptedProfile }) => {
-    const isImport = App.io.profile.import(pass, encryptedProfile);
+    case PROFILE_SELECT: {
+      const { profileId } = payload;
+      App.io.profile.select(profileId);
 
-    if (isImport !== null) sendData({ messaging, App });
-  });
+      sendResponse({
+        type: PROFILE_SELECT_RESULT,
+        payload: { profileId }
+      });
 
-  messaging.on(PROFILE_SELECT, ({ profileId }) => {
-    App.io.profile.select(profileId);
+      break;
+    }
 
-    messaging.send({
-      type: PROFILE_SELECT_RESULT,
-      payload: { profileId }
-    });
-  });
+    case PROFILE_UPDATE: {
+      App.io.profile.update(payload.id, payload.data);
+      sendData({ sendResponse, App });
+
+      break;
+    }
+
+    case PROFILE_EXPORT: {
+      App.io.profile.export(payload.id).then(encodedProfile => {
+        sendResponse({
+          type: PROFILE_EXPORT_RESULT,
+          payload: {
+            encodedProfile
+          }
+        });
+      });
+
+      break;
+    }
+
+    case PROFILE_IMPORT: {
+      const { pass, encryptedProfile } = payload;
+
+      App.io.profile.import(pass, encryptedProfile);
+      sendData({ sendResponse, App });
+
+      break;
+    }
+  }
 };
 
-const sendData = ({ messaging, App }) => {
-  const data = App.io.profile.getData();
-  messaging.send({
+const sendData = ({ sendResponse, App }) => {
+  sendResponse({
     type: PROFILE_GETLIST_RESULT,
-    payload: data
+    payload: App.io.profile.getData()
   });
 };
