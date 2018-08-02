@@ -1,4 +1,3 @@
-import messaging from '../message';
 import InternalMessage from '../../libs/InternalMessage';
 
 import {
@@ -27,6 +26,7 @@ const AuthActions = {
         AuthActions.success()(dispatch, getState);
       });
   },
+
   check: () => (dispatch, getState) => {
     InternalMessage.signal(AUTH_CHECK)
       .send()
@@ -53,6 +53,7 @@ const AuthActions = {
         }
       });
   },
+
   login: pass => (dispatch, getState) => {
     InternalMessage.payload(AUTH_LOGIN, { pass })
       .send()
@@ -64,6 +65,7 @@ const AuthActions = {
         }
       });
   },
+
   logout: () => (dispatch, getState) => {
     InternalMessage.signal(AUTH_LOGOUT)
       .send()
@@ -83,10 +85,12 @@ const AuthActions = {
         }
       });
   },
+
   success: () => (dispatch, getState) => {
     StateActions.goMain()(dispatch, getState);
     AccountActions.getInfo()(dispatch, getState);
   },
+
   fail: () => (dispatch, getState) => {
     dispatch({
       type: AUTH_LOGIN_FAIL

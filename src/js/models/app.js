@@ -8,8 +8,8 @@ export default {
 
   init() {
     this.io = Interfaces({ App: this });
-    this.io.auth.init();
     this.inited = true;
+    return this.io.auth.init();
   },
 
   isAuth() {
@@ -34,7 +34,7 @@ export default {
       this.password = pass;
 
       if (!this.inited) {
-        this.init();
+        await this.init();
       }
     }
 

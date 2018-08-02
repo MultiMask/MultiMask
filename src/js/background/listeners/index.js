@@ -12,10 +12,10 @@ export default opts => (...args) => {
   log.info('Background receive > ', args[0]);
 
   auth(opts)(...args);
-  // account(opts)(...args);
+  account(opts)(...args);
   // profile(opts)(...args);
 
-  // ui(opts)(...args);
+  ui(opts)(...args);
 
   // tx(opts)(...args);
   // eth(opts)(...args);

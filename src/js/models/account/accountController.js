@@ -62,7 +62,7 @@ export default class AccountController {
       const account = this.getAccountById(id);
 
       if (account) {
-        const seed = account.wallet.seed;
+        const seed = account.getSeed();
 
         return encode(this.App.getPass(), seed);
       }
