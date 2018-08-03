@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
 import Typography from '../../ui/Typography';
@@ -76,7 +76,16 @@ class Wallet extends React.Component {
           </div>
         )}
         {error && <div>{error}</div>}
-        {success && <Button onClick={this.handleSave}>Import</Button>}
+        {success && (
+          <Button
+            className={css`
+              margin-top: 50px;
+            `}
+            onClick={this.handleSave}
+          >
+            Import
+          </Button>
+        )}
       </FormLayout>
     );
   }

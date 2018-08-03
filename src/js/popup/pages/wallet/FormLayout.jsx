@@ -18,7 +18,9 @@ const FormLayout = ({ children, title, onSubmit, onBack, submitButtonTitle }) =>
           Back
         </Button>
       )}
-      <Button type="submit">{submitButtonTitle}</Button>
+      <Button fullWidth={!onBack} type="submit">
+        {submitButtonTitle}
+      </Button>
     </Actions>
   </Container>
 );
@@ -47,6 +49,6 @@ const Content = styled.div`
 const Actions = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  padding: 20px 0;
+  justify-content: space-between;
+  padding: 20px;
 `;
