@@ -1,6 +1,7 @@
 import { EncryptedStream } from 'extension-streams';
 import IdGenerator from './libs/IdGenerator';
 import InternalMessage from './libs/InternalMessage';
+import NetworkMessage from './libs/NetworkMessage';
 import log from 'loglevel';
 
 import { CONTENT_APP, INPAGE_APP } from './constants/apps';
@@ -48,7 +49,13 @@ class Content {
    * @param {MessageType} message
    */
   contentListener(message) {
-    log.info('send', message);
+    let nonSyncMessage = NetworkMessage.fromJson(message);
+
+    // log.info('content receive > ', nonSyncMessage);
+    this.sendBackground(nonSyncMessage);
+  }
+
+  sendBackground(message) {
     InternalMessage.payload(message.type, message.payload)
       .send()
       .then(res => this.respond(message, res));
@@ -59,8 +66,11 @@ class Content {
    * @param {Message} message
    * @param {Message} response
    */
-  respond(message, response) {
-    log.info('response', message, response);
+  respond(message, payload) {
+    // log.info('response < ', message, payload);
+    const response = message.respond(payload);
+
+    this.stream.send(response, INPAGE_APP);
   }
 }
 
