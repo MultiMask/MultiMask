@@ -18,7 +18,7 @@ const FormLayout = ({ children, title, onSubmit, onBack, submitButtonTitle }) =>
           Back
         </Button>
       )}
-      <Button onSubmit={onSubmit}>{submitButtonTitle}</Button>
+      <Button type="submit">{submitButtonTitle}</Button>
     </Actions>
   </Container>
 );

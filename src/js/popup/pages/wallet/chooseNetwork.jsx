@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import networks from './../../../blockchain';
-import FormLayout from './FormLayout';
-import Select from '../../ui/Select';
+import SelectStep from './SelectStep';
 
 export default class ChooseNetwork extends Component {
-  state = {
-    step: 0,
-    selectedBlockchain: '',
-    selectedNetwork: ''
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      step: 0,
+      selectedBlockchain: '',
+      selectedNetwork: ''
+    };
+  }
 
   handleBack = () => {
     this.setState({ step: 0 });
@@ -22,7 +25,10 @@ export default class ChooseNetwork extends Component {
   };
 
   handleSelectBlockchains = selectedItem => {
-    this.setState({ selectedBlockchain: selectedItem });
+    this.setState({
+      selectedBlockchain: selectedItem,
+      selectedNetwork: ''
+    });
   };
 
   handleSelectNetwork = selectedItem => {
@@ -63,14 +69,24 @@ export default class ChooseNetwork extends Component {
     return (
       <React.Fragment>
         {step === 0 && (
-          <FormLayout onSubmit={this.handleNext} title="Choose blockchain:" onBack={this.props.onBack}>
-            <Select options={this.blockchains} value={selectedBlockchain} onChange={this.handleSelectBlockchains} />
-          </FormLayout>
+          <SelectStep
+            onSubmit={this.handleNext}
+            title="Choose blockchain:"
+            onBack={this.props.onBack}
+            onChange={this.handleSelectBlockchains}
+            options={this.blockchains}
+            selectedValue={selectedBlockchain}
+          />
         )}
         {step === 1 && (
-          <FormLayout onSubmit={this.handleNext} title="Choose network:" onBack={this.handleBack}>
-            <Select options={this.networks} onChange={this.handleSelectNetwork} value={selectedNetwork} />
-          </FormLayout>
+          <SelectStep
+            onSubmit={this.handleNext}
+            title="Choose network:"
+            onBack={this.handleBack}
+            onChange={this.handleSelectNetwork}
+            options={this.networks}
+            selectedValue={selectedNetwork}
+          />
         )}
       </React.Fragment>
     );
