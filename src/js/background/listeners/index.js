@@ -17,6 +17,6 @@ export default opts => (...args) => {
 
   ui(opts)(...args);
 
-  // tx(opts)(...args);
+  tx(opts)(...args);
   // eth(opts)(...args);
 };

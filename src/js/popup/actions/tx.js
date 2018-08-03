@@ -1,10 +1,10 @@
 import InternalMessage from '../../libs/InternalMessage';
 
-import { TX_CREATE } from './../../constants/tx';
+import { TX_SEND } from './../../constants/tx';
 
 const StateActions = {
   createTx: ({ id, tx }) => (dispatch, getState) => {
-    return InternalMessage.payload(TX_CREATE, { id, tx }).send();
+    return InternalMessage.payload(TX_SEND, { id, tx }).send();
   }
 };
 export default StateActions;

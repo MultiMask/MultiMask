@@ -1,4 +1,4 @@
-import { TX_PAYMENT } from '../constants/tx';
+import { TX_APPROVE } from '../constants/tx';
 import networks from './../blockchain';
 import Web3Provider from './plugins/eth';
 
@@ -21,7 +21,7 @@ export default class MultiWeb {
   getUser() {}
   sendTransaction({ to, amount, data }) {
     this._send({
-      type: TX_PAYMENT,
+      type: TX_APPROVE,
       payload: {
         blockchain: networks.BTC.sign,
         tx: {
