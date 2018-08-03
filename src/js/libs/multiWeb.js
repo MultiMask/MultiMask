@@ -1,6 +1,8 @@
-import { TX_PAYMENT } from '../constants/tx';
+import { TX_APPROVE } from '../constants/tx';
 import networks from './../blockchain';
 import Web3Provider from './plugins/eth';
+
+import { CONTENT_APP } from '../constants/apps';
 
 export default class MultiWeb {
   constructor({ stream }) {
@@ -12,14 +14,14 @@ export default class MultiWeb {
   }
 
   _send(data) {
-    this.stream.write(data);
+    this.stream.send(data, CONTENT_APP);
   }
 
   isAuth() {}
   getUser() {}
   sendTransaction({ to, amount, data }) {
     this._send({
-      type: TX_PAYMENT,
+      type: TX_APPROVE,
       payload: {
         blockchain: networks.BTC.sign,
         tx: {

@@ -1,50 +1,62 @@
 import {
+  AUTH_IS_READY,
+  AUTH_IS_READY_RESULT,
   AUTH_INIT,
+  AUTH_INIT_DONE,
   AUTH_CHECK,
-  AUTH_CHECK_SUCCESS,
-  AUTH_CHECK_FAIL,
+  AUTH_CHECK_RESULT,
   AUTH_LOGIN,
   AUTH_LOGIN_RESULT,
   AUTH_LOGOUT,
-  AUTH_LOGOUT_SUCCESS,
-  AUTH_LOGOUT_FAIL
+  AUTH_LOGOUT_RESULT
 } from './../../constants/auth';
 
-export default ({ messaging, App }) => {
-  messaging.on(AUTH_INIT, data => {
-    App.create(data.pass);
-    App.io.auth.init();
-  });
+export default ({ App }) => ({ type, payload }, sendResponse) => {
+  switch (type) {
+    case AUTH_IS_READY: {
+      sendResponse({
+        type: AUTH_IS_READY_RESULT,
+        payload: {
+          isReady: App.io.auth.isReady()
+        }
+      });
 
-  messaging.on(AUTH_LOGIN, async data => {
-    const completed = await App.login(data.pass);
-    await App.io.auth.init();
-
-    messaging.send({
-      type: AUTH_LOGIN_RESULT,
-      payload: {
-        login: completed
-      }
-    });
-  });
-
-  messaging.on(AUTH_LOGOUT, () => {
-    const isLogout = App.logout();
-
-    if (isLogout) {
-      messaging.send({ type: AUTH_LOGOUT_SUCCESS });
-    } else {
-      messaging.send({ type: AUTH_LOGOUT_FAIL });
+      break;
     }
-  });
 
-  messaging.on(AUTH_CHECK, () => {
-    const isAuth = App.isAuth();
+    case AUTH_INIT: {
+      App.create(payload.pass);
 
-    if (isAuth) {
-      messaging.send({ type: AUTH_CHECK_SUCCESS });
-    } else {
-      messaging.send({ type: AUTH_CHECK_FAIL });
+      sendResponse({
+        type: AUTH_INIT_DONE
+      });
+      break;
     }
-  });
+
+    case AUTH_CHECK: {
+      sendResponse({
+        type: AUTH_CHECK_RESULT,
+        payload: { isAuth: App.isAuth() }
+      });
+      break;
+    }
+
+    case AUTH_LOGIN: {
+      App.login(payload.pass).then(login => {
+        sendResponse({
+          type: AUTH_LOGIN_RESULT,
+          payload: { login }
+        });
+      });
+      break;
+    }
+
+    case AUTH_LOGOUT: {
+      sendResponse({
+        type: AUTH_LOGOUT_RESULT,
+        payload: { isLogout: App.logout() }
+      });
+      break;
+    }
+  }
 };

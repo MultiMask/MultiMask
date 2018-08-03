@@ -85,7 +85,7 @@ export default class ProfileController {
   }
 
   add() {
-    this.createDefault();
+    return this.createDefault();
   }
 
   remove(id) {

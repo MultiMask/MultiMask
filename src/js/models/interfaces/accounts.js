@@ -1,17 +1,21 @@
-export default class AccountInterfaces {
-  constructor({ profileController }) {
-    this.pc = profileController;
-  }
-
+export default ({ App, profileController }) => ({
   addAccount(account) {
-    return this.pc.addAccount(account);
-  }
+    return profileController.addAccount(account);
+  },
 
   getAccounts() {
-    return this.pc.getAccounts();
-  }
+    if (App.isReady()) return profileController.getAccounts();
+  },
+
+  getAccountsInfo() {
+    if (App.isReady()) {
+      return Promise.all(this.getAccounts().map(account => account.getInfo()));
+    } else {
+      return Promise.resolve();
+    }
+  },
 
   getSeed({ id }) {
-    return this.pc.ac.getSeed({ id });
+    return profileController.ac.getSeed({ id });
   }
-}
+});

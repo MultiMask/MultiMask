@@ -10,6 +10,7 @@
     "quotes": [
       2,
       "single"
-    ]
+    ],
+    "default-case": "off"
   }
 }

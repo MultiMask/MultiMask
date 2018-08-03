@@ -1,4 +1,5 @@
-import messaging from '../message';
+import InternalMessage from '../../libs/InternalMessage';
+import { downloadFile } from '../helpers';
 
 import {
   PROFILE_ADD,
@@ -12,59 +13,67 @@ import {
   PROFILE_SELECT_RESULT
 } from './../../constants/profile';
 
+import accountActions from './account';
+
 const ProfileActions = {
   getList: () => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_GETLIST
-    });
+    InternalMessage.signal(PROFILE_GETLIST)
+      .send()
+      .then(updateProfileListFn(dispatch));
   },
-  getListResult: ({ list, profileId }) => (dispatch, getState) => {
-    dispatch({
-      type: PROFILE_GETLIST_RESULT,
-      payload: { list, profileId }
-    });
-  },
+
   add: () => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_ADD
-    });
+    InternalMessage.signal(PROFILE_ADD)
+      .send()
+      .then(updateProfileListFn(dispatch));
   },
+
   remove: id => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_REMOVE,
-      payload: { id }
-    });
+    InternalMessage.payload(PROFILE_REMOVE, { id })
+      .send()
+      .then(updateProfileListFn(dispatch));
   },
-  export: id => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_EXPORT,
-      payload: { id }
-    });
-  },
-  update: (id, data) => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_UPDATE,
-      payload: { id, data }
-    });
-  },
-  import: (pass, encryptedProfile) => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_IMPORT,
-      payload: { pass, encryptedProfile }
-    });
-  },
+
+  // TODO: Add loading
   select: profileId => (dispatch, getState) => {
-    messaging.send({
-      type: PROFILE_SELECT,
-      payload: { profileId }
-    });
+    return InternalMessage.payload(PROFILE_SELECT, { profileId })
+      .send()
+      .then(({ payload: { profileId } }) => {
+        dispatch({
+          type: PROFILE_SELECT_RESULT,
+          payload: { profileId }
+        });
+
+        return accountActions.getInfo()(dispatch, getState);
+      });
   },
-  getSelectResult: profileId => (dispatch, getState) => {
-    dispatch({
-      type: PROFILE_SELECT_RESULT,
-      payload: { profileId }
-    });
+
+  update: (id, data) => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_UPDATE, { id, data })
+      .send()
+      .then(updateProfileListFn(dispatch));
+  },
+
+  export: id => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_EXPORT, { id })
+      .send()
+      .then(({ payload: { encodedProfile } }) => {
+        downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
+      });
+  },
+
+  import: (pass, encryptedProfile) => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_IMPORT, { pass, encryptedProfile })
+      .send()
+      .then(updateProfileListFn(dispatch));
   }
+};
+
+const updateProfileListFn = dispatch => ({ payload }) => {
+  dispatch({
+    type: PROFILE_GETLIST_RESULT,
+    payload
+  });
 };
 
 export default ProfileActions;
