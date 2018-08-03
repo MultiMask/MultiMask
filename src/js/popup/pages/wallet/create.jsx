@@ -23,7 +23,8 @@ class Wallet extends React.Component {
     this.setState({ seed: this.account.getSeed() });
   }
 
-  handleSave = () => {
+  handleSave = e => {
+    e.preventDefault();
     this.props.create(this.account.serialize());
   };
 
