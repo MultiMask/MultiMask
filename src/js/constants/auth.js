@@ -1,3 +1,6 @@
+export const AUTH_IS_READY = 'auth:isready';
+export const AUTH_IS_READY_RESULT = 'auth:isready:result';
+
 export const AUTH_INIT = 'auth:init';
 export const AUTH_INIT_DONE = 'auth:init:done';
 export const AUTH_LOGIN = 'auth:login';

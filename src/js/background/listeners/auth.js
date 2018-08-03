@@ -1,4 +1,6 @@
 import {
+  AUTH_IS_READY,
+  AUTH_IS_READY_RESULT,
   AUTH_INIT,
   AUTH_INIT_DONE,
   AUTH_CHECK,
@@ -11,6 +13,17 @@ import {
 
 export default ({ App }) => ({ type, payload }, sendResponse) => {
   switch (type) {
+    case AUTH_IS_READY: {
+      sendResponse({
+        type: AUTH_IS_READY_RESULT,
+        payload: {
+          isReady: App.io.auth.isReady()
+        }
+      });
+
+      break;
+    }
+
     case AUTH_INIT: {
       App.create(payload.pass);
 
