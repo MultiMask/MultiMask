@@ -18,7 +18,6 @@ const Select = props => {
       border: `1px solid ${theme.colors.primary}`
     })
   };
-  console.log(props);
 
   return <BaseSelect styles={customStyles} {...props} />;
 };
