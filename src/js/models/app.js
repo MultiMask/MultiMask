@@ -6,14 +6,21 @@ import Interfaces from './interfaces';
 export default {
   inited: false,
 
-  init() {
+  bootstrap() {
     this.io = Interfaces({ App: this });
+  },
+
+  init() {
     this.inited = true;
     return this.io.auth.init();
   },
 
   isAuth() {
     return !!this.password;
+  },
+
+  isReady() {
+    return this.inited;
   },
 
   create(pass) {

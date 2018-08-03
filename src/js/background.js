@@ -12,6 +12,7 @@ class Controller {
     // eslint-disable-next-line
     log.setLevel(logLevel);
 
+    App.bootstrap();
     this.setupInternalMessaging({ App });
   }
 
