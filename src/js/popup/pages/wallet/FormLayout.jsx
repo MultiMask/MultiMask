@@ -3,10 +3,10 @@ import styled from 'react-emotion';
 import Button from '../../ui/Button';
 import Typography from '../../ui/Typography';
 
-const FormLayout = ({ children, title, onSubmit, onBack, submitButtonTitle }) => (
+const FormLayout = ({ children, title, onSubmit, onBack, submitButtonTitle, titleAlign }) => (
   <Container onSubmit={onSubmit}>
     <Content>
-      <Typography color="main" variant="title">
+      <Typography color="main" variant="title" align={titleAlign}>
         {title}
       </Typography>
       {children}
