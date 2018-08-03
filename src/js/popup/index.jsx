@@ -25,6 +25,7 @@ import {
   STATE_VIEW_PROFILES,
   STATE_VIEW_EXPORT_PROFILE,
   STATE_VIEW_IMPORT_PROFILE,
+  STATE_VIEW_QRCODE_PROFILE,
   STATE_VIEW_SETTINGS
 } from './../constants/state';
 
@@ -38,6 +39,7 @@ class Popup extends React.Component {
       case STATE_VIEW_PROFILES:
       case STATE_VIEW_EXPORT_PROFILE:
       case STATE_VIEW_IMPORT_PROFILE:
+      case STATE_VIEW_QRCODE_PROFILE:
         return (
           <MainLayout>
             <Profile />

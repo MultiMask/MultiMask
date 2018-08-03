@@ -8,16 +8,22 @@ import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
-import { STATE_VIEW_EXPORT_PROFILE, STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
+import {
+  STATE_VIEW_EXPORT_PROFILE,
+  STATE_VIEW_IMPORT_PROFILE,
+  STATE_VIEW_QRCODE_PROFILE
+} from './../../../constants/state';
 import NeedAuth from '../../ui/components/NeedAuth';
 import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from './../../actions/profile';
 import stateActions from '../../actions/state';
 import { readFile, formToJson } from '../../helpers/index';
+import QRCodeView from './QRCodeView';
 
 class Profiles extends React.Component {
   state = {
     editProfileId: false,
+    qrcodeProfileId: '',
     profileName: '',
     handleExportProfile: null,
     encryptedProfile: null
@@ -37,6 +43,12 @@ class Profiles extends React.Component {
 
   onExport = id => {
     this.props.export(id);
+  };
+
+  showQRCode = profileId => {
+    const { goQRCode } = this.props;
+    this.setState({ qrcodeProfileId: profileId });
+    goQRCode();
   };
 
   handleEdit = ({ name, id }) => () => {
@@ -110,6 +122,8 @@ class Profiles extends React.Component {
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
       const handleExportProfile = this.onExport.bind(this, profile.id);
+      const handleShowQRCode = this.showQRCode.bind(this, profile.id);
+
       const isEdit = editProfileId === profile.id;
       return (
         <Item key={profile.id}>
@@ -139,6 +153,7 @@ class Profiles extends React.Component {
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
             <MenuItem onClick={this.handleConfirmPassword(handleExportProfile)}>Export</MenuItem>
+            <MenuItem onClick={handleShowQRCode}>Show QR-code</MenuItem>
             <MenuItem onClick={onRemove}>Delete</MenuItem>
           </Menu>
         </Item>
@@ -148,6 +163,7 @@ class Profiles extends React.Component {
 
   render() {
     const { view } = this.props;
+    const { qrcodeProfileId } = this.state;
 
     if (view === STATE_VIEW_EXPORT_PROFILE) {
       return <NeedAuth onSubmit={this.handleNeedAuthExport} />;
@@ -155,6 +171,14 @@ class Profiles extends React.Component {
 
     if (view === STATE_VIEW_IMPORT_PROFILE) {
       return <AuthForm handleSubmit={this.handleNeedAuthImport} />;
+    }
+
+    if (view === STATE_VIEW_QRCODE_PROFILE) {
+      return (
+        <NeedAuth>
+          <QRCodeView profileId={qrcodeProfileId} />
+        </NeedAuth>
+      );
     }
 
     return (
@@ -183,6 +207,7 @@ export default connect(
         ...profileActions,
         goExport: stateActions.goExportProfile,
         goImport: stateActions.goImportProfile,
+        goQRCode: stateActions.goQRCodeProfile,
         goBack: stateActions.goBack
       },
       dispatch
