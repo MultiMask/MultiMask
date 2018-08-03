@@ -40,11 +40,10 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
 
 // TODO: think about more logical get accounts
 const sendAccountsInfo = (App, sendResponse) => {
-  getAccountsInfo(App).then(payload => {
+  App.io.accounts.getAccountsInfo().then(payload => {
     sendResponse({
       type: ACCOUNT_INFO_RESULT,
       payload
     });
   });
 };
-const getAccountsInfo = App => Promise.all(App.io.accounts.getAccounts().map(acc => acc.getInfo()));
