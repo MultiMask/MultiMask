@@ -1,4 +1,6 @@
 import {
+  PROFILE_GET,
+  PROFILE_GET_RESULT,
   PROFILE_ADD,
   PROFILE_REMOVE,
   PROFILE_EXPORT,
@@ -13,6 +15,19 @@ import {
 
 export default ({ App }) => ({ type, payload }, sendResponse) => {
   switch (type) {
+    case PROFILE_GET: {
+      App.io.profile.export(payload.id).then(encodedProfile => {
+        sendResponse({
+          type: PROFILE_GET_RESULT,
+          payload: {
+            encodedProfile
+          }
+        });
+      });
+
+      break;
+    }
+
     case PROFILE_GETLIST: {
       sendData({ sendResponse, App });
       break;

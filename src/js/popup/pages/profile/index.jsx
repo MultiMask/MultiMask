@@ -23,7 +23,7 @@ import QRCodeView from './QRCodeView';
 class Profiles extends React.Component {
   state = {
     editProfileId: false,
-    qrcodeProfileId: '',
+    qrcodeProfileId: null,
     profileName: '',
     handleExportProfile: null,
     encryptedProfile: null

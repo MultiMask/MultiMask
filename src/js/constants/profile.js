@@ -1,3 +1,6 @@
+export const PROFILE_GET = 'profile:get';
+export const PROFILE_GET_RESULT = 'profile:get:result';
+
 export const PROFILE_ADD = 'profile:add';
 export const PROFILE_REMOVE = 'profile:remove';
 

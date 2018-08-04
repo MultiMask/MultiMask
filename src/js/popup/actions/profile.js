@@ -2,6 +2,7 @@ import InternalMessage from '../../libs/InternalMessage';
 import { downloadFile } from '../helpers';
 
 import {
+  PROFILE_GET,
   PROFILE_ADD,
   PROFILE_REMOVE,
   PROFILE_EXPORT,
@@ -16,6 +17,14 @@ import {
 import accountActions from './account';
 
 const ProfileActions = {
+  getProfile: id => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_GET, { id })
+      .send()
+      .then(({ payload: { encodedProfile } }) => {
+        return encodedProfile;
+      });
+  },
+
   getList: () => (dispatch, getState) => {
     InternalMessage.signal(PROFILE_GETLIST)
       .send()
