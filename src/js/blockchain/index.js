@@ -33,10 +33,5 @@ export default {
         chainId: 4
       }
     ]
-  },
-  DVC: {
-    name: 'Devcoin',
-    sign: 'DVC',
-    network: []
   }
 };
