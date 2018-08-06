@@ -36,6 +36,15 @@ export default class AccountController {
     }
   };
 
+  import = (pass, accountRaw) => {
+    if (!this.getAccountById(accountRaw.id)) {
+      const accountModel = AccountFactory.create(accountRaw);
+
+      AccountFactory.save(pass, accountModel);
+      this.addAccountInstance(accountModel);
+    }
+  };
+
   getAccountById(id) {
     return this.accounts.find(account => account.id === id);
   }
@@ -53,7 +62,7 @@ export default class AccountController {
       const account = this.getAccountById(id);
 
       if (account) {
-        const seed = account.wallet.seed;
+        const seed = account.getSeed();
 
         return encode(this.App.getPass(), seed);
       }

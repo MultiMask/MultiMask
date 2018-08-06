@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import FormLayout from './FormLayout';
+import styled, { css } from 'react-emotion';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
+import Typography from '../../ui/Typography';
+import Button from '../../ui/Button';
 
 class Wallet extends React.Component {
   state = {
@@ -15,6 +18,7 @@ class Wallet extends React.Component {
   };
 
   handleCheck = e => {
+    e.preventDefault();
     this.createAccount();
     this.getInfo();
   };
@@ -30,7 +34,9 @@ class Wallet extends React.Component {
       this.account = AccountFactory.create({
         blockchain,
         network,
-        seed: this.state.seed
+        secret: {
+          seed: this.state.seed
+        }
       });
     } catch (e) {
       this.setState({
@@ -52,46 +58,35 @@ class Wallet extends React.Component {
   }
 
   render() {
+    const { address, success, balance, error } = this.state;
+
     return (
-      <div className="creation">
-        <div>
+      <FormLayout onSubmit={this.handleCheck} title="Input seed:" onBack={this.props.onBack} submitButtonTitle="Check">
+        <Textaria name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
+        {this.state.success && (
           <div>
-            <h3>Input seed:</h3>
-            <textarea name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols="40" rows="5" />
+            <Typography variant="subheading" color="main">
+              Address:
+            </Typography>
+            <Typography color="secondary">{address}</Typography>
+            <Typography variant="subheading" color="main">
+              Balance:
+            </Typography>
+            <Typography color="secondary">{balance}</Typography>
           </div>
-          {this.state.address &&
-            this.state.balance && (
-              <div>
-                <div>
-                  <dl>
-                    <dd>Address:</dd>
-                    <dt>{this.state.address}</dt>
-                  </dl>
-                </div>
-                <div>
-                  <dl>
-                    <dd>Balance:</dd>
-                    <dt>{this.state.balance}</dt>
-                  </dl>
-                </div>
-              </div>
-            )}
-          {this.state.error && <div>{this.state.error}</div>}
-          <div>
-            <button onClick={this.props.onBack} className="btn">
-              Back
-            </button>
-            <button onClick={this.handleCheck} className="login__create btn primary">
-              Check
-            </button>
-            {this.state.success && (
-              <button onClick={this.handleSave} className="login__create btn primary">
-                Import
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+        )}
+        {error && <div>{error}</div>}
+        {success && (
+          <Button
+            className={css`
+              margin-top: 50px;
+            `}
+            onClick={this.handleSave}
+          >
+            Import
+          </Button>
+        )}
+      </FormLayout>
     );
   }
 }
@@ -106,3 +101,10 @@ export default connect(
       dispatch
     )
 )(Wallet);
+
+const Textaria = styled.textarea`
+  outline: none;
+  border: 1px solid ${props => props.theme.colors.secondary};
+  border-radius: 5px;
+  resize: none;
+`;

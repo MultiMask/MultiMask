@@ -2,18 +2,25 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { css } from 'emotion';
 import Typography from '../../ui/Typography';
 import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
-
+import { STATE_VIEW_EXPORT_PROFILE, STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
+import NeedAuth from '../../ui/components/NeedAuth';
+import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from './../../actions/profile';
+import stateActions from '../../actions/state';
+import { readFile, formToJson } from '../../helpers/index';
 
 class Profiles extends React.Component {
   state = {
     editProfileId: false,
-    profileName: ''
+    profileName: '',
+    handleExportProfile: null,
+    encryptedProfile: null
   };
 
   componentDidMount() {
@@ -51,13 +58,58 @@ class Profiles extends React.Component {
     this.setState({ editProfileId: null });
   };
 
+  handleNeedAuthExport = exportFunc => {
+    const { goBack } = this.props;
+    const { handleExportProfile } = this.state;
+    handleExportProfile();
+    goBack();
+  };
+
+  handleConfirmPassword = handleExportProfile => () => {
+    const { goExport } = this.props;
+
+    this.setState({ handleExportProfile });
+    goExport();
+  };
+
+  handleNeedAuthImport = e => {
+    e.preventDefault();
+    const { encryptedProfile } = this.state;
+
+    const json = formToJson(e.target);
+    this.pass = json.password;
+
+    this.props.import(this.pass, encryptedProfile);
+    this.props.goBack();
+
+    this.setState({ encryptedProfile: null });
+  };
+
+  handleImportProfile = () => {
+    const { goImport } = this.props;
+
+    const onImport = encryptedProfile => {
+      this.setState({ encryptedProfile });
+      goImport();
+    };
+
+    readFile(onImport);
+  };
+
+  handleSelect = profileId => event => {
+    event.preventDefault();
+    const { select } = this.props;
+
+    select(profileId);
+  };
+
   get list() {
-    const { list } = this.props;
+    const { list, selectedProfileId } = this.props;
     const { editProfileId, profileName } = this.state;
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
-      const onExport = this.onExport.bind(this, profile.id);
+      const handleExportProfile = this.onExport.bind(this, profile.id);
       const isEdit = editProfileId === profile.id;
       return (
         <Item key={profile.id}>
@@ -70,7 +122,14 @@ class Profiles extends React.Component {
               onBlur={this.handleOnBlurInput(profile, profileName)}
             />
           ) : (
-            <Typography color="main" variant="subheading">
+            <Typography
+              className={css`
+                cursor: pointer;
+              `}
+              onClick={this.handleSelect(profile.id)}
+              color={profile.id === selectedProfileId ? 'primary' : 'main'}
+              variant="subheading"
+            >
               {profile.name}
             </Typography>
           )}
@@ -79,7 +138,7 @@ class Profiles extends React.Component {
           </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
-            <MenuItem onClick={onExport}>Export</MenuItem>
+            <MenuItem onClick={this.handleConfirmPassword(handleExportProfile)}>Export</MenuItem>
             <MenuItem onClick={onRemove}>Delete</MenuItem>
           </Menu>
         </Item>
@@ -88,7 +147,16 @@ class Profiles extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    const { view } = this.props;
+
+    if (view === STATE_VIEW_EXPORT_PROFILE) {
+      return <NeedAuth onSubmit={this.handleNeedAuthExport} />;
+    }
+
+    if (view === STATE_VIEW_IMPORT_PROFILE) {
+      return <AuthForm handleSubmit={this.handleNeedAuthImport} />;
+    }
+
     return (
       <Wrapper>
         <List>{this.list}</List>
@@ -96,7 +164,7 @@ class Profiles extends React.Component {
           <Button outlined onClick={this.onAdd}>
             Add
           </Button>
-          <Button>Import</Button>
+          <Button onClick={this.handleImportProfile}>Import</Button>
         </Bottom>
       </Wrapper>
     );
@@ -104,10 +172,21 @@ class Profiles extends React.Component {
 }
 
 export default connect(
-  ({ profile }) => ({
-    list: profile.list
+  ({ profile, state }) => ({
+    list: profile.list,
+    selectedProfileId: profile.selectedId,
+    view: state.view
   }),
-  dispatch => bindActionCreators(profileActions, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        ...profileActions,
+        goExport: stateActions.goExportProfile,
+        goImport: stateActions.goImportProfile,
+        goBack: stateActions.goBack
+      },
+      dispatch
+    )
 )(Profiles);
 
 const Wrapper = styled.div`

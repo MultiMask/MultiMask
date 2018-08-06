@@ -1,6 +1,26 @@
 import 'babel-core/register';
 import 'babel-polyfill';
 
-import controller from './background/controller';
+import { LocalStream } from 'extension-streams';
+import log from 'loglevel';
 
-controller.init();
+import listeners from './background/listeners';
+import App from './models/app';
+
+class Controller {
+  constructor() {
+    // eslint-disable-next-line
+    log.setLevel(logLevel);
+
+    App.bootstrap();
+    this.setupInternalMessaging({ App });
+  }
+
+  setupInternalMessaging(opts) {
+    const watcher = listeners(opts);
+
+    LocalStream.watch(watcher);
+  }
+}
+
+new Controller();

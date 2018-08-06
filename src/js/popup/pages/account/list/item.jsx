@@ -42,8 +42,6 @@ class AccountFastView extends React.Component {
         </div>
       </div>
     );
-
-    return null;
   }
 }
 

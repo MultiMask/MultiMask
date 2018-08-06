@@ -1,5 +1,5 @@
 import needauth from './needauth';
 
-export default ({ messaging, wallet, App }) => {
-  needauth({ messaging, wallet, App });
-}
+export default opts => (...args) => {
+  needauth(opts)(...args);
+};

@@ -1,71 +1,53 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { processForm } from './../../helpers';
-
 import ChooseNetwork from './chooseNetwork';
 import CreateWallet from './create';
 import ImportWallet from './import';
 
+import TypeImportingStep from './TypeImportingStep';
+
 class WalletCreate extends React.Component {
   state = {
-    step: 0
+    type: ''
   };
 
-  onSubmit = e => {
-    const data = processForm(e);
+  onNext = () => {
+    const { step } = this.state;
 
-    this.setState({ step: data.step });
+    this.setState({ step: step });
+  };
+
+  handleChooseTypeImporting = type => {
+    this.setState({ type });
+  };
+
+  handleChange = event => {
+    this.setState({ step: event.target.value });
   };
 
   goBack = () => {
-    this.setState({ step: 0 });
+    this.setState({ type: '' });
   };
 
   render() {
-    if (this.state.step == 1) {
+    if (this.state.type === 'create') {
       return (
-        <ChooseNetwork>
-          <CreateWallet onBack={this.goBack} />
+        <ChooseNetwork onBack={this.goBack}>
+          <CreateWallet />
         </ChooseNetwork>
       );
     }
 
-    if (this.state.step == 2) {
+    if (this.state.type === 'import') {
       return (
-        <ChooseNetwork>
-          <ImportWallet onBack={this.goBack} />
+        <ChooseNetwork onBack={this.goBack}>
+          <ImportWallet />
         </ChooseNetwork>
       );
     }
 
-    return (
-      <div className="creation">
-        <form onSubmit={this.onSubmit}>
-          <div>
-            <label>
-              <input type="radio" value="1" name="step" />
-              Create Wallet
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="radio" value="2" name="step" />
-              Import Seed Phrase
-            </label>
-          </div>
-          {/* <div>
-            <label>
-              <input type="radio" value="3" name="step" />
-              Import Private Key
-            </label>
-          </div> */}
-          <div>
-            <button type="submit">Next</button>
-          </div>
-        </form>
-      </div>
-    );
+    return <TypeImportingStep onSubmit={this.handleChooseTypeImporting} />;
   }
 }
 

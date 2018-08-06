@@ -1,12 +1,17 @@
+import uuid from 'uuid/v4';
+import log from 'loglevel';
+
 export default class Account {
-  constructor({ wallet, network, blockchain, name, seed, id }) {
-    this.network = network;
+  constructor({ wallet, network, blockchain, name, secret = { seed: null }, id = uuid() }) {
     this.wallet = wallet;
+
+    this.network = network;
     this.blockchain = blockchain;
     this.id = id;
+    this.secret = secret;
 
     this.name = name ? name : this.createName();
-    this.create(seed);
+    this.secret.seed = this.create(secret.seed);
   }
 
   createName() {
@@ -14,11 +19,11 @@ export default class Account {
   }
 
   create(seed) {
-    this.wallet.create(seed);
+    return this.wallet.create(seed);
   }
 
   getSeed() {
-    return this.wallet.getSeed();
+    return this.secret.seed;
   }
 
   getInfo() {
@@ -32,6 +37,7 @@ export default class Account {
   }
 
   sendTX(tx) {
+    log.info('Sending tx > ', this.blockchain, this.network, this.name, tx);
     return this.wallet.createTX(tx);
   }
 
@@ -42,7 +48,7 @@ export default class Account {
       blockchain: this.blockchain,
       network: this.network,
       secret: {
-        seed: this.wallet.seed
+        seed: this.secret.seed
       }
     };
   }

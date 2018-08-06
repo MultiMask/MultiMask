@@ -1,9 +1,12 @@
 import React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
-import messaging from './message';
-import { ACCOUNT_INFO, ACCOUNT_INFO_RESULT } from './../constants/account';
-import { TX_PAYMENT_GET, TX_PAYMENT_RESULT, TX_CREATE } from './../constants/tx';
+
+import InternalMessage from '../libs/InternalMessage';
+import { AUTH_IS_READY } from './../constants/auth';
+import { ACCOUNT_INFO } from './../constants/account';
+import { TX_PAYMENT_GET, TX_SEND } from './../constants/tx';
+
 import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
 import Select from '../popup/ui/Select';
@@ -23,6 +26,7 @@ export default class App extends React.Component {
 
     this.state = {
       isLoaded: false,
+      isReady: false,
       tx: {},
       accounts: [],
       account: {},
@@ -31,21 +35,28 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    messaging.send({
-      type: TX_PAYMENT_GET
-    });
+    InternalMessage.signal(AUTH_IS_READY)
+      .send()
+      .then(({ payload: { isReady } }) => {
+        if (!isReady) throw new Error('You need to authorize');
 
-    messaging.on(TX_PAYMENT_RESULT, data => {
-      this.setTxInfo(data);
-    });
+        return InternalMessage.signal(ACCOUNT_INFO).send();
+      })
+      .then(({ payload: accounts }) => {
+        this.setAccounts(accounts);
 
-    messaging.send({
-      type: ACCOUNT_INFO
-    });
-
-    messaging.on(ACCOUNT_INFO_RESULT, data => {
-      this.setAccounts(data);
-    });
+        return InternalMessage.signal(TX_PAYMENT_GET).send();
+      })
+      .then(({ payload }) => {
+        this.setTxInfo(payload[0]);
+      })
+      .catch(e => {
+        this.setState(state => ({
+          ...state,
+          isLoaded: true,
+          isReady: false
+        }));
+      });
   }
 
   setTxInfo(data) {
@@ -55,13 +66,20 @@ export default class App extends React.Component {
     }));
   }
 
-  setAccounts(data) {
+  setAccounts(accounts) {
     let account;
-    if (data && data.length > 0) {
-      account = data[0];
+    if (accounts && accounts.length > 0) {
+      account = accounts[0];
     }
 
-    this.setState({ accounts: data, account, selectValue: this.getOption(account), isLoaded: true });
+    this.setState(state => ({
+      ...state,
+      accounts,
+      account,
+      selectValue: this.getOption(account),
+      isLoaded: true,
+      isReady: true
+    }));
   }
 
   getOption = account => {
@@ -74,22 +92,22 @@ export default class App extends React.Component {
   };
 
   onSubmit = payload => {
-    const { to, amount, data } = payload;
-    const { account } = this.state;
+    const { account, tx } = this.state;
+    const { to, amount, data } = tx;
 
-    messaging.send({
-      type: TX_CREATE,
-      payload: {
-        name: account.name,
-        tx: {
-          to,
-          amount,
-          data
-        }
+    InternalMessage.payload(TX_SEND, {
+      id: account.id,
+      tx: {
+        to,
+        amount,
+        data
       }
-    });
-
-    window.close();
+    })
+      .send()
+      .then(() => {
+        // TODO: show txhash and loading to update info about it
+        window.close();
+      });
   };
 
   onReject = () => {
@@ -107,11 +125,17 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log(this.props, 'props');
-    console.log(this.state, 'state');
-
-    //TODO: return loader
+    // TODO: return loader
     if (!this.state.isLoaded) return null;
+
+    // TODO: style this caption
+    if (!this.state.isReady) {
+      return (
+        <DialogLayout>
+          <Typography color="main">You need to authorize</Typography>
+        </DialogLayout>
+      );
+    }
 
     const {
       account: {

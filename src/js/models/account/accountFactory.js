@@ -4,42 +4,31 @@ import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
 import log from 'loglevel';
 
-import BitcoinWallet from './wallet/bitcoin';
 import Account from '.';
+import BitcoinWallet from './wallet/bitcoin';
+import EthWallet from './wallet/eth';
 
 const createWallet = ({ blockchain, network }) => {
   if (blockchain === networks.BTC.sign) {
     return new BitcoinWallet(network);
   }
+
+  if (blockchain === networks.ETH.sign) {
+    return new EthWallet({ network });
+  }
 };
 
 export default {
-  create({ blockchain, network, seed, wallet }) {
-    let _wallet = createWallet({ blockchain, network });
-    let _seed = seed ? seed : wallet ? wallet.seed : null;
+  create({ name, blockchain, network, id, secret }) {
+    let wallet = createWallet({ blockchain, network });
 
-    return new Account({ wallet: _wallet, network, blockchain, seed: _seed, id: uuid() });
-  },
-
-  restore({ name, wallet, blockchain, network, id }) {
-    log.debug('Restore wallet >', name, blockchain, network);
-
-    let walletInstance = createWallet({ blockchain, network });
-
-    return new Account({
-      wallet: walletInstance,
-      seed: wallet.seed,
-      name,
-      blockchain,
-      network,
-      id
-    });
+    return new Account({ wallet, name, network, blockchain, secret, id });
   },
 
   save(pass, account) {
     log.debug('save account > ', pass, account);
     const id = account.id;
-    const str = JSON.stringify(account);
+    const str = JSON.stringify(account.serialize());
     // eslint-disable-next-line
     const encodedWallet = encryptEntities ? encode(pass, str) : str;
 
@@ -60,7 +49,7 @@ export default {
 
       log.debug('Account Load > ', decoded);
 
-      return this.restore(decoded);
+      return this.create(decoded);
     });
   },
 

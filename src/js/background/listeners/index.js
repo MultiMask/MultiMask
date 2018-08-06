@@ -1,3 +1,5 @@
+import log from 'loglevel';
+
 import account from './account';
 import auth from './auth';
 import ui from './ui';
@@ -5,11 +7,18 @@ import tx from './tx';
 import profile from './profile';
 import settings from './settings';
 
-export default ({ messaging, wallet, App }) => {
-  account({ messaging, wallet, App });
-  auth({ messaging, wallet, App });
-  ui({ messaging, wallet, App });
-  tx({ messaging, wallet, App });
-  profile({ messaging, wallet, App });
-  settings({ messaging, App });
+import eth from './eth';
+
+export default opts => (...args) => {
+  log.info('Background receive > ', args[0]);
+
+  auth(opts)(...args);
+  account(opts)(...args);
+  profile(opts)(...args);
+  settings(opts)(...args);
+
+  ui(opts)(...args);
+
+  tx(opts)(...args);
+  // eth(opts)(...args);
 };

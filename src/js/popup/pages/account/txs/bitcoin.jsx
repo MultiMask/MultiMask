@@ -1,7 +1,7 @@
-import React from "react";
-import { format } from "date-fns";
+import React from 'react';
+import { format } from 'date-fns';
 
-const DATE_FORMAT = "D MMMM YYYY HH:mm";
+const DATE_FORMAT = 'D MMMM YYYY HH:mm';
 
 export default class BitcoinTXS extends React.Component {
   findAmount({ out, addr }) {
@@ -21,9 +21,7 @@ export default class BitcoinTXS extends React.Component {
           <div className="tx_date">{format(tx.time * 1000, DATE_FORMAT)}</div>
           <div className="tx_amount">
             <span className="tx_amount_title">Amount:</span>
-            <span className="tx_amount_value">
-              {this.findAmount({ out: tx.out, addr: account.info.address })}
-            </span>
+            <span className="tx_amount_value">{this.findAmount({ out: tx.out, addr: account.info.address })}</span>
             <span>BTC</span>
           </div>
         </div>

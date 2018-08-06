@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import styled from 'react-emotion';
+import FormLayout from './FormLayout';
 import actions from './../../actions/account';
 import AccountFactory from './../../../models/account/accountFactory';
 
@@ -22,24 +23,22 @@ class Wallet extends React.Component {
     this.setState({ seed: this.account.getSeed() });
   }
 
-  handleSave = () => {
-    this.props.create(this.account);
+  handleSave = e => {
+    e.preventDefault();
+    this.props.create(this.account.serialize());
   };
 
   render() {
     return (
-      <div className="creation">
-        <div>
-          <h3>Save seed save:</h3>
-          <div>{this.state.seed}</div>
-        </div>
-        <button onClick={this.props.onBack} className="btn">
-          Back
-        </button>
-        <button onClick={this.handleSave} className="login__create btn primary">
-          I saved Seed
-        </button>
-      </div>
+      <FormLayout
+        onSubmit={this.handleSave}
+        title="Save your Mnemonic Phrase:"
+        titleAlign="center"
+        onBack={this.props.onBack}
+        submitButtonTitle="I saved Seed"
+      >
+        <Content>{this.state.seed}</Content>
+      </FormLayout>
     );
   }
 }
@@ -54,3 +53,12 @@ export default connect(
       dispatch
     )
 )(Wallet);
+
+const Content = styled.div`
+  font-size: 18px;
+  padding: 20px;
+  background: #eee;
+  border: 1px solid #ddd;
+  text-align: center;
+  border-radius: 5px;
+`;
