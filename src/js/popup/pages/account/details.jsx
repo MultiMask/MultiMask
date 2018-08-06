@@ -44,7 +44,7 @@ class AccountInfo extends React.Component {
   };
 
   render() {
-    const account = this.props.account;
+    const { account, settings } = this.props;
 
     return (
       <React.Fragment>
@@ -80,6 +80,7 @@ class AccountInfo extends React.Component {
               </Button>
             </div>
           }
+          settings={settings}
         />
         <TXContainer>
           <TXList data={account} />
@@ -91,7 +92,8 @@ class AccountInfo extends React.Component {
 
 export default connect(
   state => ({
-    account: getCurrentWallet(state)
+    account: getCurrentWallet(state),
+    settings: state.settings
   }),
   dispatch =>
     bindActionCreators(

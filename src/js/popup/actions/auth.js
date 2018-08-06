@@ -17,6 +17,7 @@ import { getPass } from './../../models/getter';
 
 import StateActions from './state';
 import AccountActions from './account';
+import SettingActions from './settings';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
@@ -89,6 +90,7 @@ const AuthActions = {
   success: () => (dispatch, getState) => {
     StateActions.goMain()(dispatch, getState);
     AccountActions.getInfo()(dispatch, getState);
+    SettingActions.getPrices()(dispatch, getState);
   },
 
   fail: () => (dispatch, getState) => {

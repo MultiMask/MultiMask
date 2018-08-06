@@ -11,58 +11,46 @@ class Settings extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { settings: { show_total: true, currencies_data_provider: 3 } };
-
-    this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'currencies_data_provider');
+    this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'price_provider');
   }
 
-  currenciesDataProviders = 'some data'.split('').map((val, key) => ({
-    value: key,
-    label: val
-  }));
-
   get selectedDataProvider() {
-    const { settings } = this.state;
+    const { settings } = this.props;
+    const { price_providers = [] } = settings;
 
-    return this.currenciesDataProviders.find(i => i.value === settings.currencies_data_provider);
+    return price_providers.find(i => i.value === settings.price_provider);
   }
 
   onChange = e => {
     const { target } = e;
 
-    this.setState(state => {
-      const nextState = { ...state };
+    if (typeof this.props.setSetting !== 'function') return;
 
-      switch (target.name) {
-        case 'show_total':
-          nextState.settings[target.name] = target.checked;
-          break;
-        default:
-          nextState.settings[target.name] = target.value;
-      }
-
-      return nextState;
-    });
-  };
-
-  onChangeSelect = (name, nextProvider) => {
-    if (name && nextProvider) {
-      this.setState(state => {
-        const nextState = { ...state };
-
-        nextState.settings[name] = parseInt(nextProvider.value, 10);
-
-        return nextState;
-      });
+    switch (target.name) {
+      case 'show_total':
+        typeof this.props.setSetting(target.name, target.checked);
+        break;
+      default:
     }
   };
 
+  onChangeSelect = (name, nextProvider) => {
+    // if (name && nextProvider) {
+    //   this.setState(state => {
+    //     const nextState = { ...state };
+    //     nextState.settings[name] = parseInt(nextProvider.value, 10);
+    //     return nextState;
+    //   });
+    // }
+  };
+
   get debug() {
-    return <pre>{JSON.stringify(this.state, null, 4)}</pre>;
+    return <pre>{JSON.stringify({ state: this.state, props: this.props }, null, 4)}</pre>;
   }
 
   render() {
-    const { settings } = this.state;
+    const { settings } = this.props;
+
     return (
       <Form>
         <Section>
@@ -74,7 +62,7 @@ class Settings extends Component {
             Currency data provider
           </Typography>
           <Select
-            options={this.currenciesDataProviders}
+            options={this.props.settings.price_providers}
             value={this.selectedDataProvider}
             onChange={this.onChangeCurrenciesDataProvider}
           />
@@ -85,8 +73,14 @@ class Settings extends Component {
 }
 
 export default connect(
-  () => ({}),
-  dispatch => bindActionCreators(settingsActions, dispatch)
+  ({ settings }) => ({ settings }),
+  dispatch =>
+    bindActionCreators(
+      {
+        setSetting: settingsActions.setSetting
+      },
+      dispatch
+    )
 )(Settings);
 
 const Form = styled.div`
