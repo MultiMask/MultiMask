@@ -5,6 +5,7 @@ import auth from './auth';
 import ui from './ui';
 import tx from './tx';
 import profile from './profile';
+import settings from './settings';
 
 import eth from './eth';
 
@@ -14,6 +15,7 @@ export default opts => (...args) => {
   auth(opts)(...args);
   account(opts)(...args);
   profile(opts)(...args);
+  settings(opts)(...args);
 
   ui(opts)(...args);
 

@@ -91,7 +91,7 @@ class Send extends React.Component {
   };
 
   render() {
-    const { account } = this.props;
+    const { account, settings } = this.props;
     const {
       errors: { to: toError, amount: amountError },
       to,
@@ -101,7 +101,7 @@ class Send extends React.Component {
 
     return (
       <React.Fragment>
-        <Wallet data={account} />
+        <Wallet data={account} settings={settings} />
         <Form onSubmit={this.handleDone}>
           <Typography variant="subheading" color="main" className={styles.title}>
             Send transaction
@@ -143,7 +143,8 @@ class Send extends React.Component {
 
 export default connect(
   state => ({
-    account: getCurrentWallet(state)
+    account: getCurrentWallet(state),
+    settings: state.settings
   }),
   dispatch => bindActionCreators(txActions, dispatch)
 )(Send);
