@@ -12,13 +12,13 @@ let signToIdEnum = {};
 })(signToIdEnum);
 
 export default class CoinMarketCapPriceProvider extends basePriceProvider {
-  getBCPrice(sign, convertTo) {
+  getBCPrice(sign, params) {
     if (!signToIdEnum[sign]) {
       return Promise.reject('');
     }
 
     return new Promise((resolve, reject) => {
-      this.getTickerById(signToIdEnum[sign], convertTo)
+      this.getTickerById(signToIdEnum[sign], params)
         .then(ticker => {
           if (ticker && ticker.data && ticker.data.quotes) {
             let prices = {};
@@ -27,8 +27,13 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
               prices = { ...prices, ...{ USD: ticker.data.quotes.USD.price } };
             }
 
-            if (convertTo && ticker.data.quotes[convertTo] && ticker.data.quotes[convertTo].price) {
-              prices = { ...prices, ...{ [convertTo]: ticker.data.quotes[convertTo].price } };
+            if (
+              params &&
+              params.convert &&
+              ticker.data.quotes[params.convert] &&
+              ticker.data.quotes[params.convert].price !== void 0
+            ) {
+              prices = { ...prices, ...{ [params.convert]: ticker.data.quotes[params.convert].price } };
             }
 
             resolve(prices);
@@ -42,13 +47,13 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
     });
   }
 
-  getTickerById(tickerId, convertTo) {
+  getTickerById(tickerId, params) {
     return new Promise((resolve, reject) => {
-      const params = [];
-      convertTo && params.push(`convert=${convertTo}`);
+      const prs = [];
+      params && params.convert && prs.push(`convert=${params.convert}`);
 
       axios
-        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/${params.length ? `?${params.join(',')}` : ''}`)
+        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/${prs.length ? `?${prs.join(',')}` : ''}`)
         .then(res => {
           if (res && res.data) {
             resolve(res.data);

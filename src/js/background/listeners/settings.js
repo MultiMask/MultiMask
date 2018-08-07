@@ -15,7 +15,7 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
 
         App.io.settings.usePriceProvider();
 
-        await Promise.all(signs.map(sign => App.io.settings.loadPrice(sign, 'BTC')))
+        await Promise.all(signs.map(sign => App.io.settings.loadPrice(sign, { convert: 'BTC' })))
           .then(res => {
             if (Array.isArray(res)) {
               prices = res.reduce((acc, v, i) => {
