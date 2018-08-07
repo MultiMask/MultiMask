@@ -81,10 +81,4 @@ export default class MultiWeb {
   getWeb3Provider() {
     return this.web3;
   }
-
-  check() {
-    _send('check', { payload: '2323' }).then(res => {
-      console.log('take result', res);
-    });
-  }
 }

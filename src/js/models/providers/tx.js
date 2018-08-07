@@ -10,17 +10,24 @@ class TXModel {
     this.resolver = resolver;
   }
 
-  update(data) {
-    this.data = {
-      ...this.data,
+  updateTX(data) {
+    this.data.tx = {
+      ...this.data.tx,
       ...data
     };
 
     return this;
   }
 
+  toJSON() {
+    return {
+      data: this.data,
+      id: this.id
+    };
+  }
+
   resolve() {
-    this.resolver(this.data);
+    this.resolver(this.data.tx);
 
     return this;
   }
@@ -55,7 +62,7 @@ export default class TxController {
   static confirm(id, data) {
     const tx = find(id);
     if (tx) {
-      tx.update(data).resolve();
+      tx.updateTX(data).resolve();
     }
   }
 

@@ -1,11 +1,13 @@
 import React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
+import web3 from 'web3';
 
+import networks from './../blockchain';
 import InternalMessage from '../libs/InternalMessage';
 import { AUTH_IS_READY } from './../constants/auth';
 import { ACCOUNT_INFO } from './../constants/account';
-import { TX_PAYMENT_GET, TX_SEND } from './../constants/tx';
+import { TX_PAYMENT_GET, TX_SEND, TX_APPROVE_RESULT } from './../constants/tx';
 
 import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
@@ -48,9 +50,10 @@ export default class App extends React.Component {
         return InternalMessage.signal(TX_PAYMENT_GET).send();
       })
       .then(({ payload }) => {
-        this.setTxInfo(payload[0]);
+        this.setTxInfo(payload);
       })
       .catch(e => {
+        console.log(e);
         this.setState(state => ({
           ...state,
           isLoaded: true,
@@ -59,10 +62,22 @@ export default class App extends React.Component {
       });
   }
 
-  setTxInfo(data) {
+  setTxInfo(payload) {
+    const accounts = this.state.accounts.filter(acc => acc.blockchain === payload.data.blockchain);
+    const account = payload.data.tx.from
+      ? accounts.find(acc => acc.info.address === payload.data.tx.from)
+      : accounts[0];
+
+    console.log('receive tx > ', payload);
+
     this.setState(state => ({
       ...state,
-      tx: data.tx
+      tx: payload.data.tx,
+      txId: payload.id,
+      blockchain: payload.data.blockchain,
+      accounts,
+      account,
+      selectValue: this.getOption(account)
     }));
   }
 
@@ -92,16 +107,11 @@ export default class App extends React.Component {
   };
 
   onSubmit = payload => {
-    const { account, tx } = this.state;
-    const { to, amount, data } = tx;
+    const { tx, txId } = this.state;
 
-    InternalMessage.payload(TX_SEND, {
-      id: account.id,
-      tx: {
-        to,
-        amount,
-        data
-      }
+    InternalMessage.payload(TX_APPROVE_RESULT, {
+      id: txId,
+      tx
     })
       .send()
       .then(() => {
@@ -122,6 +132,19 @@ export default class App extends React.Component {
     }
 
     return [];
+  }
+
+  get amount() {
+    const { tx, blockchain } = this.state;
+
+    if (blockchain === networks.BTC.sign) {
+      return `${tx.amount / 1e8} BTC`;
+    }
+    if (blockchain === networks.ETH.sign) {
+      return `${web3.utils.fromWei(tx.value, 'ether')} ETH`;
+    }
+
+    return null;
   }
 
   render() {
@@ -169,10 +192,10 @@ export default class App extends React.Component {
         <Typography color="main" variant="subheading">
           Send TX with params:
         </Typography>
-        <Info label="From:" content={[address, `${balance} ${blockchain}`, '? USD']} />
+        <Info label="From:" content={[address, `${balance} ${blockchain}`]} />
         <Info label="To:" content={to} />
         <Divider />
-        <Info label="Amount:" center content={[`${amount / 1e8} ETH`, '? USD']} />
+        <Info label="Amount:" center content={[this.amount]} />
         <Divider />
         {data && <Info label="Data:" content={data} />}
         <Actions>

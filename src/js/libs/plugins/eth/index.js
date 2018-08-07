@@ -11,15 +11,13 @@ export default sendFn => {
     new HookedWalletSubprovider({
       getAccounts: function(cb) {
         sendFn(ETH_GET_ACCOUNTS).then(({ payload }) => {
-          // console.log('result', payload);
           cb(null, payload);
         });
-        // console.log('get accounts', cb);
-        // cb(null, []);
       },
       approveTransaction: function(txdata, cb) {
         sendFn(ETH_APPROVE_TX, txdata).then(({ payload }) => {
-          console.log('approveTransaction', payload, cb);
+          // console.log('approveTransaction', payload, cb);
+          cb(null, payload);
         });
       },
       signTransaction: function(txdata, cb) {

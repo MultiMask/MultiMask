@@ -16,8 +16,6 @@ export default ({ App }) => {
   const settingsController = new SettingsController({ App });
   const ethController = new EthController({ accountController });
 
-  console.log(ethController);
-
   return {
     accounts: accounts({ App, profileController }),
     auth: auth({ App, profileController }),
