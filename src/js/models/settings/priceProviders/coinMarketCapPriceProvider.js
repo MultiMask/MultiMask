@@ -53,7 +53,7 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
       params && params.convert && prs.push(`convert=${params.convert}`);
 
       axios
-        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/${prs.length ? `?${prs.join(',')}` : ''}`)
+        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/${prs.length ? `?${prs.join('&')}` : ''}`)
         .then(res => {
           if (res && res.data) {
             resolve(res.data);
