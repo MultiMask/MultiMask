@@ -1,19 +1,30 @@
+import logLevel from 'loglevel';
+import {
+  SETTINGS_LOAD_CURRENCY_PRICE,
+  SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS,
+  SETTINGS_SET_PRICES,
+  SETTINGS_SET_PRICE_DATA_PROVIDERS,
+  SETTINGS_SET_SETTING
+} from '../../constants/settings';
 import InternalMessage from '../../libs/InternalMessage';
 
-import {
-  SETTINGS_SET_PRICES,
-  SETTINGS_LOAD_CURRENCY_PRICE,
-  SETTINGS_SET_SETTING,
-  SETTINGS_SET_PRICE_DATA_PROVIDERS
-} from '../../constants/settings';
-
 const settingsActions = {
-  getPrices: () => dispatch => {
+  getPrices: () => (dispatch, getState) => {
     return InternalMessage.signal(SETTINGS_LOAD_CURRENCY_PRICE)
       .send()
       .then(result => {
-        // TODO: set prices and providers
-        console.log(result);
+        const {
+          type,
+          payload: { prices, providers }
+        } = result;
+
+        if (type === SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS && prices && Array.isArray(providers)) {
+          settingsActions.setPriceProviders(providers)(dispatch, getState);
+          settingsActions.setPrices(prices)(dispatch, getState);
+        }
+      })
+      .catch(err => {
+        logLevel.error({ err });
       });
   },
   setPrices: prices => dispatch => {
