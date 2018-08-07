@@ -21,6 +21,10 @@ export default class EthWallet {
     return seed;
   }
 
+  getAddress() {
+    return this.address;
+  }
+
   getInfo() {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txResult]) => {

@@ -24,6 +24,10 @@ export default class BitcoinWallet {
     return mnemonic.toString();
   }
 
+  getAddress() {
+    return this.address;
+  }
+
   getInfo() {
     return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
       const lastOUT = res.data.txs[0];

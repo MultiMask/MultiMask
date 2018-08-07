@@ -62,21 +62,18 @@ export default class MultiWeb {
     resolvers = [];
     _subscribe();
 
-    this.web3 = new Web3Provider(_send);
+    this.web3 = Web3Provider(_send);
   }
 
   isAuth() {}
   getUser() {}
   sendTransaction({ to, amount, data }) {
-    this._send({
-      type: TX_APPROVE,
-      payload: {
-        blockchain: networks.BTC.sign,
-        tx: {
-          to,
-          amount,
-          data
-        }
+    _send(TX_APPROVE, {
+      blockchain: networks.BTC.sign,
+      tx: {
+        to,
+        amount,
+        data
       }
     });
   }
