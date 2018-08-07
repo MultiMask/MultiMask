@@ -9,13 +9,13 @@ export default class SettingsController {
     this.App = App;
     this.priceProviders = priceProviders;
 
-    this.setPriceProvider();
+    this.usePriceProvider();
   }
 
-  loadPrice(sign) {
+  loadPrice(sign, convertTo) {
     if (!this.priceProvider) return Promise.reject('priceProvider not defined');
 
-    return this.priceProvider.getBCPrice(sign);
+    return this.priceProvider.getBCPrice(sign, convertTo);
   }
 
   getAll() {
@@ -74,7 +74,7 @@ export default class SettingsController {
     show_total: true
   };
 
-  setPriceProvider() {
+  usePriceProvider() {
     const price_provider = this.getByKey('price_provider');
 
     if (price_provider && this.priceProviders[price_provider]) {

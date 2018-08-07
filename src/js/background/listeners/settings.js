@@ -1,10 +1,10 @@
 import log from 'loglevel';
+import blockchain from '../../blockchain';
 import {
   SETTINGS_LOAD_CURRENCY_PRICE,
   SETTINGS_LOAD_CURRENCY_PRICE_FAIL,
   SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS
 } from '../../constants/settings';
-import blockchain from '../../blockchain';
 
 export default ({ App }) => async ({ type, payload }, sendResponse) => {
   switch (type) {
@@ -13,7 +13,9 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
         const signs = Object.values(blockchain).map(i => i.sign);
         let prices;
 
-        await Promise.all(signs.map(sign => App.io.settings.loadPrice(sign)))
+        App.io.settings.usePriceProvider();
+
+        await Promise.all(signs.map(sign => App.io.settings.loadPrice(sign, { convert: 'BTC' })))
           .then(res => {
             if (Array.isArray(res)) {
               prices = res.reduce((acc, v, i) => {
