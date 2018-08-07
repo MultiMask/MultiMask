@@ -1,6 +1,6 @@
 export default ({ settingsController }) => ({
-  loadPrice(sign) {
-    return settingsController.loadPrice(sign);
+  loadPrice(sign, convertTo) {
+    return settingsController.loadPrice(sign, convertTo);
   },
 
   getPriceProviders() {
@@ -13,5 +13,9 @@ export default ({ settingsController }) => ({
 
   setAll(nextSettings) {
     settingsController.setAll(nextSettings);
+  },
+
+  usePriceProvider() {
+    settingsController.usePriceProvider();
   }
 });

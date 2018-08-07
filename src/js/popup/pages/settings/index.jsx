@@ -91,7 +91,7 @@ const Form = styled.div`
   justify-content: space-between;
 `;
 
-const Section = styled.dev`
+const Section = styled.div`
   padding: 30px 0;
   text-align: ${({ centered }) => (centered ? 'center' : void 0)};
 `;

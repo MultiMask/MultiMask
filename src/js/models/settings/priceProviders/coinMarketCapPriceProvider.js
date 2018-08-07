@@ -12,24 +12,26 @@ let signToIdEnum = {};
 })(signToIdEnum);
 
 export default class CoinMarketCapPriceProvider extends basePriceProvider {
-  getBCPrice(sign) {
+  getBCPrice(sign, convertTo) {
     if (!signToIdEnum[sign]) {
       return Promise.reject('');
     }
 
     return new Promise((resolve, reject) => {
-      this.getTickerById(signToIdEnum[sign])
+      this.getTickerById(signToIdEnum[sign], convertTo)
         .then(ticker => {
-          if (
-            ticker &&
-            ticker.data &&
-            ticker.data.quotes &&
-            ticker.data.quotes.USD &&
-            ticker.data.quotes.USD.price !== void 0
-          ) {
-            resolve({
-              USD: ticker.data.quotes.USD.price
-            });
+          if (ticker && ticker.data && ticker.data.quotes) {
+            let prices = {};
+
+            if (ticker.data.quotes.USD && ticker.data.quotes.USD.price !== void 0) {
+              prices = { ...prices, ...{ USD: ticker.data.quotes.USD.price } };
+            }
+
+            if (convertTo && ticker.data.quotes[convertTo] && ticker.data.quotes[convertTo].price) {
+              prices = { ...prices, ...{ [convertTo]: ticker.data.quotes[convertTo].price } };
+            }
+
+            resolve(prices);
           } else {
             reject('incorrect ticker');
           }
@@ -40,10 +42,13 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
     });
   }
 
-  getTickerById(tickerId) {
+  getTickerById(tickerId, convertTo) {
     return new Promise((resolve, reject) => {
+      const params = [];
+      convertTo && params.push(`convert=${convertTo}`);
+
       axios
-        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/`)
+        .get(`https://api.coinmarketcap.com/v2/ticker/${tickerId}/${params.length ? `?${params.join(',')}` : ''}`)
         .then(res => {
           if (res && res.data) {
             resolve(res.data);

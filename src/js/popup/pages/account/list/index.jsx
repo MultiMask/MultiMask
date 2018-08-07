@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import getPrice from '../../../../helpers/getPrice';
+import getPriceInBTC from '../../../../helpers/getPriceInBTC';
 import stateActions from '../../../actions/state';
 import Icon from '../../../ui/components/Icon';
 import Item from './item';
@@ -9,14 +10,14 @@ import Item from './item';
 class AccountList extends React.Component {
   render() {
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {
-      let total = { balance: 0 };
+      let total = { balanceInBTC: 0 };
 
       return (
         <React.Fragment>
           <div className="Wallets">
             <div className="Wallets-Items">
               {this.props.accounts.map(account => {
-                total.balance += account.info.balance;
+                total.balanceInBTC += getPriceInBTC(this.props.settings.prices, account);
 
                 return (
                   <div key={account.name} className="Wallets-Item">
@@ -28,8 +29,10 @@ class AccountList extends React.Component {
             {this.props.settings.show_total ? (
               <div className="Wallets-Total">
                 <div className="Wallets-Label">total:</div>
-                <div className="Wallets-Value">{total.balance} BTC</div>
-                <div className="Wallets-Label">{getPrice(this.props.settings.prices, 'BTC', total.balance)} USD</div>
+                <div className="Wallets-Value">{total.balanceInBTC} BTC</div>
+                <div className="Wallets-Label">
+                  {getPrice(this.props.settings.prices, 'BTC', total.balanceInBTC)} USD
+                </div>
               </div>
             ) : null}
           </div>
