@@ -1,4 +1,8 @@
 export default ({ profileController }) => ({
+  getProfileById: id => {
+    return profileController.export(id);
+  },
+
   getData: () => {
     return profileController.getData();
   },

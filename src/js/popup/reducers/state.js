@@ -10,6 +10,7 @@ import {
   STATE_PROFILES,
   STATE_EXPORT_PROFILE,
   STATE_IMPORT_PROFILE,
+  STATE_QRCODE_PROFILE,
   STATE_VIEW_BUY,
   STATE_VIEW_INIT,
   STATE_VIEW_MAIN,
@@ -21,6 +22,7 @@ import {
   STATE_VIEW_PROFILES,
   STATE_VIEW_EXPORT_PROFILE,
   STATE_VIEW_IMPORT_PROFILE,
+  STATE_VIEW_QRCODE_PROFILE,
   STATE_VIEW_SETTINGS
 } from '../../constants/state';
 
@@ -79,6 +81,12 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         view: STATE_VIEW_IMPORT_PROFILE
+      };
+    }
+    case STATE_QRCODE_PROFILE: {
+      return {
+        ...state,
+        view: STATE_VIEW_QRCODE_PROFILE
       };
     }
     case STATE_PROFILES:
