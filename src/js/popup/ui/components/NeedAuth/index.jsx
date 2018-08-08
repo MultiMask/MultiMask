@@ -10,6 +10,10 @@ class NeedAuth extends React.Component {
     this.props.start();
   }
 
+  componentWillUnmount() {
+    this.props.start();
+  }
+
   handleSubmit = e => {
     e.preventDefault();
 

@@ -7,13 +7,15 @@ import {
   STATE_PROFILES,
   STATE_EXPORT_PROFILE,
   STATE_IMPORT_PROFILE,
+  STATE_QRCODE_PROFILE,
   STATE_EXPORTPK,
   STATE_VIEW_BUY,
   STATE_VIEW_SEND,
   STATE_VIEW_EXPORTPK,
   STATE_VIEW_SETTINGS,
   STATE_VIEW_EXPORT_PROFILE,
-  STATE_VIEW_IMPORT_PROFILE
+  STATE_VIEW_IMPORT_PROFILE,
+  STATE_VIEW_QRCODE_PROFILE
 } from './../../constants/state';
 
 const StateActions = {
@@ -58,6 +60,11 @@ const StateActions = {
       type: STATE_IMPORT_PROFILE
     });
   },
+  goQRCodeProfile: () => (dispatch, getState) => {
+    dispatch({
+      type: STATE_QRCODE_PROFILE
+    });
+  },
   goProfile: () => (dispatch, getState) => {
     dispatch({
       type: STATE_PROFILES
@@ -80,6 +87,7 @@ const StateActions = {
         break;
       case STATE_VIEW_EXPORT_PROFILE:
       case STATE_VIEW_IMPORT_PROFILE:
+      case STATE_VIEW_QRCODE_PROFILE:
         StateActions.goProfile()(dispatch, getState);
         break;
       default:
