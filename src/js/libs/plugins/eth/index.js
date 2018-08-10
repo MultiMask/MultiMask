@@ -3,6 +3,11 @@ import { ETH_GET_ACCOUNTS, ETH_APPROVE_TX, ETH_SIGN_TX } from './../../../consta
 import ProviderEngine from 'web3-provider-engine';
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js');
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js');
+const WebsocketSubprovider = require('web3-provider-engine/subproviders/websocket');
+
+// eslint-disable-next-line
+const INFURA_HTTP_URL = `https://ropsten.infura.io/v3/${infuraApiKey}`;
+const INFURA_WS_URL = 'wss://ropsten.infura.io/ws';
 
 export default sendFn => {
   const engine = new ProviderEngine();
@@ -21,15 +26,20 @@ export default sendFn => {
         });
       },
       signTransaction: function(txdata, cb) {
-        sendFn('eth:signTx');
-        console.log('signTransaction', txdata, cb);
+        sendFn(ETH_SIGN_TX, txdata).then(({ payload }) => {
+          console.log('signTransaction > ', txdata, payload);
+          cb(null, payload);
+        });
       }
     })
   );
 
   engine.addProvider(
-    new RpcSubprovider({
-      rpcUrl: 'https://ropsten.infura.io/'
+    // new RpcSubprovider({
+    //   rpcUrl: INFURA_HTTP_URL
+    // })
+    new WebsocketSubprovider({
+      rpcUrl: INFURA_WS_URL
     })
   );
 

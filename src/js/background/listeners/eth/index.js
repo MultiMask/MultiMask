@@ -1,4 +1,3 @@
-import txCtrl from '../../../models/providers/tx';
 import { ETH_APPROVE_TX, ETH_GET_ACCOUNTS, ETH_SIGN_TX } from './../../../constants/blockchains/eth';
 import networks from './../../../blockchain';
 
@@ -13,7 +12,7 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
     }
 
     case ETH_APPROVE_TX: {
-      txCtrl
+      App.io.eth
         .approveTx({
           blockchain: networks.ETH.sign,
           tx: payload
@@ -23,6 +22,22 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
             payload: data
           });
         });
+
+      break;
+    }
+
+    case ETH_SIGN_TX: {
+      App.io.eth
+        .signTx({
+          tx: payload
+        })
+        .then(data => {
+          sendResponse({
+            payload: data
+          });
+        });
+
+      break;
     }
   }
 };

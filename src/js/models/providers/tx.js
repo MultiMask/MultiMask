@@ -62,7 +62,7 @@ export default class TxController {
   static confirm(id, data) {
     const tx = find(id);
     if (tx) {
-      tx.updateTX(data).resolve();
+      return tx.updateTX(data).resolve();
     }
   }
 
