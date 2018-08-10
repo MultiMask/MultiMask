@@ -1,5 +1,3 @@
-import uuid from 'uuid/v4';
-import createWindow from '../../libs/txWindow';
 import txCtrl from './../../models/providers/tx';
 
 import { TX_APPROVE, TX_APPROVE_RESULT, TX_SEND, TX_PAYMENT_GET, TX_PAYMENT_RESULT } from './../../constants/tx';
@@ -22,6 +20,7 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     case TX_APPROVE_RESULT: {
       const { id, tx } = payload;
       txCtrl.confirm(id, tx);
+      sendResponse({});
 
       break;
     }
