@@ -53,6 +53,13 @@ export default class Engine {
     return txSerialized;
   }
 
+  signRawTx(data, privKey) {
+    const tx = new ethTx(data);
+    tx.sign(privKey);
+    const txSerialized = '0x' + tx.serialize().toString('hex');
+    return txSerialized;
+  }
+
   sendERC20Tx(privKey, amount, tokenAbi, tokenAddress, receiverAddress) {
     const senderAddress = this.getEthereumAddress(privKey);
     const contract = new Web3.eth.Contract(tokenAbi, tokenAddress);

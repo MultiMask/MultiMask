@@ -26,6 +26,10 @@ export default class Account {
     return this.secret.seed;
   }
 
+  getAddress() {
+    return this.wallet.getAddress();
+  }
+
   getInfo() {
     return this.wallet.getInfo().then(info => ({
       id: this.id,

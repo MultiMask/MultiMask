@@ -2,8 +2,8 @@ import Web3 from 'web3';
 import log from 'loglevel';
 import EthEngine from './engine';
 
-const testnet = 'https://ropsten.infura.io/';
-const web3 = new Web3(new Web3.providers.HttpProvider(testnet));
+const net = 'https://ropsten.infura.io/';
+const web3 = new Web3(new Web3.providers.HttpProvider(net));
 
 export default class EthWallet {
   constructor({ network }) {
@@ -19,6 +19,10 @@ export default class EthWallet {
     this.address = this.engine.getEthereumAddress(this.priv);
 
     return seed;
+  }
+
+  getAddress() {
+    return this.address;
   }
 
   getInfo() {
@@ -55,5 +59,10 @@ export default class EthWallet {
         res(transactionHash);
       });
     });
+  }
+
+  // TODO: provide to Account entity
+  signRawTx(data) {
+    return this.engine.signRawTx(data, this.privHex);
   }
 }
