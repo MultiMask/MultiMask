@@ -13,6 +13,7 @@ import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
 import Select from '../popup/ui/Select';
 import Info from './Info';
+import Control from './Control';
 import Divider from '../popup/ui/Divider';
 import Button from '../popup/ui/Button';
 
@@ -147,6 +148,41 @@ export default class App extends React.Component {
     return null;
   }
 
+  get gasControls() {
+    const gasPrice = web3.utils.fromWei(web3.utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
+    const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
+    const handlePrice = (...args) => this.handleUpdateTX('gasPrice', ...args);
+    const handleLimit = (...args) => this.handleUpdateTX('gasLimit', ...args);
+
+    return (
+      <React.Fragment>
+        <Control label="Gas Price:" value={gasPrice} onChange={handlePrice} secondLabel="gwei" />
+        <Control label="Gas Limit:" value={gasLimit} onChange={handleLimit} />
+      </React.Fragment>
+    );
+  }
+
+  handleUpdateTX(field, e) {
+    const value = e && e.target ? e.target.value : e;
+    const getValue = (field, value = 0) => {
+      switch (field) {
+        case 'gasPrice':
+          return web3.utils.toHex(web3.utils.toWei(value.toString(), 'gwei'));
+        case 'gasLimit':
+          return web3.utils.toHex(value.toString());
+      }
+    };
+    const hexValue = getValue(field, value);
+
+    this.setState(state => ({
+      ...state,
+      tx: {
+        ...state.tx,
+        [field]: hexValue
+      }
+    }));
+  }
+
   render() {
     // TODO: return loader
     if (!this.state.isLoaded) return null;
@@ -167,8 +203,12 @@ export default class App extends React.Component {
         id
       },
       tx: { to, amount, data },
+      tx,
       selectValue
     } = this.state;
+    const isEth = blockchain === networks.ETH.sign;
+
+    console.log('tx', tx);
 
     return (
       <DialogLayout>
@@ -197,6 +237,7 @@ export default class App extends React.Component {
         <Divider />
         <Info label="Amount:" center content={[this.amount]} />
         <Divider />
+        {isEth && this.gasControls}
         {data && <Info label="Data:" content={data} />}
         <Actions>
           <Button large outlined onClick={this.onReject}>

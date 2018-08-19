@@ -21,7 +21,7 @@ export default sendFn => {
       },
       approveTransaction: function(txdata, cb) {
         sendFn(ETH_APPROVE_TX, txdata).then(({ payload }) => {
-          // console.log('approveTransaction', payload, cb);
+          console.log('approveTransaction', payload);
           cb(null, payload);
         });
       },
