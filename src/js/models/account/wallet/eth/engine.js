@@ -7,7 +7,7 @@ import hdkey from 'hdkey';
 import EtherApi from 'etherscan-api';
 
 // eslint-disable-next-line
-const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '3000');
+const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '10000');
 
 export default class Engine {
   generateMnemonic() {
