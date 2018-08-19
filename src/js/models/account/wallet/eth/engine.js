@@ -79,6 +79,6 @@ export default class Engine {
   }
 
   getTransactions(address) {
-    return etherApi.account.txlist(address, 0, 9999999999999, 'asc');
+    return etherApi.account.txlist(address, 0, 9999999999999, 'desc');
   }
 }
