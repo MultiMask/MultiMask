@@ -27,11 +27,11 @@ export default class EthWallet {
 
   getInfo() {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
-      ([amountInWei, txResult]) => {
+      ([amountInWei, txs]) => {
         return {
           address: this.address,
           balance: web3.utils.fromWei(amountInWei, 'ether'),
-          txs: txResult.result
+          txs
         };
       }
     );
