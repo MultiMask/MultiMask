@@ -27,14 +27,13 @@ export default class EthWallet {
 
   getInfo() {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
-      ([amountInWei, txResult]) => {
-        const lastTx = txResult.result[0];
-        this.nonce = +lastTx.nonce;
+      ([amountInWei, txs]) => {
+        this.nonce = txs && txs[0] ? +txs[0].nonce : 0;
 
         return {
           address: this.address,
           balance: web3.utils.fromWei(amountInWei, 'ether'),
-          txs: txResult.result
+          txs
         };
       }
     );
