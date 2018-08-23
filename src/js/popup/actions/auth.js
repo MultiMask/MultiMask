@@ -70,6 +70,7 @@ const AuthActions = {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
           });
+          dispatch(push('/login'));
         } else {
           dispatch({
             type: AUTH_LOGOUT_FAIL

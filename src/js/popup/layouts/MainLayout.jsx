@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-
+import { goBack } from 'connected-react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
@@ -51,7 +52,7 @@ class MainLayout extends React.Component {
   }
 
   handleBack = () => {
-    this.props.goBack();
+    goBack();
   };
 
   get showBack() {
@@ -60,7 +61,7 @@ class MainLayout extends React.Component {
 
   render() {
     const { createWallet, logout, children, creation, goProfile, goToSettings } = this.props;
-
+    console.log(this.props);
     return (
       <Container>
         <Header>
@@ -69,19 +70,19 @@ class MainLayout extends React.Component {
               <Icon className={styles.icon} name="plus-circle" onClick={createWallet} />
               <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
                 <MenuItem onClick={goProfile}>Profiles</MenuItem>
-                <MenuItem onClick={goToSettings}>Settings</MenuItem>
+                <MenuItem component={Link} to="/settings">
+                  Settings
+                </MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </HeaderItem>
           )}
-          {this.showBack && (
-            <HeaderItem onClick={this.handleBack}>
-              <FontAwesome name="chevron-left" />
-              <Typography className={styles.buttonText} color="primary">
-                Back
-              </Typography>
-            </HeaderItem>
-          )}
+          <HeaderItem onClick={this.handleBack}>
+            <FontAwesome name="chevron-left" />
+            <Typography className={styles.buttonText} color="primary">
+              Back
+            </Typography>
+          </HeaderItem>
         </Header>
         {children}
       </Container>

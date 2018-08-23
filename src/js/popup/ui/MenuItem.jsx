@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import Typography from './Typography';
 
 const Item = styled(Typography)``;
@@ -17,7 +17,16 @@ const Root = styled.div`
 `;
 
 const MenuItem = props => {
-  const { children, theme, ...other } = props;
+  const { children, theme, component: Component, ...other } = props;
+  if (Component) {
+    return (
+      <Component style={{ textDecoration: 'none' }} {...other}>
+        <Root>
+          <Item color="main">{children}</Item>
+        </Root>
+      </Component>
+    );
+  }
 
   return (
     <Root {...other}>

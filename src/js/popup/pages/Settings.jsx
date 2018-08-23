@@ -1,0 +1,104 @@
+import React, { Component } from 'react';
+import styled from 'react-emotion';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Checkbox from '../../popup/ui/Checkbox';
+import Select from '../../popup/ui/Select';
+import Typography from '../../popup/ui/Typography';
+import settingsActions from '../actions/settings';
+
+class Settings extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'price_provider');
+  }
+
+  get selectedDataProvider() {
+    const { settings } = this.props;
+    const { price_providers = [] } = settings;
+
+    return price_providers.find(i => i.value === settings.price_provider);
+  }
+
+  onChange = e => {
+    const { target } = e;
+
+    if (typeof this.props.setSetting !== 'function') return;
+
+    switch (target.name) {
+      case 'show_total':
+        typeof this.props.setSetting(target.name, target.checked);
+        break;
+      default:
+    }
+  };
+
+  onChangeSelect = (name, nextProvider) => {
+    // if (name && nextProvider) {
+    //   this.setState(state => {
+    //     const nextState = { ...state };
+    //     nextState.settings[name] = parseInt(nextProvider.value, 10);
+    //     return nextState;
+    //   });
+    // }
+  };
+
+  get debug() {
+    return <pre>{JSON.stringify({ state: this.state, props: this.props }, null, 4)}</pre>;
+  }
+
+  render() {
+    const { settings } = this.props;
+
+    return (
+      <Form>
+        <Section>
+          <Checkbox name="show_total" label="Show total" checked={settings.show_total} onChange={this.onChange} />
+        </Section>
+        <Hr />
+        <Section style={{ flexGrow: '1' }} centered>
+          <Typography color="main" variant="subheading">
+            Currency data provider
+          </Typography>
+          <Select
+            options={this.props.settings.price_providers}
+            value={this.selectedDataProvider}
+            onChange={this.onChangeCurrenciesDataProvider}
+          />
+        </Section>
+      </Form>
+    );
+  }
+}
+
+export default connect(
+  ({ settings }) => ({ settings }),
+  dispatch =>
+    bindActionCreators(
+      {
+        setSetting: settingsActions.setSetting
+      },
+      dispatch
+    )
+)(Settings);
+
+const Form = styled.div`
+  display: flex;
+  padding: 0 20px;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+`;
+
+const Section = styled.div`
+  padding: 30px 0;
+  text-align: ${({ centered }) => (centered ? 'center' : void 0)};
+`;
+
+const Hr = styled.hr`
+  height: 1px;
+  width: 100%;
+  background-color: #dee3ec;
+  border: none;
+`;
