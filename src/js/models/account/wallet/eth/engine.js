@@ -7,7 +7,7 @@ import hdkey from 'hdkey';
 import EtherApi from 'etherscan-api';
 
 // eslint-disable-next-line
-const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '3000');
+const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '10000');
 
 export default class Engine {
   generateMnemonic() {
@@ -81,7 +81,7 @@ export default class Engine {
   getTransactions(address) {
     return new Promise((res, rej) => {
       etherApi.account
-        .txlist(address, 0, 9999999999999, 'asc')
+        .txlist(address, 0, 9999999999999, 'desc')
         .then(data => {
           res(data.result);
         })

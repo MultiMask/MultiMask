@@ -28,6 +28,8 @@ export default class EthWallet {
   getInfo() {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txs]) => {
+        this.nonce = txs && txs[0] ? +txs[0].nonce : 0;
+
         return {
           address: this.address,
           balance: web3.utils.fromWei(amountInWei, 'ether'),
@@ -35,6 +37,14 @@ export default class EthWallet {
         };
       }
     );
+  }
+
+  getNextNonce() {
+    return this.nonce + 1;
+  }
+
+  updateNonce() {
+    this.nonce++;
   }
 
   createTX({ to, amount, data }) {

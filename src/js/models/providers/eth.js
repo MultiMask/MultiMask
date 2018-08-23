@@ -26,11 +26,16 @@ export default class EthController {
   }
 
   approveTx(data) {
+    const account = this.getAccount(data.tx.from);
+
     return {
       ...data,
       tx: {
         ...data.tx,
-        ...this.enhanceTXdata(data.tx)
+        // Default
+        gasLimit: Web3.utils.toHex(Web3.utils.toBN('21000')),
+        gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
+        nonce: Web3.utils.toHex(account.wallet.getNextNonce().toString())
       }
     };
   }
@@ -39,23 +44,9 @@ export default class EthController {
     const account = this.getAccount(tx.from);
 
     if (account) {
+      account.wallet.updateNonce();
       return account.wallet.signRawTx(tx);
     }
     return tx;
-  }
-
-  enhanceTXdata(tx) {
-    // const account = this.getAccount(tx.from);
-
-    // Promise.all([account.getInfo(), etherApi.proxy.eth_gasPrice()]).then(console.log);
-    // console.log(this.getAccount(tx.from));
-    // console.log('enhance TX > ', tx);
-
-    return {
-      ...tx,
-      gasLimit: Web3.utils.toHex(Web3.utils.toBN('21000')),
-      gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
-      nonce: Web3.utils.toHex(40)
-    };
   }
 }
