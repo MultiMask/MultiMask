@@ -13,7 +13,6 @@ import {
   AUTH_LOGOUT_FAIL
 } from './../../constants/auth';
 
-import { STATE_LOGIN } from './../../constants/state';
 import { getPass } from './../../models/getter';
 import AccountActions from './account';
 import SettingActions from './settings';
@@ -44,7 +43,8 @@ const AuthActions = {
                 hasPass
               }
             });
-            dispatch(push('/login'));
+            const next = hasPass ? '/login' : '/create/account';
+            dispatch(push(next));
           });
         }
       });
@@ -69,10 +69,6 @@ const AuthActions = {
         if (isLogout) {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
-          });
-
-          dispatch({
-            type: STATE_LOGIN
           });
         } else {
           dispatch({
