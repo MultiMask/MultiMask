@@ -1,11 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 import Typography from '../popup/ui/Typography';
 
+type ContainerProps = { multi: boolean; }
 const Container = styled.div`
   display: flex;
-  align-items: ${props => (props.multi ? 'start' : 'center')};
+  align-items: ${(props: ContainerProps) => (props.multi ? 'start' : 'center')};
   padding: 10px 0;
 `;
 
@@ -15,8 +16,9 @@ const FirstItem = styled(Typography)`
   flex-basis: 60px;
 `;
 
+type ContentProps = { center: boolean; }
 const Content = styled.div`
-  margin: ${props => props.center && 'auto'};
+  margin: ${(props: ContentProps) => props.center && 'auto'};
   overflow: hidden;
 `;
 const styles = {
@@ -26,7 +28,7 @@ const styles = {
   `
 };
 
-const Info = ({ label, content, labelColor, center }) => {
+const Info: React.SFC<any> = ({ label, content, labelColor, center }) => {
   const multi = Array.isArray(content);
   const rows = multi ? (
     <Content center>
@@ -42,8 +44,8 @@ const Info = ({ label, content, labelColor, center }) => {
       ))}
     </Content>
   ) : (
-    <Typography color="secondary">{content}</Typography>
-  );
+      <Typography color="secondary">{content}</Typography>
+    );
 
   return (
     <Container multi={multi}>

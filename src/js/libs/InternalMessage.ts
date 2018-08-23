@@ -1,32 +1,38 @@
 import { LocalStream } from 'extension-streams';
 
+type InternalMessageResponse = {
+  type: string;
+  payload: any;
+}
+
 export default class InternalMessage {
-  constructor() {
-    this.type = '';
-    this.payload = '';
-  }
+  public type: string = '';
+  public payload: any = '';
 
   static placeholder() {
     return new InternalMessage();
   }
-  static fromJson(json) {
-    return Object.assign(this.placeholder(), json);
+  static fromJson(json: any) {
+    return {
+      ...this.placeholder(),
+      ...json
+    };
   }
 
-  static payload(type, payload) {
+  static payload(type: string, payload: any) {
     let p = this.placeholder();
     p.type = type;
     p.payload = payload;
     return p;
   }
 
-  static signal(type) {
+  static signal(type: string) {
     let p = this.placeholder();
     p.type = type;
     return p;
   }
 
-  send() {
+  send(): Promise<any> {
     return LocalStream.send(this);
   }
 }

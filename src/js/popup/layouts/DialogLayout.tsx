@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'react-emotion';
 import logo from '../../../img/logo.svg';
 import Typography from '../ui/Typography';
@@ -21,7 +21,7 @@ const Image = styled('img')`
   width: 90px;
 `;
 
-const DialogLayout = ({ children }) => (
+const DialogLayout: React.SFC<any> = ({ children }) => (
   <Container>
     <Header>
       <Image alt="logo" src={logo} />

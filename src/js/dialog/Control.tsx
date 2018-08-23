@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 import Typography from '../popup/ui/Typography';
@@ -35,7 +35,7 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const Control = ({ label, secondLabel, value, onChange }) => {
+const Control: React.SFC<any> = ({ label, secondLabel, value, onChange }) => {
   const input = <Input type="number" value={value} onChange={onChange} />;
 
   return (
@@ -52,16 +52,3 @@ const Control = ({ label, secondLabel, value, onChange }) => {
 Control.defaultProps = {};
 
 export default Control;
-
-/**
- * 
- * 
- *       {secondLabel ? (
-        <div>
-          {input}
-          <Typography>{secondLabel}</Typography>
-        </div>
-      ) : (
-        { input }
-      )}
- */

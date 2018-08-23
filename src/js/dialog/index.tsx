@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
-import web3 from 'web3';
+import web3Utils from 'web3-utils';
 
-import networks from './../blockchain';
+import networks from '../blockchain';
 import InternalMessage from '../libs/InternalMessage';
-import { AUTH_IS_READY } from './../constants/auth';
-import { ACCOUNT_INFO } from './../constants/account';
-import { TX_PAYMENT_GET, TX_SEND, TX_APPROVE_RESULT } from './../constants/tx';
+import { AUTH_IS_READY } from '../constants/auth';
+import { ACCOUNT_INFO } from '../constants/account';
+import { TX_PAYMENT_GET, TX_APPROVE_RESULT } from '../constants/tx';
 
 import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
@@ -23,19 +23,35 @@ const Actions = styled.div`
   justify-content: space-between;
 `;
 
-export default class App extends React.Component {
-  constructor(opts) {
-    super(opts);
+interface AppState {
+  isLoaded?: boolean;
+  isReady?: boolean;
 
-    this.state = {
-      isLoaded: false,
-      isReady: false,
-      tx: {},
-      accounts: [],
-      account: {},
-      selectValue: ''
-    };
-  }
+  tx?: any;
+  txId?: string;
+  blockchain?: string;
+
+  accounts?: any[];
+  account?: any;
+  selectValue?: SelectOption;
+}
+
+type SelectOption = {
+  value: string;
+  label: string;
+}
+
+export default class App extends React.Component<{}, AppState> {
+  state = {
+    isLoaded: false,
+    isReady: false,
+    tx: null,
+    txId: null,
+    blockchain: null,
+    accounts: [],
+    account: null,
+    selectValue: null
+  };
 
   componentDidMount() {
     InternalMessage.signal(AUTH_IS_READY)
@@ -63,7 +79,7 @@ export default class App extends React.Component {
       });
   }
 
-  setTxInfo(payload) {
+  setTxInfo(payload: any) {
     const accounts = this.state.accounts.filter(acc => acc.blockchain === payload.data.blockchain);
     const account = payload.data.tx.from
       ? accounts.find(acc => acc.info.address === payload.data.tx.from)
@@ -98,7 +114,7 @@ export default class App extends React.Component {
     }));
   }
 
-  getOption = account => {
+  getOption = (account): SelectOption => {
     return { value: account.id, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
   };
 
@@ -142,17 +158,17 @@ export default class App extends React.Component {
       return `${tx.amount / 1e8} BTC`;
     }
     if (blockchain === networks.ETH.sign) {
-      return `${web3.utils.fromWei(tx.value, 'ether')} ETH`;
+      return `${web3Utils.utils.fromWei(tx.value, 'ether')} ETH`;
     }
 
     return null;
   }
 
   get gasControls() {
-    const gasPrice = web3.utils.fromWei(web3.utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
-    const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
-    const handlePrice = (...args) => this.handleUpdateTX('gasPrice', ...args);
-    const handleLimit = (...args) => this.handleUpdateTX('gasLimit', ...args);
+    const gasPrice = web3Utils.fromWei(web3Utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
+    const gasLimit = web3Utils.hexToNumber(this.state.tx.gasLimit);
+    const handlePrice = e => this.handleUpdateTX('gasPrice', e);
+    const handleLimit = e => this.handleUpdateTX('gasLimit', e);
 
     return (
       <React.Fragment>
@@ -167,9 +183,9 @@ export default class App extends React.Component {
     const getValue = (field, value = 0) => {
       switch (field) {
         case 'gasPrice':
-          return web3.utils.toHex(web3.utils.toWei(value.toString(), 'gwei'));
+          return web3Utils.utils.toHex(web3Utils.utils.toWei(value.toString(), 'gwei'));
         case 'gasLimit':
-          return web3.utils.toHex(value.toString());
+          return web3Utils.utils.toHex(value.toString());
       }
     };
     const hexValue = getValue(field, value);
