@@ -6,6 +6,7 @@ import getPriceInBTC from '../../../../helpers/getPriceInBTC';
 import stateActions from '../../../actions/state';
 import Icon from '../../../ui/components/Icon';
 import Item from './item';
+import { Link } from 'react-router-dom';
 
 class AccountList extends React.Component {
   render() {

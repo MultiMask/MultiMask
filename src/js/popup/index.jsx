@@ -1,11 +1,16 @@
 import React from 'react';
+import Routes from './routes';
+import { ConnectedRouter } from 'connected-react-router';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from 'emotion-theming';
+import { theme } from '../config/theme';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
-import Login from './pages/login';
-import Create from './pages/login/create';
+import Login from './pages/Login';
+import Create from './pages/CreateAccount';
 import Account from './pages/account';
 import Wallet from './pages/wallet';
 import Profile from './pages/profile';
@@ -29,7 +34,17 @@ import {
   STATE_VIEW_SETTINGS
 } from './../constants/state';
 
-class Popup extends React.Component {
+const Popup = ({ store, history }) => (
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <ConnectedRouter history={history}>
+        <Routes />
+      </ConnectedRouter>
+    </ThemeProvider>
+  </Provider>
+);
+
+class App extends React.Component {
   componentDidMount() {
     this.props.check();
   }

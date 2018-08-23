@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
 
-import TextField from '../../ui/TextField';
-import Button from '../../ui/Button';
-import Typography from '../../ui/Typography';
+import TextField from '../ui/TextField';
+import Button from '../ui/Button';
+import Typography from '../ui/Typography';
 
-import authActions from '../../actions/auth';
+import authActions from '../actions/auth';
 
 const styles = {
   textField: css`

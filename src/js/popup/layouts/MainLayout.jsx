@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
 import { STATE_VIEW_MAIN } from '../../constants/state';
-import stateActions from '../actions/state';
 import authAction from '../actions/auth';
 import { BaseContainer } from './BaseContainer';
 import Typography from '../ui/Typography';
@@ -47,6 +46,10 @@ const styles = {
 };
 
 class MainLayout extends React.Component {
+  componentDidMount() {
+    this.props.check();
+  }
+
   handleBack = () => {
     this.props.goBack();
   };
@@ -90,5 +93,5 @@ export default connect(
   ({ state }) => ({
     view: state.view
   }),
-  dispatch => bindActionCreators({ ...stateActions, ...authAction }, dispatch)
+  dispatch => bindActionCreators({ ...authAction }, dispatch)
 )(MainLayout);
