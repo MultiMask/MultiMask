@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import accountActions from '../../actions/account';
-import stateActions from '../../actions/state';
 import { getCurrentWallet } from './../../select';
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
@@ -24,10 +24,6 @@ class AccountInfo extends React.Component {
     isViewMenu: false
   };
 
-  handleBuy = () => {
-    this.props.buy();
-  };
-
   handleSend = () => {
     this.props.send();
   };
@@ -37,10 +33,6 @@ class AccountInfo extends React.Component {
       ...state,
       isViewMenu: !state.isViewMenu
     }));
-  };
-
-  handleExportPK = () => {
-    this.props.goExport();
   };
 
   render() {
@@ -69,13 +61,15 @@ class AccountInfo extends React.Component {
               >
                 <MenuItem>View Account</MenuItem>
                 <MenuItem>Show QR-code</MenuItem>
-                <MenuItem onClick={this.handleExportPK}>Export Private Key</MenuItem>
+                <MenuItem component={Link} to="/account/exportpk">
+                  Export Private Key
+                </MenuItem>
               </Menu>
             </React.Fragment>
           }
           actions={
             <div>
-              <Button outlined small onClick={this.handleSend}>
+              <Button outlined small component={Link} componentProps={{ to: '/account/send' }}>
                 Send
               </Button>
             </div>
@@ -98,9 +92,7 @@ export default connect(
   dispatch =>
     bindActionCreators(
       {
-        buy: accountActions.buy,
-        send: accountActions.send,
-        goExport: stateActions.goExportPK
+        send: accountActions.send
       },
       dispatch
     )

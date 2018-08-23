@@ -36,7 +36,16 @@ const LargeStyle = css`
   padding: 7px 25px;
 `;
 
-const Button = ({ children, ...props }) => {
+const Button = ({ children, component: Component, componentProps, ...props }) => {
+  if (Component) {
+    return (
+      <Component style={{ textDecoration: 'none' }} {...componentProps}>
+        <ButtonBase {...props}>
+          <span>{children}</span>
+        </ButtonBase>
+      </Component>
+    );
+  }
   return (
     <ButtonBase {...props}>
       <span>{children}</span>

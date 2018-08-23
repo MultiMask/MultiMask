@@ -1,5 +1,6 @@
 import InternalMessage from '../../libs/InternalMessage';
 import { hidePass } from './../../libs/cipher';
+import { push } from 'connected-react-router';
 
 import {
   ACCOUNT_ACTIVE,
@@ -50,7 +51,7 @@ const AccountActions = {
 
     dispatch(action);
 
-    stateActions.goWallet(name)(dispatch, getState);
+    dispatch(push('/account/details'));
   },
 
   buy: () => (dispatch, getState) => {
