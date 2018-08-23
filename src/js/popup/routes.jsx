@@ -6,12 +6,14 @@ import Login from './pages/Login';
 import Account from './pages/account';
 import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
+import Profiles from './pages/profile';
 
 const routes = () => {
   return (
     <Switch>
       <AppRoute exact path="/" component={Account} layout={MainLayout} />
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
+      <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
       <AppRoute exact path="/login" component={Login} layout={AuthLayout} />
       <AppRoute exact path="/create/account" component={CreateAccount} layout={AuthLayout} />
     </Switch>

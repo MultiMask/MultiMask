@@ -14,7 +14,7 @@ import Create from './pages/CreateAccount';
 import Account from './pages/account';
 import Wallet from './pages/wallet';
 import Profile from './pages/profile';
-import Settings from './pages/settings';
+import Settings from './pages/Settings';
 
 import authActions from './actions/auth';
 
@@ -79,26 +79,26 @@ class App extends React.Component {
           </MainLayout>
         );
       // TODO: make more beautifully using layout and routing
-      case STATE_VIEW_LOGIN:
-        return (
-          <AuthLayout login>
-            <Login />
-          </AuthLayout>
-        );
+      // case STATE_VIEW_LOGIN:
+      //   return (
+      //     <AuthLayout login>
+      //       <Login />
+      //     </AuthLayout>
+      //   );
 
-      case STATE_VIEW_INIT:
-        return (
-          <AuthLayout>
-            <Create />
-          </AuthLayout>
-        );
+      // case STATE_VIEW_INIT:
+      //   return (
+      //     <AuthLayout>
+      //       <Create />
+      //     </AuthLayout>
+      //   );
 
-      case STATE_VIEW_SETTINGS:
-        return (
-          <MainLayout>
-            <Settings />
-          </MainLayout>
-        );
+      // case STATE_VIEW_SETTINGS:
+      //   return (
+      //     <MainLayout>
+      //       <Settings />
+      //     </MainLayout>
+      //   );
 
       // TODO: make error page or logger
       default:
