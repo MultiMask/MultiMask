@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
@@ -36,7 +36,7 @@ const LargeStyle = css`
   padding: 7px 25px;
 `;
 
-const Button = ({ children, ...props }) => {
+const Button: React.SFC<any> = ({ children, ...props }) => {
   return (
     <ButtonBase {...props}>
       <span>{children}</span>

@@ -29,13 +29,15 @@ if (fileSystem.existsSync(secretsPath)) {
 }
 
 var options = {
+  mode: 'development',
+  // context: path.join(__dirname, 'src', 'js'),
   entry: {
-    popup: path.join(__dirname, 'src', 'js', 'popup.js'),
-    dialog: path.join(__dirname, 'src', 'js', 'dialog.js'),
-    inpage: path.join(__dirname, 'src', 'js', 'inpage.js'),
-    options: path.join(__dirname, 'src', 'js', 'options.js'),
-    content: path.join(__dirname, 'src', 'js', 'content.js'),
-    background: path.join(__dirname, 'src', 'js', 'background.js')
+    // popup: path.join(__dirname, 'src', 'js', 'popup.js'),
+    dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx')
+    // inpage: path.join(__dirname, 'src', 'js', 'inpage.js'),
+    // options: path.join(__dirname, 'src', 'js', 'options.js'),
+    // content: path.join(__dirname, 'src', 'js', 'content.js'),
+    // background: path.join(__dirname, 'src', 'js', 'background.js')
   },
   devtool: 'eval',
   output: {
@@ -65,15 +67,20 @@ var options = {
         exclude: /node_modules/
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'awesome-typescript-loader',
         exclude: /node_modules/
       }
     ]
   },
   resolve: {
     alias: alias,
-    extensions: fileExtensions.map(extension => '.' + extension).concat(['.jsx', '.js', '.css'])
+    extensions: fileExtensions.map(extension => '.' + extension).concat(['.tsx', '.ts', '.jsx', '.js', '.css'])
   },
   plugins: [
     // clean the build folder
