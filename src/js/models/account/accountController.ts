@@ -1,17 +1,18 @@
 import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
-import log from 'loglevel';
+import { info } from 'loglevel';
 
 export default class AccountController {
-  accounts = [];
+  public App: any;
+  public accounts = [];
 
   constructor({ App }) {
     this.App = App;
   }
 
   restore(accounts, pass) {
-    log.info('AccountController > load all accounts > ', accounts);
+    info('AccountController > load all accounts > ', accounts);
 
     if (accounts && accounts.length > 0) {
       return this.loadAccountsByIds(pass, accounts).then(accounts => {
@@ -26,7 +27,7 @@ export default class AccountController {
 
   getAccountsSerialized(accounts, pass) {
     return this.loadAccountsByIds(pass, accounts).then(result => {
-      return result.map(account => account.serialize());
+      return result.map((account: any) => account.serialize());
     });
   }
 

@@ -1,12 +1,14 @@
-import txCtrl from './tx';
 import networks from './../../blockchain';
 import EtherApi from 'etherscan-api';
-import Web3 from 'web3';
+import Web3 = require('web3');
+let web3: Web3;
 
 // eslint-disable-next-line
 const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '3000');
 
 export default class EthController {
+  public ac;
+
   constructor({ accountController }) {
     this.ac = accountController;
   }
@@ -33,9 +35,9 @@ export default class EthController {
       tx: {
         ...data.tx,
         // Default
-        gasLimit: Web3.utils.toHex(Web3.utils.toBN('21000')),
-        gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
-        nonce: Web3.utils.toHex(account.wallet.getNextNonce().toString())
+        gasLimit: web3.utils.toHex(web3.utils.toBN('21000')),
+        gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'gwei')),
+        nonce: web3.utils.toHex(account.wallet.getNextNonce().toString())
       }
     };
   }

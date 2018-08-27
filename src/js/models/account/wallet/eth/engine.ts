@@ -1,12 +1,14 @@
-import Web3 from 'web3';
-import ethUtil from 'ethereumjs-util';
-import bip39 from 'bip39';
-import ethTx from 'ethereumjs-tx';
+import Web3 = require('web3');
+import ethTx = require('ethereumjs-tx');
+
+import * as ethUtil from 'ethereumjs-util';
+import * as bip39 from 'bip39';
 import hdkey from 'hdkey';
 
 import EtherApi from 'etherscan-api';
 
 // eslint-disable-next-line
+let web3: Web3;
 const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '10000');
 
 export default class Engine {
@@ -43,10 +45,10 @@ export default class Engine {
     const tx = new ethTx({
       to,
       from,
-      value: Web3.utils.toHex(Web3.utils.toBN(amount)),
-      gasLimit: Web3.utils.toHex(Web3.utils.toBN('21000')),
-      gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
-      nonce: Web3.utils.toHex(0)
+      value: web3.utils.toHex(web3.utils.toBN(amount)),
+      gasLimit: web3.utils.toHex(web3.utils.toBN('21000')),
+      gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'gwei')),
+      nonce: web3.utils.toHex(0)
     });
     tx.sign(privKey);
     const txSerialized = '0x' + tx.serialize().toString('hex');
@@ -62,15 +64,15 @@ export default class Engine {
 
   sendERC20Tx(privKey, amount, tokenAbi, tokenAddress, receiverAddress) {
     const senderAddress = this.getEthereumAddress(privKey);
-    const contract = new Web3.eth.Contract(tokenAbi, tokenAddress);
+    const contract = new web3.eth.Contract(tokenAbi, tokenAddress);
     const bytecode = contract.methods.transfer(receiverAddress, amount).encodeABI();
     const tx = new ethTx({
       to: tokenAddress,
       from: senderAddress,
-      value: Web3.utils.toHex(amount),
-      gasLimit: Web3.utils.toHex(Web3.utils.toBN('75000')),
-      gasPrice: Web3.utils.toHex(Web3.utils.toWei('1', 'gwei')),
-      nonce: Web3.utils.toHex(0),
+      value: web3.utils.toHex(amount),
+      gasLimit: web3.utils.toHex(web3.utils.toBN('75000')),
+      gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'gwei')),
+      nonce: web3.utils.toHex(0),
       data: bytecode
     });
     tx.sign(privKey);

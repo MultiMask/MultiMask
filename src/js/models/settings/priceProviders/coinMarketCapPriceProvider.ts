@@ -2,7 +2,7 @@ import axios from 'axios';
 import basePriceProvider from './basePriceProvider';
 
 let signToIdEnum = {};
-(function(obj) {
+(function (obj) {
   Object.entries({
     1: 'BTC',
     1027: 'ETH'
@@ -19,7 +19,7 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
 
     return new Promise((resolve, reject) => {
       this.getTickerById(signToIdEnum[sign], params)
-        .then(ticker => {
+        .then((ticker: any) => {
           if (ticker && ticker.data && ticker.data.quotes) {
             let prices = {};
 

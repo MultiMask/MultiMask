@@ -15,6 +15,10 @@ let resolvers;
  * requests using browser messaging.
  */
 class DanglingResolver {
+  public id;
+  public resolve;
+  public reject;
+
   constructor(_id, _resolve, _reject) {
     this.id = _id;
     this.resolve = _resolve;
@@ -56,6 +60,8 @@ const _send = (type, payload) => {
 };
 
 export default class MultiWeb {
+  public web3;
+
   constructor(_stream) {
     stream = _stream;
 
@@ -65,8 +71,8 @@ export default class MultiWeb {
     this.web3 = Web3Provider(_send);
   }
 
-  isAuth() {}
-  getUser() {}
+  isAuth() { }
+  getUser() { }
   sendTransaction({ to, amount, data }) {
     _send(TX_APPROVE, {
       blockchain: networks.BTC.sign,

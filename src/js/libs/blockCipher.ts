@@ -1,6 +1,10 @@
 import aes256 from 'aes256';
 
 class BlockCipher {
+  public type;
+  public ciphers;
+  public sign;
+
   constructor(type) {
     this.type = type;
     this.ciphers = {

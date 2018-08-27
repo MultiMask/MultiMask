@@ -3,7 +3,9 @@ import { getSettings, setSettings } from '../getter';
 import priceProviders from './priceProviders';
 
 export default class SettingsController {
-  priceProvider;
+  public App;
+  public priceProviders;
+  public priceProvider;
 
   constructor({ App }) {
     this.App = App;
@@ -23,7 +25,7 @@ export default class SettingsController {
       const {
         price_provider = this.defaultSettings.price_provider,
         show_total = this.defaultSettings.show_total
-      } = this.settings;
+      } = this.settings as any;
       return { price_provider, show_total };
     }
   }
@@ -64,7 +66,7 @@ export default class SettingsController {
   }
 
   getPriceProviders() {
-    return Object.entries(this.priceProviders).map(ent => ({ value: ent[0], label: ent[1].title }));
+    return Object.entries(this.priceProviders).map((ent: any) => ({ value: ent[0], label: ent[1].title }));
   }
 
   settings = {};

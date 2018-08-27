@@ -1,6 +1,8 @@
 import ProfileFactory from './profileFactory';
 
 export default class Profile {
+  public data: any;
+
   constructor(data) {
     this.data = data;
   }

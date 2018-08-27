@@ -1,8 +1,7 @@
-import uuid from 'uuid/v4';
 import { getEntity, setEntity, removeEntity } from '../getter';
 import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
-import log from 'loglevel';
+import { debug } from 'loglevel';
 
 import Account from '.';
 import BitcoinWallet from './wallet/bitcoin';
@@ -26,13 +25,13 @@ export default {
   },
 
   save(pass, account) {
-    log.debug('save account > ', pass, account);
+    debug('save account > ', pass, account);
     const id = account.id;
     const str = JSON.stringify(account.serialize());
     // eslint-disable-next-line
     const encodedWallet = encryptEntities ? encode(pass, str) : str;
 
-    log.debug('Account Save > ', encodedWallet);
+    debug('Account Save > ', encodedWallet);
 
     setEntity(id, encodedWallet);
   },
@@ -42,12 +41,12 @@ export default {
   },
 
   load(pass, id) {
-    return getEntity(id).then(str => {
-      log.debug('Account Load > raw >', str, id);
+    return getEntity(id).then((str: string) => {
+      debug('Account Load > raw >', str, id);
       // eslint-disable-next-line
-      const decoded =  encryptEntities ? JSON.parse(decode(pass, str)) : JSON.parse(str);
+      const decoded = encryptEntities ? JSON.parse(decode(pass, str)) : JSON.parse(str);
 
-      log.debug('Account Load > ', decoded);
+      debug('Account Load > ', decoded);
 
       return this.create(decoded);
     });

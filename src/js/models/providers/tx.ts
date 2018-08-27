@@ -4,6 +4,10 @@ import windowCtrl from './../../libs/txWindow';
 const txs = [];
 
 class TXModel {
+  public data;
+  public id;
+  public resolver;
+
   constructor(data, id, resolver) {
     this.data = data;
     this.id = id;
@@ -66,5 +70,5 @@ export default class TxController {
     }
   }
 
-  static reject(id) {}
+  static reject(id) { }
 }

@@ -5,6 +5,9 @@ import AccountFactory from './../account/accountFactory';
 import Profile from './Profile';
 
 export default class ProfileController {
+  public App: any;
+  public ac: any;
+  public plc: any;
   currentProfileId = null;
 
   constructor({ App, accountController }) {

@@ -32,12 +32,12 @@ var options = {
   mode: 'development',
   // context: path.join(__dirname, 'src', 'js'),
   entry: {
-    // popup: path.join(__dirname, 'src', 'js', 'popup.js'),
-    dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx')
+    popup: path.join(__dirname, 'src', 'js', 'popup.ts'),
+    dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx'),
     // inpage: path.join(__dirname, 'src', 'js', 'inpage.js'),
-    // options: path.join(__dirname, 'src', 'js', 'options.js'),
+    options: path.join(__dirname, 'src', 'js', 'options.ts'),
     // content: path.join(__dirname, 'src', 'js', 'content.js'),
-    // background: path.join(__dirname, 'src', 'js', 'background.js')
+    background: path.join(__dirname, 'src', 'js', 'background.ts')
   },
   devtool: 'eval',
   output: {

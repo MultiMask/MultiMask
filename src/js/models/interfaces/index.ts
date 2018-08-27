@@ -19,8 +19,8 @@ export default ({ App }) => {
   return {
     accounts: accounts({ App, profileController }),
     auth: auth({ App, profileController }),
-    tx: tx({ App, profileController }),
-    profile: profile({ App, profileController }),
+    tx: tx({ profileController }),
+    profile: profile({ profileController }),
     settings: settings({ settingsController }),
     eth: eth({ ethController })
   };

@@ -1,7 +1,7 @@
 import { getEntity, setEntity, removeEntity } from '../getter';
 import BlockCipher, { cipherTypes } from '../../libs/blockCipher';
 import uuid from 'uuid/v4';
-import log from 'loglevel';
+import { debug } from 'loglevel';
 
 import Profile from './Profile';
 
@@ -13,7 +13,7 @@ export default class ProfileFactory {
 
     const encodedProfile = blockCipher.encrypt(pass, profile.serialize());
 
-    log.debug('Save Profile > ', encodedProfile);
+    debug('Save Profile > ', encodedProfile);
 
     return setEntity(key, encodedProfile);
   }
@@ -22,7 +22,7 @@ export default class ProfileFactory {
     return getEntity(key).then(encodedStr => {
       const profileData = blockCipher.decrypt(pass, encodedStr);
 
-      log.debug('Load Profile > ', profileData);
+      debug('Load Profile > ', profileData);
 
       return new Profile(profileData);
     });
@@ -43,7 +43,7 @@ export default class ProfileFactory {
     return ProfileFactory.save(pass, profile);
   }
 
-  static createDefault(data) {
+  static createDefault(data?: any) {
     return new Profile({
       id: uuid(),
       name: 'Default profile',

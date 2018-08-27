@@ -1,4 +1,9 @@
 export default class NetworkMessage {
+  public type;
+  public payload;
+  public resolver;
+  public domain;
+
   constructor(_type = '', _payload = {}, _resolver = '', _domain = '') {
     this.type = _type;
     this.payload = _payload;

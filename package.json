@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Wallet to bitcoin blockchains in Chrome",
   "scripts": {
+    "postinstall": "rm -f node_modules/web3/*.d.ts",
     "build": "node utils/build.js",
     "start": "node utils/webserver.js"
   },
@@ -54,6 +55,11 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
+    "@types/bip39": "^2.4.0",
+    "@types/bitcoinjs-lib": "^3.4.0",
+    "@types/ethereumjs-tx": "^1.0.0",
+    "@types/ethereumjs-util": "^5.2.0",
+    "@types/loglevel": "^1.5.3",
     "@types/react": "^16.4.11",
     "@types/react-select": "^2.0.2",
     "@types/web3": "^1.0.3",

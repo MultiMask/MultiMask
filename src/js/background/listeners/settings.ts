@@ -1,4 +1,4 @@
-import log from 'loglevel';
+import { error } from 'loglevel';
 import blockchain from '../../blockchain';
 import {
   SETTINGS_LOAD_CURRENCY_PRICE,
@@ -25,7 +25,7 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
             }
           })
           .catch(err => {
-            log.error(err);
+            error(err);
           });
 
         sendResponse({
@@ -36,7 +36,7 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
           }
         });
       } catch (err) {
-        log.error('error loading price', err);
+        error('error loading price', err);
 
         sendResponse({
           type: SETTINGS_LOAD_CURRENCY_PRICE_FAIL

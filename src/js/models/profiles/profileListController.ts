@@ -5,6 +5,7 @@ import AccountFactory from './../account/accountFactory';
 
 export default class ProfileListController {
   list = null;
+  public App;
 
   constructor({ App }) {
     this.App = App;
@@ -16,7 +17,7 @@ export default class ProfileListController {
     }
 
     return getProfiles()
-      .then(ids => {
+      .then((ids: any[]) => {
         if (ids && ids.length > 0) {
           return Promise.all(
             ids.map(id => {

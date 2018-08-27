@@ -1,16 +1,12 @@
-import 'babel-core/register';
-import 'babel-polyfill';
-
 import { LocalStream } from 'extension-streams';
-import log from 'loglevel';
+import { setLevel } from 'loglevel';
 
 import listeners from './background/listeners';
 import App from './models/app';
 
 class Controller {
   constructor() {
-    // eslint-disable-next-line
-    log.setLevel(logLevel);
+    setLevel(logLevel);
 
     App.bootstrap();
     this.setupInternalMessaging({ App });

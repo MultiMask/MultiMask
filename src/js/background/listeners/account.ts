@@ -38,7 +38,7 @@ export default ({ App }) => async ({ type, payload }, sendResponse) => {
   }
 };
 
-// TODO: think about more logical get accounts
+// TODO: think about more logical getAccounts
 const sendAccountsInfo = (App, sendResponse) => {
   App.io.accounts.getAccountsInfo().then(payload => {
     sendResponse({

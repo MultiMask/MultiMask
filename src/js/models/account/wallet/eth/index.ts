@@ -1,11 +1,19 @@
-import Web3 from 'web3';
-import log from 'loglevel';
+import Web3 = require('web3');
+import { info } from 'loglevel';
 import EthEngine from './engine';
 
 const net = 'https://ropsten.infura.io/';
 const web3 = new Web3(new Web3.providers.HttpProvider(net));
 
 export default class EthWallet {
+  public engine: any;
+  public network: any;
+  public priv: any;
+  public privHex: any;
+  public public: any;
+  public address: any;
+  public nonce: any;
+
   constructor({ network }) {
     this.engine = new EthEngine();
     this.network = network;
@@ -57,15 +65,15 @@ export default class EthWallet {
       from: this.address
     });
 
-    log.info(tx);
+    info(tx);
 
     return new Promise((res, rej) => {
-      web3.eth.sendSignedTransaction(tx, function(err, transactionHash) {
+      web3.eth.sendSignedTransaction(tx, function (err, transactionHash) {
         if (err) {
           rej(err);
         }
 
-        log.info('Transaction success > ', transactionHash);
+        info('Transaction success > ', transactionHash);
         res(transactionHash);
       });
     });
