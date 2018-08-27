@@ -35,18 +35,18 @@ export default sendFn => {
 
   engine.addProvider(
     new HookedWalletSubprovider({
-      getAccounts: function(cb) {
+      getAccounts: function (cb) {
         sendFn(ETH_GET_ACCOUNTS).then(({ payload }) => {
           cb(null, payload);
         });
       },
-      approveTransaction: function(txdata, cb) {
+      approveTransaction: function (txdata, cb) {
         sendFn(ETH_APPROVE_TX, txdata).then(({ payload }) => {
           // console.log('approveTransaction', payload);
           cb(null, payload);
         });
       },
-      signTransaction: function(txdata, cb) {
+      signTransaction: function (txdata, cb) {
         sendFn(ETH_SIGN_TX, txdata).then(({ payload }) => {
           // console.log('signTransaction > ', txdata, payload);
           cb(null, payload);

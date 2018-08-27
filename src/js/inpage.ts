@@ -1,4 +1,4 @@
-import log from 'loglevel';
+import { setLevel } from 'loglevel';
 
 import { EncryptedStream } from 'extension-streams';
 import IdGenerator from './libs/IdGenerator';
@@ -9,9 +9,9 @@ import { CONTENT_APP, INPAGE_APP } from './constants/apps';
 class Inpage {
   constructor() {
     // eslint-disable-next-line
-    log.setLevel(logLevel);
+    setLevel(logLevel);
 
-    const stream = new EncryptedStream(INPAGE_APP, IdGenerator.text(64));
+    const stream = new EncryptedStream(INPAGE_APP, IdGenerator.text(64)) as any;
     window.multiWeb = new MultiWeb(stream);
 
     // Syncing the streams between the

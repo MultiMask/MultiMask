@@ -2,7 +2,7 @@ import { EncryptedStream } from 'extension-streams';
 import IdGenerator from './libs/IdGenerator';
 import InternalMessage from './libs/InternalMessage';
 import NetworkMessage from './libs/NetworkMessage';
-import log from 'loglevel';
+import { setLevel, info } from 'loglevel';
 
 import { CONTENT_APP, INPAGE_APP } from './constants/apps';
 
@@ -13,12 +13,12 @@ class Content {
 
   constructor() {
     // eslint-disable-next-line
-    log.setLevel(logLevel);
+    setLevel(logLevel);
 
     this.setupInpageStream();
     this.injectScript();
 
-    log.info('MultiMask - start listening events');
+    info('MultiMask - start listening events');
   }
 
   /**
@@ -28,7 +28,7 @@ class Content {
     this.stream = new EncryptedStream(CONTENT_APP, IdGenerator.text(256));
     this.stream.listenWith(msg => this.contentListener(msg));
 
-    this.stream.onSync(() => {});
+    this.stream.onSync(() => { });
   }
 
   /**

@@ -9,6 +9,7 @@ declare var logLevel: 'trace'
   | 'silent';
 declare var encryptEntities: boolean;
 declare var etherscanApiKey: string;
+declare var infuraApiKey: string;
 
 /**
  * Custom imports
@@ -28,3 +29,11 @@ declare module "web3-utils";
  * Custom API
  */
 declare var chrome: any;
+
+/**
+ * Extend Window
+ */
+interface Window {
+  multiWeb: any;
+}
+

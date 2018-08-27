@@ -34,9 +34,9 @@ var options = {
   entry: {
     popup: path.join(__dirname, 'src', 'js', 'popup.ts'),
     dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx'),
-    // inpage: path.join(__dirname, 'src', 'js', 'inpage.js'),
+    inpage: path.join(__dirname, 'src', 'js', 'inpage.ts'),
     options: path.join(__dirname, 'src', 'js', 'options.ts'),
-    // content: path.join(__dirname, 'src', 'js', 'content.js'),
+    content: path.join(__dirname, 'src', 'js', 'content.ts'),
     background: path.join(__dirname, 'src', 'js', 'background.ts')
   },
   devtool: 'eval',
