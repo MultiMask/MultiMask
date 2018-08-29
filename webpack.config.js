@@ -32,7 +32,7 @@ var options = {
   mode: 'development',
   // context: path.join(__dirname, 'src', 'js'),
   entry: {
-    popup: path.join(__dirname, 'src', 'js', 'popup.ts'),
+    popup: path.join(__dirname, 'src', 'js', 'popup.tsx'),
     dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx'),
     inpage: path.join(__dirname, 'src', 'js', 'inpage.ts'),
     options: path.join(__dirname, 'src', 'js', 'options.ts'),
@@ -73,7 +73,7 @@ var options = {
       },
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        loader: 'ts-loader',
         exclude: /node_modules/
       }
     ]

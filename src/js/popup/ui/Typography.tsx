@@ -8,12 +8,14 @@ interface Typography {
   variant?: any;
   color?: string;
   align?: string;
+  onClick?: any;
 }
 
 type Props = {
-  theme: any;
-  align: string;
-  color: string;
+  theme?: any;
+  align?: string;
+  color?: string;
+  onClick?: any;
 }
 
 const Typography: React.SFC<Typography> = ({ children, headlineMapping, variant, ...props }) => {

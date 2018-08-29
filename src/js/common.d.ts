@@ -35,5 +35,6 @@ declare var chrome: any;
  */
 interface Window {
   multiWeb: any;
+  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
 }
 

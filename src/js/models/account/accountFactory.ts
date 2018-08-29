@@ -18,7 +18,7 @@ const createWallet = ({ blockchain, network }) => {
 };
 
 export default {
-  create({ name, blockchain, network, id, secret }) {
+  create({ name, blockchain, network, id, secret }: any) {
     let wallet = createWallet({ blockchain, network });
 
     return new Account({ wallet, name, network, blockchain, secret, id });
