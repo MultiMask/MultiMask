@@ -2,7 +2,11 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import Typography from './Typography';
 
-const Item = styled(Typography)``;
+const Item = styled(Typography)`
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+  }
+`;
 
 const Root = styled('div')`
   border-radius: 2px;
@@ -10,9 +14,6 @@ const Root = styled('div')`
   cursor: pointer;
   &:hover {
     background-color: ${props => props.theme.colors.hint};
-  }
-  &:hover ${Item} {
-    color: ${props => props.theme.colors.primary};
   }
 `;
 
