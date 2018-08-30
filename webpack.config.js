@@ -74,7 +74,6 @@ var options = {
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        // loader: ['babel-loader', ],
         use: [
           {
             loader: 'awesome-typescript-loader',
