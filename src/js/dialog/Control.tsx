@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import { css } from 'emotion';
 import Typography from '../popup/ui/Typography';
 
-const Container = styled.div`
+const Container = styled('div')`
   display: flex;
   align-items: center;
   padding: 10px 0;
@@ -15,7 +15,7 @@ const FirstItem = styled(Typography)`
   flex-basis: 60px;
 `;
 
-const Input = styled.input`
+const Input = styled('input')`
   width: 65%;
   outline: none;
   padding: 8px;
@@ -29,7 +29,7 @@ const Input = styled.input`
   }
 `;
 
-const Content = styled.div`
+const Content = styled('div')`
   display: flex;
   flex-grow: 1;
   align-items: center;

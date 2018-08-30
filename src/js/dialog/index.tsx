@@ -17,7 +17,7 @@ import Control from './Control';
 import Divider from '../popup/ui/Divider';
 import Button from '../popup/ui/Button';
 
-const Actions = styled.div`
+const Actions = styled('div')`
   display: flex;
   margin: 20px 20px 0 20px;
   justify-content: space-between;
@@ -201,7 +201,7 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     // TODO: return loader
-    if (!this.state.isLoaded) return null;
+    if (!this.state.isLoaded || !this.state.tx) return null;
 
     // TODO: style this caption
     if (!this.state.isReady) {

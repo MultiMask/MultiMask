@@ -4,7 +4,7 @@ import { css } from 'emotion';
 import Typography from '../popup/ui/Typography';
 
 type ContainerProps = { multi: boolean; }
-const Container = styled.div`
+const Container = styled('div')`
   display: flex;
   align-items: ${(props: ContainerProps) => (props.multi ? 'start' : 'center')};
   padding: 10px 0;
@@ -17,7 +17,7 @@ const FirstItem = styled(Typography)`
 `;
 
 type ContentProps = { center: boolean; }
-const Content = styled.div`
+const Content = styled('div')`
   margin: ${(props: ContentProps) => props.center && 'auto'};
   overflow: hidden;
 `;
