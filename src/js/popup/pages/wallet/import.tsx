@@ -107,7 +107,7 @@ export default connect(
 type TextariaProps = Partial<HTMLTextAreaElement> & {
   theme?: any;
 }
-const Textaria = styled.textarea`
+const Textaria = styled('textarea')`
   outline: none;
   border: 1px solid ${(props: TextariaProps) => props.theme.colors.secondary};
   border-radius: 5px;

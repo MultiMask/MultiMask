@@ -39,6 +39,6 @@ export default connect(
   dispatch => bindActionCreators(profileActions, dispatch)
 )(QRCodeView);
 
-const Container = styled.div`
+const Container = styled('div')`
   padding: 20px;
 `;

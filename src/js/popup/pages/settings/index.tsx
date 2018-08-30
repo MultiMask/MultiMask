@@ -85,7 +85,7 @@ export default connect(
     )
 )(Settings);
 
-const Form = styled.div`
+const Form = styled('div')`
   display: flex;
   padding: 0 20px;
   flex-direction: column;
@@ -97,12 +97,12 @@ type SectionProps = {
   centered?: boolean;
   style?: any;
 }
-const Section = styled.div`
+const Section = styled('div')`
   padding: 30px 0;
   text-align: ${({ centered }: SectionProps) => (centered ? 'center' : void 0)};
 `;
 
-const Hr = styled.hr`
+const Hr = styled('hr')`
   height: 1px;
   width: 100%;
   background-color: #dee3ec;

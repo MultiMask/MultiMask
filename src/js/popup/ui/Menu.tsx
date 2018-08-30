@@ -2,11 +2,11 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import Icon from './Icon';
 
-const Root = styled.div`
+const Root = styled('div')`
   position: relative;
 `;
 
-const MenuContainer = styled.div`
+const MenuContainer = styled('div')`
   min-width: 100px;
   position: absolute;
   right: 0;

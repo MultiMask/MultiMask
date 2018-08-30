@@ -10,7 +10,7 @@ const Container = styled(BaseContainer)`
   height: 600px;
 `;
 
-const Header = styled.header`
+const Header = styled('header')`
   display: flex;
   align-items: center;
   text-align: center;

@@ -32,13 +32,13 @@ FormLayout.defaultProps = {
 
 export default FormLayout;
 
-const Container = styled.form`
+const Container = styled('form')`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 `;
 
-const Content = styled.div`
+const Content = styled('div')`
   flex-grow: 1;
   padding: 0 20px;
   overflow-y: auto;
@@ -46,7 +46,7 @@ const Content = styled.div`
   flex-direction: column;
 `;
 
-const Actions = styled.div`
+const Actions = styled('div')`
   display: flex;
   flex-direction: row;
   justify-content: space-between;

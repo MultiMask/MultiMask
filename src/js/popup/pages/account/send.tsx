@@ -11,7 +11,7 @@ import txActions from '../../actions/tx';
 import { getCurrentWallet } from './../../select';
 import Typography from '../../ui/Typography';
 
-const Form = styled.form`
+const Form = styled('form')`
   background-color: ${props => props.theme.colors.background};
   flex-grow: 1;
   padding: 20px;

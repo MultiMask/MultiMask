@@ -12,7 +12,7 @@ const Container = styled(BaseContainer)`
 type HeaderProps = {
   login?: boolean;
 }
-const Header = styled.header`
+const Header = styled('header')`
   display: flex;
   align-items: center;
   text-align: center;

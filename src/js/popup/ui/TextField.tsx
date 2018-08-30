@@ -2,13 +2,13 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 type fullWidth = { fullWidth: boolean; }
-const InputContainer = styled.div`
+const InputContainer = styled('div')`
   position: relative;
   background-color: inherit;
   width: ${(props: fullWidth) => props.fullWidth && '100%'};
 `;
 
-const Input = styled.input`
+const Input = styled('input')`
   border: 1px solid ${props => props.theme.colors.hint};
   box-shadow: ${props => props.theme.shadows[0]};
   width: 100%;
@@ -24,7 +24,7 @@ type LabelProps = {
   theme?: any;
   for: string;
 }
-const Label = styled.label`
+const Label = styled('label')`
   position: absolute;
   color: ${(props: LabelProps) => props.theme.colors.secondary};
   top: -8px;
@@ -35,7 +35,7 @@ const Label = styled.label`
 `;
 
 type ErrorProps = { error: boolean }
-const Error = styled.div`
+const Error = styled('div')`
   display: ${(props: ErrorProps) => (props.error ? 'block' : 'none')};
   color: ${props => props.theme.colors.error};
   font-size: 10px;

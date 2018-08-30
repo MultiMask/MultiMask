@@ -56,7 +56,7 @@ export default connect(
     )
 )(Wallet);
 
-const Content = styled.div`
+const Content = styled('div')`
   font-size: 18px;
   padding: 20px;
   background: #eee;

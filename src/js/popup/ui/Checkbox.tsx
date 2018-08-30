@@ -31,11 +31,11 @@ class Checkbox extends React.Component<any, any> {
   };
 }
 
-const Label = styled.label`
+const Label = styled('label')`
   font-size: 16px;
 `;
 
-const Input = styled.input`
+const Input = styled('input')`
   position: absolute;
   z-index: -1;
   opacity: 0;
@@ -45,12 +45,12 @@ type CheckboxIconProps = {
   theme?: any;
   color?: string;
 }
-const CheckboxIcon = styled.span`
+const CheckboxIcon = styled('span')`
   font-size: 18px;
   color: ${(props: CheckboxIconProps) => props.theme.colors[props.color] || props.theme.colors.primary};
 `;
 
-const CheckboxText = styled.span`
+const CheckboxText = styled('span')`
   display: inline-block;
   margin-left: 0.5em;
 `;

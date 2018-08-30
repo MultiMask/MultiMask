@@ -19,7 +19,7 @@ const Container = styled(BaseContainer)`
   flex-direction: column;
 `;
 
-const Header = styled.div`
+const Header = styled('div')`
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -33,7 +33,7 @@ type HeaderItemProps = {
   theme?: any;
   color?: any;
 }
-const HeaderItem = styled.div`
+const HeaderItem = styled('div')`
   color: ${(props: HeaderItemProps) => props.theme.colors[props.color] || props.theme.colors.primary};
   cursor: pointer;
   display: flex;

@@ -4,7 +4,7 @@ import Typography from './Typography';
 
 const Item = styled(Typography)``;
 
-const Root = styled.div`
+const Root = styled('div')`
   border-radius: 2px;
   padding: 4px 8px;
   cursor: pointer;

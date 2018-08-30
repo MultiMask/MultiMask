@@ -16,7 +16,7 @@ import MenuItem from '../../ui/MenuItem';
 import Button from '../../ui/Button';
 import Icon from '../../ui/Icon';
 
-const TXContainer = styled.div`
+const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
   flex-grow: 1;
 `;

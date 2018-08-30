@@ -9,7 +9,7 @@ const iconTypes = {
   'no-wallets': require('./Icon_type_no-wallets.png')
 };
 
-const IconInner = styled.span`
+const IconInner = styled('span')`
   display: inline-block;
   text-align: center;
   min-width: 1em;
@@ -28,7 +28,7 @@ const IconInner = styled.span`
     }
   }};
 `;
-const IconImg = styled.img`
+const IconImg = styled('img')`
   height: 100%;
   width: auto;
 `;

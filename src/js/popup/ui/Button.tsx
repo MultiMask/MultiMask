@@ -10,7 +10,7 @@ const dynamicStyle = props => css`
   box-shadow: ${props.outlined && 'none'};
 `;
 
-const ButtonBase = styled.button`
+const ButtonBase = styled('button')`
   color: white;
   border-radius: 4px;
   line-height: 16px;

@@ -12,7 +12,7 @@ export const styles = {
   `
 };
 
-export const Root = styled.div`
+export const Root = styled('div')`
   display: flex;
   flex-direction: column;
   margin: 0 30px 0 20px;
@@ -20,7 +20,7 @@ export const Root = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.hint};
 `;
 
-export const Header = styled.div`
+export const Header = styled('div')`
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;

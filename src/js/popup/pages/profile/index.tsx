@@ -217,19 +217,19 @@ export default connect(
     )
 )(Profiles);
 
-const Wrapper = styled.div`
+const Wrapper = styled('div')`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 `;
 
-const List = styled.div`
+const List = styled('div')`
   flex-grow: 1;
   padding: 0 20px;
   overflow-y: auto;
 `;
 
-const Bottom = styled.div`
+const Bottom = styled('div')`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -240,7 +240,7 @@ const Button = styled(BaseButton)`
   min-width: 80px;
 `;
 
-const Item = styled.div`
+const Item = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: center;

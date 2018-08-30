@@ -7,18 +7,18 @@ import networkSign from '../../../../helpers/networkSign';
 import Icon from '../../../ui/components/Icon';
 import Typography from '../../../ui/Typography';
 
-const WalletContainer = styled.div`
+const WalletContainer = styled('div')`
   padding: 10px 20px;
   margin-left: 5px;
   background-color: #fff;
 `;
 
-const WalletHeader = styled.div`
+const WalletHeader = styled('div')`
   display: flex;
   align-items: center;
 `;
 
-const WalletContent = styled.div`
+const WalletContent = styled('div')`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
