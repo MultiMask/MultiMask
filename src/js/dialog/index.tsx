@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
-import web3Utils from 'web3-utils';
+import Web3 = require('web3');
 
 import networks from '../blockchain';
 import InternalMessage from '../libs/InternalMessage';
@@ -16,6 +16,8 @@ import Info from './Info';
 import Control from './Control';
 import Divider from '../popup/ui/Divider';
 import Button from '../popup/ui/Button';
+
+let web3 = new Web3();
 
 const Actions = styled('div')`
   display: flex;
@@ -158,15 +160,15 @@ export default class App extends React.Component<{}, AppState> {
       return `${tx.amount / 1e8} BTC`;
     }
     if (blockchain === networks.ETH.sign) {
-      return `${web3Utils.utils.fromWei(tx.value, 'ether')} ETH`;
+      return `${web3.utils.fromWei(tx.value, 'ether')} ETH`;
     }
 
     return null;
   }
 
   get gasControls() {
-    const gasPrice = web3Utils.fromWei(web3Utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
-    const gasLimit = web3Utils.hexToNumber(this.state.tx.gasLimit);
+    const gasPrice = web3.utils.fromWei(web3.utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
+    const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
     const handlePrice = e => this.handleUpdateTX('gasPrice', e);
     const handleLimit = e => this.handleUpdateTX('gasLimit', e);
 
@@ -183,9 +185,9 @@ export default class App extends React.Component<{}, AppState> {
     const getValue = (field, value = 0) => {
       switch (field) {
         case 'gasPrice':
-          return web3Utils.utils.toHex(web3Utils.utils.toWei(value.toString(), 'gwei'));
+          return web3.utils.toHex(web3.utils.toWei(value.toString(), 'gwei'));
         case 'gasLimit':
-          return web3Utils.utils.toHex(value.toString());
+          return web3.utils.toHex(value.toString());
       }
     };
     const hexValue = getValue(field, value);

@@ -7,8 +7,7 @@ import hdkey from 'hdkey';
 
 import EtherApi from 'etherscan-api';
 
-// eslint-disable-next-line
-let web3: Web3;
+let web3 = new Web3();
 const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '10000');
 
 export default class Engine {

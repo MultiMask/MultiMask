@@ -6,7 +6,7 @@ import Typography from '../../../../ui/Typography';
 import Icon from '../../../../ui/Icon';
 
 import Web3 = require('web3');
-let web3: Web3;
+let web3 = new Web3();
 
 import { DATE_FORMAT, Header, Root, styles } from './elements';
 

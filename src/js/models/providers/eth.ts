@@ -1,7 +1,7 @@
 import networks from './../../blockchain';
 import EtherApi from 'etherscan-api';
 import Web3 = require('web3');
-let web3: Web3;
+let web3 = new Web3();
 
 // eslint-disable-next-line
 const etherApi = EtherApi.init(etherscanApiKey, 'ropsten', '3000');
