@@ -73,8 +73,20 @@ var options = {
       },
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        // loader: ['babel-loader', ],
+        use: [
+          {
+            loader: 'awesome-typescript-loader',
+            options: {
+              useBabel: true,
+              babelCore: '@babel/core',
+              babelOptions: {
+                babelrc: true
+              }
+            }
+          }
+        ]
       }
     ]
   },
