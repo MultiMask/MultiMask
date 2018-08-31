@@ -12,6 +12,7 @@ class Controller {
   private messageController: MessageController;
 
   constructor() {
+    // Set from settings in ./config.json
     setLevel(logLevel);
 
     // App.bootstrap();
