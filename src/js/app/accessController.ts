@@ -31,7 +31,7 @@ export class AccessController {
     // TODO: Maybe use AUTH_CHECK for this purpuse
     this.messageController.on(AUTH_IS_READY, (sendResponse) => {
       sendResponse({
-        isReady: this.isReady()
+        isReady: this.isAuth()
       });
     })
 
@@ -70,13 +70,6 @@ export class AccessController {
   }
 
   /**
-   * Check app is Ready
-   */
-  public isReady() {
-    return this.inited;
-  }
-
-  /**
    * Return pass for decode and encode profiles and wallets
    */
   public getPass() {
@@ -86,7 +79,7 @@ export class AccessController {
   /**
    * Check that user is authorize
    */
-  private isAuth() {
+  public isAuth() {
     return !!this.password;
   }
 
