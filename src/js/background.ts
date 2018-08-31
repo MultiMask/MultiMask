@@ -1,22 +1,34 @@
-import { LocalStream } from 'extension-streams';
+// import { LocalStream } from 'extension-streams';
 import { setLevel } from 'loglevel';
 
-import listeners from './background/listeners';
-import App from './models/app';
+import { AccessController } from './background/accessController';
+import { MessageController } from './background/messageController';
+
+// import listeners from './background/listeners';
+// import App from './models/app';
 
 class Controller {
+  private accessController: AccessController;
+  private messageController: MessageController;
+
   constructor() {
     setLevel(logLevel);
 
-    App.bootstrap();
-    this.setupInternalMessaging({ App });
+    // App.bootstrap();
+    // this.setupInternalMessaging({ App });
+
+    this.messageController = new MessageController();
+
+    this.accessController = new AccessController({
+      messageController: this.messageController
+    });
   }
 
-  setupInternalMessaging(opts) {
-    const watcher = listeners(opts);
+  // setupInternalMessaging(opts) {
+  //   const watcher = listeners(opts);
 
-    LocalStream.watch(watcher);
-  }
+  //   LocalStream.watch(watcher);
+  // }
 }
 
 new Controller();

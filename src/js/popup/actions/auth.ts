@@ -31,7 +31,7 @@ const AuthActions = {
   check: () => (dispatch, getState) => {
     InternalMessage.signal(AUTH_CHECK)
       .send()
-      .then(({ payload: { isAuth } }) => {
+      .then(({ isAuth }) => {
         if (isAuth) {
           dispatch({
             type: AUTH_CHECK_SUCCESS
@@ -58,8 +58,8 @@ const AuthActions = {
   login: pass => (dispatch, getState) => {
     InternalMessage.payload(AUTH_LOGIN, { pass })
       .send()
-      .then(({ payload: { login } }) => {
-        if (login) {
+      .then(({ isLogin }) => {
+        if (isLogin) {
           AuthActions.success()(dispatch, getState);
         } else {
           AuthActions.fail()(dispatch, getState);

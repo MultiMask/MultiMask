@@ -1,6 +1,6 @@
 import {
   AUTH_IS_READY,
-  AUTH_IS_READY_RESULT,
+  // AUTH_IS_READY_RESULT,
   AUTH_INIT,
   AUTH_INIT_DONE,
   AUTH_CHECK,
@@ -13,50 +13,50 @@ import {
 
 export default ({ App }) => ({ type, payload }, sendResponse) => {
   switch (type) {
-    case AUTH_IS_READY: {
-      sendResponse({
-        type: AUTH_IS_READY_RESULT,
-        payload: {
-          isReady: App.io.auth.isReady()
-        }
-      });
+    // case AUTH_IS_READY: {
+    //   sendResponse({
+    //     type: AUTH_IS_READY_RESULT,
+    //     payload: {
+    //       isReady: App.io.auth.isReady()
+    //     }
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
 
-    case AUTH_INIT: {
-      App.create(payload.pass);
+    // case AUTH_INIT: {
+    //   App.create(payload.pass);
 
-      sendResponse({
-        type: AUTH_INIT_DONE
-      });
-      break;
-    }
+    //   sendResponse({
+    //     type: AUTH_INIT_DONE
+    //   });
+    //   break;
+    // }
 
-    case AUTH_CHECK: {
-      sendResponse({
-        type: AUTH_CHECK_RESULT,
-        payload: { isAuth: App.isAuth() }
-      });
-      break;
-    }
+    // case AUTH_CHECK: {
+    //   sendResponse({
+    //     type: AUTH_CHECK_RESULT,
+    //     payload: { isAuth: App.isAuth() }
+    //   });
+    //   break;
+    // }
 
-    case AUTH_LOGIN: {
-      App.login(payload.pass).then(login => {
-        sendResponse({
-          type: AUTH_LOGIN_RESULT,
-          payload: { login }
-        });
-      });
-      break;
-    }
+    // case AUTH_LOGIN: {
+    //   App.login(payload.pass).then(login => {
+    //     sendResponse({
+    //       type: AUTH_LOGIN_RESULT,
+    //       payload: { login }
+    //     });
+    //   });
+    //   break;
+    // }
 
-    case AUTH_LOGOUT: {
-      sendResponse({
-        type: AUTH_LOGOUT_RESULT,
-        payload: { isLogout: App.logout() }
-      });
-      break;
-    }
+    // case AUTH_LOGOUT: {
+    //   sendResponse({
+    //     type: AUTH_LOGOUT_RESULT,
+    //     payload: { isLogout: App.logout() }
+    //   });
+    //   break;
+    // }
   }
 };
