@@ -203,10 +203,10 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     // TODO: return loader
-    if (!this.state.isLoaded || !this.state.tx) return null;
+    if (!this.state.isLoaded) return null;
 
     // TODO: style this caption
-    if (!this.state.isReady) {
+    if (!this.state.isReady || !this.state.tx) {
       return (
         <DialogLayout>
           <Typography color="main">You need to authorize</Typography>
