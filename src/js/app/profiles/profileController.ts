@@ -48,7 +48,7 @@ export class ProfileController {
    */
   public getAccounts = (sendResponse): void => {
     const resolver = this.currentProfileId
-      ? Promise.resolve([])
+      ? Promise.resolve(this.accountController.getAccounts())
       : this.init();
 
     resolver
@@ -122,13 +122,6 @@ export class ProfileController {
     sendResponse(this.accountController.getSeed(id));
   }
 
-  create(data) {
-    const profile = new Profile(data);
-
-    ProfileFactory.create(this.getPass(), profile);
-    this.profileListController.add(profile);
-  }
-
   getCurrent() {
     return this.profileListController.findById(this.currentProfileId);
   }
@@ -147,8 +140,17 @@ export class ProfileController {
     }
   }
 
+
+  ////////// LIST
   add() {
     return this.createDefault();
+  }
+
+  create(data) {
+    const profile = new Profile(data);
+
+    ProfileFactory.create(this.getPass(), profile);
+    this.profileListController.add(profile);
   }
 
   remove(id) {

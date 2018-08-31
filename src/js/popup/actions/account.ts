@@ -26,7 +26,7 @@ const AccountActions = {
   create: account => (dispatch, getState) => {
     InternalMessage.payload(ACCOUNT_CREATE, account)
       .send()
-      .then(({ payload }) => {
+      .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
 
         dispatch({
