@@ -1,10 +1,10 @@
 // import { LocalStream } from 'extension-streams';
 import { setLevel } from 'loglevel';
 
-import { AccessController } from './background/accessController';
-import { MessageController } from './background/messageController';
+import { AccessController } from './app/accessController';
+import { MessageController } from './app/messageController';
 
-import { ProfileListController } from './background/profiles/profileListController';
+import { ProfileListController } from './app/profiles/profileListController';
 
 // import listeners from './background/listeners';
 // import App from './models/app';

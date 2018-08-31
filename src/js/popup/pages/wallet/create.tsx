@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import styled from 'react-emotion';
 import FormLayout from './FormLayout';
 import actions from './../../actions/account';
-import AccountFactory from './../../../background/account/accountFactory';
+import AccountFactory from './../../../app/account/accountFactory';
 
 class Wallet extends React.Component<any, any> {
   public account;
