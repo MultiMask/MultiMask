@@ -1,4 +1,4 @@
-import txCtrl from './../providers/tx';
+// import txCtrl from './../providers/tx';
 
 export default ({ ethController }) => ({
   getAccounts() {
@@ -7,7 +7,7 @@ export default ({ ethController }) => ({
 
   approveTx(tx) {
     const data = ethController.approveTx(tx);
-    return txCtrl.approveTx(data);
+    // return txCtrl.approveTx(data);
   },
 
   signTx({ tx }) {

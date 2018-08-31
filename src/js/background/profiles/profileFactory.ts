@@ -1,4 +1,4 @@
-import { getEntity, setEntity, removeEntity } from '../getter';
+import { getEntity, setEntity, removeEntity } from '../../models/getter';
 import BlockCipher, { cipherTypes } from '../../libs/blockCipher';
 import uuid from 'uuid/v4';
 import { debug } from 'loglevel';

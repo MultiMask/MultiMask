@@ -1,4 +1,4 @@
-import ProfileListController from './profileListController';
+import { ProfileListController } from './profileListController';
 import ProfileFactory from './profileFactory';
 
 import AccountFactory from './../account/accountFactory';

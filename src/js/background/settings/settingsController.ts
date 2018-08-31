@@ -1,4 +1,4 @@
-import { getSettings, setSettings } from '../getter';
+import { getSettings, setSettings } from '../../models/getter';
 
 import priceProviders from './priceProviders';
 

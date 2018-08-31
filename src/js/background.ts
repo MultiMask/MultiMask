@@ -4,12 +4,15 @@ import { setLevel } from 'loglevel';
 import { AccessController } from './background/accessController';
 import { MessageController } from './background/messageController';
 
+import { ProfileListController } from './background/profiles/profileListController';
+
 // import listeners from './background/listeners';
 // import App from './models/app';
 
 class Controller {
   private accessController: AccessController;
   private messageController: MessageController;
+  private profileListController: ProfileListController;
 
   constructor() {
     // Set from settings in ./config.json
@@ -22,6 +25,11 @@ class Controller {
 
     this.accessController = new AccessController({
       messageController: this.messageController
+    });
+
+    this.profileListController = new ProfileListController({
+      messageController: this.messageController,
+      accessController: this.accessController
     });
   }
 

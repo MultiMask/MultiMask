@@ -1,14 +1,20 @@
-import { getProfiles, setProfiles } from '../getter';
+import { getProfiles, setProfiles } from '../../models/getter';
+
+import { AccessController } from './../accessController';
+import { MessageController } from './../messageController';
 
 import ProfileFactory from './profileFactory';
-import AccountFactory from './../account/accountFactory';
+import AccountFactory from '../account/accountFactory';
 
-export default class ProfileListController {
-  list = null;
-  public App;
+export class ProfileListController {
+  private list: any[] = null;
 
-  constructor({ App }) {
-    this.App = App;
+  private accessController: AccessController;
+  private messageController: MessageController;
+
+  constructor(opts) {
+    this.accessController = opts.accessController;
+    this.messageController = opts.messageController;
   }
 
   get() {
@@ -21,7 +27,7 @@ export default class ProfileListController {
         if (ids && ids.length > 0) {
           return Promise.all(
             ids.map(id => {
-              return ProfileFactory.load(this.App.getPass(), id);
+              return ProfileFactory.load(this.accessController.getPass(), id);
             })
           );
         } else {
