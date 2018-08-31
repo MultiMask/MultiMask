@@ -4,6 +4,8 @@ import { setLevel } from 'loglevel';
 import { AccessController } from './app/accessController';
 import { MessageController } from './app/messageController';
 
+import { AccountController } from './app/account/accountController';
+import { ProfileController } from './app/profiles/profileController';
 import { ProfileListController } from './app/profiles/profileListController';
 
 // import listeners from './background/listeners';
@@ -12,6 +14,9 @@ import { ProfileListController } from './app/profiles/profileListController';
 class Controller {
   private accessController: AccessController;
   private messageController: MessageController;
+  
+  private accountController: AccountController;
+  private profileController: ProfileController;
   private profileListController: ProfileListController;
 
   constructor() {
@@ -30,6 +35,18 @@ class Controller {
     this.profileListController = new ProfileListController({
       messageController: this.messageController,
       accessController: this.accessController
+    });
+
+    this.accountController = new AccountController({
+      messageController: this.messageController,
+      accessController: this.accessController
+    });
+
+    this.profileController = new ProfileController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+      profileListController: this.profileListController,
     });
   }
 

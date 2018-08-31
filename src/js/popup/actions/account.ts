@@ -18,13 +18,13 @@ const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
       .send()
-      .then(({ payload }) => {
+      .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
       });
   },
 
   create: account => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_CREATE, { account })
+    InternalMessage.payload(ACCOUNT_CREATE, account)
       .send()
       .then(({ payload }) => {
         AccountActions.setAccount(payload)(dispatch, getState);

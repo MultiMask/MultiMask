@@ -1,27 +1,67 @@
 import { ProfileListController } from './profileListController';
 import ProfileFactory from './profileFactory';
 
+import { AccessController } from './../accessController';
+import { MessageController } from './../messageController';
+
+import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import Profile from './Profile';
 
-export default class ProfileController {
-  public App: any;
-  public ac: any;
-  public plc: any;
-  currentProfileId = null;
+import { ACCOUNT_INFO, ACCOUNT_CREATE } from './../../constants/account';
 
-  constructor({ App, accountController }) {
-    this.App = App;
-    this.ac = accountController;
-    this.plc = new ProfileListController({ App });
+export class ProfileController {
+  private accessController: AccessController;
+  private messageController: MessageController;
+
+  private profileListController: ProfileListController;
+  private accountController: AccountController;
+
+  private currentProfileId = null;
+
+  constructor(opts) {
+    this.accessController = opts.accessController;
+    this.messageController = opts.messageController;
+    
+    this.accountController = opts.accountController;
+    this.profileListController =  opts.profileListController;
+
+    this.startListening();
   }
 
-  getPass() {
-    return this.App.getPass();
+  /**
+   * Messages from popup
+   */
+  private startListening() {
+    this.messageController.on(ACCOUNT_INFO, this.getAccounts);
+    this.messageController.on(ACCOUNT_CREATE, this.addAccount);
   }
 
-  init() {
-    return this.plc.get().then(profiles => {
+  private getPass() {
+    return this.accessController.getPass();
+  }
+
+  /**
+   * Return accounts for current Profile
+   * @param sendResponse
+   */
+  public getAccounts = (sendResponse) => {
+    const resolver = this.currentProfileId
+      ? Promise.resolve([])
+      : this.init();
+
+    resolver
+      .then(accounts => {
+        return Promise.all(accounts.map(account => account.getInfo()));
+      })
+      .then(sendResponse);
+  }
+
+  /**
+   * Get profiles list and restore first or create new
+   */
+  private init() {
+    return this.profileListController.get().then(profiles => {
       if (profiles && profiles.length > 0) {
         const firstProfile = profiles[0];
 
@@ -32,52 +72,64 @@ export default class ProfileController {
     });
   }
 
-  createDefault() {
+  /**
+   * Create new default profile
+   */
+  private createDefault() {
     const profile = ProfileFactory.createDefault();
 
     ProfileFactory.create(this.getPass(), profile);
-    this.plc.add(profile);
+    this.profileListController.add(profile);
 
     return this.setCurrrent(profile);
+  }
+
+  /**
+   * Set new current account and decode all wallets in this profile
+   * @param profile 
+   */
+  private setCurrrent(profile) {
+    this.currentProfileId = profile.getId();
+
+    this.accountController.clearList();
+    return this.accountController.restore(profile.getAccounts(), this.getPass());
+  }
+
+  /**
+   * Create new account in with profile with data
+   * @param sendResponse 
+   * @param accountData 
+   */
+  public addAccount = (sendResponse, accountData) => {
+    console.log(sendResponse, accountData);
+    
+    const profile = this.getCurrent();
+    const account = AccountFactory.create(accountData);
+
+    profile.addAccount(this.getPass(), account).then(() => {
+      AccountFactory.save(this.getPass(), account);
+      this.accountController.addAccountInstance(account);
+
+      this.getAccounts(sendResponse);
+    });
   }
 
   create(data) {
     const profile = new Profile(data);
 
     ProfileFactory.create(this.getPass(), profile);
-    this.plc.add(profile);
-  }
-
-  setCurrrent(profile) {
-    this.currentProfileId = profile.getId();
-
-    this.ac.clearList();
-    return this.ac.restore(profile.getAccounts(), this.getPass());
+    this.profileListController.add(profile);
   }
 
   getCurrent() {
-    return this.plc.findById(this.currentProfileId);
-  }
-
-  addAccount(accountData) {
-    const profile = this.getCurrent();
-    const account = AccountFactory.create(accountData);
-
-    return profile.addAccount(this.getPass(), account).then(() => {
-      AccountFactory.save(this.getPass(), account);
-      this.ac.addAccountInstance(account);
-    });
-  }
-
-  getAccounts() {
-    return this.ac.getAccounts();
+    return this.profileListController.findById(this.currentProfileId);
   }
 
   async getFullInfo(id) {
-    const profile = this.plc.findById(id);
+    const profile = this.profileListController.findById(id);
 
     if (profile) {
-      return this.ac.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
+      return this.accountController.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
         profile.wallets = accounts;
 
         return profile;
@@ -93,7 +145,7 @@ export default class ProfileController {
 
   remove(id) {
     if (id !== this.currentProfileId) {
-      this.plc.remove(id);
+      this.profileListController.remove(id);
     }
   }
 
@@ -104,7 +156,7 @@ export default class ProfileController {
   }
 
   update(id, data) {
-    this.plc.update(this.getPass(), id, data);
+    this.profileListController.update(this.getPass(), id, data);
   }
 
   import(pass, encryptedProfile) {
@@ -112,15 +164,15 @@ export default class ProfileController {
 
     if (!decryptProfile) return;
 
-    const oldProfile = this.plc.findById(decryptProfile.data.id);
+    const oldProfile = this.profileListController.findById(decryptProfile.data.id);
 
     if (!oldProfile) {
-      decryptProfile.wallets.map(wallet => this.ac.import(this.getPass(), wallet));
+      decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
       return this.create(decryptProfile.data);
     }
 
     if (oldProfile.data.version < decryptProfile.data.version) {
-      decryptProfile.wallets.map(wallet => this.ac.import(this.getPass(), wallet));
+      decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
       return this.update(oldProfile.data.id, decryptProfile.data);
     }
 
@@ -128,12 +180,12 @@ export default class ProfileController {
   }
 
   select(id) {
-    const selectedProfile = this.plc.findById(id);
+    const selectedProfile = this.profileListController.findById(id);
     this.setCurrrent(selectedProfile);
   }
 
   getData() {
-    const profileList = this.plc.getList();
+    const profileList = this.profileListController.getList();
     return { list: profileList, profileId: this.currentProfileId };
   }
 }

@@ -1,14 +1,20 @@
 import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
+import { AccessController } from './../accessController';
+import { MessageController } from './../messageController';
+
 import { info } from 'loglevel';
 
-export default class AccountController {
-  public App: any;
+export class AccountController {
   public accounts = [];
 
-  constructor({ App }) {
-    this.App = App;
+  private accessController: AccessController;
+  private messageController: MessageController;
+
+  constructor(opts) {
+    this.accessController = opts.accessController;
+    this.messageController = opts.messageController;
   }
 
   restore(accounts, pass) {
@@ -51,7 +57,7 @@ export default class AccountController {
   }
 
   getAccounts() {
-    if (this.App.isAuth()) {
+    if (this.accessController.isAuth()) {
       return this.accounts;
     }
 
@@ -59,13 +65,13 @@ export default class AccountController {
   }
 
   getSeed({ id }) {
-    if (this.App.isAuth()) {
+    if (this.accessController.isAuth()) {
       const account = this.getAccountById(id);
 
       if (account) {
         const seed = account.getSeed();
 
-        return encode(this.App.getPass(), seed);
+        return encode(this.accessController.getPass(), seed);
       }
     }
 
