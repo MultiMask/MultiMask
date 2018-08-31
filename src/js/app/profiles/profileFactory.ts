@@ -3,7 +3,7 @@ import BlockCipher, { cipherTypes } from '../../libs/blockCipher';
 import uuid from 'uuid/v4';
 import { debug } from 'loglevel';
 
-import Profile from './Profile';
+import {Profile} from './Profile';
 
 const blockCipher = new BlockCipher(cipherTypes.AES256);
 

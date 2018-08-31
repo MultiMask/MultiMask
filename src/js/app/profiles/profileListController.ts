@@ -6,8 +6,11 @@ import { MessageController } from './../messageController';
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
 
+import { PROFILE_GETLIST } from './../../constants/profile';
+
 export class ProfileListController {
   private list: any[] = null;
+  private current = null;
 
   private accessController: AccessController;
   private messageController: MessageController;
@@ -15,13 +18,45 @@ export class ProfileListController {
   constructor(opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
+
+    this.startListening();
   }
 
-  get() {
-    if (this.list) {
-      return Promise.resolve(this.list);
-    }
+  /**
+   * Messages
+   */
+  private startListening() {
+    this.messageController.on(PROFILE_GETLIST, this.responseList);
+  }
 
+  /**
+   * Response with list of profiles
+   */
+  private responseList = sendResponse => {
+    sendResponse({
+      list: this.getList(),
+      profileId: this.current.getId()
+    })
+  }
+
+  /**
+   * Read profile list from storage and restore all profiles
+   */
+  public init() {
+    return this._loadProfileList()
+      .then(profiles => {
+        if (profiles && profiles.length > 0) {
+          // TODO: load last choosen profile
+          const firstProfile = profiles[0];
+  
+          return this.setCurrrent(firstProfile);
+        } else {
+          return this.createDefault();
+        };
+      })
+  }
+
+  private _loadProfileList() {
     return getProfiles()
       .then((ids: any[]) => {
         if (ids && ids.length > 0) {
@@ -39,6 +74,48 @@ export class ProfileListController {
         return this.list;
       });
   }
+
+  /**
+   * Return list of profiles
+   */
+  public getList() {
+    return this.list.map(profile => profile.serialize());
+  }
+
+  // public getCurrent() {
+
+  // }
+
+  /**
+   * Create new default profile
+   */
+  private createDefault() {
+    const profile = ProfileFactory.createDefault();
+
+    ProfileFactory.create(this.accessController.getPass(), profile);
+    this.add(profile);
+
+    return this.setCurrrent(profile);
+  }
+
+  /**
+   * Set new current account
+   * @param profile 
+   */
+  private setCurrrent(profile) {
+    this.current = profile;
+
+    return this.current;
+  }
+
+
+
+
+
+
+
+
+
 
   add(profile) {
     this.list.push(profile);
@@ -79,7 +156,5 @@ export class ProfileListController {
     return this.list.find(profile => profile.getId() === id);
   }
 
-  getList() {
-    return this.list.map(profile => profile.serialize());
-  }
+
 }

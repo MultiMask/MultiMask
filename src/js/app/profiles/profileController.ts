@@ -6,7 +6,7 @@ import { MessageController } from './../messageController';
 
 import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
-import Profile from './Profile';
+import { Profile } from './Profile';
 
 import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED } from './../../constants/account';
 
@@ -30,7 +30,7 @@ export class ProfileController {
   }
 
   /**
-   * Messages from popup
+   * Messages
    */
   private startListening() {
     this.messageController.on(ACCOUNT_INFO, this.getAccounts);
@@ -62,39 +62,43 @@ export class ProfileController {
    * Get profiles list and restore first or create new
    */
   private init() {
-    return this.profileListController.get().then(profiles => {
-      if (profiles && profiles.length > 0) {
-        const firstProfile = profiles[0];
-
-        return this.setCurrrent(firstProfile);
-      } else {
-        return this.createDefault();
-      }
-    });
+    return this.profileListController.init()
+      .then((profile: Profile) => {
+        return profile.getAccounts();
+      })
+      .then(this.restoreAccounts);
   }
 
   /**
+   * Restore all accounts from store
+   * @param accountIds
+   */
+  private restoreAccounts = (accountIds: string[]) => {
+    this.accountController.clearList();
+    return this.accountController.restore(accountIds, this.getPass());
+  }
+  /**
    * Create new default profile
    */
-  private createDefault() {
-    const profile = ProfileFactory.createDefault();
+  // private createDefault() {
+  //   const profile = ProfileFactory.createDefault();
 
-    ProfileFactory.create(this.getPass(), profile);
-    this.profileListController.add(profile);
+  //   ProfileFactory.create(this.getPass(), profile);
+  //   this.profileListController.add(profile);
 
-    return this.setCurrrent(profile);
-  }
+  //   return this.setCurrrent(profile);
+  // }
 
   /**
    * Set new current account and decode all wallets in this profile
    * @param profile 
    */
-  private setCurrrent(profile) {
-    this.currentProfileId = profile.getId();
+  // private setCurrrent(profile) {
+  //   this.currentProfileId = profile.getId();
 
-    this.accountController.clearList();
-    return this.accountController.restore(profile.getAccounts(), this.getPass());
-  }
+  //   this.accountController.clearList();
+  //   return this.accountController.restore(profile.getAccounts(), this.getPass());
+  // }
 
   /**
    * Create new account in with profile with data
@@ -142,60 +146,56 @@ export class ProfileController {
 
 
   ////////// LIST
-  add() {
-    return this.createDefault();
-  }
+  // create(data) {
+  //   const profile = new Profile(data);
 
-  create(data) {
-    const profile = new Profile(data);
+  //   ProfileFactory.create(this.getPass(), profile);
+  //   this.profileListController.add(profile);
+  // }
 
-    ProfileFactory.create(this.getPass(), profile);
-    this.profileListController.add(profile);
-  }
+  // remove(id) {
+  //   if (id !== this.currentProfileId) {
+  //     this.profileListController.remove(id);
+  //   }
+  // }
 
-  remove(id) {
-    if (id !== this.currentProfileId) {
-      this.profileListController.remove(id);
-    }
-  }
+  // export(id) {
+  //   return this.getFullInfo(id).then(profile => {
+  //     return ProfileFactory.encryptFullProfile(this.getPass(), profile, true);
+  //   });
+  // }
 
-  export(id) {
-    return this.getFullInfo(id).then(profile => {
-      return ProfileFactory.encryptFullProfile(this.getPass(), profile, true);
-    });
-  }
+  // update(id, data) {
+  //   this.profileListController.update(this.getPass(), id, data);
+  // }
 
-  update(id, data) {
-    this.profileListController.update(this.getPass(), id, data);
-  }
+  // import(pass, encryptedProfile) {
+  //   const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
 
-  import(pass, encryptedProfile) {
-    const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
+  //   if (!decryptProfile) return;
 
-    if (!decryptProfile) return;
+  //   const oldProfile = this.profileListController.findById(decryptProfile.data.id);
 
-    const oldProfile = this.profileListController.findById(decryptProfile.data.id);
+  //   if (!oldProfile) {
+  //     decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
+  //     return this.create(decryptProfile.data);
+  //   }
 
-    if (!oldProfile) {
-      decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
-      return this.create(decryptProfile.data);
-    }
+  //   if (oldProfile.data.version < decryptProfile.data.version) {
+  //     decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
+  //     return this.update(oldProfile.data.id, decryptProfile.data);
+  //   }
 
-    if (oldProfile.data.version < decryptProfile.data.version) {
-      decryptProfile.wallets.map(wallet => this.accountController.import(this.getPass(), wallet));
-      return this.update(oldProfile.data.id, decryptProfile.data);
-    }
+  //   return;
+  // }
 
-    return;
-  }
+  // select(id) {
+  //   const selectedProfile = this.profileListController.findById(id);
+  //   this.setCurrrent(selectedProfile);
+  // }
 
-  select(id) {
-    const selectedProfile = this.profileListController.findById(id);
-    this.setCurrrent(selectedProfile);
-  }
-
-  getData() {
-    const profileList = this.profileListController.getList();
-    return { list: profileList, profileId: this.currentProfileId };
-  }
+  // getData() {
+  //   const profileList = this.profileListController.getList();
+  //   return { list: profileList, profileId: this.currentProfileId };
+  // }
 }

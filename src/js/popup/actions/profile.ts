@@ -78,7 +78,7 @@ const ProfileActions = {
   }
 };
 
-const updateProfileListFn = dispatch => ({ payload }) => {
+const updateProfileListFn = dispatch => payload => {
   dispatch({
     type: PROFILE_GETLIST_RESULT,
     payload
