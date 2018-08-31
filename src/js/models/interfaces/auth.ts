@@ -1,9 +1,9 @@
 export default ({ App, profileController }) => ({
-  isReady: () => {
-    return App.isReady();
-  },
+  // isReady: () => {
+  //   return App.isReady();
+  // },
 
-  init: () => {
-    return profileController.init();
-  }
+  // init: () => {
+  //   return profileController.init();
+  // }
 });

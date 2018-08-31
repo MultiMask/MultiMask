@@ -8,33 +8,33 @@ import {
 
 export default ({ App }) => async ({ type, payload }, sendResponse) => {
   switch (type) {
-    case ACCOUNT_INFO: {
-      sendAccountsInfo(App, sendResponse);
-      break;
-    }
+    // case ACCOUNT_INFO: {
+    //   sendAccountsInfo(App, sendResponse);
+    //   break;
+    // }
 
-    case ACCOUNT_CREATE: {
-      App.io.accounts.addAccount(payload.account).then(() => {
-        sendAccountsInfo(App, sendResponse);
-      });
+    // case ACCOUNT_CREATE: {
+    //   App.io.accounts.addAccount(payload.account).then(() => {
+    //     sendAccountsInfo(App, sendResponse);
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
 
-    case ACCOUNT_GETSEED: {
-      const { hashPass, id } = payload;
-      if (await App.check(hashPass)) {
-        const seed = App.io.accounts.getSeed({ id });
+    // case ACCOUNT_GETSEED: {
+    //   const { hashPass, id } = payload;
+    //   if (await App.check(hashPass)) {
+    //     const seed = App.io.accounts.getSeed({ id });
 
-        if (seed) {
-          sendResponse({
-            type: ACCOUNT_GETSEED_RESULT,
-            payload: { seed }
-          });
-        }
-      }
-      break;
-    }
+    //     if (seed) {
+    //       sendResponse({
+    //         type: ACCOUNT_GETSEED_RESULT,
+    //         payload: { seed }
+    //       });
+    //     }
+    //   }
+    //   break;
+    // }
   }
 };
 

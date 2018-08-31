@@ -28,10 +28,10 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
       break;
     }
 
-    case PROFILE_GETLIST: {
-      sendData({ sendResponse, App });
-      break;
-    }
+    // case PROFILE_GETLIST: {
+    //   sendData({ sendResponse, App });
+    //   break;
+    // }
 
     case PROFILE_ADD: {
       App.io.profile.add().then(() => {
