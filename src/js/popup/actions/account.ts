@@ -64,9 +64,9 @@ const AccountActions = {
   getSeed: (pass, id) => (dispatch, getState) => {
     const hashPass = hidePass(pass);
 
-    InternalMessage.payload(ACCOUNT_GETSEED, { hashPass, id })
+    InternalMessage.payload(ACCOUNT_GETSEED, id)
       .send()
-      .then(({ payload: { seed } }) => {
+      .then(seed => {
         dispatch({
           type: ACCOUNT_GETSEED_RESULT,
           payload: { seed }

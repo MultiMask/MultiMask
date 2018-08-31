@@ -8,7 +8,7 @@ import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import Profile from './Profile';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE } from './../../constants/account';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED } from './../../constants/account';
 
 export class ProfileController {
   private accessController: AccessController;
@@ -35,6 +35,7 @@ export class ProfileController {
   private startListening() {
     this.messageController.on(ACCOUNT_INFO, this.getAccounts);
     this.messageController.on(ACCOUNT_CREATE, this.addAccount);
+    this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
   }
 
   private getPass() {
@@ -45,7 +46,7 @@ export class ProfileController {
    * Return accounts for current Profile
    * @param sendResponse
    */
-  public getAccounts = (sendResponse) => {
+  public getAccounts = (sendResponse): void => {
     const resolver = this.currentProfileId
       ? Promise.resolve([])
       : this.init();
@@ -100,9 +101,7 @@ export class ProfileController {
    * @param sendResponse 
    * @param accountData 
    */
-  public addAccount = (sendResponse, accountData) => {
-    console.log(sendResponse, accountData);
-    
+  public addAccount = (sendResponse, accountData): void => {   
     const profile = this.getCurrent();
     const account = AccountFactory.create(accountData);
 
@@ -112,6 +111,15 @@ export class ProfileController {
 
       this.getAccounts(sendResponse);
     });
+  }
+
+  /**
+   * Return seed for Wallet to export
+   * @param sendResponse 
+   * @param id 
+   */
+  public getSeed = (sendResponse, id): void => {
+    sendResponse(this.accountController.getSeed(id));
   }
 
   create(data) {

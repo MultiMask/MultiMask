@@ -64,7 +64,11 @@ export class AccountController {
     return [];
   }
 
-  getSeed({ id }) {
+  /**
+   * Return seed for account by id
+   * @param id 
+   */
+  public getSeed(id): string {
     if (this.accessController.isAuth()) {
       const account = this.getAccountById(id);
 
