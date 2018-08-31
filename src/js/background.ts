@@ -8,6 +8,8 @@ import { AccountController } from './app/account/accountController';
 import { ProfileController } from './app/profiles/profileController';
 import { ProfileListController } from './app/profiles/profileListController';
 
+import { SettingsController } from './app/settings/settingsController';
+
 // import listeners from './background/listeners';
 // import App from './models/app';
 
@@ -18,6 +20,8 @@ class Controller {
   private accountController: AccountController;
   private profileController: ProfileController;
   private profileListController: ProfileListController;
+
+  private settingsController: SettingsController;
 
   constructor() {
     // Set from settings in ./config.json
@@ -48,6 +52,11 @@ class Controller {
       accountController: this.accountController,
       profileListController: this.profileListController,
     });
+
+    this.settingsController = new SettingsController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+    })
   }
 
   // setupInternalMessaging(opts) {
