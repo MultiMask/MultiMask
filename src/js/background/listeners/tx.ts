@@ -1,4 +1,4 @@
-import txCtrl from './../../models/providers/tx';
+// import txCtrl from './../../models/providers/tx';
 
 import { TX_APPROVE, TX_APPROVE_RESULT, TX_SEND, TX_PAYMENT_GET, TX_PAYMENT_RESULT } from './../../constants/tx';
 
@@ -12,14 +12,14 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     }
 
     case TX_APPROVE: {
-      txCtrl.approveTx(payload);
+      // txCtrl.approveTx(payload);
 
       break;
     }
 
     case TX_APPROVE_RESULT: {
       const { id, tx } = payload;
-      txCtrl.confirm(id, tx);
+      // txCtrl.confirm(id, tx);
       sendResponse({});
 
       break;
@@ -28,7 +28,7 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     case TX_PAYMENT_GET: {
       sendResponse({
         type: TX_PAYMENT_RESULT,
-        payload: txCtrl.getLast().toJSON()
+        // payload: txCtrl.getLast().toJSON()
       });
 
       break;
