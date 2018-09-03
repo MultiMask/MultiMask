@@ -61,23 +61,23 @@ class App extends React.Component {
           </MainLayout>
         );
 
-      case STATE_VIEW_CREATION:
-        return (
-          <MainLayout>
-            <Wallet />
-          </MainLayout>
-        );
+      // case STATE_VIEW_CREATION:
+      //   return (
+      //     <MainLayout>
+      //       <Wallet />
+      //     </MainLayout>
+      //   );
 
-      case STATE_VIEW_MAIN:
-      case STATE_VIEW_WALLET:
-      case STATE_VIEW_BUY:
-      case STATE_VIEW_SEND:
-      case STATE_VIEW_EXPORTPK:
-        return (
-          <MainLayout>
-            <Account />
-          </MainLayout>
-        );
+      // case STATE_VIEW_MAIN:
+      // case STATE_VIEW_WALLET:
+      // case STATE_VIEW_BUY:
+      // case STATE_VIEW_SEND:
+      // case STATE_VIEW_EXPORTPK:
+      //   return (
+      //     <MainLayout>
+      //       <Account />
+      //     </MainLayout>
+      //   );
       // TODO: make more beautifully using layout and routing
       // case STATE_VIEW_LOGIN:
       //   return (

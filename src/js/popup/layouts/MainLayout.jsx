@@ -58,7 +58,9 @@ class MainLayout extends React.Component {
         <Header>
           {!creation && (
             <HeaderItem color="secondary">
-              <Icon className={styles.icon} name="plus-circle" onClick={createWallet} />
+              <Link to="wallets/create">
+                <Icon className={styles.icon} name="plus-circle" />
+              </Link>
               <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
                 <MenuItem component={Link} to="/profiles">
                   Profiles

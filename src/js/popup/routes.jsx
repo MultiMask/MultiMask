@@ -10,18 +10,20 @@ import Profiles from './pages/profile';
 import ExportPK from './pages/account/exportpk';
 import Details from './pages/account/details';
 import Send from './pages/account/send';
+import CreateWallet from './pages/wallet';
 
 const routes = () => {
   return (
     <Switch>
       <AppRoute exact path="/" component={Account} layout={MainLayout} />
+      <AppRoute exact path="/create/account" component={CreateAccount} layout={AuthLayout} />
       <AppRoute exact path="/account/details" component={Details} layout={MainLayout} />
       <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
       <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
+      <AppRoute exact path="/wallets/create" component={CreateWallet} layout={MainLayout} />
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
       <AppRoute exact path="/login" component={Login} layout={AuthLayout} />
-      <AppRoute exact path="/create/account" component={CreateAccount} layout={AuthLayout} />
     </Switch>
   );
 };
