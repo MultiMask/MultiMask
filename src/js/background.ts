@@ -36,14 +36,15 @@ class Controller {
       messageController: this.messageController
     });
 
-    this.profileListController = new ProfileListController({
+    this.accountController = new AccountController({
       messageController: this.messageController,
       accessController: this.accessController
     });
 
-    this.accountController = new AccountController({
+    this.profileListController = new ProfileListController({
       messageController: this.messageController,
-      accessController: this.accessController
+      accessController: this.accessController,
+      accountController: this.accountController,
     });
 
     this.profileController = new ProfileController({

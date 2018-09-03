@@ -7,6 +7,7 @@ import { MessageController } from './../messageController';
 
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
+import {AccountController} from '../account/accountController';
 
 import { 
   PROFILE_GETLIST, 
@@ -15,6 +16,7 @@ import {
   PROFILE_REMOVE, 
   PROFILE_UPDATE,
   PROFILE_EXPORT,
+  PROFILE_IMPORT
  } from './../../constants/profile';
 import { Profile } from './Profile';
 
@@ -24,12 +26,14 @@ export class ProfileListController extends EventEmitter {
 
   private accessController: AccessController;
   private messageController: MessageController;
+  private accountController: AccountController;
 
   constructor(opts) {
     super();
 
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
+    this.accountController = opts.accountController;
 
     this.startListening();
   }
@@ -45,6 +49,7 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     
     this.messageController.on(PROFILE_EXPORT, this.responseExport);
+    this.messageController.on(PROFILE_IMPORT, this.responseImport);
   }
 
   /**
@@ -120,6 +125,15 @@ export class ProfileListController extends EventEmitter {
     })
   }
 
+  private responseImport = (sendResponse, { pass, encryptedProfile }) => {
+    this.import(pass, encryptedProfile);
+    
+    sendResponse({
+      list: this.getListSerialized(),
+      profileId: this.current.getId()
+    });
+  }
+
   /**
    * Read profile list from storage and restore all profiles
    */
@@ -144,6 +158,9 @@ export class ProfileListController extends EventEmitter {
     return this.current;
   }
 
+  /**
+   * Load profile list from storage
+   */
   private _loadProfileList() {
     return getProfiles()
       .then((ids: any[]) => {
@@ -252,6 +269,17 @@ export class ProfileListController extends EventEmitter {
   }
 
   /**
+   * Create profile from data
+   * @param data 
+   */
+  private create(data) {
+    const profile = new Profile(data);
+
+    ProfileFactory.create(this.accessController.getPass(), profile);
+    this.addProfileInList(profile);
+  }
+
+  /**
    * Load Profile full model and encrypt
    * @param id 
    */
@@ -279,5 +307,30 @@ export class ProfileListController extends EventEmitter {
     } else {
       return Promise.resolve();
     }
+  }
+
+  /**
+   * Import encrypted profile
+   * @param pass 
+   * @param encryptedProfile 
+   */
+  private import(pass, encryptedProfile) {
+    const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
+
+    if (!decryptProfile) return;
+
+    const oldProfile = this.findById(decryptProfile.data.id);
+
+    if (!oldProfile) {
+      decryptProfile.wallets.map(wallet => this.accountController.import(this.accessController.getPass(), wallet));
+      return this.create(decryptProfile.data);
+    }
+
+    if (oldProfile.data.version < decryptProfile.data.version) {
+      decryptProfile.wallets.map(wallet => this.accountController.import(this.accessController.getPass(), wallet));
+      return this.update(oldProfile.data.id, decryptProfile.data);
+    }
+
+    return;
   }
 }
