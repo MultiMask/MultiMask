@@ -9,17 +9,13 @@ import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
 import { Link } from 'react-router-dom';
-import { STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
-import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from './../../actions/profile';
-import stateActions from '../../actions/state';
-import { readFile, formToJson } from '../../helpers/index';
+import { readFile } from '../../helpers/index';
 
 class Profiles extends React.Component {
   state = {
     editProfileId: false,
-    profileName: '',
-    encryptedProfile: null
+    profileName: ''
   };
 
   componentDidMount() {
@@ -57,25 +53,11 @@ class Profiles extends React.Component {
     this.setState({ editProfileId: null });
   };
 
-  handleNeedAuthImport = e => {
-    e.preventDefault();
-    const { encryptedProfile } = this.state;
-
-    const json = formToJson(e.target);
-    this.pass = json.password;
-
-    this.props.import(this.pass, encryptedProfile);
-    this.props.goBack();
-
-    this.setState({ encryptedProfile: null });
-  };
-
   handleImportProfile = () => {
-    const { goImport } = this.props;
+    const { setImportingProfile } = this.props;
 
     const onImport = encryptedProfile => {
-      this.setState({ encryptedProfile });
-      goImport();
+      setImportingProfile(encryptedProfile);
     };
 
     readFile(onImport);
@@ -137,12 +119,6 @@ class Profiles extends React.Component {
   }
 
   render() {
-    const { view } = this.props;
-
-    if (view === STATE_VIEW_IMPORT_PROFILE) {
-      return <AuthForm handleSubmit={this.handleNeedAuthImport} />;
-    }
-
     return (
       <Wrapper>
         <List>{this.list}</List>
@@ -160,16 +136,12 @@ class Profiles extends React.Component {
 export default connect(
   ({ profile, state }) => ({
     list: profile.list,
-    selectedProfileId: profile.selectedId,
-    view: state.view
+    selectedProfileId: profile.selectedId
   }),
   dispatch =>
     bindActionCreators(
       {
-        ...profileActions,
-        goExport: stateActions.goExportProfile,
-        goImport: stateActions.goImportProfile,
-        goBack: stateActions.goBack
+        ...profileActions
       },
       dispatch
     )
