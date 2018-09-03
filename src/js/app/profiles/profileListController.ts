@@ -192,15 +192,17 @@ export class ProfileListController extends EventEmitter {
    * @param id 
    */
   private remove(id) {
-    const profile = this.findById(id);
-    const idx = this.list.findIndex(profile => profile.getId() === id);
-
-    if (idx > -1) {
-      this.list.splice(idx, 1);
-      this.save();
-
-      ProfileFactory.remove(id);
-      AccountFactory.removeList(profile.getAccounts());
+    if (id !== this.getCurrent().getId()) {
+      const profile = this.findById(id);
+      const idx = this.list.findIndex(profile => profile.getId() === id);
+  
+      if (idx > -1) {
+        this.list.splice(idx, 1);
+        this.save();
+  
+        ProfileFactory.remove(id);
+        AccountFactory.removeList(profile.getAccounts());
+      }
     }
   }
 
