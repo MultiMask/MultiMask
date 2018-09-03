@@ -8,7 +8,7 @@ import { MessageController } from './../messageController';
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
 
-import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT, PROFILE_REMOVE } from './../../constants/profile';
+import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT, PROFILE_REMOVE, PROFILE_UPDATE } from './../../constants/profile';
 import { Profile } from './Profile';
 
 export class ProfileListController extends EventEmitter {
@@ -35,6 +35,7 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_ADD,     this.responseAdd);
     this.messageController.on(PROFILE_SELECT, this.responseSelect);
     this.messageController.on(PROFILE_REMOVE, this.responseRemove);
+    this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
   }
 
   /**
@@ -80,6 +81,18 @@ export class ProfileListController extends EventEmitter {
    */
   private responseRemove = (sendResponse, profileId) => {
     this.remove(profileId);
+
+    sendResponse({
+      list: this.getListSerialized(),
+      profileId: this.current.getId()
+    });
+  }
+
+  /**
+   * Update certain Profile
+   */
+  private responseUpdate = (sendResponse, {id, data}) => {
+    this.update(id, data);
 
     sendResponse({
       list: this.getListSerialized(),
@@ -206,12 +219,15 @@ export class ProfileListController extends EventEmitter {
     }
   }
 
-  update(pass, id, data) {
+  /**
+   * Update name of Profile
+   * @param id 
+   * @param data 
+   */
+  private update(id, data) {
     const idx = this.list.findIndex(profile => profile.getId() === id);
     if (idx > -1) {
-      this.list[idx].update(pass, data);
-
-      this.save();
+      this.list[idx].update(this.accessController.getPass(), data);
     }
   }
 }

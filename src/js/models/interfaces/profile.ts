@@ -27,9 +27,9 @@ export default ({ profileController }) => ({
     return profileController.import(pass, data);
   },
 
-  update: (id, data) => {
-    return profileController.update(id, data);
-  },
+  // update: (id, data) => {
+  //   return profileController.update(id, data);
+  // },
 
   // select: profileId => {
   //   return profileController.select(profileId);

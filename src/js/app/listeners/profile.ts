@@ -58,12 +58,12 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     //   break;
     // }
 
-    case PROFILE_UPDATE: {
-      App.io.profile.update(payload.id, payload.data);
-      sendData({ sendResponse, App });
+    // case PROFILE_UPDATE: {
+    //   App.io.profile.update(payload.id, payload.data);
+    //   sendData({ sendResponse, App });
 
-      break;
-    }
+    //   break;
+    // }
 
     case PROFILE_EXPORT: {
       App.io.profile.export(payload.id).then(encodedProfile => {
