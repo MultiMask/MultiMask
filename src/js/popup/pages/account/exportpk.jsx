@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import NeedAuth from '../../ui/components/NeedAuth';
 import { getCurrentWallet } from '../../select';
 import actions from './../../actions/account';
 
-import { decode, hidePass } from './../../../libs/cipher';
+import { decode } from './../../../libs/cipher';
 
 class ExportPK extends React.Component {
   state = {
@@ -33,12 +32,10 @@ class ExportPK extends React.Component {
   render() {
     return (
       <div className="balance">
-        <NeedAuth>
-          <div>
-            <h1>export PK</h1>
-            <h2>{this.state.seed}</h2>
-          </div>
-        </NeedAuth>
+        <div>
+          <h1>export PK</h1>
+          <h2>{this.state.seed}</h2>
+        </div>
       </div>
     );
   }

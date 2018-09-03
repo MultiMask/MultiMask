@@ -16,7 +16,7 @@ const routes = () => {
     <Switch>
       <AppRoute exact path="/" component={Account} layout={MainLayout} />
       <AppRoute exact path="/account/details" component={Details} layout={MainLayout} />
-      <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} />
+      <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
       <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
@@ -26,11 +26,11 @@ const routes = () => {
   );
 };
 
-const AppRoute = ({ component: Component, layout: Layout, ...rest }) => (
+const AppRoute = ({ component: Component, layout: Layout, needAuth = false, ...rest }) => (
   <Route
     {...rest}
     render={props => (
-      <Layout>
+      <Layout needAuth={needAuth}>
         <Component {...props} />
       </Layout>
     )}

@@ -12,6 +12,7 @@ import Typography from '../ui/Typography';
 import Menu from '../ui/Menu';
 import MenuItem from '../ui/MenuItem';
 import Icon from '../ui/Icon';
+import NeedAuth from '../ui/components/NeedAuth';
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -51,8 +52,7 @@ class MainLayout extends React.Component {
   }
 
   render() {
-    const { createWallet, logout, children, creation, goBack } = this.props;
-
+    const { createWallet, logout, children, creation, goBack, needAuth } = this.props;
     return (
       <Container>
         <Header>
@@ -77,7 +77,7 @@ class MainLayout extends React.Component {
             </Typography>
           </HeaderItem>
         </Header>
-        {children}
+        {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
       </Container>
     );
   }
