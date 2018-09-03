@@ -18,9 +18,9 @@ import accountActions from './account';
 
 const ProfileActions = {
   getProfile: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_GET, { id })
+    return InternalMessage.payload(PROFILE_EXPORT, id)
       .send()
-      .then(({ payload: { encodedProfile } }) => {
+      .then(({ encodedProfile }) => {
         return encodedProfile;
       });
   },
@@ -64,9 +64,9 @@ const ProfileActions = {
   },
 
   export: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_EXPORT, { id })
+    return InternalMessage.payload(PROFILE_EXPORT, id)
       .send()
-      .then(({ payload: { encodedProfile } }) => {
+      .then(({ encodedProfile }) => {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
       });
   },

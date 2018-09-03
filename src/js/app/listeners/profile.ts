@@ -15,18 +15,18 @@ import {
 
 export default ({ App }) => ({ type, payload }, sendResponse) => {
   switch (type) {
-    case PROFILE_GET: {
-      App.io.profile.export(payload.id).then(encodedProfile => {
-        sendResponse({
-          type: PROFILE_GET_RESULT,
-          payload: {
-            encodedProfile
-          }
-        });
-      });
+    // case PROFILE_GET: {
+    //   App.io.profile.export(payload.id).then(encodedProfile => {
+    //     sendResponse({
+    //       type: PROFILE_GET_RESULT,
+    //       payload: {
+    //         encodedProfile
+    //       }
+    //     });
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
 
     // case PROFILE_GETLIST: {
     //   sendData({ sendResponse, App });
@@ -65,18 +65,18 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     //   break;
     // }
 
-    case PROFILE_EXPORT: {
-      App.io.profile.export(payload.id).then(encodedProfile => {
-        sendResponse({
-          type: PROFILE_EXPORT_RESULT,
-          payload: {
-            encodedProfile
-          }
-        });
-      });
+    // case PROFILE_EXPORT: {
+    //   App.io.profile.export(payload.id).then(encodedProfile => {
+    //     sendResponse({
+    //       type: PROFILE_EXPORT_RESULT,
+    //       payload: {
+    //         encodedProfile
+    //       }
+    //     });
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
 
     case PROFILE_IMPORT: {
       const { pass, encryptedProfile } = payload;

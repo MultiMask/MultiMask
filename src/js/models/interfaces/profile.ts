@@ -1,7 +1,7 @@
 export default ({ profileController }) => ({
-  getProfileById: id => {
-    return profileController.export(id);
-  },
+  // getProfileById: id => {
+  //   return profileController.export(id);
+  // },
 
   // getData: () => {
   //   return profileController.getData();
@@ -19,9 +19,9 @@ export default ({ profileController }) => ({
   //   return profileController.remove(id);
   // },
 
-  export: id => {
-    return profileController.export(id);
-  },
+  // export: id => {
+  //   return profileController.export(id);
+  // },
 
   import: (pass, data) => {
     return profileController.import(pass, data);

@@ -142,11 +142,7 @@ export class ProfileController {
   //   }
   // }
 
-  // export(id) {
-  //   return this.getFullInfo(id).then(profile => {
-  //     return ProfileFactory.encryptFullProfile(this.getPass(), profile, true);
-  //   });
-  // }
+
 
   // update(id, data) {
   //   this.profileListController.update(this.getPass(), id, data);

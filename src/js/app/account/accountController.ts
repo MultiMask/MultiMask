@@ -17,11 +17,16 @@ export class AccountController {
     this.messageController = opts.messageController;
   }
 
-  restore(accounts, pass) {
+  /**
+   * Restore accounts by Ids from storage
+   * @param accounts 
+   * @param pass 
+   */
+  public restore(accounts, pass) {
     info('AccountController > load all accounts > ', accounts);
 
     if (accounts && accounts.length > 0) {
-      return this.loadAccountsByIds(pass, accounts).then(accounts => {
+      return AccountFactory.loadListByIds(pass, accounts).then(accounts => {
         accounts.forEach(this.addAccountInstance);
 
         return this.accounts;
@@ -29,12 +34,6 @@ export class AccountController {
     } else {
       return Promise.resolve([]);
     }
-  }
-
-  getAccountsSerialized(accounts, pass) {
-    return this.loadAccountsByIds(pass, accounts).then(result => {
-      return result.map((account: any) => account.serialize());
-    });
   }
 
   addAccountInstance = account => {
@@ -80,10 +79,6 @@ export class AccountController {
     }
 
     return null;
-  }
-
-  loadAccountsByIds(pass, ids) {
-    return AccountFactory.loadListByIds(pass, ids);
   }
 
   clearList() {

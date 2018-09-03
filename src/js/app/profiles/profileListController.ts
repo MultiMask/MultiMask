@@ -8,7 +8,14 @@ import { MessageController } from './../messageController';
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
 
-import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT, PROFILE_REMOVE, PROFILE_UPDATE } from './../../constants/profile';
+import { 
+  PROFILE_GETLIST, 
+  PROFILE_ADD, 
+  PROFILE_SELECT, 
+  PROFILE_REMOVE, 
+  PROFILE_UPDATE,
+  PROFILE_EXPORT,
+ } from './../../constants/profile';
 import { Profile } from './Profile';
 
 export class ProfileListController extends EventEmitter {
@@ -36,6 +43,8 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_SELECT, this.responseSelect);
     this.messageController.on(PROFILE_REMOVE, this.responseRemove);
     this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
+    
+    this.messageController.on(PROFILE_EXPORT, this.responseExport);
   }
 
   /**
@@ -98,6 +107,17 @@ export class ProfileListController extends EventEmitter {
       list: this.getListSerialized(),
       profileId: this.current.getId()
     });
+  }
+
+  /**
+   * Export profile
+   */
+  private responseExport = (sendResponse, id) => {
+    this.export(id).then(encodedProfile => {
+      sendResponse({
+        encodedProfile
+      });
+    })
   }
 
   /**
@@ -228,6 +248,36 @@ export class ProfileListController extends EventEmitter {
     const idx = this.list.findIndex(profile => profile.getId() === id);
     if (idx > -1) {
       this.list[idx].update(this.accessController.getPass(), data);
+    }
+  }
+
+  /**
+   * Load Profile full model and encrypt
+   * @param id 
+   */
+  private export(id: string) {
+    return this.getFullInfo(id).then(profile => {
+      return ProfileFactory.encryptFullProfile(this.accessController.getPass(), profile, true);
+    });
+  }
+
+  /**
+   * Get Profile Info with serialized wallets
+   * @param id 
+   */
+  private async getFullInfo(id: string) {
+    const profile = this.findById(id);
+
+    if (profile) {
+      return AccountFactory.loadListSerializedByIds(
+        this.accessController.getPass(), profile.getAccounts()
+      ).then(accounts => {
+        profile.wallets = accounts;
+
+        return profile;
+      });
+    } else {
+      return Promise.resolve();
     }
   }
 }
