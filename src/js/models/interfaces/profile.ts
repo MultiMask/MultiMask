@@ -15,9 +15,9 @@ export default ({ profileController }) => ({
   //   return profileController.add();
   // },
 
-  remove: id => {
-    return profileController.remove(id);
-  },
+  // remove: id => {
+  //   return profileController.remove(id);
+  // },
 
   export: id => {
     return profileController.export(id);

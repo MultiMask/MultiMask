@@ -38,7 +38,7 @@ const ProfileActions = {
   },
 
   remove: id => (dispatch, getState) => {
-    InternalMessage.payload(PROFILE_REMOVE, { id })
+    InternalMessage.payload(PROFILE_REMOVE, id)
       .send()
       .then(updateProfileListFn(dispatch));
   },

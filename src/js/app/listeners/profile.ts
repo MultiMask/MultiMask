@@ -40,11 +40,11 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     //   break;
     // }
 
-    case PROFILE_REMOVE: {
-      App.io.profile.remove(payload.id);
-      sendData({ sendResponse, App });
-      break;
-    }
+    // case PROFILE_REMOVE: {
+    //   App.io.profile.remove(payload.id);
+    //   sendData({ sendResponse, App });
+    //   break;
+    // }
 
     // case PROFILE_SELECT: {
     //   const { profileId } = payload;

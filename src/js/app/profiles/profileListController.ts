@@ -8,7 +8,7 @@ import { MessageController } from './../messageController';
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
 
-import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT } from './../../constants/profile';
+import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT, PROFILE_REMOVE } from './../../constants/profile';
 import { Profile } from './Profile';
 
 export class ProfileListController extends EventEmitter {
@@ -32,8 +32,9 @@ export class ProfileListController extends EventEmitter {
    */
   private startListening() {
     this.messageController.on(PROFILE_GETLIST, this.responseList);
-    this.messageController.on(PROFILE_ADD, this.responseAdd);
+    this.messageController.on(PROFILE_ADD,     this.responseAdd);
     this.messageController.on(PROFILE_SELECT, this.responseSelect);
+    this.messageController.on(PROFILE_REMOVE, this.responseRemove);
   }
 
   /**
@@ -70,6 +71,18 @@ export class ProfileListController extends EventEmitter {
     }
 
     sendResponse({
+      profileId: this.current.getId()
+    });
+  }
+
+  /**
+   * Remove certain Profile
+   */
+  private responseRemove = (sendResponse, profileId) => {
+    this.remove(profileId);
+
+    sendResponse({
+      list: this.getListSerialized(),
       profileId: this.current.getId()
     });
   }
@@ -174,8 +187,11 @@ export class ProfileListController extends EventEmitter {
     return this.list.find((profile: Profile) => profile.getId() === profileId);
   }
 
-
-  remove(id) {
+  /**
+   * Remove Profile from the list and from storage
+   * @param id 
+   */
+  private remove(id) {
     const profile = this.findById(id);
     const idx = this.list.findIndex(profile => profile.getId() === id);
 
@@ -196,6 +212,4 @@ export class ProfileListController extends EventEmitter {
       this.save();
     }
   }
-
-
 }
