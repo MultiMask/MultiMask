@@ -17,7 +17,8 @@
     "object-literal-sort-keys": false,
     "member-ordering": false,
     "jsx-no-lambda": false,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "jsdoc-format": [true, "check-multiline-start"]
   },
   "rulesDirectory": []
 }

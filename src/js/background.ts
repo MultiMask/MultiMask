@@ -16,65 +16,65 @@ import { SettingsController } from './app/settings/settingsController';
 // import App from './models/app';
 
 class Controller {
-  private accessController: AccessController;
-  private messageController: MessageController;
-  
-  private accountController: AccountController;
-  private profileController: ProfileController;
-  private profileListController: ProfileListController;
+	private accessController: AccessController;
+	private messageController: MessageController;
+	
+	private accountController: AccountController;
+	private profileController: ProfileController;
+	private profileListController: ProfileListController;
 
-  private transactionController: TransactionController;
+	private transactionController: TransactionController;
 
-  private settingsController: SettingsController;
+	private settingsController: SettingsController;
 
-  constructor() {
-    // Set from settings in ./config.json
-    setLevel(logLevel);
+	constructor() {
+		// Set from settings in ./config.json
+		setLevel(logLevel);
 
-    // App.bootstrap();
-    // this.setupInternalMessaging({ App });
+		// App.bootstrap();
+		// this.setupInternalMessaging({ App });
 
-    this.messageController = new MessageController();
+		this.messageController = new MessageController();
 
-    this.accessController = new AccessController({
-      messageController: this.messageController
-    });
+		this.accessController = new AccessController({
+			messageController: this.messageController
+		});
 
-    this.accountController = new AccountController({
-      messageController: this.messageController,
-      accessController: this.accessController
-    });
+		this.accountController = new AccountController({
+			messageController: this.messageController,
+			accessController: this.accessController
+		});
 
-    this.profileListController = new ProfileListController({
-      messageController: this.messageController,
-      accessController: this.accessController,
-      accountController: this.accountController,
-    });
+		this.profileListController = new ProfileListController({
+			messageController: this.messageController,
+			accessController: this.accessController,
+			accountController: this.accountController,
+		});
 
-    this.profileController = new ProfileController({
-      messageController: this.messageController,
-      accessController: this.accessController,
-      accountController: this.accountController,
-      profileListController: this.profileListController,
-    });
+		this.profileController = new ProfileController({
+			messageController: this.messageController,
+			accessController: this.accessController,
+			accountController: this.accountController,
+			profileListController: this.profileListController,
+		});
 
-    this.settingsController = new SettingsController({
-      messageController: this.messageController,
-      accessController: this.accessController,
-    });
+		this.settingsController = new SettingsController({
+			messageController: this.messageController,
+			accessController: this.accessController,
+		});
 
-    this.transactionController = new TransactionController({
-      messageController: this.messageController,
-      accessController: this.accessController,
-      accountController: this.accountController,
-    })
-  }
+		this.transactionController = new TransactionController({
+			messageController: this.messageController,
+			accessController: this.accessController,
+			accountController: this.accountController,
+		})
+	}
 
-  // setupInternalMessaging(opts) {
-  //   const watcher = listeners(opts);
+	// setupInternalMessaging(opts) {
+	//   const watcher = listeners(opts);
 
-  //   LocalStream.watch(watcher);
-  // }
+	//   LocalStream.watch(watcher);
+	// }
 }
 
 new Controller();
