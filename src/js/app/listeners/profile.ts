@@ -46,17 +46,17 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
       break;
     }
 
-    case PROFILE_SELECT: {
-      const { profileId } = payload;
-      App.io.profile.select(profileId);
+    // case PROFILE_SELECT: {
+    //   const { profileId } = payload;
+    //   App.io.profile.select(profileId);
 
-      sendResponse({
-        type: PROFILE_SELECT_RESULT,
-        payload: { profileId }
-      });
+    //   sendResponse({
+    //     type: PROFILE_SELECT_RESULT,
+    //     payload: { profileId }
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
 
     case PROFILE_UPDATE: {
       App.io.profile.update(payload.id, payload.data);

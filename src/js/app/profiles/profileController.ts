@@ -1,3 +1,5 @@
+import { info } from 'loglevel';
+
 import { ProfileListController } from './profileListController';
 import ProfileFactory from './profileFactory';
 
@@ -9,6 +11,7 @@ import AccountFactory from './../account/accountFactory';
 import { Profile } from './Profile';
 
 import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED } from './../../constants/account';
+import { PROFILE_SELECT } from './../../constants/profile';
 
 export class ProfileController {
   private accessController: AccessController;
@@ -34,6 +37,8 @@ export class ProfileController {
     this.messageController.on(ACCOUNT_INFO, this.getAccounts);
     this.messageController.on(ACCOUNT_CREATE, this.addAccount);
     this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
+
+    this.profileListController.on(PROFILE_SELECT, this.restoreProfile);
   }
 
   private getPass() {
@@ -61,10 +66,16 @@ export class ProfileController {
    */
   private init() {
     return this.profileListController.init()
-      .then((profile: Profile) => {
-        return profile.getAccounts();
-      })
-      .then(this.restoreAccounts);
+      .then(this.restoreProfile);
+  }
+
+  /**
+   * Restore all accounts from Profile
+   * @param {Profile} profile
+   */
+  private restoreProfile = (profile: Profile) => {
+    info('Profile changed > ', profile);
+    return this.restoreAccounts(profile.getAccounts());
   }
 
   /**
@@ -75,28 +86,6 @@ export class ProfileController {
     this.accountController.clearList();
     return this.accountController.restore(accountIds, this.getPass());
   }
-  /**
-   * Create new default profile
-   */
-  // private createDefault() {
-  //   const profile = ProfileFactory.createDefault();
-
-  //   ProfileFactory.create(this.getPass(), profile);
-  //   this.profileListController.add(profile);
-
-  //   return this.setCurrrent(profile);
-  // }
-
-  /**
-   * Set new current account and decode all wallets in this profile
-   * @param profile 
-   */
-  // private setCurrrent(profile) {
-  //   this.currentProfileId = profile.getId();
-
-  //   this.accountController.clearList();
-  //   return this.accountController.restore(profile.getAccounts(), this.getPass());
-  // }
 
   /**
    * Create new account in with profile with data

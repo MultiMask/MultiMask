@@ -45,9 +45,9 @@ const ProfileActions = {
 
   // TODO: Add loading
   select: profileId => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_SELECT, { profileId })
+    return InternalMessage.payload(PROFILE_SELECT, profileId)
       .send()
-      .then(({ payload: { profileId } }) => {
+      .then(({ profileId } ) => {
         dispatch({
           type: PROFILE_SELECT_RESULT,
           payload: { profileId }

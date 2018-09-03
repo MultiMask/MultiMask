@@ -1,3 +1,5 @@
+import EventEmitter = require('events');
+
 import { getProfiles, setProfiles } from '../../models/getter';
 
 import { AccessController } from './../accessController';
@@ -9,7 +11,7 @@ import AccountFactory from '../account/accountFactory';
 import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT } from './../../constants/profile';
 import { Profile } from './Profile';
 
-export class ProfileListController {
+export class ProfileListController extends EventEmitter {
   private list: any[] = null;
   private current = null;
 
@@ -17,6 +19,8 @@ export class ProfileListController {
   private messageController: MessageController;
 
   constructor(opts) {
+    super();
+
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
 
@@ -55,11 +59,15 @@ export class ProfileListController {
   }
   
   /**
-   * Select certain Profile
+   * Select certain Profile and emit event that Profile changed
    */
   private responseSelect = (sendResponse, selectId) => {
     const selectedProfile = this.findById(selectId);
-    this.setCurrrent(selectedProfile);
+  
+    if (selectedProfile) {
+      this.setCurrrent(selectedProfile);
+      this.emit(PROFILE_SELECT, selectedProfile);
+    }
 
     sendResponse({
       profileId: this.current.getId()

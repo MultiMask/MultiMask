@@ -31,7 +31,7 @@ export default ({ profileController }) => ({
     return profileController.update(id, data);
   },
 
-  select: profileId => {
-    return profileController.select(profileId);
-  }
+  // select: profileId => {
+  //   return profileController.select(profileId);
+  // }
 });
