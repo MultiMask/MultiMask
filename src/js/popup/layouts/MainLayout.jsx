@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import { goBack } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FontAwesome from 'react-fontawesome';
-import { STATE_VIEW_MAIN } from '../../constants/state';
 import authAction from '../actions/auth';
+import routingActions from '../actions/routing';
 import { BaseContainer } from './BaseContainer';
 import Typography from '../ui/Typography';
 import Menu from '../ui/Menu';
@@ -51,16 +50,8 @@ class MainLayout extends React.Component {
     this.props.check();
   }
 
-  handleBack = () => {
-    goBack();
-  };
-
-  get showBack() {
-    return this.props.view !== STATE_VIEW_MAIN;
-  }
-
   render() {
-    const { createWallet, logout, children, creation } = this.props;
+    const { createWallet, logout, children, creation, goBack } = this.props;
 
     return (
       <Container>
@@ -79,7 +70,7 @@ class MainLayout extends React.Component {
               </Menu>
             </HeaderItem>
           )}
-          <HeaderItem onClick={this.handleBack}>
+          <HeaderItem onClick={goBack}>
             <FontAwesome name="chevron-left" />
             <Typography className={styles.buttonText} color="primary">
               Back
@@ -96,5 +87,5 @@ export default connect(
   ({ state }) => ({
     view: state.view
   }),
-  dispatch => bindActionCreators({ ...authAction }, dispatch)
+  dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
 )(MainLayout);
