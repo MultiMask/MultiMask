@@ -4,6 +4,7 @@ import { css } from 'emotion';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
 import FontAwesome from 'react-fontawesome';
 import authAction from '../actions/auth';
 import routingActions from '../actions/routing';
@@ -52,32 +53,42 @@ class MainLayout extends React.Component {
   }
 
   render() {
-    const { createWallet, logout, children, creation, goBack, needAuth } = this.props;
+    const {
+      logout,
+      children,
+      goBack,
+      needAuth,
+      location: { pathname }
+    } = this.props;
+
     return (
       <Container>
         <Header>
-          {!creation && (
-            <HeaderItem color="secondary">
+          <HeaderItem color="secondary">
+            {pathname !== '/wallets/create' && (
               <Link to="wallets/create">
                 <Icon className={styles.icon} name="plus-circle" />
               </Link>
-              <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
-                <MenuItem component={Link} to="/profiles">
-                  Profiles
-                </MenuItem>
-                <MenuItem component={Link} to="/settings">
-                  Settings
-                </MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
-              </Menu>
+            )}
+            <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+              <MenuItem component={Link} to="/profiles">
+                Profiles
+              </MenuItem>
+              <MenuItem component={Link} to="/settings">
+                Settings
+              </MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
+          </HeaderItem>
+
+          {pathname !== '/' && (
+            <HeaderItem onClick={goBack}>
+              <FontAwesome name="chevron-left" />
+              <Typography className={styles.buttonText} color="primary">
+                Back
+              </Typography>
             </HeaderItem>
           )}
-          <HeaderItem onClick={goBack}>
-            <FontAwesome name="chevron-left" />
-            <Typography className={styles.buttonText} color="primary">
-              Back
-            </Typography>
-          </HeaderItem>
         </Header>
         {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
       </Container>
@@ -85,7 +96,9 @@ class MainLayout extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
-)(MainLayout);
+export default withRouter(
+  connect(
+    null,
+    dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
+  )(MainLayout)
+);
