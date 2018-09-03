@@ -17,8 +17,6 @@ export class ProfileController {
   private profileListController: ProfileListController;
   private accountController: AccountController;
 
-  private currentProfileId = null;
-
   constructor(opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
@@ -47,7 +45,7 @@ export class ProfileController {
    * @param sendResponse
    */
   public getAccounts = (sendResponse): void => {
-    const resolver = this.currentProfileId
+    const resolver = this.profileListController.getCurrent()
       ? Promise.resolve(this.accountController.getAccounts())
       : this.init();
 
@@ -106,7 +104,7 @@ export class ProfileController {
    * @param accountData 
    */
   public addAccount = (sendResponse, accountData): void => {   
-    const profile = this.getCurrent();
+    const profile = this.profileListController.getCurrent();
     const account = AccountFactory.create(accountData);
 
     profile.addAccount(this.getPass(), account).then(() => {
@@ -126,26 +124,22 @@ export class ProfileController {
     sendResponse(this.accountController.getSeed(id));
   }
 
-  getCurrent() {
-    return this.profileListController.findById(this.currentProfileId);
-  }
-
-  async getFullInfo(id) {
-    const profile = this.profileListController.findById(id);
-
-    if (profile) {
-      return this.accountController.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
-        profile.wallets = accounts;
-
-        return profile;
-      });
-    } else {
-      return Promise.resolve();
-    }
-  }
-
 
   ////////// LIST
+  // async getFullInfo(id) {
+  //   const profile = this.profileListController.findById(id);
+
+  //   if (profile) {
+  //     return this.accountController.getAccountsSerialized(profile.getAccounts(), this.getPass()).then(accounts => {
+  //       profile.wallets = accounts;
+
+  //       return profile;
+  //     });
+  //   } else {
+  //     return Promise.resolve();
+  //   }
+  // }
+
   // create(data) {
   //   const profile = new Profile(data);
 

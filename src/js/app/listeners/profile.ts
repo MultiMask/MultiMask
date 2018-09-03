@@ -33,12 +33,12 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     //   break;
     // }
 
-    case PROFILE_ADD: {
-      App.io.profile.add().then(() => {
-        sendData({ sendResponse, App });
-      });
-      break;
-    }
+    // case PROFILE_ADD: {
+    //   App.io.profile.add().then(() => {
+    //     sendData({ sendResponse, App });
+    //   });
+    //   break;
+    // }
 
     case PROFILE_REMOVE: {
       App.io.profile.remove(payload.id);

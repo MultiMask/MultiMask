@@ -6,7 +6,8 @@ import { MessageController } from './../messageController';
 import ProfileFactory from './profileFactory';
 import AccountFactory from '../account/accountFactory';
 
-import { PROFILE_GETLIST } from './../../constants/profile';
+import { PROFILE_GETLIST, PROFILE_ADD, PROFILE_SELECT } from './../../constants/profile';
+import { Profile } from './Profile';
 
 export class ProfileListController {
   private list: any[] = null;
@@ -27,6 +28,8 @@ export class ProfileListController {
    */
   private startListening() {
     this.messageController.on(PROFILE_GETLIST, this.responseList);
+    this.messageController.on(PROFILE_ADD, this.responseAdd);
+    this.messageController.on(PROFILE_SELECT, this.responseSelect);
   }
 
   /**
@@ -34,9 +37,33 @@ export class ProfileListController {
    */
   private responseList = sendResponse => {
     sendResponse({
-      list: this.getList(),
+      list: this.getListSerialized(),
       profileId: this.current.getId()
     })
+  }
+
+  /**
+   * Add new empty Profile and response with all profiles
+   */
+  private responseAdd = sendResponse => {
+    this.createDefault();
+
+    sendResponse({
+      list: this.getListSerialized(),
+      profileId: this.current.getId()
+    });
+  }
+  
+  /**
+   * Select certain Profile
+   */
+  private responseSelect = (sendResponse, selectId) => {
+    const selectedProfile = this.findById(selectId);
+    this.setCurrrent(selectedProfile);
+
+    sendResponse({
+      profileId: this.current.getId()
+    });
   }
 
   /**
@@ -54,6 +81,13 @@ export class ProfileListController {
           return this.createDefault();
         };
       })
+  }
+
+  /**
+   * Return current Profile
+   */
+  public getCurrent(): Profile {
+    return this.current;
   }
 
   private _loadProfileList() {
@@ -78,13 +112,9 @@ export class ProfileListController {
   /**
    * Return list of profiles
    */
-  public getList() {
+  private getListSerialized() {
     return this.list.map(profile => profile.serialize());
   }
-
-  // public getCurrent() {
-
-  // }
 
   /**
    * Create new default profile
@@ -93,7 +123,7 @@ export class ProfileListController {
     const profile = ProfileFactory.createDefault();
 
     ProfileFactory.create(this.accessController.getPass(), profile);
-    this.add(profile);
+    this.addProfileInList(profile);
 
     return this.setCurrrent(profile);
   }
@@ -108,21 +138,34 @@ export class ProfileListController {
     return this.current;
   }
 
-
-
-
-
-
-
-
-
-
-  add(profile) {
+  /**
+   * Add Profile in List and save list in storage
+   * @param profile ProfileData
+   */
+  private addProfileInList(profile) {
     this.list.push(profile);
     this.save();
 
     return this.list;
   }
+
+  /**
+   * Save List of profiles in storage
+   */
+  private save(): Promise<void> {
+    const profileIds = this.list.map(profile => profile.getId());
+
+    return setProfiles(profileIds);
+  }
+
+  /**
+   * Return profile with certian Id
+   * @param profileId 
+   */
+  private findById(profileId) {
+    return this.list.find((profile: Profile) => profile.getId() === profileId);
+  }
+
 
   remove(id) {
     const profile = this.findById(id);
@@ -144,16 +187,6 @@ export class ProfileListController {
 
       this.save();
     }
-  }
-
-  save() {
-    const profileIds = this.list.map(profile => profile.getId());
-
-    return setProfiles(profileIds);
-  }
-
-  findById(id) {
-    return this.list.find(profile => profile.getId() === id);
   }
 
 

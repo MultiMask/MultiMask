@@ -3,17 +3,17 @@ export default ({ profileController }) => ({
     return profileController.export(id);
   },
 
-  getData: () => {
-    return profileController.getData();
-  },
+  // getData: () => {
+  //   return profileController.getData();
+  // },
 
-  getList: () => {
-    return profileController.plc.getList();
-  },
+  // getList: () => {
+  //   return profileController.plc.getList();
+  // },
 
-  add: () => {
-    return profileController.add();
-  },
+  // add: () => {
+  //   return profileController.add();
+  // },
 
   remove: id => {
     return profileController.remove(id);
