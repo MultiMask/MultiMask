@@ -8,7 +8,7 @@ import { MessageController } from './messageController';
 
 import { AccountController } from './account/accountController';
 
-import { TX_APPROVE, TX_PAYMENT_GET, TX_APPROVE_RESULT } from './../constants/tx';
+import { TX_APPROVE, TX_PAYMENT_GET, TX_APPROVE_RESULT, TX_SEND } from './../constants/tx';
 
 const txs: TXModel[] = [];
 const find = id => {
@@ -36,6 +36,8 @@ export class TransactionController {
 		this.messageController.on(TX_APPROVE, this.responseTxToApprove);
 		this.messageController.on(TX_PAYMENT_GET, this.responseGetLastTx);
 		this.messageController.on(TX_APPROVE_RESULT, this.responseConfirm);
+		
+		this.messageController.on(TX_SEND, this.responseSendTx);
 	}
 
 	/**
@@ -75,5 +77,25 @@ export class TransactionController {
 			
 			sendResponse({});
 		}
+	}
+	
+	/**
+   * Send TX via popup
+   */
+	private responseSendTx = (sendResponse, { id, tx }) => {
+		const account = this.accountController.getAccountById(id);
+
+		account.sendTX(tx).then(txHash => {
+			sendResponse({
+				result: 'success',
+				txHash
+			})
+		})
+		.catch(error => {
+			sendResponse({
+				result: 'error',
+				error
+			})
+		})
 	}
 }
