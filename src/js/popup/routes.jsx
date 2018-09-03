@@ -8,6 +8,7 @@ import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
 import Profiles from './pages/profile';
 import ProfileQRCode from './pages/profile/QRCodeView';
+import ProfileExport from './pages/profile/ExportProfile';
 import ExportPK from './pages/account/exportpk';
 import Details from './pages/account/details';
 import Send from './pages/account/send';
@@ -25,6 +26,7 @@ const routes = () => {
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
       <AppRoute exact path="/profiles/:id/qrcode" component={ProfileQRCode} layout={MainLayout} needAuth />
+      <AppRoute exact path="/profiles/:id/export" component={ProfileExport} layout={MainLayout} />
       <AppRoute exact path="/login" component={Login} layout={AuthLayout} />
     </Switch>
   );

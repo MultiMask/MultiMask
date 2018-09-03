@@ -9,8 +9,7 @@ import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
 import { Link } from 'react-router-dom';
-import { STATE_VIEW_EXPORT_PROFILE, STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
-import NeedAuth from '../../ui/components/NeedAuth';
+import { STATE_VIEW_IMPORT_PROFILE } from './../../../constants/state';
 import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from './../../actions/profile';
 import stateActions from '../../actions/state';
@@ -20,7 +19,6 @@ class Profiles extends React.Component {
   state = {
     editProfileId: false,
     profileName: '',
-    handleExportProfile: null,
     encryptedProfile: null
   };
 
@@ -57,20 +55,6 @@ class Profiles extends React.Component {
     }
 
     this.setState({ editProfileId: null });
-  };
-
-  handleNeedAuthExport = exportFunc => {
-    const { goBack } = this.props;
-    const { handleExportProfile } = this.state;
-    handleExportProfile();
-    goBack();
-  };
-
-  handleConfirmPassword = handleExportProfile => () => {
-    const { goExport } = this.props;
-
-    this.setState({ handleExportProfile });
-    goExport();
   };
 
   handleNeedAuthImport = e => {
@@ -110,7 +94,6 @@ class Profiles extends React.Component {
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
-      const handleExportProfile = this.onExport.bind(this, profile.id);
 
       const isEdit = editProfileId === profile.id;
       return (
@@ -140,7 +123,9 @@ class Profiles extends React.Component {
           </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
-            <MenuItem onClick={this.handleConfirmPassword(handleExportProfile)}>Export</MenuItem>
+            <MenuItem component={Link} to={`/profiles/${profile.id}/export`}>
+              Export
+            </MenuItem>
             <MenuItem component={Link} to={`/profiles/${profile.id}/qrcode`}>
               Show QR-code
             </MenuItem>
@@ -153,10 +138,6 @@ class Profiles extends React.Component {
 
   render() {
     const { view } = this.props;
-
-    if (view === STATE_VIEW_EXPORT_PROFILE) {
-      return <NeedAuth onSubmit={this.handleNeedAuthExport} />;
-    }
 
     if (view === STATE_VIEW_IMPORT_PROFILE) {
       return <AuthForm handleSubmit={this.handleNeedAuthImport} />;

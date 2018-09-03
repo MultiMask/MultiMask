@@ -1,5 +1,6 @@
 import InternalMessage from '../../libs/InternalMessage';
 import { downloadFile } from '../helpers';
+import { goBack } from 'connected-react-router';
 
 import {
   PROFILE_GET,
@@ -68,6 +69,7 @@ const ProfileActions = {
       .send()
       .then(({ payload: { encodedProfile } }) => {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
+        dispatch(goBack());
       });
   },
 
