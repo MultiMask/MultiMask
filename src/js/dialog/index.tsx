@@ -58,17 +58,17 @@ export default class App extends React.Component<{}, AppState> {
   componentDidMount() {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
-      .then(({ payload: { isReady } }) => {
+      .then(({ isReady }) => {
         if (!isReady) throw new Error('You need to authorize');
 
         return InternalMessage.signal(ACCOUNT_INFO).send();
       })
-      .then(({ payload: accounts }) => {
+      .then(accounts => {
         this.setAccounts(accounts);
 
         return InternalMessage.signal(TX_PAYMENT_GET).send();
       })
-      .then(({ payload }) => {
+      .then( payload => {
         this.setTxInfo(payload);
       })
       .catch(e => {

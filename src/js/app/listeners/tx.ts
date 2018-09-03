@@ -11,11 +11,11 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
       break;
     }
 
-    case TX_APPROVE: {
-      // txCtrl.approveTx(payload);
+    // case TX_APPROVE: {
+    //   // txCtrl.approveTx(payload);
 
-      break;
-    }
+    //   break;
+    // }
 
     case TX_APPROVE_RESULT: {
       const { id, tx } = payload;
@@ -25,13 +25,13 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
       break;
     }
 
-    case TX_PAYMENT_GET: {
-      sendResponse({
-        type: TX_PAYMENT_RESULT,
-        // payload: txCtrl.getLast().toJSON()
-      });
+    // case TX_PAYMENT_GET: {
+    //   sendResponse({
+    //     type: TX_PAYMENT_RESULT,
+    //     // payload: txCtrl.getLast().toJSON()
+    //   });
 
-      break;
-    }
+    //   break;
+    // }
   }
 };

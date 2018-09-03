@@ -8,6 +8,8 @@ import { AccountController } from './app/account/accountController';
 import { ProfileController } from './app/profiles/profileController';
 import { ProfileListController } from './app/profiles/profileListController';
 
+import { TransactionController } from './app/transactionController';
+
 import { SettingsController } from './app/settings/settingsController';
 
 // import listeners from './background/listeners';
@@ -20,6 +22,8 @@ class Controller {
   private accountController: AccountController;
   private profileController: ProfileController;
   private profileListController: ProfileListController;
+
+  private transactionController: TransactionController;
 
   private settingsController: SettingsController;
 
@@ -57,6 +61,12 @@ class Controller {
     this.settingsController = new SettingsController({
       messageController: this.messageController,
       accessController: this.accessController,
+    });
+
+    this.transactionController = new TransactionController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
     })
   }
 

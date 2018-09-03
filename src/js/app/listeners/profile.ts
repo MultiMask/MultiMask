@@ -78,14 +78,14 @@ export default ({ App }) => ({ type, payload }, sendResponse) => {
     //   break;
     // }
 
-    case PROFILE_IMPORT: {
-      const { pass, encryptedProfile } = payload;
+    // case PROFILE_IMPORT: {
+    //   const { pass, encryptedProfile } = payload;
 
-      App.io.profile.import(pass, encryptedProfile);
-      sendData({ sendResponse, App });
+    //   App.io.profile.import(pass, encryptedProfile);
+    //   sendData({ sendResponse, App });
 
-      break;
-    }
+    //   break;
+    // }
   }
 };
 
