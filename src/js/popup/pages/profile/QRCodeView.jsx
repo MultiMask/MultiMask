@@ -41,11 +41,7 @@ class QRCodeView extends Component {
 
 export default withRouter(
   connect(
-    props => {
-      return {
-        view: props.state.view
-      };
-    },
+    null,
     dispatch => bindActionCreators(profileActions, dispatch)
   )(QRCodeView)
 );

@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import accountActions from '../../actions/account';
 import { getCurrentWallet } from './../../select';
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
@@ -20,21 +18,6 @@ const TXContainer = styled.div`
 `;
 
 class AccountInfo extends React.Component {
-  state = {
-    isViewMenu: false
-  };
-
-  handleSend = () => {
-    this.props.send();
-  };
-
-  handleMenu = () => {
-    this.setState(state => ({
-      ...state,
-      isViewMenu: !state.isViewMenu
-    }));
-  };
-
   render() {
     const { account, settings } = this.props;
 
@@ -86,14 +69,7 @@ class AccountInfo extends React.Component {
 
 export default connect(
   state => ({
-    account: getCurrentWallet(state),
-    settings: state.settings
+    account: getCurrentWallet(state)
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        send: accountActions.send
-      },
-      dispatch
-    )
+  null
 )(AccountInfo);

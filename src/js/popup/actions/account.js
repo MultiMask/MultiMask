@@ -11,8 +11,6 @@ import {
   ACCOUNT_GETSEED_RESULT
 } from './../../constants/account';
 
-import stateActions from './state';
-
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
@@ -48,14 +46,6 @@ const AccountActions = {
     dispatch(action);
 
     dispatch(push('/account/details'));
-  },
-
-  buy: () => (dispatch, getState) => {
-    stateActions.goBy()(dispatch, getState);
-  },
-
-  send: () => (dispatch, getState) => {
-    stateActions.goSend()(dispatch, getState);
   },
 
   getSeed: (pass, id) => (dispatch, getState) => {

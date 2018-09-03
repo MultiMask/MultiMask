@@ -86,8 +86,6 @@ class MainLayout extends React.Component {
 }
 
 export default connect(
-  ({ state }) => ({
-    view: state.view
-  }),
+  null,
   dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
 )(MainLayout);
