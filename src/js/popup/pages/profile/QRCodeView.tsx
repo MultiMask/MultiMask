@@ -5,6 +5,7 @@ import QRCode = require('qrcode.react');
 import styled from 'react-emotion';
 import profileActions from './../../actions/profile';
 import Typography from '../../ui/Typography';
+import { withRouter } from 'react-router';
 
 class QRCodeView extends React.Component<any, any> {
   state = {
@@ -13,15 +14,20 @@ class QRCodeView extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    const { getProfile, profileId } = this.props;
+    const {
+      getProfile,
+      match: {
+        params: { id }
+      }
+    } = this.props;
 
-    getProfile(profileId).then(profile => {
+    getProfile(id).then(profile => {
       this.setState({ profile });
     });
   }
 
   render() {
-    const { profile, profileId } = this.state;
+    const { profile } = this.state;
 
     return (
       <Container>
@@ -34,10 +40,12 @@ class QRCodeView extends React.Component<any, any> {
   }
 }
 
-export default connect(
-  null,
-  dispatch => bindActionCreators(profileActions, dispatch)
-)(QRCodeView);
+export default withRouter(
+  connect(
+    null,
+    dispatch => bindActionCreators(profileActions, dispatch)
+  )(QRCodeView)
+);
 
 const Container = styled('div')`
   padding: 20px;

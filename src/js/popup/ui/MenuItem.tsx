@@ -18,7 +18,16 @@ const Root = styled('div')`
 `;
 
 const MenuItem = props => {
-  const { children, theme, ...other } = props;
+  const { children, theme, component: Component, ...other } = props;
+  if (Component) {
+    return (
+      <Component style={{ textDecoration: 'none' }} {...other}>
+        <Root>
+          <Item color="main">{children}</Item>
+        </Root>
+      </Component>
+    );
+  }
 
   return (
     <Root {...other}>

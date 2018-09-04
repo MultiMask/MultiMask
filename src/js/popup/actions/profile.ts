@@ -1,5 +1,6 @@
 import InternalMessage from '../../libs/InternalMessage';
 import { downloadFile } from '../helpers';
+import { push, goBack } from 'connected-react-router';
 
 import {
   PROFILE_GET,
@@ -11,7 +12,8 @@ import {
   PROFILE_UPDATE,
   PROFILE_IMPORT,
   PROFILE_SELECT,
-  PROFILE_SELECT_RESULT
+  PROFILE_SELECT_RESULT,
+  PROFILE_IMPORT_SET
 } from './../../constants/profile';
 
 import accountActions from './account';
@@ -68,13 +70,25 @@ const ProfileActions = {
       .send()
       .then(({ payload: { encodedProfile } }) => {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
+        dispatch(goBack());
       });
   },
 
   import: (pass, encryptedProfile) => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_IMPORT, { pass, encryptedProfile })
       .send()
-      .then(updateProfileListFn(dispatch));
+      .then(() => {
+        updateProfileListFn(dispatch);
+        dispatch(goBack());
+      });
+  },
+
+  setImportingProfile: encryptedProfile => dispatch => {
+    dispatch({
+      type: PROFILE_IMPORT_SET,
+      payload: encryptedProfile
+    });
+    dispatch(push('/profiles/import'));
   }
 };
 

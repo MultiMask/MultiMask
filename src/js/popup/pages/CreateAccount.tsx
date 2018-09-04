@@ -1,13 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
 
-import TextField from '../../ui/TextField';
-import Button from '../../ui/Button';
-import Typography from '../../ui/Typography';
+import TextField from '../ui/TextField';
+import Button from '../ui/Button';
+import Typography from '../ui/Typography';
 
-import authActions from '../../actions/auth';
+import authActions from '../actions/auth';
 
 const styles = {
   textField: css`
@@ -49,7 +49,7 @@ class Auth extends React.Component<any, any> {
   };
 
   validate = values => {
-    const errors: any = {};
+    const errors: { password?: string; confirmPassword?: string } = {};
 
     if (!values.password) {
       errors.password = 'Required';

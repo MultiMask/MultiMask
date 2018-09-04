@@ -1,8 +1,9 @@
-import { PROFILE_GETLIST_RESULT, PROFILE_SELECT_RESULT } from '../../constants/profile';
+import { PROFILE_GETLIST_RESULT, PROFILE_SELECT_RESULT, PROFILE_IMPORT_SET } from '../../constants/profile';
 
 const initialState = {
   list: [],
-  selectedId: ''
+  selectedId: '',
+  importProfile: null
 };
 
 export default function accountReducer(state = initialState, action) {
@@ -17,6 +18,11 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         selectedId: action.payload.profileId
+      };
+    case PROFILE_IMPORT_SET:
+      return {
+        ...state,
+        importProfile: action.payload
       };
     default:
       return state;

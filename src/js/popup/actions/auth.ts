@@ -1,4 +1,5 @@
 import InternalMessage from '../../libs/InternalMessage';
+import { push } from 'connected-react-router';
 
 import {
   AUTH_INIT,
@@ -12,10 +13,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from './../../constants/auth';
 
-import { STATE_INIT, STATE_LOGIN } from './../../constants/state';
 import { getPass } from './../../models/getter';
-
-import StateActions from './state';
 import AccountActions from './account';
 import SettingActions from './settings';
 
@@ -36,7 +34,6 @@ const AuthActions = {
           dispatch({
             type: AUTH_CHECK_SUCCESS
           });
-
           AuthActions.success()(dispatch, getState);
         } else {
           checkPass(hasPass => {
@@ -46,10 +43,8 @@ const AuthActions = {
                 hasPass
               }
             });
-
-            dispatch({
-              type: hasPass ? STATE_LOGIN : STATE_INIT
-            });
+            const next = hasPass ? '/login' : '/create/account';
+            dispatch(push(next));
           });
         }
       });
@@ -75,10 +70,7 @@ const AuthActions = {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
           });
-
-          dispatch({
-            type: STATE_LOGIN
-          });
+          dispatch(push('/login'));
         } else {
           dispatch({
             type: AUTH_LOGOUT_FAIL
@@ -88,9 +80,9 @@ const AuthActions = {
   },
 
   success: () => (dispatch, getState) => {
-    StateActions.goMain()(dispatch, getState);
     AccountActions.getInfo()(dispatch, getState);
     SettingActions.getPrices()(dispatch, getState);
+    dispatch(push('/'));
   },
 
   fail: () => (dispatch, getState) => {

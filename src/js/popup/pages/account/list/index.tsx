@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import getPrice from '../../../../helpers/getPrice';
 import getPriceInBTC from '../../../../helpers/getPriceInBTC';
-import stateActions from '../../../actions/state';
 import Icon from '../../../ui/components/Icon';
 import Item from './item';
 
@@ -49,9 +48,9 @@ class AccountList extends React.Component<any, any> {
           <span>No wallets</span>
         </div>
         <div className="NoWallets-Actions">
-          <a className="Link" onClick={this.props.createWallet}>
+          <Link className="Link" to="/wallets/create">
             Create new
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -80,5 +79,5 @@ export default connect(
     accounts: account.accounts,
     settings
   }),
-  dispatch => bindActionCreators(stateActions, dispatch)
+  null
 )(AccountList);

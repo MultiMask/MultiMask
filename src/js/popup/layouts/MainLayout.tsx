@@ -1,18 +1,19 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FontAwesome = require('react-fontawesome');
-import { STATE_VIEW_MAIN } from '../../constants/state';
-import stateActions from '../actions/state';
+import { withRouter } from 'react-router';
+import FontAwesome from 'react-fontawesome';
 import authAction from '../actions/auth';
+import routingActions from '../actions/routing';
 import { BaseContainer } from './BaseContainer';
 import Typography from '../ui/Typography';
 import Menu from '../ui/Menu';
 import MenuItem from '../ui/MenuItem';
 import Icon from '../ui/Icon';
+import NeedAuth from '../ui/components/NeedAuth';
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -33,6 +34,7 @@ type HeaderItemProps = {
   theme?: any;
   color?: any;
 }
+
 const HeaderItem = styled('div')`
   color: ${(props: HeaderItemProps) => props.theme.colors[props.color] || props.theme.colors.primary};
   cursor: pointer;
@@ -51,32 +53,41 @@ const styles = {
 };
 
 class MainLayout extends React.Component<any, any> {
-  handleBack = () => {
-    this.props.goBack();
-  };
-
-  get showBack() {
-    return this.props.view !== STATE_VIEW_MAIN;
+  componentDidMount() {
+    this.props.check();
   }
 
   render() {
-    const { createWallet, logout, children, creation, goProfile, goToSettings } = this.props;
+    const {
+      logout,
+      children,
+      goBack,
+      needAuth,
+      location: { pathname }
+    } = this.props;
 
     return (
       <Container>
         <Header>
-          {!creation && (
-            <HeaderItem color="secondary">
-              <Icon className={styles.icon} name="plus-circle" onClick={createWallet} />
-              <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
-                <MenuItem onClick={goProfile}>Profiles</MenuItem>
-                <MenuItem onClick={goToSettings}>Settings</MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
-              </Menu>
-            </HeaderItem>
-          )}
-          {this.showBack && (
-            <HeaderItem onClick={this.handleBack}>
+          <HeaderItem color="secondary">
+            {pathname !== '/wallets/create' && (
+              <Link to="wallets/create">
+                <Icon className={styles.icon} name="plus-circle" />
+              </Link>
+            )}
+            <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+              <MenuItem component={Link} to="/profiles">
+                Profiles
+              </MenuItem>
+              <MenuItem component={Link} to="/settings">
+                Settings
+              </MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
+          </HeaderItem>
+
+          {pathname !== '/' && (
+            <HeaderItem onClick={goBack}>
               <FontAwesome name="chevron-left" />
               <Typography className={styles.buttonText} color="primary">
                 Back
@@ -84,15 +95,15 @@ class MainLayout extends React.Component<any, any> {
             </HeaderItem>
           )}
         </Header>
-        {children}
+        {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
       </Container>
     );
   }
 }
 
-export default connect(
-  ({ state }: any) => ({
-    view: state.view
-  }),
-  dispatch => bindActionCreators({ ...stateActions, ...authAction }, dispatch)
-)(MainLayout);
+export default withRouter(
+  connect(
+    null,
+    dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
+  )(MainLayout)
+);
