@@ -1,4 +1,3 @@
-// import { LocalStream } from 'extension-streams';
 import { setLevel } from 'loglevel';
 
 import { AccessController } from './app/accessController';
@@ -12,9 +11,6 @@ import { TransactionController } from './app/transactionController';
 import { EthereumController } from './app/ethereumController';
 
 import { SettingsController } from './app/settings/settingsController';
-
-// import listeners from './background/listeners';
-// import App from './models/app';
 
 class Controller {
 	private accessController: AccessController;
@@ -32,9 +28,6 @@ class Controller {
 	constructor() {
 		// Set from settings in ./config.json
 		setLevel(logLevel);
-
-		// App.bootstrap();
-		// this.setupInternalMessaging({ App });
 
 		this.messageController = new MessageController();
 
@@ -78,12 +71,6 @@ class Controller {
 			transactionController: this.transactionController,
 		});
 	}
-
-	// setupInternalMessaging(opts) {
-	//   const watcher = listeners(opts);
-
-	//   LocalStream.watch(watcher);
-	// }
 }
 
 new Controller();
