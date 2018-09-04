@@ -9,6 +9,7 @@ import { ProfileController } from './app/profiles/profileController';
 import { ProfileListController } from './app/profiles/profileListController';
 
 import { TransactionController } from './app/transactionController';
+import { EthereumController } from './app/ethereumController';
 
 import { SettingsController } from './app/settings/settingsController';
 
@@ -24,6 +25,7 @@ class Controller {
 	private profileListController: ProfileListController;
 
 	private transactionController: TransactionController;
+	private ethereumController: EthereumController;
 
 	private settingsController: SettingsController;
 
@@ -67,7 +69,14 @@ class Controller {
 			messageController: this.messageController,
 			accessController: this.accessController,
 			accountController: this.accountController,
-		})
+		});
+		
+		this.ethereumController = new EthereumController({
+			messageController: this.messageController,
+			accessController: this.accessController,
+			accountController: this.accountController,
+			transactionController: this.transactionController,
+		});
 	}
 
 	// setupInternalMessaging(opts) {
