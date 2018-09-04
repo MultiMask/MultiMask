@@ -1,5 +1,6 @@
 import InternalMessage from '../../libs/InternalMessage';
 import { hidePass } from './../../libs/cipher';
+import { push, goBack } from 'connected-react-router';
 
 import {
   ACCOUNT_ACTIVE,
@@ -9,10 +10,6 @@ import {
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT
 } from './../../constants/account';
-
-import { STATE_MAIN } from './../../constants/state';
-
-import stateActions from './state';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
@@ -29,9 +26,7 @@ const AccountActions = {
       .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
 
-        dispatch({
-          type: STATE_MAIN
-        });
+        dispatch(goBack());
       });
   },
 
@@ -50,15 +45,7 @@ const AccountActions = {
 
     dispatch(action);
 
-    stateActions.goWallet(name)(dispatch, getState);
-  },
-
-  buy: () => (dispatch, getState) => {
-    stateActions.goBuy()(dispatch, getState);
-  },
-
-  send: () => (dispatch, getState) => {
-    stateActions.goSend()(dispatch, getState);
+    dispatch(push('/account/details'));
   },
 
   getSeed: (pass, id) => (dispatch, getState) => {

@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
-import accountActions from '../../actions/account';
-import stateActions from '../../actions/state';
 import { getCurrentWallet } from './../../select';
 
 import TXList from './common/TXList';
@@ -22,29 +20,6 @@ const TXContainer = styled('div')`
 `;
 
 class AccountInfo extends React.Component<any, any> {
-  state = {
-    isViewMenu: false
-  };
-
-  handleBuy = () => {
-    this.props.buy();
-  };
-
-  handleSend = () => {
-    this.props.send();
-  };
-
-  handleMenu = () => {
-    this.setState(state => ({
-      ...state,
-      isViewMenu: !state.isViewMenu
-    }));
-  };
-
-  handleExportPK = () => {
-    this.props.goExport();
-  };
-
   render() {
     const { account, settings } = this.props;
 
@@ -71,13 +46,15 @@ class AccountInfo extends React.Component<any, any> {
               >
                 <MenuItem>View Account</MenuItem>
                 <MenuItem>Show QR-code</MenuItem>
-                <MenuItem onClick={this.handleExportPK}>Export Private Key</MenuItem>
+                <MenuItem component={Link} to="/account/exportpk">
+                  Export Private Key
+                </MenuItem>
               </Menu>
             </React.Fragment>
           }
           actions={
             <div>
-              <Button outlined small onClick={this.handleSend}>
+              <Button outlined small component={Link} componentProps={{ to: '/account/send' }}>
                 Send
               </Button>
             </div>
@@ -93,17 +70,8 @@ class AccountInfo extends React.Component<any, any> {
 }
 
 export default connect(
-  (state: any) => ({
-    account: getCurrentWallet(state),
-    settings: state.settings
+  state => ({
+    account: getCurrentWallet(state)
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        buy: accountActions.buy,
-        send: accountActions.send,
-        goExport: stateActions.goExportPK
-      },
-      dispatch
-    )
+  null
 )(AccountInfo);

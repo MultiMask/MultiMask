@@ -8,17 +8,9 @@ import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import BaseButton from '../../ui/Button';
 import TextField from '../../ui/TextField';
-import {
-  STATE_VIEW_EXPORT_PROFILE,
-  STATE_VIEW_IMPORT_PROFILE,
-  STATE_VIEW_QRCODE_PROFILE
-} from './../../../constants/state';
-import NeedAuth from '../../ui/components/NeedAuth';
-import AuthForm from '../../ui/components/NeedAuth/AuthForm';
+import { Link } from 'react-router-dom';
 import profileActions from './../../actions/profile';
-import stateActions from '../../actions/state';
-import { readFile, formToJson } from '../../helpers/index';
-import QRCodeView from './QRCodeView';
+import { readFile } from '../../helpers/index';
 
 class Profiles extends React.Component<any, any> {
   private pass;
@@ -26,10 +18,7 @@ class Profiles extends React.Component<any, any> {
 
   state = {
     editProfileId: false,
-    qrcodeProfileId: null,
-    profileName: '',
-    handleExportProfile: null,
-    encryptedProfile: null
+    profileName: ''
   };
 
   componentDidMount() {
@@ -46,12 +35,6 @@ class Profiles extends React.Component<any, any> {
 
   onExport = id => {
     this.props.export(id);
-  };
-
-  showQRCode = profileId => {
-    const { goQRCode } = this.props;
-    this.setState({ qrcodeProfileId: profileId });
-    goQRCode();
   };
 
   handleEdit = ({ name, id }) => () => {
@@ -73,39 +56,11 @@ class Profiles extends React.Component<any, any> {
     this.setState({ editProfileId: null });
   };
 
-  handleNeedAuthExport = exportFunc => {
-    const { goBack } = this.props;
-    const { handleExportProfile } = this.state;
-    handleExportProfile();
-    goBack();
-  };
-
-  handleConfirmPassword = handleExportProfile => () => {
-    const { goExport } = this.props;
-
-    this.setState({ handleExportProfile });
-    goExport();
-  };
-
-  handleNeedAuthImport = e => {
-    e.preventDefault();
-    const { encryptedProfile } = this.state;
-
-    const json: any = formToJson(e.target);
-    this.pass = json.password;
-
-    this.props.import(this.pass, encryptedProfile);
-    this.props.goBack();
-
-    this.setState({ encryptedProfile: null });
-  };
-
   handleImportProfile = () => {
-    const { goImport } = this.props;
+    const { setImportingProfile } = this.props;
 
     const onImport = encryptedProfile => {
-      this.setState({ encryptedProfile });
-      goImport();
+      setImportingProfile(encryptedProfile);
     };
 
     readFile(onImport);
@@ -124,8 +79,6 @@ class Profiles extends React.Component<any, any> {
 
     return list.map(profile => {
       const onRemove = this.onRemove.bind(this, profile.id);
-      const handleExportProfile = this.onExport.bind(this, profile.id);
-      const handleShowQRCode = this.showQRCode.bind(this, profile.id);
 
       const isEdit = editProfileId === profile.id;
       return (
@@ -155,8 +108,12 @@ class Profiles extends React.Component<any, any> {
           </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
-            <MenuItem onClick={this.handleConfirmPassword(handleExportProfile)}>Export</MenuItem>
-            <MenuItem onClick={handleShowQRCode}>Show QR-code</MenuItem>
+            <MenuItem component={Link} to={`/profiles/${profile.id}/export`}>
+              Export
+            </MenuItem>
+            <MenuItem component={Link} to={`/profiles/${profile.id}/qrcode`}>
+              Show QR-code
+            </MenuItem>
             <MenuItem onClick={onRemove}>Delete</MenuItem>
           </Menu>
         </Item>
@@ -165,25 +122,6 @@ class Profiles extends React.Component<any, any> {
   }
 
   render() {
-    const { view } = this.props;
-    const { qrcodeProfileId } = this.state;
-
-    if (view === STATE_VIEW_EXPORT_PROFILE) {
-      return <NeedAuth onSubmit={this.handleNeedAuthExport} />;
-    }
-
-    if (view === STATE_VIEW_IMPORT_PROFILE) {
-      return <AuthForm handleSubmit={this.handleNeedAuthImport} />;
-    }
-
-    if (view === STATE_VIEW_QRCODE_PROFILE) {
-      return (
-        <NeedAuth>
-          <QRCodeView profileId={qrcodeProfileId} />
-        </NeedAuth>
-      );
-    }
-
     return (
       <Wrapper>
         <List>{this.list}</List>
@@ -201,17 +139,12 @@ class Profiles extends React.Component<any, any> {
 export default connect(
   ({ profile, state }: any) => ({
     list: profile.list,
-    selectedProfileId: profile.selectedId,
-    view: state.view
+    selectedProfileId: profile.selectedId
   }),
   dispatch =>
     bindActionCreators(
       {
-        ...profileActions,
-        goExport: stateActions.goExportProfile,
-        goImport: stateActions.goImportProfile,
-        goQRCode: stateActions.goQRCodeProfile,
-        goBack: stateActions.goBack
+        ...profileActions
       },
       dispatch
     )

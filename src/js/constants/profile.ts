@@ -16,3 +16,5 @@ export const PROFILE_IMPORT = 'profile:import';
 
 export const PROFILE_SELECT = 'profile:select';
 export const PROFILE_SELECT_RESULT = 'profile:select:result';
+
+export const PROFILE_IMPORT_SET = 'profile:import:set';
