@@ -22,7 +22,7 @@ const Input = styled('input')`
 
 type LabelProps = {
   theme?: any;
-  for: string;
+  htmlFor: string;
 }
 const Label = styled('label')`
   position: absolute;
@@ -61,7 +61,7 @@ type TextFieldProps = {
 const TextField: React.SFC<TextFieldProps> = ({ className, label, name, error, fullWidth, inputRef, ...props }: any) => {
   return (
     <InputContainer className={className} fullWidth>
-      <Label for={name}>{label}</Label>
+      <Label htmlFor={name}>{label}</Label>
       <Input id={name} ref={inputRef} name={name} {...props} />
       <Error error>{error}</Error>
     </InputContainer>

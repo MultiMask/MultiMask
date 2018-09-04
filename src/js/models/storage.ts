@@ -1,31 +1,25 @@
 class Storage {
   constructor() { }
 
-  get(key) {
-    // console.log('get>', key);
+  get(key): Promise<any> {
     return new Promise(resolve => {
       chrome.storage.local.get(key, function (result) {
-        // console.log('get:', result[key]);
         resolve(result[key]);
       });
     });
   }
 
-  set(key, value) {
-    // console.log('set:', key, value);
+  set(key, value): Promise<void> {
     return new Promise(resolve => {
       chrome.storage.local.set({ [key]: value }, function () {
-        // console.log('set: done');
         resolve();
       });
     });
   }
 
-  remove(key) {
-    // console.log('remove:', key);
+  remove(key): Promise<void> {
     return new Promise(resolve => {
       chrome.storage.local.remove(key, function () {
-        // console.log('remove: done');
         resolve();
       });
     });

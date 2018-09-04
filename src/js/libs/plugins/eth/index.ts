@@ -14,64 +14,67 @@ const INFURA_HTTP_URL = `https://ropsten.infura.io/v3/${infuraApiKey}`;
 const INFURA_WS_URL = 'wss://ropsten.infura.io/ws';
 
 export default sendFn => {
-  const engine = new ProviderEngine();
+	const engine = new ProviderEngine();
 
-  // static results
-  engine.addProvider(
-    new FixtureSubprovider({
-      web3_clientVersion: 'MultiMask/v0.0.1',
-      net_listening: true,
-      eth_hashrate: '0x00',
-      eth_mining: false,
-      eth_syncing: true
-    })
-  );
+	// static results
+	engine.addProvider(
+		new FixtureSubprovider({
+			web3_clientVersion: 'MultiMask/v0.0.1',
+			net_listening: true,
+			eth_hashrate: '0x00',
+			eth_mining: false,
+			eth_syncing: true
+		})
+	);
 
-  // cache layer
-  engine.addProvider(new CacheSubprovider());
+	// cache layer
+	engine.addProvider(new CacheSubprovider());
 
-  // pending nonce
-  engine.addProvider(new NonceSubprovider());
+	// pending nonce
+	engine.addProvider(new NonceSubprovider());
 
-  engine.addProvider(
-    new HookedWalletSubprovider({
-      getAccounts: function (cb) {
-        sendFn(ETH_GET_ACCOUNTS).then(({ payload }) => {
-          cb(null, payload);
-        });
-      },
-      approveTransaction: function (txdata, cb) {
-        sendFn(ETH_APPROVE_TX, txdata).then(({ payload }) => {
-          // console.log('approveTransaction', payload);
-          cb(null, payload);
-        });
-      },
-      signTransaction: function (txdata, cb) {
-        sendFn(ETH_SIGN_TX, txdata).then(({ payload }) => {
-          // console.log('signTransaction > ', txdata, payload);
-          cb(null, payload);
-        });
-      }
-    })
-  );
+	engine.addProvider(
+		new HookedWalletSubprovider({
+			getAccounts (cb) {
+				sendFn(ETH_GET_ACCOUNTS).then(payload => {
+					console.log(payload);
+					cb(null, payload);
+				});
+			},
+			approveTransaction (txdata, cb) {
+				sendFn(ETH_APPROVE_TX, txdata).then(({ payload }) => {
+					// console.log('approveTransaction', payload);
+					cb(null, payload);
+				});
+			},
+			signTransaction (txdata, cb) {
+				sendFn(ETH_SIGN_TX, txdata).then(payload => {
+					console.log('signTransaction > ', txdata, payload);
+					// if(error) throw new Error(error);
+					
+					cb(null, payload);
+				});
+			}
+		})
+	);
 
-  // Subscription
-  const subscriptionSubprovider = new SubscriptionsSubprovider();
-  subscriptionSubprovider.on('data', (err, notification) => {
-    engine.emit('data', err, notification);
-  });
-  engine.addProvider(subscriptionSubprovider);
+	// Subscription
+	const subscriptionSubprovider = new SubscriptionsSubprovider();
+	subscriptionSubprovider.on('data', (err, notification) => {
+		engine.emit('data', err, notification);
+	});
+	engine.addProvider(subscriptionSubprovider);
 
-  engine.addProvider(
-    // new RpcSubprovider({
-    //   rpcUrl: INFURA_HTTP_URL
-    // })
-    new WebsocketSubprovider({
-      rpcUrl: INFURA_WS_URL
-    })
-  );
+	engine.addProvider(
+		// new RpcSubprovider({
+		//   rpcUrl: INFURA_HTTP_URL
+		// })
+		new WebsocketSubprovider({
+			rpcUrl: INFURA_WS_URL
+		})
+	);
 
-  engine.start();
+	engine.start();
 
-  return engine;
+	return engine;
 };

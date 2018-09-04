@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
 import styled, { css } from 'react-emotion';
 import actions from './../../actions/account';
-import AccountFactory from './../../../models/account/accountFactory';
+import AccountFactory from './../../../app/account/accountFactory';
 import Typography from '../../ui/Typography';
 import Button from '../../ui/Button';
 

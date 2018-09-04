@@ -1,4 +1,4 @@
-import { getEntity, setEntity, removeEntity } from '../getter';
+import { getEntity, setEntity, removeEntity } from '../../models/getter';
 import { encode, decode } from '../../libs/cipher';
 import networks from '../../blockchain';
 import { debug } from 'loglevel';
@@ -54,5 +54,11 @@ export default {
 
   loadListByIds(pass, ids) {
     return Promise.all(ids.map(id => this.load(pass, id)));
+  },
+
+  loadListSerializedByIds(pass, ids) {
+    return this.loadListByIds(pass, ids).then(result => {
+      return result.map((account: any) => account.serialize());
+    });
   }
 };

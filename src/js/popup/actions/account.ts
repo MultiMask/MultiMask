@@ -15,15 +15,15 @@ const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
       .send()
-      .then(({ payload }) => {
+      .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
       });
   },
 
   create: account => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_CREATE, { account })
+    InternalMessage.payload(ACCOUNT_CREATE, account)
       .send()
-      .then(({ payload }) => {
+      .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
 
         dispatch(goBack());
@@ -51,9 +51,9 @@ const AccountActions = {
   getSeed: (pass, id) => (dispatch, getState) => {
     const hashPass = hidePass(pass);
 
-    InternalMessage.payload(ACCOUNT_GETSEED, { hashPass, id })
+    InternalMessage.payload(ACCOUNT_GETSEED, id)
       .send()
-      .then(({ payload: { seed } }) => {
+      .then(seed => {
         dispatch({
           type: ACCOUNT_GETSEED_RESULT,
           payload: { seed }

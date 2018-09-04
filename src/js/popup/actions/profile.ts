@@ -20,9 +20,9 @@ import accountActions from './account';
 
 const ProfileActions = {
   getProfile: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_GET, { id })
+    return InternalMessage.payload(PROFILE_EXPORT, id)
       .send()
-      .then(({ payload: { encodedProfile } }) => {
+      .then(({ encodedProfile }) => {
         return encodedProfile;
       });
   },
@@ -40,16 +40,16 @@ const ProfileActions = {
   },
 
   remove: id => (dispatch, getState) => {
-    InternalMessage.payload(PROFILE_REMOVE, { id })
+    InternalMessage.payload(PROFILE_REMOVE, id)
       .send()
       .then(updateProfileListFn(dispatch));
   },
 
   // TODO: Add loading
   select: profileId => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_SELECT, { profileId })
+    return InternalMessage.payload(PROFILE_SELECT, profileId)
       .send()
-      .then(({ payload: { profileId } }) => {
+      .then(({ profileId } ) => {
         dispatch({
           type: PROFILE_SELECT_RESULT,
           payload: { profileId }
@@ -66,9 +66,9 @@ const ProfileActions = {
   },
 
   export: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_EXPORT, { id })
+    return InternalMessage.payload(PROFILE_EXPORT, id)
       .send()
-      .then(({ payload: { encodedProfile } }) => {
+      .then(({ encodedProfile }) => {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
         dispatch(goBack());
       });
@@ -92,7 +92,7 @@ const ProfileActions = {
   }
 };
 
-const updateProfileListFn = dispatch => ({ payload }) => {
+const updateProfileListFn = dispatch => payload => {
   dispatch({
     type: PROFILE_GETLIST_RESULT,
     payload

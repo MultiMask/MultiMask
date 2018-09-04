@@ -1,6 +1,6 @@
 import ProfileFactory from './profileFactory';
 
-export default class Profile {
+export class Profile {
   public data: any;
 
   constructor(data) {
