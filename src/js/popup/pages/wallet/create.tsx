@@ -7,53 +7,53 @@ import actions from './../../actions/account';
 import AccountFactory from './../../../app/account/accountFactory';
 
 class Wallet extends React.Component<any, any> {
-  public account;
+	public account;
 
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
-      seed: null
-    };
-  }
+		this.state = {
+			seed: null
+		};
+	}
 
-  componentDidMount() {
-    const { blockchain, network } = this.props;
+	public componentDidMount() {
+		const { blockchain } = this.props;
 
-    this.account = AccountFactory.create({ blockchain, network });
+		this.account = AccountFactory.create({ blockchain });
 
-    this.setState({ seed: this.account.getSeed() });
-  }
+		this.setState({ seed: this.account.getSeed() });
+	}
 
-  handleSave = e => {
-    e.preventDefault();
-    this.props.create(this.account.serialize());
-  };
+	public handleSave = e => {
+		e.preventDefault();
+		this.props.create(this.account.serialize());
+	};
 
-  render() {
-    return (
-      <FormLayout
-        onSubmit={this.handleSave}
-        title="Save your Mnemonic Phrase:"
-        titleAlign="center"
-        onBack={this.props.onBack}
-        submitButtonTitle="I saved Seed"
-      >
-        <Content>{this.state.seed}</Content>
-      </FormLayout>
-    );
-  }
+	public render() {
+		return (
+			<FormLayout
+				onSubmit={this.handleSave}
+				title="Save your Mnemonic Phrase:"
+				titleAlign="center"
+				onBack={this.props.onBack}
+				submitButtonTitle="I saved Seed"
+			>
+				<Content>{this.state.seed}</Content>
+			</FormLayout>
+		);
+	}
 }
 
 export default connect(
-  () => ({}),
-  dispatch =>
-    bindActionCreators(
-      {
-        create: actions.create
-      },
-      dispatch
-    )
+	() => ({}),
+	dispatch =>
+		bindActionCreators(
+			{
+				create: actions.create
+			},
+			dispatch
+		)
 )(Wallet);
 
 const Content = styled('div')`
