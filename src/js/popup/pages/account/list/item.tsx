@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import getPrice from '../../../../helpers/getPrice';
 import networkSign from '../../../../helpers/networkSign';
 import accountActions from '../../../actions/account';
 import Icon from '../../../ui/components/Icon';
@@ -27,7 +26,7 @@ class AccountFastView extends React.Component<any, any> {
   };
 
   public render() {
-    const { account, prices } = this.props;
+    const { account } = this.props;
 
     return (
       <div className="Wallet" onClick={this.handleClick}>
