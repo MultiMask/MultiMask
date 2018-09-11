@@ -8,6 +8,7 @@ import Button from '../../ui/Button';
 import Wallet from './common/Wallet';
 
 import txActions from '../../actions/tx';
+import priceActions from '../../actions/price';
 import { getCurrentWallet } from './../../select';
 import Typography from '../../ui/Typography';
 
@@ -50,11 +51,11 @@ class Send extends React.Component<any, any> {
     };
   }
 
-  handleInput = e => {
+  public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = event => {
+  public handleDone = event => {
     event.preventDefault();
 
     const errors = this.validate(this.state);
@@ -69,7 +70,7 @@ class Send extends React.Component<any, any> {
     }
   };
 
-  formatTX({ to, amount, data }: any) {
+  public formatTX({ to, amount, data }: any) {
     return {
       to,
       data,
@@ -77,7 +78,7 @@ class Send extends React.Component<any, any> {
     };
   }
 
-  validate = values => {
+  public validate = values => {
     const errors: any = {};
 
     if (!values.to) {
@@ -90,7 +91,7 @@ class Send extends React.Component<any, any> {
     return errors;
   };
 
-  render() {
+  public render() {
     const { account, settings } = this.props;
     const {
       errors: { to: toError, amount: amountError },
@@ -128,7 +129,7 @@ class Send extends React.Component<any, any> {
               =
             </Typography>
 
-            <TextField type="text" name="usd" value={`${amount} USD`} readOnly />
+            <TextField type="text" name="usd" value={`${this.props.getPriceInUSD(amount, account.blockchain)} USD`} readOnly />
           </div>
           <Typography variant="subheading" color="main" className={styles.title}>
             Transaction data (optional)
@@ -146,5 +147,12 @@ export default connect(
     account: getCurrentWallet(state),
     settings: state.settings
   }),
-  dispatch => bindActionCreators(txActions, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        ...txActions,
+        ...priceActions
+      },
+      dispatch
+    )
 )(Send);
