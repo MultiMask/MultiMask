@@ -760,6 +760,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-redux@^6.0.8":
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-6.0.8.tgz#29c884174516f0cfab6638d2236fd7d53f45640e"
+  dependencies:
+    "@types/react" "*"
+    redux "^4.0.0"
+
 "@types/react-select@^2.0.2":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-2.0.3.tgz#08aede7985cbc8a538cb06a9262b0589f07d280e"

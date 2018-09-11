@@ -6,6 +6,8 @@ import networkSign from '../../../../helpers/networkSign';
 import accountActions from '../../../actions/account';
 import Icon from '../../../ui/components/Icon';
 
+import pricesActions from './../../../actions/price';
+
 class AccountFastView extends React.Component<any, any> {
   get image() {
     const { account } = this.props;
@@ -18,13 +20,13 @@ class AccountFastView extends React.Component<any, any> {
     return `${account.info.balance} ${networkSign(account)}`;
   }
 
-  handleClick = () => {
+  public handleClick = () => {
     const { account, setActive } = this.props;
 
     setActive(account.name);
   };
 
-  render() {
+  public render() {
     const { account, prices } = this.props;
 
     return (
@@ -36,7 +38,7 @@ class AccountFastView extends React.Component<any, any> {
               {account.info.address}
             </div>
             <div className="Wallet-Balance">{this.balance}</div>
-            <div className="Wallet-Balance-USD">{getPrice(prices, account.blockchain, account.info.balance)} USD</div>
+            <div className="Wallet-Balance-USD">{this.props.getPriceInUSD(account.info.balance, account.blockchain)} USD</div>
           </div>
           <div className="Wallet-Network">{account.network}</div>
         </div>
@@ -47,5 +49,12 @@ class AccountFastView extends React.Component<any, any> {
 
 export default connect(
   null,
-  dispatch => bindActionCreators(accountActions, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        ...accountActions,
+        ...pricesActions
+      },
+      dispatch
+    )
 )(AccountFastView);
