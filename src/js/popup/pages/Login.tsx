@@ -29,16 +29,16 @@ class Auth extends React.Component<any, any> {
     };
   }
 
-  handleInput = e => {
+  public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = e => {
+  public handleDone = e => {
     e.preventDefault();
     this.props.login(this.state.pass);
   };
 
-  render() {
+  public render() {
     return (
       <React.Fragment>
         <Typography color="main" variant="subheading" align="center">
@@ -65,7 +65,7 @@ class Auth extends React.Component<any, any> {
 }
 
 export default connect(
-  ({ auth }) => ({
+  ({ auth }: any) => ({
     error: auth.error
   }),
   dispatch => bindActionCreators(authActions, dispatch)

@@ -7,23 +7,23 @@ import profileActions from '../../actions/profile';
 import { formToJson } from '../../helpers';
 
 class ImportProfile extends Component<any, any> {
-  handleImportProfile = e => {
+  public handleImportProfile = e => {
     e.preventDefault();
     const { profile, handleImport } = this.props;
 
-    const pass = formToJson(e.target)['password'];
+    const pass = (formToJson(e.target) as any).password;
 
     handleImport(pass, profile);
   };
 
-  render() {
+  public render() {
     return <AuthForm handleSubmit={this.handleImportProfile} />;
   }
 }
 
 export default withRouter(
   connect(
-    ({ profile }) => {
+    ({ profile }: any) => {
       console.log(profile, 'state');
       return {
         profile: profile.importProfile
