@@ -10,7 +10,7 @@
   "rules": {
     "indent": [
       true,
-      "tabs",
+      "spaces",
       2
     ],
     "ordered-imports": false,
