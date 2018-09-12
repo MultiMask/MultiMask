@@ -34,13 +34,17 @@ class WalletCreate extends React.Component<any, any> {
 	public render() {
 		if (this.state.type === 'create') {
 			return (
-				<CreateWallet />
+				<ChooseNetwork onBack={this.goBack}>
+					<CreateWallet />
+				</ChooseNetwork>
 			);
 		}
 
 		if (this.state.type === 'import') {
 			return (
-				<ImportWallet />
+				<ChooseNetwork onBack={this.goBack}>
+					<ImportWallet />
+				</ChooseNetwork>
 			);
 		}
 

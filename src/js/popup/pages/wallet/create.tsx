@@ -19,9 +19,9 @@ class Wallet extends React.Component<any, any> {
 
 	public componentDidMount() {
 		const { blockchain } = this.props;
-
+		
 		this.account = AccountFactory.create({ blockchain });
-
+	
 		this.setState({ seed: this.account.getSeed() });
 	}
 
