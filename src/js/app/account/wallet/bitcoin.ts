@@ -43,6 +43,7 @@ export default class BitcoinWallet {
 				address: res.data.address,
 				output,
 				balance: res.data.final_balance / 1e8,
+				network: this.network,
 				txs: res.data.txs
 			};
 		});
