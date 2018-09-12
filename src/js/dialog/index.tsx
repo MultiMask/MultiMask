@@ -46,6 +46,7 @@ interface ISelectOption {
   label: string;
 }
 
+// TODO: split component to blockchain's component
 export default class App extends React.Component<{}, IAppState> {
   public state = {
     isLoaded: false,
@@ -253,7 +254,7 @@ export default class App extends React.Component<{}, IAppState> {
         blockchain,
         id
       },
-      tx: { to, amount, data },
+      tx: { to, data },
       tx,
       selectValue
     } = this.state;
