@@ -20,7 +20,7 @@ const TXContainer = styled('div')`
 `;
 
 class AccountInfo extends React.Component<any, any> {
-  render() {
+  public render() {
     const { account, settings } = this.props;
 
     return (
@@ -70,7 +70,7 @@ class AccountInfo extends React.Component<any, any> {
 }
 
 export default connect(
-  state => ({
+  (state: any) => ({
     account: getCurrentWallet(state)
   }),
   null
