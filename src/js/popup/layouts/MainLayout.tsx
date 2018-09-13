@@ -28,11 +28,13 @@ const Header = styled('div')`
   padding: 10px 0;
   margin: 0 20px;
   border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  flex: 0 0 36px;
+  box-sizing: border-box;
 `;
 
-type HeaderItemProps = {
-  theme?: any;
-  color?: any;
+interface HeaderItemProps {
+  theme?: any,
+  color?: any
 }
 
 const HeaderItem = styled('div')`
@@ -53,11 +55,11 @@ const styles = {
 };
 
 class MainLayout extends React.Component<any, any> {
-  componentDidMount() {
+  public componentDidMount() {
     this.props.check();
   }
 
-  render() {
+  public render() {
     const {
       logout,
       children,
