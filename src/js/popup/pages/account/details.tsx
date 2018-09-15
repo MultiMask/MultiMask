@@ -22,12 +22,11 @@ const TXContainer = styled('div')`
 
 class AccountInfo extends React.Component<any, any> {
   public render() {
-    const { account, settings, changeNetwork } = this.props;
+    const { account, settings } = this.props;
     return (
       <React.Fragment>
         <Wallet
           data={account}
-          changeNetwork={changeNetwork}
           menu={
             <React.Fragment>
               <CopyToClipboard text={account.info.address}>
@@ -74,5 +73,5 @@ export default connect(
   (state: any) => ({
     account: getCurrentWallet(state)
   }),
-  dispatch => bindActionCreators(accountActions, dispatch)
+  null
 )(AccountInfo);

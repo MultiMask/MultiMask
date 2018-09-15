@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
+import { Link } from 'react-router-dom';
 
 import getPrice from '../../../../helpers/getPrice';
 import networkSign from '../../../../helpers/networkSign';
@@ -34,46 +35,52 @@ const Sing = styled('div')`
 `;
 
 const Wallet = ({
-	data: {
-		info: { address, balance, network },
-		blockchain,
-		id
-	},
-	menu,
-	actions,
-	settings,
-	changeNetwork
+  data: {
+    info: { address, balance, network },
+    blockchain,
+    id
+  },
+  menu,
+  actions,
+  settings
 }: any) => (
-	<WalletContainer className="item">
-		<WalletHeader>
-			<Icon type={blockchain} size="s" />
-			<Typography
-				className={css`
+  <WalletContainer className="item">
+    <WalletHeader>
+      <Icon type={blockchain} size="s" />
+      <Typography
+        className={css`
           padding: 0 12px;
         `}
-				color="secondary"
-			>
-				{address}
-			</Typography>
-			<Sing onClick={() => changeNetwork(id, 'livenet')}>{network}</Sing>
-			{menu}
-		</WalletHeader>
-		<WalletContent>
-			<div>
-				<Typography
-					className={css`
+        color="secondary"
+      >
+        {address}
+      </Typography>
+      <Link
+        className={css`
+          text-decoration: none;
+        `}
+        to={`/account/edit/${id}`}
+      >
+        <Sing>{network}</Sing>
+      </Link>
+      {menu}
+    </WalletHeader>
+    <WalletContent>
+      <div>
+        <Typography
+          className={css`
             display: block;
             margin-bottom: 5px;
           `}
-					color="main"
-				>
-					{`${balance} ${networkSign({ blockchain })}`}
-				</Typography>
-				<Typography color="secondary">{getPrice(settings && settings.prices, blockchain, balance)} USD</Typography>
-			</div>
-			{actions}
-		</WalletContent>
-	</WalletContainer>
+          color="main"
+        >
+          {`${balance} ${networkSign({ blockchain })}`}
+        </Typography>
+        <Typography color="secondary">{getPrice(settings && settings.prices, blockchain, balance)} USD</Typography>
+      </div>
+      {actions}
+    </WalletContent>
+  </WalletContainer>
 );
 
 export default Wallet;
