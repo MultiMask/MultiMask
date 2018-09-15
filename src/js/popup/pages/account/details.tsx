@@ -21,58 +21,58 @@ const TXContainer = styled('div')`
 `;
 
 class AccountInfo extends React.Component<any, any> {
-	public render() {
-		const { account, settings, changeNetwork } = this.props;
-		return (
-			<React.Fragment>
-				<Wallet
-					data={account}
-					changeNetwork={changeNetwork}
-					menu={
-						<React.Fragment>
-							<CopyToClipboard text={account.info.address}>
-								<Icon
-									className={css`
+  public render() {
+    const { account, settings, changeNetwork } = this.props;
+    return (
+      <React.Fragment>
+        <Wallet
+          data={account}
+          changeNetwork={changeNetwork}
+          menu={
+            <React.Fragment>
+              <CopyToClipboard text={account.info.address}>
+                <Icon
+                  className={css`
                     margin: 0 7px;
                   `}
-									name="clone"
-									color="secondary"
-								/>
-							</CopyToClipboard>
-							<Menu
-								className={css`
+                  name="clone"
+                  color="secondary"
+                />
+              </CopyToClipboard>
+              <Menu
+                className={css`
                   margin-left: auto;
                 `}
-								iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
-							>
-								<MenuItem>View Account</MenuItem>
-								<MenuItem>Show QR-code</MenuItem>
-								<MenuItem component={Link} to="/account/exportpk">
-									Export Private Key
-								</MenuItem>
-							</Menu>
-						</React.Fragment>
-					}
-					actions={
-						<div>
-							<Button outlined small component={Link} componentProps={{ to: '/account/send' }}>
-								Send
-							</Button>
-						</div>
-					}
-					settings={settings}
-				/>
-				<TXContainer>
-					<TXList data={account} />
-				</TXContainer>
-			</React.Fragment>
-		);
-	}
+                iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
+              >
+                <MenuItem>View Account</MenuItem>
+                <MenuItem>Show QR-code</MenuItem>
+                <MenuItem component={Link} to="/account/exportpk">
+                  Export Private Key
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
+          }
+          actions={
+            <div>
+              <Button outlined small component={Link} componentProps={{ to: '/account/send' }}>
+                Send
+              </Button>
+            </div>
+          }
+          settings={settings}
+        />
+        <TXContainer>
+          <TXList data={account} />
+        </TXContainer>
+      </React.Fragment>
+    );
+  }
 }
 
 export default connect(
-	state => ({
-		account: getCurrentWallet(state)
-	}),
-	dispatch => bindActionCreators(accountActions, dispatch)
+  (state: any) => ({
+    account: getCurrentWallet(state)
+  }),
+  dispatch => bindActionCreators(accountActions, dispatch)
 )(AccountInfo);

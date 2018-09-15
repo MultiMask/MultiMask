@@ -9,100 +9,125 @@ const URL_NODE = 'https://testnet.blockchain.info';
 // const NETWORK = "livenet";
 
 export default class BitcoinWallet {
-	public network: any;
-	public priv: any;
-	public address: any;
+  public network: any;
+  public priv: any;
+  public address: any;
 
-	constructor(network) {
-		this.network = network;
-	}
+  constructor(network) {
+    this.network = network;
+  }
 
-	public create(seed) {
-		const mnemonic = new Mnemonic(seed);
-	
-		const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
-	
-		this.priv = HDPrivateKey.privateKey.toWIF();
-		this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
+  public create(seed) {
+    const mnemonic = new Mnemonic(seed);
 
-		return mnemonic.toString();
-	}
+    const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
 
-	public changeNetwork(network: string, seed: string) {
-		this.network = network
+    this.priv = HDPrivateKey.privateKey.toWIF();
+    this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
 
-		const mnemonic = new Mnemonic(seed);
-	
-		const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
-	
-		this.priv = HDPrivateKey.privateKey.toWIF();
-		this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
-	}
-	
-	public getAddress() {
-		return this.address;
-	}
+    return mnemonic.toString();
+  }
 
-	public getInfo() {
-		return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
-			const lastOUT = res.data.txs[0];
-			const output = lastOUT ? lastOUT.hash : null;
-			const outputIndex = lastOUT && lastOUT.out ? lastOUT.out.findIndex(item => item.addr === this.address) : null;
+  public changeNetwork(network: string, seed: string) {
+    this.network = network
 
-			return {
-				index: outputIndex,
-				address: res.data.address,
-				output,
-				balance: res.data.final_balance / 1e8,
-				network: this.network,
-				txs: res.data.txs
-			};
-		});
-	}
+    const mnemonic = new Mnemonic(seed);
+  
+    const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
+  
+    this.priv = HDPrivateKey.privateKey.toWIF();
+    this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
+  }
 
-	public createTX({ to, amount, data }) {
-		return this.getInfo().then(({ output, balance, index }) => {
-			const privateKey = this.priv;
-			const address = this.address;
-			// SEND signed Tx
-			info('create TX with: ');
-			info('to: ', to);
-			info('amount: ', amount);
-			info('data: ', data);
-			info('output: ', output);
-			// console.log('balance: ', balance);
+  public getAddress() {
+    return this.address;
+  }
 
-			const amountInSatoshi = amount * 1e8;
-			const SUM = balance * 1e8;
-			info('balance:', SUM);
+  public getInfo() {
+    return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
+      const outputs = [];
 
-			const testnet = bitcoin.networks.testnet;
-			const txb = new bitcoin.TransactionBuilder(testnet);
-			const keyPair = bitcoin.ECPair.fromWIF(privateKey, testnet);
+      res.data.txs.forEach(tx => {
+        tx.out.forEach((out, idx) => {
+          if (out.addr === this.address && !out.spent) {
+            outputs.push({
+              hash: tx.hash,
+              idx
+            })
+          }
+        })
+      })
 
-			txb.addInput(output, index);
+      return {
+        address: res.data.address,
+        outputs,
+        balance: res.data.final_balance / 1e8,
+        txs: res.data.txs
+      };
+    });
+  }
 
-			if (data) {
-				const bitcoin_payload = Buffer.from(data, 'utf8');
-				const dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
+  public createTX(opts) {
+    return this.buildTX(opts)
+      .then(this.signTXBuild)
+      .then(signedTX => {
+        info('TX = ', signedTX);
 
-				txb.addOutput(dataScript, 0);
-			}
+        return axios.post(`${URL_NODE}/pushtx`, 'tx=' + signedTX).then(hash => {
+          info('TX hash:', hash);
+    
+          return { hash };
+        });
+      })
+  }
 
-			const amountToReturn = SUM - amountInSatoshi - 5000;
+  private buildTX({ to, amount, data }) {
+    return this.getInfo().then(({ outputs, balance }) => {
+      info('create TX with >> ');
+      info('to: ', to);
+      info('amount: ', amount);
+      info('data: ', data);
+      info('outputs: ', outputs);
 
-			txb.addOutput(to, amountInSatoshi);
-			txb.addOutput(address, +amountToReturn.toFixed(0));
+      const amountInSatoshi = amount * 1e8;
+      const balanceInSatoshi = balance * 1e8;
+      info('balance:', balanceInSatoshi);
 
-			txb.sign(0, keyPair);
+      const testnet = bitcoin.networks.testnet;
+      const txb = new bitcoin.TransactionBuilder(testnet);
 
-			info('TX = ', txb.build().toHex());
+      outputs.forEach((out, idx) => {
+        txb.addInput(out.hash, out.idx);
+      })
+      
+      // Put data in hex to OP_RETURN 
+      if (data) {
+        const bitcoin_payload = Buffer.from(data, 'utf8');
+        const dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
+        
+        txb.addOutput(dataScript, 0);
+      }
+      
+      const fee = 5000;
+      const amountToReturn = balanceInSatoshi - amountInSatoshi - fee;
+      
+      txb.addOutput(to, amountInSatoshi);
+      txb.addOutput(this.address, +amountToReturn.toFixed(0));
+      
+      return txb;
+    });
+  }
 
-			return axios.post(`${URL_NODE}/pushtx`, 'tx=' + txb.build().toHex()).then(hash => {
-				info('TX hash:', hash);
+  private signTXBuild = (txb) => {
+    const privateKey = this.priv;
+    const testnet = bitcoin.networks.testnet;
+    const keyPair = bitcoin.ECPair.fromWIF(privateKey, testnet);
 
-				return { hash };
-			});
-		});
-	}
+    // Sign all inputs
+    txb.inputs.forEach((input, idx) => {
+      txb.sign(idx, keyPair);
+    });
+
+    return txb.build().toHex();
+  }
 }
