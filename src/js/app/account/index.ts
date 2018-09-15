@@ -48,6 +48,10 @@ export default class Account {
 		return this.wallet.createTX(tx);
 	}
 
+	public changeNetwork(network: string) {
+		this.wallet.changeNetwork(network, this.secret.seed)
+	}
+
 	public serialize() {
 		return {
 			id: this.id,

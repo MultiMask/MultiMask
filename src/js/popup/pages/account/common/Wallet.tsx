@@ -30,16 +30,19 @@ const Sing = styled('div')`
   color: #bdc2ce;
   border-radius: 3px;
   background-color: #ebeef5;
+  cursor: pointer;
 `;
 
 const Wallet = ({
 	data: {
 		info: { address, balance, network },
-		blockchain
+		blockchain,
+		id
 	},
 	menu,
 	actions,
-	settings
+	settings,
+	changeNetwork
 }: any) => (
 	<WalletContainer className="item">
 		<WalletHeader>
@@ -52,7 +55,7 @@ const Wallet = ({
 			>
 				{address}
 			</Typography>
-			<Sing>{network}</Sing>
+			<Sing onClick={() => changeNetwork(id, 'livenet')}>{network}</Sing>
 			{menu}
 		</WalletHeader>
 		<WalletContent>

@@ -28,6 +28,17 @@ export default class BitcoinWallet {
 		return mnemonic.toString();
 	}
 
+	public changeNetwork(network: string, seed: string) {
+		this.network = network
+
+		const mnemonic = new Mnemonic(seed);
+	
+		const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
+	
+		this.priv = HDPrivateKey.privateKey.toWIF();
+		this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
+	}
+	
 	public getAddress() {
 		return this.address;
 	}
