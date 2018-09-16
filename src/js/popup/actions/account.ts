@@ -34,7 +34,9 @@ const AccountActions = {
   changeNetwork: (id, network) => (dispatch, getState) => {
     InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
       .send()
-      .then(() => {
+      .then(payload => {
+        AccountActions.setAccount(payload)(dispatch, getState);
+
         dispatch(goBack());
       });
   },
