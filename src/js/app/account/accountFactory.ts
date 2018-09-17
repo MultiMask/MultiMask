@@ -6,6 +6,7 @@ import { debug } from 'loglevel';
 import Account from '.';
 import BitcoinWallet from './wallet/bitcoin';
 import EthWallet from './wallet/eth';
+import { EosWallet } from './wallet/eos';
 
 const createWallet = ({ blockchain, network }) => {
   if (blockchain === networks.BTC.sign) {
@@ -15,16 +16,22 @@ const createWallet = ({ blockchain, network }) => {
   if (blockchain === networks.ETH.sign) {
     return new EthWallet({ network });
   }
+
+  if (blockchain === networks.EOS.sign) {
+    return new EosWallet({ network });
+  }
+
+  throw new Error(`No support blockchain ${network}`);
 };
 
 export default {
-  create({ name, blockchain, network, id, secret }: any) {
-    let wallet = createWallet({ blockchain, network });
+  create({ name, blockchain, network, id, secret }: any): Account {
+    const wallet = createWallet({ blockchain, network });
 
     return new Account({ wallet, name, network, blockchain, secret, id });
   },
 
-  save(pass, account) {
+  save(pass, account): void {
     debug('save account > ', pass, account);
     const id = account.id;
     const str = JSON.stringify(account.serialize());
@@ -40,7 +47,7 @@ export default {
     return Promise.all(ids.map(id => removeEntity(id)));
   },
 
-  load(pass, id) {
+  load(pass, id): Promise<Account> {
     return getEntity(id).then((str: string) => {
       debug('Account Load > raw >', str, id);
       // eslint-disable-next-line
@@ -48,7 +55,7 @@ export default {
 
       debug('Account Load > ', decoded);
 
-      return this.create(decoded);
+      return this.create(decoded).init();
     });
   },
 

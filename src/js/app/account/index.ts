@@ -18,26 +18,35 @@ export default class Account {
     this.secret = secret;
 
     this.name = name ? name : this.createName();
-    this.secret.seed = this.create(secret.seed);
   }
 
-  createName() {
+  public init() {
+    return this._create(this.secret.seed)
+      .then(seed => {
+        this.secret.seed = seed; 
+        
+        return this;
+      });
+  }
+  
+  private _create(seed) {
+    return this.wallet.create(seed);
+  }
+  
+  public createName() {
     return Date.now();
   }
 
-  create(seed) {
-    return this.wallet.create(seed);
-  }
 
-  getSeed() {
+  public getSeed() {
     return this.secret.seed;
   }
 
-  getAddress() {
+  public getAddress() {
     return this.wallet.getAddress();
   }
 
-  getInfo() {
+  public getInfo() {
     return this.wallet.getInfo().then(info => ({
       id: this.id,
       name: this.name,
@@ -47,12 +56,12 @@ export default class Account {
     }));
   }
 
-  sendTX(tx) {
+  public sendTX(tx) {
     info('Sending tx > ', this.blockchain, this.network, this.name, tx);
     return this.wallet.createTX(tx);
   }
 
-  serialize() {
+  public serialize() {
     return {
       id: this.id,
       name: this.name,

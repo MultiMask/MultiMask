@@ -17,20 +17,21 @@ class Wallet extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { blockchain, network } = this.props;
 
     this.account = AccountFactory.create({ blockchain, network });
-
-    this.setState({ seed: this.account.getSeed() });
+    this.account.init().then(() => {
+      this.setState({ seed: this.account.getSeed() });
+    })
   }
 
-  handleSave = e => {
+  public handleSave = e => {
     e.preventDefault();
     this.props.create(this.account.serialize());
   };
 
-  render() {
+  public render() {
     return (
       <FormLayout
         onSubmit={this.handleSave}
@@ -63,4 +64,5 @@ const Content = styled('div')`
   border: 1px solid #ddd;
   text-align: center;
   border-radius: 5px;
+  word-wrap: break-word;
 `;

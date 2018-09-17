@@ -11,25 +11,25 @@ import Button from '../../ui/Button';
 class Wallet extends React.Component<any, any> {
   private account;
 
-  state: any = {
+  public state: any = {
     seed: ''
   };
 
-  handleInput = e => {
+  public handleInput = e => {
     this.setState({ seed: e.target.value });
   };
 
-  handleCheck = e => {
+  public handleCheck = e => {
     e.preventDefault();
     this.createAccount();
     this.getInfo();
   };
 
-  handleSave = () => {
+  public handleSave = () => {
     this.props.create(this.account);
   };
 
-  createAccount() {
+  public createAccount() {
     const { blockchain, network } = this.props;
 
     try {
@@ -39,7 +39,7 @@ class Wallet extends React.Component<any, any> {
         secret: {
           seed: this.state.seed
         }
-      });
+      }).init();
     } catch (e) {
       this.setState({
         error: `Wrong wordlist: ${e}`
@@ -47,7 +47,7 @@ class Wallet extends React.Component<any, any> {
     }
   }
 
-  getInfo() {
+  public getInfo() {
     if (this.account) {
       this.account.getInfo().then(data => {
         this.setState({
@@ -59,7 +59,7 @@ class Wallet extends React.Component<any, any> {
     }
   }
 
-  render() {
+  public render() {
     const { address, success, balance, error } = this.state;
 
     return (

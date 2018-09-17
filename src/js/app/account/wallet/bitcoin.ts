@@ -25,7 +25,7 @@ export default class BitcoinWallet {
     this.priv = HDPrivateKey.privateKey.toWIF();
     this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
 
-    return mnemonic.toString();
+    return Promise.resolve(mnemonic.toString());
   }
 
   public getAddress() {
