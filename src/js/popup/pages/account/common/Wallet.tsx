@@ -80,7 +80,7 @@ class Wallet extends React.Component<any, any> {
               `}
               color="main"
             >
-              {`${balance} ${blockchain })}`}
+              {`${balance} ${blockchain}`}
             </Typography>
             <Typography color="secondary">{getPrice(balance, blockchain)} USD</Typography>
           </div>
