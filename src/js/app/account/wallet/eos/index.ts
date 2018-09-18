@@ -50,7 +50,14 @@ export class EosWallet {
   }
 
   public getInfo() {
-    return this._getInfoByAccount(this.account);
+    return this._getInfoByAccount(this.account).then(accountInfo => {
+      return {
+        address: this.account,
+        balance: accountInfo.core_liquid_balance.split(' ')[0],
+        network: this.network.sign,
+        txs: []
+      }
+    })
   }
 
   public setExtra(data) {
