@@ -18,7 +18,8 @@
     "member-ordering": false,
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
-    "jsdoc-format": [true, "check-multiline-start"]
+    "jsdoc-format": [true, "check-multiline-start"],
+    "space-before-function-paren": [true, "always"]
   },
   "rulesDirectory": []
 }
