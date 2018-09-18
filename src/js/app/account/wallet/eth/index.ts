@@ -16,7 +16,7 @@ export default class EthWallet {
   public networkUrl: string;
 
   constructor({ network }) {
-    this.engine = new EthEngine();
+    this.engine = new EthEngine(network);
     this.changeNetwork(network)
   }
 
@@ -36,6 +36,7 @@ export default class EthWallet {
     this.networkUrl = networkProps.url;
 
     web3.setProvider(new Web3.providers.HttpProvider(this.networkUrl))
+    this.engine = new EthEngine(network);
   }
   
   public getAddress() {
