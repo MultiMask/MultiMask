@@ -1,9 +1,9 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
 import EthEngine from './engine';
+import networks from '../../../../blockchain'
 
-const net = 'https://ropsten.infura.io/';
-const web3 = new Web3(new Web3.providers.HttpProvider(net));
+const web3 = new Web3();
 
 export default class EthWallet {
   public engine: any;
@@ -13,13 +13,14 @@ export default class EthWallet {
   public public: any;
   public address: any;
   public nonce: any;
+  public networkUrl: string;
 
   constructor({ network }) {
-    this.engine = new EthEngine();
-    this.network = network;
+    this.engine = new EthEngine(network);
+    this.changeNetwork(network)
   }
 
-  create(_seed) {
+  public create(_seed) {
     const seed = _seed || this.engine.generateMnemonic();
     ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(seed));
 
@@ -29,11 +30,20 @@ export default class EthWallet {
     return seed;
   }
 
-  getAddress() {
+  public changeNetwork(network: string) {
+    this.network = network;
+    const networkProps = networks.ETH.network.find(item => item.sign === network)
+    this.networkUrl = networkProps.url;
+
+    web3.setProvider(new Web3.providers.HttpProvider(this.networkUrl))
+    this.engine = new EthEngine(network);
+  }
+  
+  public getAddress() {
     return this.address;
   }
 
-  getInfo() {
+  public getInfo() {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txs]) => {
         this.nonce = txs && txs[0] ? +txs[0].nonce : 0;
@@ -41,21 +51,22 @@ export default class EthWallet {
         return {
           address: this.address,
           balance: web3.utils.fromWei(amountInWei, 'ether'),
+          network: this.network,
           txs
         };
       }
     );
   }
 
-  getNextNonce() {
+  public getNextNonce() {
     return this.nonce + 1;
   }
 
-  updateNonce() {
+  public updateNonce() {
     this.nonce++;
   }
 
-  createTX({ to, amount, data }) {
+  public createTX({ to, amount, data }) {
     const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
 
     const tx = this.engine.signEthTx({
@@ -80,7 +91,7 @@ export default class EthWallet {
   }
 
   // TODO: provide to Account entity
-  signRawTx(data) {
+  public signRawTx(data) {
     return this.engine.signRawTx(data, this.privHex);
   }
 }

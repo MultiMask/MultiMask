@@ -8,7 +8,8 @@ import {
   ACCOUNT_INFO,
   ACCOUNT_SET,
   ACCOUNT_GETSEED,
-  ACCOUNT_GETSEED_RESULT
+  ACCOUNT_GETSEED_RESULT,
+  ACCOUNT_NETWORK_UPDATE
 } from './../../constants/account';
 
 const AccountActions = {
@@ -22,6 +23,16 @@ const AccountActions = {
 
   create: account => (dispatch, getState) => {
     InternalMessage.payload(ACCOUNT_CREATE, account)
+      .send()
+      .then(payload => {
+        AccountActions.setAccount(payload)(dispatch, getState);
+
+        dispatch(goBack());
+      });
+  },
+
+  changeNetwork: (id, network) => (dispatch, getState) => {
+    InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
       .send()
       .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);

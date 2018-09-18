@@ -7,21 +7,23 @@ import Account from '.';
 import BitcoinWallet from './wallet/bitcoin';
 import EthWallet from './wallet/eth';
 
-const createWallet = ({ blockchain, network }) => {
+const createWallet = ({ blockchain }) => {
   if (blockchain === networks.BTC.sign) {
-    return new BitcoinWallet(network);
+    const defaultBTCNetwork = networks.BTC.network[0].sign;
+    return new BitcoinWallet(defaultBTCNetwork);
   }
 
   if (blockchain === networks.ETH.sign) {
-    return new EthWallet({ network });
+    const defaultETHNetwork = networks.ETH.network[0].sign;
+    return new EthWallet({ network: defaultETHNetwork });
   }
 };
 
 export default {
-  create({ name, blockchain, network, id, secret }: any) {
-    let wallet = createWallet({ blockchain, network });
+  create({ name, blockchain, id, secret }: any) {
+    const wallet = createWallet({ blockchain });
 
-    return new Account({ wallet, name, network, blockchain, secret, id });
+    return new Account({ wallet, name, blockchain, secret, id });
   },
 
   save(pass, account) {

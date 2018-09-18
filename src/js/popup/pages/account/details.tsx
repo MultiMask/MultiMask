@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
-
+import accountActions from '../../actions/account'
 import { getCurrentWallet } from './../../select';
 
 import TXList from './common/TXList';
@@ -22,7 +23,6 @@ const TXContainer = styled('div')`
 class AccountInfo extends React.Component<any, any> {
   public render() {
     const { account, settings } = this.props;
-
     return (
       <React.Fragment>
         <Wallet
@@ -32,7 +32,7 @@ class AccountInfo extends React.Component<any, any> {
               <CopyToClipboard text={account.info.address}>
                 <Icon
                   className={css`
-                    margin-right: 7px;
+                    margin: 0 7px;
                   `}
                   name="clone"
                   color="secondary"

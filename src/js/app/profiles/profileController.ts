@@ -10,7 +10,7 @@ import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import { Profile } from './Profile';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED } from './../../constants/account';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from './../../constants/account';
 import { PROFILE_SELECT } from './../../constants/profile';
 
 export class ProfileController {
@@ -37,6 +37,7 @@ export class ProfileController {
 		this.messageController.on(ACCOUNT_INFO, this.getAccounts);
 		this.messageController.on(ACCOUNT_CREATE, this.addAccount);
 		this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
+		this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
 
 		this.profileListController.on(PROFILE_SELECT, this.restoreProfile);
 	}
@@ -104,6 +105,21 @@ export class ProfileController {
 		});
 	}
 
+	/**
+   * Update account's wallet network
+	 * @param sendResponse 
+   * @param accountData: {id, network} 
+   */
+
+	public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
+		const account = this.accountController.getAccountById(accountData.id);
+		account.changeNetwork(accountData.network)
+
+		AccountFactory.save(this.getPass(), account)
+
+		this.getAccounts(sendResponse);
+	}
+	
 	/**
    * Return seed for Wallet to export
    * @param sendResponse 
