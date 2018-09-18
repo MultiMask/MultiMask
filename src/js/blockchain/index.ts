@@ -4,13 +4,18 @@ export default {
     sign: 'BTC',
     network: [
       // {
-      //   name: 'Mainnet',
-      //   sign: 'mainnet'
+      // 	name: 'Mainnet',
+      // 	sign: 'mainnet'
       // },
       {
         name: 'Testnet',
-        sign: 'testnet'
+        sign: 'testnet',
+        url: 'https://testnet.blockchain.info'
       }
+      // {
+      //   name: 'Livenet',
+      //   sign: 'livenet'
+      // }
     ]
   },
   ETH: {
@@ -25,11 +30,13 @@ export default {
       {
         name: 'Ropsten',
         sign: 'ropsten',
+        url: 'https://ropsten.infura.io/',
         chainId: 3
       },
       {
         name: 'Rinkeby',
         sign: 'rinkeby',
+        url: 'https://rinkeby.infura.io',
         chainId: 4
       }
     ]

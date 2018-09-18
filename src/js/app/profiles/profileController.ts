@@ -10,7 +10,7 @@ import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import { Profile } from './Profile';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED } from './../../constants/account';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from './../../constants/account';
 import { PROFILE_SELECT } from './../../constants/profile';
 
 export class ProfileController {
@@ -33,11 +33,12 @@ export class ProfileController {
   /**
    * Messages
    */
-  private startListening() {
-    this.messageController.on(ACCOUNT_INFO, this.getAccounts);
-    this.messageController.on(ACCOUNT_CREATE, this.addAccount);
-    this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
-
+	private startListening() {
+		this.messageController.on(ACCOUNT_INFO, this.getAccounts);
+		this.messageController.on(ACCOUNT_CREATE, this.addAccount);
+		this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
+		this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
+    
     this.profileListController.on(PROFILE_SELECT, this.restoreProfile);
   }
 
@@ -94,17 +95,39 @@ export class ProfileController {
    */
   public addAccount = (sendResponse, accountData): void => {   
     const profile = this.profileListController.getCurrent();
-    const account = AccountFactory.create(accountData);
+    let account = null;
 
-    profile.addAccount(this.getPass(), account).then(() => {
-      AccountFactory.save(this.getPass(), account);
-      this.accountController.addAccountInstance(account);
+    return AccountFactory.create(accountData)
+      .init()
+      .then(_account => {
+        account = _account;
 
-      this.getAccounts(sendResponse);
-    });
+        return profile.addAccount(this.getPass(), account)
+      })
+      .then(() => {
+        AccountFactory.save(this.getPass(), account);
+        this.accountController.addAccountInstance(account);
+  
+        this.getAccounts(sendResponse);
+      })
   }
 
-  /**
+	/**
+   * Update account's wallet network
+	 * @param sendResponse 
+   * @param accountData: {id, network} 
+   */
+
+	public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
+		const account = this.accountController.getAccountById(accountData.id);
+		account.changeNetwork(accountData.network)
+
+		AccountFactory.save(this.getPass(), account)
+
+		this.getAccounts(sendResponse);
+	}
+	
+	/**
    * Return seed for Wallet to export
    * @param sendResponse 
    * @param id 

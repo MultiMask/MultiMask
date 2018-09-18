@@ -8,27 +8,31 @@ import BitcoinWallet from './wallet/bitcoin';
 import EthWallet from './wallet/eth';
 import { EosWallet } from './wallet/eos';
 
-const createWallet = ({ blockchain, network = {}}: any) => {
+const createWallet = ({ blockchain }) => {
   if (blockchain === networks.BTC.sign) {
-    return new BitcoinWallet(network.sign);
+    const defaultBTCNetwork = networks.BTC.network[0].sign;
+    return new BitcoinWallet(defaultBTCNetwork);
   }
 
   if (blockchain === networks.ETH.sign) {
-    return new EthWallet(network.sign);
+    const defaultETHNetwork = networks.ETH.network[0].sign;
+    return new EthWallet(defaultETHNetwork);
   }
 
   if (blockchain === networks.EOS.sign) {
-    return new EosWallet(network);
+    const defaultEOSNetwork = networks.EOS.network[0].sign;
+    return new EosWallet(defaultEOSNetwork);
   }
 
-  throw new Error(`No support blockchain ${network}`);
+  throw new Error(`No support blockchain: ${blockchain}`);
 };
 
 export default {
-  create({ name, blockchain, network, id, secret }: any): Account {
-    const wallet = createWallet({ blockchain, network });
+  create(opts) {
+    const { blockchain } = opts;
+    const wallet = createWallet({ blockchain });
 
-    return new Account({ wallet, name, network, blockchain, secret, id });
+    return new Account({ ...opts, wallet });
   },
 
   save(pass, account): void {

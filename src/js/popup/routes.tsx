@@ -13,6 +13,7 @@ import ImportProfile from './pages/profile/ImportProfile';
 import ExportPK from './pages/account/exportpk';
 import Details from './pages/account/details';
 import Send from './pages/account/send';
+import EditAccount from './pages/account/edit';
 import CreateWallet from './pages/wallet';
 
 const routes = () => {
@@ -23,6 +24,7 @@ const routes = () => {
       <AppRoute exact path="/account/details" component={Details} layout={MainLayout} />
       <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
       <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
+      <AppRoute exact path="/account/edit/:id" component={EditAccount} layout={MainLayout} />
       <AppRoute exact path="/wallets/create" component={CreateWallet} layout={MainLayout} />
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />

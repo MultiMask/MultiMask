@@ -47,13 +47,16 @@ class Wallet extends React.Component<any, IWalletState> {
     this.props.create(this.account);
   };
 
+  public handleSaveEos = account => {
+    console.log(account)
+  }
+
   public createAccount() {
-    const { blockchain, network } = this.props;
+    const { blockchain } = this.props;
 
     try {
       return AccountFactory.create({
         blockchain,
-        network,
         secret: {
           seed: this.state.seed
         }
@@ -129,6 +132,7 @@ class Wallet extends React.Component<any, IWalletState> {
 
     if (success) {
       return eos.map((account, idx) => {
+        const handleEos = this.handleSaveEos.bind(this, account);
         return (
           <React.Fragment key={idx}>
             <div>
@@ -144,7 +148,7 @@ class Wallet extends React.Component<any, IWalletState> {
             className={css`
               margin-top: 50px;
             `}
-            onClick={this.handleSave}
+            onClick={handleEos}
           >
             Import
           </Button>

@@ -2,22 +2,27 @@ import uuid from 'uuid/v4';
 import { info } from 'loglevel';
 
 export default class Account {
-  public wallet: any;
-  public network: any;
-  public blockchain: any;
-  public id: any;
-  public secret: any;
-  public name: any;
+	public wallet: any;
+	public blockchain: any;
+	public id: any;
+	public secret: any;
+	public name: any;
 
-  constructor({ wallet, network, blockchain, name, secret = { seed: null }, id = uuid() }) {
-    this.wallet = wallet;
+	constructor({ wallet, blockchain, name, secret = { seed: null }, id = uuid() }) {
+		this.wallet = wallet;
+		this.blockchain = blockchain;
+		this.id = id;
+		this.secret = secret;
 
-    this.network = network;
-    this.blockchain = blockchain;
-    this.id = id;
-    this.secret = secret;
-
-    this.name = name ? name : this.createName();
+		this.name = name ? name : this._createName();
+  }
+  
+  private _create(seed) {
+    return this.wallet.create(seed);
+  }
+  
+  private _createName() {
+    return Date.now();
   }
 
   public init() {
@@ -28,16 +33,11 @@ export default class Account {
         return this;
       });
   }
-  
-  private _create(seed) {
-    return this.wallet.create(seed);
-  }
-  
-  public createName() {
-    return Date.now();
-  }
 
-
+  public changeNetwork(network: string) {
+		this.wallet.changeNetwork(network, this.secret.seed)
+	}
+  
   public getSeed() {
     return this.secret.seed;
   }
@@ -51,13 +51,12 @@ export default class Account {
       id: this.id,
       name: this.name,
       blockchain: this.blockchain,
-      network: this.network,
       info
     }));
   }
 
   public sendTX(tx) {
-    info('Sending tx > ', this.blockchain, this.network, this.name, tx);
+    info('Sending tx > ', this.blockchain, this.name, tx);
     return this.wallet.createTX(tx);
   }
 
@@ -66,7 +65,7 @@ export default class Account {
       id: this.id,
       name: this.name,
       blockchain: this.blockchain,
-      network: this.network,
+
       secret: {
         seed: this.secret.seed
       }
