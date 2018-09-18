@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 import Icon from '../../../ui/components/Icon';
-import priceActions from '../../../actions/prices';
+import priceActions from './../../../actions/prices';
 
 import Item from './item';
 

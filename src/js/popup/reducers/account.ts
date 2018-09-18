@@ -1,3 +1,5 @@
+import { info } from 'loglevel';
+
 import { ACCOUNT_SET, ACCOUNT_ACTIVE, ACCOUNT_GETSEED_RESULT } from '../../constants/account';
 
 const initialState = {
@@ -8,6 +10,7 @@ const initialState = {
 export default function accountReducer(state = initialState, action) {
   switch (action.type) {
     case ACCOUNT_SET: {
+      info(action.payload);
       return {
         ...state,
         accounts: action.payload

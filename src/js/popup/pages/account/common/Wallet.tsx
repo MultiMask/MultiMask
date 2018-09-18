@@ -36,6 +36,18 @@ const Sing = styled('div')`
   cursor: pointer;
 `;
 
+const Inner = styled('div')`
+  display: flex;
+`;
+const Left = styled('div')`
+  display: flex;
+  flex-direction: column;
+`;
+const Center = styled('div')`
+  margin: 0 10px;
+`;
+const Right = styled('div')``;
+
 class Wallet extends React.Component<any, any> {
   public render () {
     const {
@@ -51,41 +63,56 @@ class Wallet extends React.Component<any, any> {
 
     return (
       <WalletContainer className="item">
-        <WalletHeader>
-          <Icon type={blockchain} size="s" />
-          <Typography
-            className={css`
-              padding: 0 12px;
-            `}
-            color="secondary"
-          >
-            {address}
-          </Typography>
+      <Inner>
+        <Left>
+          <Icon type={blockchain}/>
           <Link
             className={css`
               text-decoration: none;
+              margin-top: 8px;
             `}
             to={`/account/edit/${id}`}
           >
             <Sing>{network}</Sing>
           </Link>
-          {menu}
-        </WalletHeader>
-        <WalletContent>
-          <div>
+        </Left>
+        <Center>
+          <Typography
+            className={css`
+              white-space: inherit;
+              word-break: break-all;
+              font-size: 0.8rem;
+            `}
+            color="secondary"
+          >
+            {address}
+          </Typography>
             <Typography
               className={css`
                 display: block;
+                margin-top: 10px;
                 margin-bottom: 5px;
+                font-size: 1rem;
+                font-weight: bold;
               `}
               color="main"
             >
               {`${balance} ${blockchain}`}
             </Typography>
-            <Typography color="secondary">{getPrice(balance, blockchain)} USD</Typography>
-          </div>
-          {actions}
-        </WalletContent>
+            <Typography 
+              className={css`
+                font-size: 0.9rem;
+              `}
+              color="secondary"
+            >
+              {getPrice(balance, blockchain)} USD
+            </Typography>
+        </Center>
+        <Right>
+          {menu}
+        </Right>
+        </Inner>
+        {actions}
       </WalletContainer>
     )
   }
