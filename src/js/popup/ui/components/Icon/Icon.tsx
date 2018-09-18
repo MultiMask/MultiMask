@@ -6,6 +6,7 @@ const iconTypes = {
   BTC: require('./Icon_type_btc.svg'),
   ETH: require('./Icon_type_eth.svg'),
   DVC: require('./Icon_type_dvc.svg'),
+  EOS: require('./Icon_type_eos.svg'),
   'no-wallets': require('./Icon_type_no-wallets.png')
 };
 
@@ -49,7 +50,7 @@ export class Icon extends React.Component<any, any> {
   };
 
   static propTypes = {
-    type: PropTypes.oneOf(['BTC', 'DVC', 'ETH', 'no-wallets']).isRequired,
+    type: PropTypes.oneOf(['BTC', 'DVC', 'ETH', 'EOS', 'no-wallets']).isRequired,
     size: PropTypes.oneOf(['s', 'm', 'l', 'xl'])
   };
 }

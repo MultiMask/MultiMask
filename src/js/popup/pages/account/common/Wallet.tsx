@@ -2,9 +2,11 @@ import * as React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import getPrice from '../../../../helpers/getPrice';
-import networkSign from '../../../../helpers/networkSign';
+import priceActions from '../../../actions/prices';
+
 import Icon from '../../../ui/components/Icon';
 import Typography from '../../../ui/Typography';
 
@@ -34,53 +36,62 @@ const Sing = styled('div')`
   cursor: pointer;
 `;
 
-const Wallet = ({
-  data: {
-    info: { address, balance, network },
-    blockchain,
-    id
-  },
-  menu,
-  actions,
-  settings
-}: any) => (
-  <WalletContainer className="item">
-    <WalletHeader>
-      <Icon type={blockchain} size="s" />
-      <Typography
-        className={css`
-          padding: 0 12px;
-        `}
-        color="secondary"
-      >
-        {address}
-      </Typography>
-      <Link
-        className={css`
-          text-decoration: none;
-        `}
-        to={`/account/edit/${id}`}
-      >
-        <Sing>{network}</Sing>
-      </Link>
-      {menu}
-    </WalletHeader>
-    <WalletContent>
-      <div>
-        <Typography
-          className={css`
-            display: block;
-            margin-bottom: 5px;
-          `}
-          color="main"
-        >
-          {`${balance} ${networkSign({ blockchain })}`}
-        </Typography>
-        <Typography color="secondary">{getPrice(settings && settings.prices, blockchain, balance)} USD</Typography>
-      </div>
-      {actions}
-    </WalletContent>
-  </WalletContainer>
-);
+class Wallet extends React.Component<any, any> {
+  public render () {
+    const {
+      data: {
+        info: { address, balance, network },
+        blockchain,
+        id
+      },
+      menu,
+      actions,
+      getPrice
+    } = this.props;
 
-export default Wallet;
+    return (
+      <WalletContainer className="item">
+        <WalletHeader>
+          <Icon type={blockchain} size="s" />
+          <Typography
+            className={css`
+              padding: 0 12px;
+            `}
+            color="secondary"
+          >
+            {address}
+          </Typography>
+          <Link
+            className={css`
+              text-decoration: none;
+            `}
+            to={`/account/edit/${id}`}
+          >
+            <Sing>{network}</Sing>
+          </Link>
+          {menu}
+        </WalletHeader>
+        <WalletContent>
+          <div>
+            <Typography
+              className={css`
+                display: block;
+                margin-bottom: 5px;
+              `}
+              color="main"
+            >
+              {`${balance} ${blockchain}`}
+            </Typography>
+            <Typography color="secondary">{getPrice(balance, blockchain)} USD</Typography>
+          </div>
+          {actions}
+        </WalletContent>
+      </WalletContainer>
+    )
+  }
+}
+
+export default connect(
+  null,
+  dispatch => bindActionCreators(priceActions, dispatch)
+)(Wallet);

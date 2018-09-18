@@ -1,36 +1,40 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import getPrice from '../../../../helpers/getPrice';
-import getPriceInBTC from '../../../../helpers/getPriceInBTC';
+import { bindActionCreators } from 'redux';
+
 import Icon from '../../../ui/components/Icon';
+import priceActions from '../../../actions/prices';
+
 import Item from './item';
 
 class AccountList extends React.Component<any, any> {
-  render() {
+  public render () {
+    const { getPrice, getPriceInBTC } = this.props;
+
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {
-      let total = { balanceInBTC: 0 };
+      const total = { balanceInBTC: 0 };
 
       return (
         <React.Fragment>
           <div className="Wallets">
             <div className="Wallets-Items">
               {this.props.accounts.map(account => {
-                total.balanceInBTC += getPriceInBTC(this.props.settings.prices, account);
+                total.balanceInBTC += getPriceInBTC(account.info.balance, account.blockchain);
 
                 return (
                   <div key={account.name} className="Wallets-Item">
-                    <Item account={account} prices={this.prices} />
+                    <Item account={account} />
                   </div>
                 );
               })}
             </div>
-            {this.props.settings.show_total ? (
+            {this.props.showTotal ? (
               <div className="Wallets-Total">
                 <div className="Wallets-Label">total:</div>
                 <div className="Wallets-Value">{total.balanceInBTC} BTC</div>
                 <div className="Wallets-Label">
-                  {getPrice(this.props.settings.prices, 'BTC', total.balanceInBTC)} USD
+                  {getPrice(total.balanceInBTC, 'BTC')} USD
                 </div>
               </div>
             ) : null}
@@ -55,29 +59,12 @@ class AccountList extends React.Component<any, any> {
       </div>
     );
   }
-
-  getUSDbyTotal(total) {
-    if (!this.priceInUSD('BTC')) {
-      return '?';
-    }
-
-    const usd = total * this.priceInUSD('BTC');
-    return isNaN(usd) ? '?' : usd.toFixed(2);
-  }
-
-  priceInUSD(sign) {
-    return this.prices && this.prices[sign] && this.prices[sign].USD;
-  }
-
-  get prices() {
-    return (this.props.settings && this.props.settings.prices) || {};
-  }
 }
 
 export default connect(
   ({ account, settings }: any) => ({
     accounts: account.accounts,
-    settings
+    showTotal: settings.show_total
   }),
-  null
+  dispatch => bindActionCreators(priceActions, dispatch)
 )(AccountList);

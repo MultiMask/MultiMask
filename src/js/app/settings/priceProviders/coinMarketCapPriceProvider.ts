@@ -2,10 +2,11 @@ import axios from 'axios';
 import basePriceProvider from './basePriceProvider';
 
 let signToIdEnum = {};
-(function (obj) {
+(function(obj) {
   Object.entries({
     1: 'BTC',
-    1027: 'ETH'
+    1027: 'ETH',
+    1765: 'EOS'
   }).map(entry => {
     obj[(obj[entry[0]] = entry[1])] = entry[0];
   });
@@ -14,7 +15,7 @@ let signToIdEnum = {};
 export default class CoinMarketCapPriceProvider extends basePriceProvider {
   getBCPrice(sign, params) {
     if (!signToIdEnum[sign]) {
-      return Promise.reject('');
+      return Promise.reject('Coin not found on Mapping in priceProvider');
     }
 
     return new Promise((resolve, reject) => {

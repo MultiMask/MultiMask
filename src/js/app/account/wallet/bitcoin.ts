@@ -6,19 +6,19 @@ import networks from '../../../blockchain'
 import { info } from 'loglevel';
 
 
-export default class BitcoinWallet {
+export default class BitcoinWallet implements IWallet {
   public network: any;
   public priv: any;
   public address: any;
   public networkUrl: string;
 
-  constructor(network) {
+  constructor (network) {
     this.network = network;
 
     this.setNetworkUrl(network)
   }
 
-  public create(seed) {
+  public create (seed) {
     const mnemonic = new Mnemonic(seed);
 
     const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
@@ -26,10 +26,10 @@ export default class BitcoinWallet {
     this.priv = HDPrivateKey.privateKey.toWIF();
     this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
 
-    return mnemonic.toString();
+    return Promise.resolve(mnemonic.toString());
   }
 
-  public changeNetwork(network: string, seed: string) {
+  public changeNetwork (network: string, seed: string) {
     this.network = network
 
     const mnemonic = new Mnemonic(seed);
@@ -47,11 +47,11 @@ export default class BitcoinWallet {
     this.networkUrl = networkProps.url;
   }
 
-  public getAddress() {
+  public getAddress () {
     return this.address;
   }
 
-  public getInfo() {
+  public getInfo () {
     return axios.get(`${this.networkUrl}/rawaddr/${this.address}`).then(res => {
       const outputs = [];
 
@@ -76,7 +76,7 @@ export default class BitcoinWallet {
     });
   }
 
-  public createTX(opts) {
+  public sendCoins (opts) {
     return this.buildTX(opts)
       .then(this.signTXBuild)
       .then(signedTX => {
@@ -90,7 +90,7 @@ export default class BitcoinWallet {
       })
   }
 
-  private buildTX({ to, amount, data }) {
+  private buildTX ({ to, amount, data }) {
     return this.getInfo().then(({ outputs, balance }) => {
       info('create TX with >> ');
       info('to: ', to);

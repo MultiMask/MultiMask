@@ -29,10 +29,6 @@ export default class ChooseNetwork extends React.Component<any, any> {
 		});
 	};
 
-	public getOption = item => {
-		return { value: item.sign, label: item.name };
-	};
-
 	get blockchains() {
 		const blocks = Object.entries(networks);
 		return blocks.map((item, idx) => {
@@ -40,13 +36,10 @@ export default class ChooseNetwork extends React.Component<any, any> {
 			return this.getOption(blockchain);
 		});
 	}
-
-	get networks() {
-		const blockchain = networks[this.state.selectedBlockchain.value];
-		return blockchain.network.map((item, idx) => {
-			return this.getOption(item);
-		});
-	}
+  
+  private getOption = item => {
+		return { value: item.sign, label: item.name };
+	};
 
 	public render() {
 		const { selectedBlockchain, step } = this.state;

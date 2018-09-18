@@ -8,105 +8,190 @@ import AccountFactory from './../../../app/account/accountFactory';
 import Typography from '../../ui/Typography';
 import Button from '../../ui/Button';
 
-class Wallet extends React.Component<any, any> {
-	private account;
+import networks from './../../../blockchain';
+import Account from './../../../app/account';
 
-	public state: any = {
-		seed: ''
-	};
+interface IWalletState {
+  seed?: string;
+  error?: string;
+  address?: string;
+  balance?: string;
+  success?: boolean;
+  eos?: any;
+}
 
-	public handleInput = e => {
-		this.setState({ seed: e.target.value });
-	};
+class Wallet extends React.Component<any, IWalletState> {
+  private account: Account;
 
-	public handleCheck = e => {
-		e.preventDefault();
-		this.createAccount();
-		this.getInfo();
-	};
+  public state: IWalletState = {
+    seed: ''
+  };
 
-	public handleSave = () => {
-		this.props.create(this.account);
-	};
+  public handleInput = e => {
+    this.setState({ seed: e.target.value });
+  };
 
-	public createAccount() {
-		const { blockchain } = this.props;
+  public handleCheck = e => {
+    e.preventDefault();
+    this.createAccount()
+      .then(() => {
+        if (this.isEos()) {
+          this.getEosAccounts();
+        } else {
+          this.getInfo();
+        }
+      })
+  };
 
-		try {
-			this.account = AccountFactory.create({
-				blockchain,
-				secret: {
-					seed: this.state.seed
-				}
-			});
-		} catch (e) {
-			this.setState({
-				error: `Wrong wordlist: ${e}`
-			});
-		}
-	}
+  public handleSave = () => {
+    this.props.create(this.account);
+  };
 
-	public getInfo() {
-		if (this.account) {
-			this.account.getInfo().then(data => {
-				this.setState({
-					address: data.info.address,
-					balance: data.info.balance,
-					success: true
-				});
-			});
-		}
-	}
+  public handleSaveEos = data => {
+    this.account.setExtra({ account: data.account_name });
+    this.props.create(this.account);
+  }
 
-	public render() {
-		const { address, success, balance, error } = this.state;
+  public createAccount() {
+    const { blockchain } = this.props;
 
-		return (
-			<FormLayout onSubmit={this.handleCheck} title="Input seed:" onBack={this.props.onBack} submitButtonTitle="Check">
-				<Textaria name="seed" type="text" value={this.state.seed} onChange={this.handleInput} cols={40} rows={5} />
-				{this.state.success && (
-					<div>
-						<Typography variant="subheading" color="main">
-							Address:
-						</Typography>
-						<Typography color="secondary">{address}</Typography>
-						<Typography variant="subheading" color="main">
-							Balance:
-						</Typography>
-						<Typography color="secondary">{balance}</Typography>
-					</div>
-				)}
-				{error && <div>{error}</div>}
-				{success && (
-					<Button
-						className={css`
+    try {
+      return AccountFactory.create({
+        blockchain,
+        secret: {
+          seed: this.state.seed
+        }
+      }).init()
+        .then(account => this.account = account);
+    } catch (e) {
+      this.setState({
+        error: `Wrong wordlist: ${e}`
+      });
+
+      return Promise.reject();
+    }
+  }
+
+  private getInfo() {
+    if (this.account) {
+      this.account.getInfo().then(data => {
+        this.setState({
+          address: data.info.address,
+          balance: data.info.balance,
+          success: true
+        });
+      });
+    }
+  }
+
+  private getEosAccounts() {
+    this.account.wallet.getKeyAccounts()
+      .then(accounts => {
+        this.setState(state => ({
+          ...state,
+          success: true,
+          eos: accounts
+        }))
+      })
+  }
+
+  private isEos() {
+    return this.account && this.account.blockchain === networks.EOS.sign;
+  }
+
+  private ethImport() {
+    const { success, address, balance } = this.state;
+
+    if (success) {
+      return (
+        <React.Fragment>
+          <div>
+            <Typography variant="subheading" color="main">
+              Address:
+            </Typography>
+            <Typography color="secondary">{address}</Typography>
+            <Typography variant="subheading" color="main">
+              Balance:
+            </Typography>
+            <Typography color="secondary">{balance}</Typography>
+          </div>
+          <Button
+            className={css`
               margin-top: 50px;
             `}
-						onClick={this.handleSave}
-					>
-						Import
-					</Button>
-				)}
-			</FormLayout>
-		);
-	}
+            onClick={this.handleSave}
+          >
+            Import
+          </Button>
+        </React.Fragment>
+      )
+    }
+  }
+
+  private eosImport() {
+    const { success, eos } = this.state;
+
+    if (success) {
+      return eos.map((account, idx) => {
+        const handleEos = this.handleSaveEos.bind(this, account);
+        return (
+          <React.Fragment key={idx}>
+            <div>
+              <Typography variant="subheading" color="main">
+                Account: {account.account_name}
+              </Typography>
+              <Typography variant="subheading" color="main">
+                Balance:
+              </Typography>
+              <Typography color="secondary">{account.core_liquid_balance}</Typography>
+          </div>
+          <Button
+            className={css`
+              margin-top: 50px;
+            `}
+            onClick={handleEos}
+          >
+            Import
+          </Button>
+        </React.Fragment>
+        );
+      });
+    }
+  }
+
+  public render() {
+    const { error, seed } = this.state;
+
+    return (
+      <FormLayout 
+        onSubmit={this.handleCheck} 
+        title="Input seed:" 
+        onBack={this.props.onBack} 
+        submitButtonTitle="Check"
+      >
+        <Textaria name="seed" type="text" value={seed} onChange={this.handleInput} cols={40} rows={5} />
+        {error && <div>{error}</div>}
+        {!this.isEos() && this.ethImport()}
+        {this.isEos() && this.eosImport()}
+      </FormLayout>
+    );
+  }
 }
 
 export default connect(
-	() => ({}),
-	dispatch =>
-		bindActionCreators(
-			{
-				create: actions.create
-			},
-			dispatch
-		)
+  () => ({}),
+  dispatch =>
+    bindActionCreators(
+      {
+        create: actions.create
+      },
+      dispatch
+    )
 )(Wallet);
 
 type TextariaProps = Partial<HTMLTextAreaElement> & {
-	theme?: any;
+  theme?: any;
 }
-
 const Textaria = styled('textarea')`
   outline: none;
   border: 1px solid ${(props: TextariaProps) => props.theme.colors.secondary};

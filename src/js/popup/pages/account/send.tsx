@@ -39,7 +39,7 @@ const styles = {
   `
 };
 class Send extends React.Component<any, any> {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -50,11 +50,11 @@ class Send extends React.Component<any, any> {
     };
   }
 
-  handleInput = e => {
+  public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDone = event => {
+  public handleDone = event => {
     event.preventDefault();
 
     const errors = this.validate(this.state);
@@ -69,7 +69,7 @@ class Send extends React.Component<any, any> {
     }
   };
 
-  formatTX({ to, amount, data }: any) {
+  public formatTX ({ to, amount, data }: any) {
     return {
       to,
       data,
@@ -77,7 +77,7 @@ class Send extends React.Component<any, any> {
     };
   }
 
-  validate = values => {
+  public validate = values => {
     const errors: any = {};
 
     if (!values.to) {
@@ -90,7 +90,7 @@ class Send extends React.Component<any, any> {
     return errors;
   };
 
-  render() {
+  public render () {
     const { account, settings } = this.props;
     const {
       errors: { to: toError, amount: amountError },
@@ -101,7 +101,7 @@ class Send extends React.Component<any, any> {
 
     return (
       <React.Fragment>
-        <Wallet data={account} settings={settings} />
+        <Wallet data={account} />
         <Form onSubmit={this.handleDone}>
           <Typography variant="subheading" color="main" className={styles.title}>
             Send transaction
@@ -143,8 +143,7 @@ class Send extends React.Component<any, any> {
 
 export default connect(
   (state: any) => ({
-    account: getCurrentWallet(state),
-    settings: state.settings
+    account: getCurrentWallet(state)
   }),
   dispatch => bindActionCreators(txActions, dispatch)
 )(Send);

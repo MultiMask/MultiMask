@@ -2,64 +2,86 @@ import uuid from 'uuid/v4';
 import { info } from 'loglevel';
 
 export default class Account {
-	public wallet: any;
-	public blockchain: any;
-	public id: any;
-	public secret: any;
-	public name: any;
+  private secret: any;
+  
+  public wallet: any;
+  
+  public blockchain: string;
+  public id: string;
+  public name: string;
+  public extra: any;
 
-	constructor({ wallet, blockchain, name, secret = { seed: null }, id = uuid() }) {
-		this.wallet = wallet;
-		this.blockchain = blockchain;
-		this.id = id;
-		this.secret = secret;
+  constructor ({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
+    this.name = name ? name : this._createName();
+    
+    this.blockchain = blockchain;
+    this.id = id;
+    this.secret = secret;
+    this.extra = extra;
+    
+    this.wallet = wallet;
+    if (this.extra && this.wallet.setExtra) {
+      this.wallet.setExtra(this.extra);
+    }
+  }
+  
+  private _create (seed) {
+    return this.wallet.create(seed);
+  }
+  
+  private _createName () {
+    return Date.now();
+  }
 
-		this.name = name ? name : this.createName();
-		this.secret.seed = this.create(secret.seed);
-	}
+  public init () {
+    return this._create(this.secret.seed)
+      .then(seed => {
+        this.secret.seed = seed; 
+        
+        return this;
+      });
+  }
+ 
+  public getSeed () {
+    return this.secret.seed;
+  }
 
-	public createName() {
-		return Date.now();
-	}
+  public getAddress () {
+    return this.wallet.getAddress();
+  }
 
-	public create(seed) {
-		return this.wallet.create(seed);
-	}
+  public getInfo () {
+    return this.wallet.getInfo().then(info => ({
+      id: this.id,
+      name: this.name,
+      blockchain: this.blockchain,
+      info
+    }));
+  }
 
-	public getSeed() {
-		return this.secret.seed;
-	}
+  public changeNetwork (network: string) {
+    this.wallet.changeNetwork(network, this.secret.seed)
+  }
 
-	public getAddress() {
-		return this.wallet.getAddress();
-	}
+  public sendTX (tx) {
+    info('Sending tx > ', this.blockchain, this.name, tx);
+    return this.wallet.sendCoins(tx);
+  }
 
-	public getInfo() {
-		return this.wallet.getInfo().then(info => ({
-			id: this.id,
-			name: this.name,
-			blockchain: this.blockchain,
-			info
-		}));
-	}
+  public setExtra (data) {
+    this.extra = data;
+  }
 
-	public sendTX(tx) {
-		info('Sending tx > ', this.blockchain, this.name, tx);
-		return this.wallet.createTX(tx);
-	}
+  public serialize () {
+    return {
+      id: this.id,
+      name: this.name,
+      blockchain: this.blockchain,
+      extra: this.extra,
 
-	public changeNetwork(network: string) {
-		this.wallet.changeNetwork(network, this.secret.seed)
-	}
-
-	public serialize() {
-		return {
-			id: this.id,
-			name: this.name,
-			blockchain: this.blockchain,
-			secret: {
-				seed: this.secret.seed
-			}
-		};
-	}
+      secret: {
+        seed: this.secret.seed
+      }
+    };
+  }
 }
