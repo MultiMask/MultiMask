@@ -7,7 +7,6 @@ const DATE_FORMAT = 'D MMMM YYYY HH:mm';
 export default class BitcoinTXS extends React.Component {
   get txs() {
     const { account } = this.props;
-    // console.log("btc out", account.info.txs);
 
     return account.info.txs.map(tx => {
       return (

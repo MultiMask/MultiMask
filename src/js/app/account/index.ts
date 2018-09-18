@@ -6,16 +6,16 @@ export default class Account {
   
   public wallet: any;
   
-	public blockchain: string;
-	public id: string;
+  public blockchain: string;
+  public id: string;
   public name: string;
   public extra: any;
 
-	constructor({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
-		this.name = name ? name : this._createName();
+  constructor ({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
+    this.name = name ? name : this._createName();
     
     this.blockchain = blockchain;
-		this.id = id;
+    this.id = id;
     this.secret = secret;
     this.extra = extra;
     
@@ -25,15 +25,15 @@ export default class Account {
     }
   }
   
-  private _create(seed) {
+  private _create (seed) {
     return this.wallet.create(seed);
   }
   
-  private _createName() {
+  private _createName () {
     return Date.now();
   }
 
-  public init() {
+  public init () {
     return this._create(this.secret.seed)
       .then(seed => {
         this.secret.seed = seed; 
@@ -42,15 +42,15 @@ export default class Account {
       });
   }
  
-  public getSeed() {
+  public getSeed () {
     return this.secret.seed;
   }
 
-  public getAddress() {
+  public getAddress () {
     return this.wallet.getAddress();
   }
 
-  public getInfo() {
+  public getInfo () {
     return this.wallet.getInfo().then(info => ({
       id: this.id,
       name: this.name,
@@ -59,20 +59,20 @@ export default class Account {
     }));
   }
 
-  public changeNetwork(network: string) {
-		this.wallet.changeNetwork(network, this.secret.seed)
-	}
-
-  public sendTX(tx) {
-    info('Sending tx > ', this.blockchain, this.name, tx);
-    return this.wallet.createTX(tx);
+  public changeNetwork (network: string) {
+    this.wallet.changeNetwork(network, this.secret.seed)
   }
 
-  public setExtra(data) {
+  public sendTX (tx) {
+    info('Sending tx > ', this.blockchain, this.name, tx);
+    return this.wallet.sendCoins(tx);
+  }
+
+  public setExtra (data) {
     this.extra = data;
   }
 
-  public serialize() {
+  public serialize () {
     return {
       id: this.id,
       name: this.name,

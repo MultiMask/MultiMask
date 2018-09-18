@@ -1,7 +1,13 @@
 import Eos from 'eosjs';
 const {ecc, Fcbuffer} = Eos.modules;
 
-export class EosWallet {
+import networks from './../../../../blockchain';
+
+const findNetwork = name => {
+  return networks.EOS.network.find(net => net.name === name);
+}
+
+export class EosWallet implements IWallet {
   private eos;
   private network;
 
@@ -10,11 +16,23 @@ export class EosWallet {
 
   public account: string;
 
-  constructor(network) {
+  constructor (network) {
     this.network = network;
   }
 
-  public create(_private) {
+  public changeNetwork (network: string, seed: string): void {
+    const net = findNetwork(network);
+
+    if (net) {
+      this.eos = Eos({
+        keyProvider: seed,
+        httpEndpoint: net.url,
+        chainId: net.chainId,
+      });
+    }
+  }
+
+  public create (_private) {
     const promise = _private
       ? Promise.resolve(_private)
       : ecc.randomKey();
@@ -27,29 +45,29 @@ export class EosWallet {
           keyProvider: this.private,
           httpEndpoint: this.network.url,
           chainId: this.network.chainId,
-        })
+        });
         
         return ecc.privateToPublic(this.private);
       })
       .then(_public => {
         this.public = _public;
-        
+
         return this.private;
       });
   }
 
-  public getKeyAccounts() {
+  public getKeyAccounts () {
     return this.eos.getKeyAccounts({ public_key: this.public})
       .then(({account_names}) => {
         return Promise.all(account_names.map(name => this._getInfoByAccount(name)));
       })
   }
 
-  private _getInfoByAccount(accountName: string) {
+  private _getInfoByAccount (accountName: string) {
     return this.eos.getAccount(accountName);
   }
 
-  public getInfo() {
+  public getInfo () {
     return this._getInfoByAccount(this.account).then(accountInfo => {
       return {
         address: this.account,
@@ -60,9 +78,17 @@ export class EosWallet {
     })
   }
 
-  public setExtra(data) {
+  public getAddress () {
+    return this.account;
+  }
+
+  public setExtra (data) {
     if (data && data.account) {
       this.account = data.account;
     }
+  }
+
+  public sendCoins ({ to, amount, data }) {
+    return this.eos.transfer(this.account, to, `${amount.toFixed(4)} EOS`, data);
   }
 }
