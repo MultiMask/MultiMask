@@ -8,6 +8,8 @@ export class EosWallet {
   private public: string;
   private private: string;
 
+  public account: string;
+
   constructor(network) {
     this.network = network;
   }
@@ -48,10 +50,12 @@ export class EosWallet {
   }
 
   public getInfo() {
-    return new Promise((res, rej) => {
-      return {
+    return this._getInfoByAccount(this.account);
+  }
 
-      }
-    });
+  public setExtra(data) {
+    if (data && data.account) {
+      this.account = data.account;
+    }
   }
 }

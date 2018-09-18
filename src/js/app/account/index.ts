@@ -2,19 +2,27 @@ import uuid from 'uuid/v4';
 import { info } from 'loglevel';
 
 export default class Account {
-	public wallet: any;
-	public blockchain: any;
-	public id: any;
-	public secret: any;
-	public name: any;
+  private secret: any;
+  
+  public wallet: any;
+  
+	public blockchain: string;
+	public id: string;
+  public name: string;
+  public extra: any;
 
-	constructor({ wallet, blockchain, name, secret = { seed: null }, id = uuid() }) {
-		this.wallet = wallet;
-		this.blockchain = blockchain;
-		this.id = id;
-		this.secret = secret;
-
+	constructor({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
 		this.name = name ? name : this._createName();
+    
+    this.blockchain = blockchain;
+		this.id = id;
+    this.secret = secret;
+    this.extra = extra;
+    
+    this.wallet = wallet;
+    if (this.extra && this.wallet.setExtra) {
+      this.wallet.setExtra(this.extra);
+    }
   }
   
   private _create(seed) {
@@ -33,11 +41,7 @@ export default class Account {
         return this;
       });
   }
-
-  public changeNetwork(network: string) {
-		this.wallet.changeNetwork(network, this.secret.seed)
-	}
-  
+ 
   public getSeed() {
     return this.secret.seed;
   }
@@ -55,9 +59,17 @@ export default class Account {
     }));
   }
 
+  public changeNetwork(network: string) {
+		this.wallet.changeNetwork(network, this.secret.seed)
+	}
+
   public sendTX(tx) {
     info('Sending tx > ', this.blockchain, this.name, tx);
     return this.wallet.createTX(tx);
+  }
+
+  public setExtra(data) {
+    this.extra = data;
   }
 
   public serialize() {
@@ -65,6 +77,7 @@ export default class Account {
       id: this.id,
       name: this.name,
       blockchain: this.blockchain,
+      extra: this.extra,
 
       secret: {
         seed: this.secret.seed

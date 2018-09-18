@@ -47,8 +47,9 @@ class Wallet extends React.Component<any, IWalletState> {
     this.props.create(this.account);
   };
 
-  public handleSaveEos = account => {
-    console.log(account)
+  public handleSaveEos = data => {
+    this.account.setExtra({ account: data.account_name });
+    this.props.create(this.account);
   }
 
   public createAccount() {

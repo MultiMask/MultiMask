@@ -4,10 +4,12 @@ import { bindActionCreators } from 'redux';
 import styled from 'react-emotion';
 import FormLayout from './FormLayout';
 import actions from './../../actions/account';
+
 import AccountFactory from './../../../app/account/accountFactory';
+import Account from './../../../app/account';
 
 class Wallet extends React.Component<any, any> {
-	public account;
+	public account: Account;
 
 	constructor(props) {
 		super(props);

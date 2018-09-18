@@ -20,7 +20,7 @@ const createWallet = ({ blockchain }) => {
   }
 
   if (blockchain === networks.EOS.sign) {
-    const defaultEOSNetwork = networks.EOS.network[0].sign;
+    const defaultEOSNetwork = networks.EOS.network[0];
     return new EosWallet(defaultEOSNetwork);
   }
 
@@ -36,7 +36,7 @@ export default {
   },
 
   save(pass, account): void {
-    debug('save account > ', pass, account);
+    debug('save account > ', account);
     const id = account.id;
     const str = JSON.stringify(account.serialize());
     // eslint-disable-next-line
