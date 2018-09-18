@@ -13,29 +13,29 @@ export default class ChooseNetwork extends React.Component<any, any> {
     };
   }
 
-  handleBack = () => {
+  public handleBack = () => {
     this.setState({ step: 0 });
   };
 
-  handleNext = () => {
+  public handleNext = () => {
     const { step } = this.state;
     this.setState({
       step: step + 1
     });
   };
 
-  handleSelectBlockchains = selectedItem => {
+  public handleSelectBlockchains = selectedItem => {
     this.setState({
       selectedBlockchain: selectedItem,
       selectedNetwork: ''
     });
   };
 
-  handleSelectNetwork = selectedItem => {
+  public handleSelectNetwork = selectedItem => {
     this.setState({ selectedNetwork: selectedItem });
   };
 
-  getOption = item => {
+  public getOption = item => {
     return { value: item.sign, label: item.name };
   };
 
@@ -48,21 +48,30 @@ export default class ChooseNetwork extends React.Component<any, any> {
   }
 
   get networks() {
-    const blockchain = networks[this.state.selectedBlockchain.value];
-    return blockchain.network.map((item, idx) => {
+    return this.selectedBlockchain.network.map((item, idx) => {
       return this.getOption(item);
     });
   }
 
-  render() {
+  get selectedNetwork() {
+    return this.selectedBlockchain.network.find(
+      nt => nt.sign === this.state.selectedNetwork.value
+    );
+  }
+
+  get selectedBlockchain() {
+    return networks[this.state.selectedBlockchain.value];
+  }
+
+  public render() {
     const { selectedBlockchain, selectedNetwork, step } = this.state;
     const { children, onBack } = this.props;
 
     if (step === 2) {
       return React.cloneElement(children as any, {
         blockchain: selectedBlockchain.value,
-        network: selectedNetwork.value,
-        onBack: onBack
+        network: this.selectedNetwork,
+        onBack
       });
     }
 

@@ -14,7 +14,7 @@ export default class EthWallet {
   public address: any;
   public nonce: any;
 
-  constructor({ network }) {
+  constructor(network) {
     this.engine = new EthEngine();
     this.network = network;
   }

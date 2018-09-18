@@ -8,17 +8,17 @@ import BitcoinWallet from './wallet/bitcoin';
 import EthWallet from './wallet/eth';
 import { EosWallet } from './wallet/eos';
 
-const createWallet = ({ blockchain, network }) => {
+const createWallet = ({ blockchain, network = {}}: any) => {
   if (blockchain === networks.BTC.sign) {
-    return new BitcoinWallet(network);
+    return new BitcoinWallet(network.sign);
   }
 
   if (blockchain === networks.ETH.sign) {
-    return new EthWallet({ network });
+    return new EthWallet(network.sign);
   }
 
   if (blockchain === networks.EOS.sign) {
-    return new EosWallet({ network });
+    return new EosWallet(network);
   }
 
   throw new Error(`No support blockchain ${network}`);
