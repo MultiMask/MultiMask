@@ -1,20 +1,21 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
+import networks from '../../../blockchain'
 
 import { info } from 'loglevel';
 
-const URL_NODE = 'https://testnet.blockchain.info';
-// const NETWORK = 'testnet';
-// const NETWORK = "livenet";
 
 export default class BitcoinWallet {
   public network: any;
   public priv: any;
   public address: any;
+  public networkUrl: string;
 
   constructor(network) {
     this.network = network;
+
+    this.setNetworkUrl(network)
   }
 
   public create(seed) {
@@ -37,6 +38,13 @@ export default class BitcoinWallet {
   
     this.priv = HDPrivateKey.privateKey.toWIF();
     this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
+    
+    this.setNetworkUrl(network)
+  }
+
+  private setNetworkUrl (network) {
+    const networkProps = networks.BTC.network.find(item => item.sign === network)
+    this.networkUrl = networkProps.url;
   }
 
   public getAddress() {
@@ -44,7 +52,7 @@ export default class BitcoinWallet {
   }
 
   public getInfo() {
-    return axios.get(`${URL_NODE}/rawaddr/${this.address}`).then(res => {
+    return axios.get(`${this.networkUrl}/rawaddr/${this.address}`).then(res => {
       const outputs = [];
 
       res.data.txs.forEach(tx => {
@@ -74,7 +82,7 @@ export default class BitcoinWallet {
       .then(signedTX => {
         info('TX = ', signedTX);
 
-        return axios.post(`${URL_NODE}/pushtx`, 'tx=' + signedTX).then(hash => {
+        return axios.post(`${this.networkUrl}/pushtx`, 'tx=' + signedTX).then(hash => {
           info('TX hash:', hash);
     
           return { hash };

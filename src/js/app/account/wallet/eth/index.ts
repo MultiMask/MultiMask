@@ -1,9 +1,9 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
 import EthEngine from './engine';
+import networks from '../../../../blockchain'
 
-const net = 'https://ropsten.infura.io/';
-const web3 = new Web3(new Web3.providers.HttpProvider(net));
+const web3 = new Web3();
 
 export default class EthWallet {
   public engine: any;
@@ -13,10 +13,11 @@ export default class EthWallet {
   public public: any;
   public address: any;
   public nonce: any;
+  public networkUrl: string;
 
   constructor({ network }) {
     this.engine = new EthEngine();
-    this.network = network;
+    this.changeNetwork(network)
   }
 
   public create(_seed) {
@@ -31,6 +32,10 @@ export default class EthWallet {
 
   public changeNetwork(network: string) {
     this.network = network;
+    const networkProps = networks.ETH.network.find(item => item.sign === network)
+    this.networkUrl = networkProps.url;
+
+    web3.setProvider(new Web3.providers.HttpProvider(this.networkUrl))
   }
   
   public getAddress() {
