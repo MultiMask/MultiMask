@@ -1,6 +1,6 @@
-import InternalMessage from '../../libs/InternalMessage';
 import { downloadFile } from '../helpers';
 import { push, goBack } from 'connected-react-router';
+import InternalMessage from '../../models/InternalMessage';
 
 import {
   PROFILE_GET,

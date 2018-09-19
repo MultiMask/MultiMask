@@ -21,12 +21,12 @@ const priceActions = {
 
     let btc;
 
-  if (!prices || !sign  || !prices[sign]['BTC']) {
+  if (!prices || !sign  || !prices[sign].BTC) {
     return 0;
   }
 
   if (prices) {
-    btc = parseFloat(prices[sign]['BTC'] * amount as any);
+    btc = parseFloat(prices[sign].BTC * amount as any);
   }
 
   return isNaN(btc) ? 0 : parseFloat(btc.toFixed(2));

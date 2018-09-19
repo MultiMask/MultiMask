@@ -2,29 +2,14 @@ import uuid from 'uuid/v4';
 
 import networks from './../blockchain';
 import Web3Provider from './plugins/eth';
-import NetworkMessage from './../libs/NetworkMessage';
+import NetworkMessage from './../models/NetworkMessage';
+import { DanglingResolver } from './../models/DanglingResolver';
 
 import { TX_APPROVE } from '../constants/tx';
 import { CONTENT_APP } from '../constants/apps';
 
 let stream;
 let resolvers;
-
-/***
- * This is just a helper to manage resolving fake-async
- * requests using browser messaging.
- */
-class DanglingResolver {
-  public id;
-  public resolve;
-  public reject;
-
-  constructor(_id, _resolve, _reject) {
-    this.id = _id;
-    this.resolve = _resolve;
-    this.reject = _reject;
-  }
-}
 
 /***
  * Messages do not come back on the same thread.
@@ -52,8 +37,8 @@ const _subscribe = () => {
  */
 const _send = (type, payload) => {
   return new Promise((resolve, reject) => {
-    let id = uuid();
-    let message = new NetworkMessage(type, payload, id);
+    const id = uuid();
+    const message = new NetworkMessage(type, payload, id);
     resolvers.push(new DanglingResolver(id, resolve, reject));
     stream.send(message, CONTENT_APP);
   });
@@ -62,7 +47,7 @@ const _send = (type, payload) => {
 export default class MultiWeb {
   public web3;
 
-  constructor(_stream) {
+  constructor (_stream) {
     stream = _stream;
 
     resolvers = [];
@@ -71,9 +56,10 @@ export default class MultiWeb {
     this.web3 = Web3Provider(_send);
   }
 
-  isAuth() { }
-  getUser() { }
-  sendTransaction({ to, amount, data }) {
+  public isAuth () { }
+  public getUser () { }
+  
+  public sendTransaction ({ to, amount, data }) {
     _send(TX_APPROVE, {
       blockchain: networks.BTC.sign,
       tx: {
@@ -84,7 +70,7 @@ export default class MultiWeb {
     });
   }
 
-  getWeb3Provider() {
+  public getWeb3Provider () {
     return this.web3;
   }
 }

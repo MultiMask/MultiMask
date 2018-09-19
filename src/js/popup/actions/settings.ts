@@ -6,7 +6,7 @@ import {
   SETTINGS_SET_PRICE_DATA_PROVIDERS,
   SETTINGS_SET_SETTING
 } from '../../constants/settings';
-import InternalMessage from '../../libs/InternalMessage';
+import InternalMessage from '../../models/InternalMessage';
 
 const settingsActions = {
   getPrices: () => (dispatch, getState) => {

@@ -1,5 +1,5 @@
-import InternalMessage from '../../libs/InternalMessage';
 import { push } from 'connected-react-router';
+import InternalMessage from '../../models/InternalMessage';
 
 import {
   AUTH_INIT,
@@ -93,6 +93,6 @@ const AuthActions = {
 };
 export default AuthActions;
 
-function checkPass(cb) {
+function checkPass (cb) {
   getPass().then(result => cb(!!result));
 }

@@ -1,6 +1,7 @@
-import InternalMessage from '../../libs/InternalMessage';
 import { hidePass } from './../../libs/cipher';
 import { push, goBack } from 'connected-react-router';
+
+import InternalMessage from '../../models/InternalMessage';
 
 import {
   ACCOUNT_ACTIVE,

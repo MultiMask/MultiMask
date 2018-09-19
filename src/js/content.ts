@@ -1,7 +1,7 @@
 import { EncryptedStream } from 'extension-streams';
-import IdGenerator from './libs/IdGenerator';
-import InternalMessage from './libs/InternalMessage';
-import NetworkMessage from './libs/NetworkMessage';
+import IdGenerator from './models/IdGenerator';
+import InternalMessage from './models/InternalMessage';
+import NetworkMessage from './models/NetworkMessage';
 import { setLevel, info } from 'loglevel';
 
 import { CONTENT_APP, INPAGE_APP } from './constants/apps';
@@ -9,9 +9,9 @@ import { CONTENT_APP, INPAGE_APP } from './constants/apps';
 const INJECT_FILENAME = 'inpage.bundle.js';
 
 class Content {
-  stream;
+  public stream;
 
-  constructor() {
+  constructor () {
     // eslint-disable-next-line
     setLevel(logLevel);
 
@@ -24,7 +24,7 @@ class Content {
   /**
    * Create encrypted strem to inject script in user page
    */
-  setupInpageStream() {
+  public setupInpageStream () {
     this.stream = new EncryptedStream(CONTENT_APP, IdGenerator.text(256));
     this.stream.listenWith(msg => this.contentListener(msg));
 
@@ -34,7 +34,7 @@ class Content {
   /**
    * Inject script to user page
    */
-  injectScript() {
+  public injectScript () {
     const s = document.createElement('script');
     const container = document.head || document.documentElement;
 
@@ -48,14 +48,14 @@ class Content {
    * Listing injected messages
    * @param {MessageType} message
    */
-  contentListener(message) {
-    let nonSyncMessage = NetworkMessage.fromJson(message);
+  public contentListener (message) {
+    const nonSyncMessage = NetworkMessage.fromJson(message);
 
     // log.info('content receive > ', nonSyncMessage);
     this.sendBackground(nonSyncMessage);
   }
 
-  sendBackground(message) {
+  public sendBackground (message) {
     InternalMessage.payload(message.type, message.payload)
       .send()
       .then(res => this.respond(message, res));
@@ -66,7 +66,7 @@ class Content {
    * @param {Message} message
    * @param {Message} response
    */
-  respond(message, payload) {
+  public respond (message, payload) {
     // log.info('response < ', message, payload);
     const response = message.respond(payload);
 

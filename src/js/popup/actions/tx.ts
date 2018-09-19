@@ -1,4 +1,4 @@
-import InternalMessage from '../../libs/InternalMessage';
+import InternalMessage from '../../models/InternalMessage';
 
 import { TX_SEND } from './../../constants/tx';
 

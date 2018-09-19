@@ -1,33 +1,33 @@
 export class TXModel {
-	public data;
-	public id;
-	public resolver;
+  public data;
+  public id;
+  public resolver;
 
-	constructor(data, id, resolver) {
-		this.data = data;
-		this.id = id;
-		this.resolver = resolver;
-	}
+  constructor (data, id, resolver) {
+    this.data = data;
+    this.id = id;
+    this.resolver = resolver;
+  }
 
-	public updateTX(data) {
-		this.data.tx = {
-			...this.data.tx,
-			...data
-		};
+  public updateTX (data) {
+    this.data.tx = {
+      ...this.data.tx,
+      ...data
+    };
 
-		return this;
-	}
+    return this;
+  }
 
-	public toJSON() {
-		return {
-			data: this.data,
-			id: this.id
-		};
-	}
+  public toJSON () {
+    return {
+      data: this.data,
+      id: this.id
+    };
+  }
 
-	public resolve() {
-		this.resolver(this.data.tx);
+  public resolve () {
+    this.resolver(this.data.tx);
 
-		return this;
-	}
+    return this;
+  }
 }

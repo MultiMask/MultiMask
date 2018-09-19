@@ -1,13 +1,13 @@
 import { setLevel } from 'loglevel';
 
 import { EncryptedStream } from 'extension-streams';
-import IdGenerator from './libs/IdGenerator';
+import IdGenerator from './models/IdGenerator';
 import MultiWeb from './libs/multiWeb';
 
 import { CONTENT_APP, INPAGE_APP } from './constants/apps';
 
 class Inpage {
-  constructor() {
+  constructor () {
     // eslint-disable-next-line
     setLevel(logLevel);
 

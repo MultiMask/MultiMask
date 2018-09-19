@@ -4,38 +4,38 @@ export default class NetworkMessage {
   public resolver;
   public domain;
 
-  constructor(_type = '', _payload = {}, _resolver = '', _domain = '') {
+  constructor (_type = '', _payload = {}, _resolver = '', _domain = '') {
     this.type = _type;
     this.payload = _payload;
     this.resolver = _resolver;
     this.domain = _domain;
   }
 
-  static placeholder() {
+  public static placeholder () {
     return new NetworkMessage();
   }
-  static fromJson(json) {
-    let p = Object.assign(this.placeholder(), json);
+  public static fromJson (json) {
+    const p = Object.assign(this.placeholder(), json);
     return p;
   }
 
-  static payload(type, payload) {
-    let p = this.placeholder();
+  public static payload (type, payload) {
+    const p = this.placeholder();
     p.type = type;
     p.payload = payload;
     return p;
   }
 
-  static signal(type) {
-    let p = this.placeholder();
+  public static signal (type) {
+    const p = this.placeholder();
     p.type = type;
     return p;
   }
 
-  respond(payload) {
+  public respond (payload) {
     return new NetworkMessage(this.type, payload, this.resolver);
   }
-  error(payload) {
+  public error (payload) {
     return new NetworkMessage('error', payload, this.resolver);
   }
 }
