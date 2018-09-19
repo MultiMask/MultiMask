@@ -1,25 +1,23 @@
 # MultiMask
 
-MultiMask is browser extension based wallet for Bitcoin. You can see transaction history and send transaction.
+We sincerely think that a wallet only for one blockchain has no future. People use different crypto-currencies and our mission is to make the interaction experience as simple as possible. We are also keen on creating a solution for interoperability by creating a wallet that will support DAPPs across multiple chains. This also means that devlopers and users will be able to access sidechains and layer2 solutions.
 
-### Installation
+MultiMask is browser extension. You can see transaction history and send transaction.
 
-Install project
+## Installation MultiMask
 
-```javascript
-    npm install
-```
+#### Getting the Chrome Extension files
 
-Build project
+**From The Repository** 
+* Clone repository
+* [In some cases](https://github.com/MultiMask/MultiMask) on a Windows system you will need to run `npm install --global --production windows-build-tools`
+* `npm install` or `yarn` to get dependencies
+* `npm start` or `yarn start` to compile a `build` folder.
 
-```javascript
-    npm run build
-```
+#### Installing a dev build into Chrome
 
-Start in dev mode:
+* Open up **Chrome** and type `chrome://extensions/` into the url bar
+* Click the `Load unpacked extension...` button and point it at the folder you just created/built 
 
-```javascript
-    npm run start
-```
+Or you can see [instruction](https://developer.chrome.com/extensions/getstarted#unpacked).
 
-You can see app in ./build after build. To add extension in chrome you need see [instruction](https://developer.chrome.com/extensions/getstarted#unpacked).
