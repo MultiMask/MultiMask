@@ -1,6 +1,6 @@
 import { LocalStream } from 'extension-streams';
 
-type InternalMessageResponse = {
+interface InternalMessageResponse {
   type: string;
   payload: any;
 }
@@ -9,30 +9,30 @@ export default class InternalMessage {
   public type: string = '';
   public payload: any = '';
 
-  static placeholder() {
+  public static placeholder () {
     return new InternalMessage();
   }
-  static fromJson(json: any) {
+  public static fromJson (json: any) {
     return {
       ...this.placeholder(),
       ...json
     };
   }
 
-  static payload(type: string, payload: any) {
-    let p = this.placeholder();
+  public static payload (type: string, payload: any) {
+    const p = this.placeholder();
     p.type = type;
     p.payload = payload;
     return p;
   }
 
-  static signal(type: string) {
-    let p = this.placeholder();
+  public static signal (type: string) {
+    const p = this.placeholder();
     p.type = type;
     return p;
   }
 
-  send(): Promise<any> {
+  public send (): Promise<any> {
     return LocalStream.send(this);
   }
 }

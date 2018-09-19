@@ -1,12 +1,13 @@
 import uuid from 'uuid/v4';
 
-import networks from './../blockchain';
-import Web3Provider from './plugins/eth';
-import NetworkMessage from './../models/NetworkMessage';
-import { DanglingResolver } from './../models/DanglingResolver';
+import networks from 'bcnetwork';
+import Web3Provider from './plugins/ethPlugin';
 
-import { TX_APPROVE } from '../constants/tx';
-import { CONTENT_APP } from '../constants/apps';
+import NetworkMessage from 'models/NetworkMessage';
+import { DanglingResolver } from 'models/DanglingResolver';
+
+import { TX_APPROVE } from 'constants/tx';
+import { CONTENT_APP } from 'constants/apps';
 
 let stream;
 let resolvers;
@@ -44,7 +45,10 @@ const _send = (type, payload) => {
   });
 };
 
-export default class MultiWeb {
+/**
+ * Provide work with wallets
+ */
+export class MultiWeb {
   public web3;
 
   constructor (_stream) {
@@ -57,7 +61,6 @@ export default class MultiWeb {
   }
 
   public isAuth () { }
-  public getUser () { }
   
   public sendTransaction ({ to, amount, data }) {
     _send(TX_APPROVE, {
