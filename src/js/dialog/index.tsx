@@ -3,17 +3,19 @@ import { css } from 'emotion';
 import styled from 'react-emotion';
 import Web3 = require('web3');
 
-import networks from '../blockchain';
-import InternalMessage from '../models/InternalMessage';
-import { AUTH_IS_READY } from '../constants/auth';
-import { ACCOUNT_INFO } from '../constants/account';
-import { TX_PAYMENT_GET, TX_APPROVE_RESULT } from '../constants/tx';
+import networks from 'bcnetwork';
+import InternalMessage from 'models/InternalMessage';
+
+import { AUTH_IS_READY } from 'constants/auth';
+import { ACCOUNT_INFO } from 'constants/account';
+import { TX_PAYMENT_GET, TX_APPROVE_RESULT } from 'constants/tx';
+
+import Info from './Info';
+import Control from './Control';
 
 import DialogLayout from '../popup/layouts/DialogLayout';
 import Typography from '../popup/ui/Typography';
 import Select from '../popup/ui/Select';
-import Info from './Info';
-import Control from './Control';
 import Divider from '../popup/ui/Divider';
 import Button from '../popup/ui/Button';
 

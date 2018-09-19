@@ -1,10 +1,11 @@
 import { EncryptedStream } from 'extension-streams';
-import IdGenerator from './models/IdGenerator';
-import InternalMessage from './models/InternalMessage';
-import NetworkMessage from './models/NetworkMessage';
 import { setLevel, info } from 'loglevel';
 
-import { CONTENT_APP, INPAGE_APP } from './constants/apps';
+import IdGenerator from 'models/IdGenerator';
+import InternalMessage from 'models/InternalMessage';
+import NetworkMessage from 'models/NetworkMessage';
+
+import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 
 const INJECT_FILENAME = 'inpage.bundle.js';
 

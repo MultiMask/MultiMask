@@ -1,10 +1,9 @@
 import { setLevel } from 'loglevel';
-
 import { EncryptedStream } from 'extension-streams';
-import IdGenerator from './models/IdGenerator';
-import MultiWeb from './libs/multiWeb';
 
-import { CONTENT_APP, INPAGE_APP } from './constants/apps';
+import MultiWeb from 'libs/multiWeb';
+import IdGenerator from 'models/IdGenerator';
+import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 
 class Inpage {
   constructor () {
