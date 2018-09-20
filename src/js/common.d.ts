@@ -35,6 +35,7 @@ declare var browser: any;
  * Extend Window
  */
 interface Window {
+  data: any;
   notification: any;
   multiWeb: any;
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;

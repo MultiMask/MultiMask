@@ -1,0 +1,1 @@
+export const SIGNATURE = 'eos:signature';

@@ -3,7 +3,7 @@ import InternalMessage from './InternalMessage'
 
 let openWindow = null;
 
-export default class NotificationService {
+export class NotificationService {
 
     /***
      * Opens a prompt window outside of the extension
@@ -39,7 +39,7 @@ export default class NotificationService {
                     return created;
                 }
                 else {
-                    const win: any = window.open(url, 'MultiMaskPromp', `width=${width},height=${height},resizable=0,top=${middleY},left=${middleX},titlebar=0`);
+                    const win: any = window.open(url, 'MultiMaskPrompt', `width=${width},height=${height},resizable=0,top=${middleY},left=${middleX},titlebar=0`);
                     win.data = notification;
                     openWindow = win;
                     return win;

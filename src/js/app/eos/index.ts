@@ -6,6 +6,10 @@ import { AccountController } from '../account/accountController';
 import { TransactionController } from '../transactionController';
 
 import { REQUEST_SIGNATURE } from 'constants/blockchains/eos';
+import { SIGNATURE } from 'constants/promptTypes';
+
+import {Prompt} from 'models/Prompt';
+import {NotificationService} from 'services/NotificationService';
 
 import { EosEngine } from './engine';
 
@@ -44,9 +48,12 @@ export class EosController {
     if (account) {
       const signature = EosEngine.sign(payload, account.getSeed());
       
-      sendResponse({
-        signatures:[signature]
-      })
+      NotificationService.open(new Prompt(SIGNATURE, 'local', 'jungle', payload, approval => {
+        console.log(approval);
+      }))
+      // sendResponse({
+      //   signatures:[signature]
+      // })
     }
   }
 
