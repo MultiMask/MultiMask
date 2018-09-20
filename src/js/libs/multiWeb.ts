@@ -1,12 +1,12 @@
 import uuid from 'uuid/v4';
 
-import networks from 'bcnetwork';
-import Web3Provider from './plugins/ethPlugin';
+import BTC from './plugins/btcPlugin';
+import Eth from './plugins/ethPlugin';
+import EOS from './plugins/eosPlugin';
 
 import NetworkMessage from 'models/NetworkMessage';
 import { DanglingResolver } from 'models/DanglingResolver';
 
-import { TX_APPROVE } from 'constants/tx';
 import { CONTENT_APP } from 'constants/apps';
 
 let stream;
@@ -49,7 +49,9 @@ const _send = (type, payload) => {
  * Provide work with wallets
  */
 export class MultiWeb {
-  public web3;
+  public btc;
+  public eos;
+  public eth;
 
   constructor (_stream) {
     stream = _stream;
@@ -57,23 +59,10 @@ export class MultiWeb {
     resolvers = [];
     _subscribe();
 
-    this.web3 = Web3Provider(_send);
+    this.btc = BTC(_send);
+    this.eth = Eth(_send);
+    this.eos = EOS(_send);
   }
 
   public isAuth () { }
-  
-  public sendTransaction ({ to, amount, data }) {
-    _send(TX_APPROVE, {
-      blockchain: networks.BTC.sign,
-      tx: {
-        to,
-        amount,
-        data
-      }
-    });
-  }
-
-  public getWeb3Provider () {
-    return this.web3;
-  }
 }
