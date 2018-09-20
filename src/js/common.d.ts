@@ -35,9 +35,23 @@ declare var browser: any;
  * Extend Window
  */
 interface Window {
-  data: any;
+  data: IPrompt;
   notification: any;
   multiWeb: any;
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
 }
 
+/**
+ * MultiMask interfaces
+ */
+interface IPromptConstruct {
+  domain?: string;
+  network?: any;
+  data?: any;
+  responder?: (approval: any) => void;
+}
+
+interface IPrompt extends IPromptConstruct{
+  type: string;
+  routeName(): string;
+}

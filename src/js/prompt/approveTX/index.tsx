@@ -13,11 +13,11 @@ import { TX_PAYMENT_GET, TX_APPROVE_RESULT } from 'constants/tx';
 import Info from './Info';
 import Control from './Control';
 
-import DialogLayout from '../popup/layouts/DialogLayout';
-import Typography from '../popup/ui/Typography';
-import Select from '../popup/ui/Select';
-import Divider from '../popup/ui/Divider';
-import Button from '../popup/ui/Button';
+import DialogLayout from '../../popup/layouts/DialogLayout';
+import Typography from '../../popup/ui/Typography';
+import Select from '../../popup/ui/Select';
+import Divider from '../../popup/ui/Divider';
+import Button from '../../popup/ui/Button';
 
 const web3 = new Web3();
 
@@ -45,7 +45,11 @@ interface ISelectOption {
   label: string;
 }
 
-export default class App extends React.Component<{}, IAppState> {
+interface IApproveProps {
+  prompt: IPrompt;
+}
+
+export default class App extends React.Component<IApproveProps, IAppState> {
   public state = {
     isLoaded: false,
     isReady: false,
@@ -67,11 +71,7 @@ export default class App extends React.Component<{}, IAppState> {
       })
       .then(accounts => {
         this.setAccounts(accounts);
-
-        return InternalMessage.signal(TX_PAYMENT_GET).send();
-      })
-      .then( payload => {
-        this.setTxInfo(payload);
+        this.setTxInfo(this.props.prompt.data);
       })
       .catch(e => {
         console.log(e);
@@ -83,19 +83,18 @@ export default class App extends React.Component<{}, IAppState> {
       });
   }
 
-  public setTxInfo (payload: any) {
-    const accounts = this.state.accounts.filter(acc => acc.blockchain === payload.data.blockchain);
-    const account = payload.data.tx.from
-      ? accounts.find(acc => acc.info.address === payload.data.tx.from)
+  public setTxInfo (data: any) {
+    const accounts = this.state.accounts.filter(acc => acc.blockchain === data.blockchain);
+    const account = data.tx.from
+      ? accounts.find(acc => acc.info.address === data.tx.from)
       : accounts[0];
 
-    console.log('receive tx > ', payload);
+    console.log('receive tx > ', data);
 
     this.setState(state => ({
       ...state,
-      tx: payload.data.tx,
-      txId: payload.id,
-      blockchain: payload.data.blockchain,
+      tx: data.tx,
+      blockchain: data.blockchain,
       accounts,
       account,
       selectValue: this.getOption(account)

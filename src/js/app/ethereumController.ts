@@ -2,6 +2,10 @@ import ntx from 'bcnetwork';
 import Web3 = require('web3');
 const web3 = new Web3();
 
+import { NotificationService } from 'services/NotificationService';
+import { Prompt } from 'models/Prompt';
+import { APPROVAL } from 'constants/promptTypes';
+
 import { AccessController } from './accessController';
 import { MessageController } from './messageController';
 import { AccountController } from './account/accountController';
@@ -61,23 +65,23 @@ export class EthereumController {
    * Enhance TX and send to
    * @param data 
    */
-  private responseApproveTx = (sendResponse, data) => {
+  private responseApproveTx = (sendResponse, payload) => {
     const preparedData = {
       blockchain: ntx.ETH.sign,
-      tx: data
+      tx: payload
     };
-    const richData = this.appreveTX(preparedData);
-    
-    this.transactionController.ApproveTX(richData)
-      .then(data => {
-        sendResponse({
-          payload: data
-        });
-      })
-    // };
+    const data = this.addDefaultsPropsToTx(preparedData);
+    const responder = approval => {
+      console.log(approval);
+      // sendResponse({
+        //       payload: data
+        //     });
+    }
+
+    NotificationService.open(new Prompt(APPROVAL, { data, responder }));
   }
   
-  private appreveTX (data) {
+  private addDefaultsPropsToTx (data) {
     const account = this.getAccount(data.tx.from);
 
     return {

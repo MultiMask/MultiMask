@@ -48,9 +48,14 @@ export class EosController {
     if (account) {
       const signature = EosEngine.sign(payload, account.getSeed());
       
-      NotificationService.open(new Prompt(SIGNATURE, 'local', 'jungle', payload, approval => {
-        console.log(approval);
-      }))
+      NotificationService.open(new Prompt(SIGNATURE, 
+        {
+          data:payload, 
+          responder: approval => {
+            console.log(approval);
+          }
+        }
+      ))
       // sendResponse({
       //   signatures:[signature]
       // })

@@ -1,16 +1,21 @@
-export class Prompt {
+export class Prompt implements IPrompt {
   public type;
   public domain;
   public network;
   public data;
   public responder;
 
-  constructor (_type = '', _domain = '', _network = null, _data = {}, _responder = null){
-    this.type = _type;
-    this.domain = _domain;
-    this.network = _network;
-    this.data = _data;
-    this.responder = _responder;
+  constructor (type = '', {
+    domain = '',
+    network = null,
+    data = {},
+    responder = null}: IPromptConstruct = null
+  ){
+    this.type = type;
+    this.domain = domain;
+    this.network = network;
+    this.data = data;
+    this.responder = responder;
   }
 
   public static placeholder (){ return new Prompt(); }
