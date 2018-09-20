@@ -9,6 +9,7 @@ import { ProfileListController } from './app/profiles/profileListController';
 
 import { TransactionController } from './app/transactionController';
 import { EthereumController } from './app/ethereumController';
+import { EosController } from './app/eos';
 
 import { SettingsController } from './app/settings/settingsController';
 
@@ -22,11 +23,12 @@ class Controller {
 
   private transactionController: TransactionController;
   private ethereumController: EthereumController;
-
+  private eosController: EosController;
+  
   private settingsController: SettingsController;
 
   constructor () {
-    // Set from settings in ./config.json
+    // Webpack provide this from ./config.json
     setLevel(logLevel);
 
     this.messageController = new MessageController();
@@ -70,6 +72,13 @@ class Controller {
       accountController: this.accountController,
       transactionController: this.transactionController,
     });
+
+    this.eosController = new EosController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+      transactionController: this.transactionController
+    })
   }
 }
 

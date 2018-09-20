@@ -83,7 +83,7 @@ export class TransactionController {
    * Send TX via popup
    */
   private responseSendTx = (sendResponse, { id, tx }) => {
-    const account = this.accountController.getAccountById(id);
+    const account = this.accountController.getById(id);
     
     account.sendTX(tx).then(txHash => {
       sendResponse({
