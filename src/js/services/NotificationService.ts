@@ -23,7 +23,7 @@ export class NotificationService {
 
         const getPopup = async () => {
             try {
-                const url = apis.runtime.getURL('/dialog.html');
+                const url = apis.runtime.getURL('/prompt.html');
 
                 // Notifications get bound differently depending on browser
                 // as Firefox does not support opening windows from background.
