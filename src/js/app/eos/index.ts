@@ -35,7 +35,6 @@ export class EosController {
    * When need to sign transaction
    */
   private responseRequestSignature = (sendResponse, payload) => {
-    console.log(payload)
     const requiredAccounts = EosEngine.actionParticipants(payload);
     const requiredAccount = requiredAccounts ? requiredAccounts[0].split('@')[0] : null;
 
@@ -43,11 +42,18 @@ export class EosController {
 
     const account = this.findByAccountName(requiredAccount);
     if (account) {
+      const signature = EosEngine.sign(payload, account.getSeed());
       
+      sendResponse({
+        signatures:[signature]
+      })
     }
   }
 
-
+  /**
+   * Find required account by account_name
+   * @param name 
+   */
   private findByAccountName (name: string) {
     return this.accountController.getByAddress(name);
   }

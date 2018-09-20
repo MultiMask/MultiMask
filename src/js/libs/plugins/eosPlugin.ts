@@ -32,7 +32,7 @@ export default sender => {
     return proxy(_eos({httpEndpoint, chainId:_options.chainId}), {
         get (eosInstance, method) {
 
-            let returnedFields = null;
+            const returnedFields = null;
 
             return (...args) => {
 
@@ -57,7 +57,7 @@ export default sender => {
 
                     if(result.hasOwnProperty('signatures')){
                         // Holding onto the returned fields for the final result
-                        returnedFields = result.returnedFields;
+                        // returnedFields = result.returnedFields;
 
                         // Grabbing buf signatures from local multi sig sign provider
                         const multiSigKeyProvider = args.find(arg => arg.hasOwnProperty('signProvider'));
