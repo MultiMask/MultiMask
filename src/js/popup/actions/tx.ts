@@ -1,6 +1,6 @@
-import InternalMessage from '../../models/InternalMessage';
+import InternalMessage from 'services/InternalMessage';
 
-import { TX_SEND } from './../../constants/tx';
+import { TX_SEND } from 'constants/tx';
 
 const StateActions = {
   createTx: ({ id, tx }) => (dispatch, getState) => {

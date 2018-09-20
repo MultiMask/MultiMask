@@ -2,8 +2,8 @@ import { EncryptedStream } from 'extension-streams';
 import { setLevel, info } from 'loglevel';
 
 import IdGenerator from 'models/IdGenerator';
-import InternalMessage from 'models/InternalMessage';
-import NetworkMessage from 'models/NetworkMessage';
+import InternalMessage from 'services/InternalMessage';
+import NetworkMessage from 'services/NetworkMessage';
 
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 

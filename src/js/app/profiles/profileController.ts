@@ -10,8 +10,8 @@ import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import { Profile } from './Profile';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from './../../constants/account';
-import { PROFILE_SELECT } from './../../constants/profile';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
+import { PROFILE_SELECT } from 'constants/profile';
 
 export class ProfileController {
   private accessController: AccessController;

@@ -1,7 +1,7 @@
 import { error } from 'loglevel';
 
-import { getSettings, setSettings } from '../../models/getter';
-import blockchain from '../../blockchain';
+import { getSettings, setSettings } from 'services/getter';
+import ntx from 'bcnetwork';
 
 import { AccessController } from './../accessController';
 import { MessageController } from './../messageController';
@@ -10,7 +10,7 @@ import {
   SETTINGS_LOAD_CURRENCY_PRICE,
   SETTINGS_LOAD_CURRENCY_PRICE_FAIL,
   SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS
-} from '../../constants/settings';
+} from 'constants/settings';
 
 import priceProviders from './priceProviders';
 
@@ -28,7 +28,7 @@ export class SettingsController {
     show_total: true
   };
 
-  constructor(opts) {
+  constructor (opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
 
@@ -38,10 +38,10 @@ export class SettingsController {
     this.startListening();
   }
 
-  private startListening() {
+  private startListening () {
     this.messageController.on(SETTINGS_LOAD_CURRENCY_PRICE, async (sendResponse) => {
       try {
-        const signs = Object.values(blockchain).map(i => i.sign);
+        const signs = Object.values(ntx).map(i => i.sign);
         let prices;
 
         await Promise.all(signs.map(sign => this.loadPrice(sign, { convert: 'BTC' })))
@@ -75,13 +75,13 @@ export class SettingsController {
     });
   }
 
-  loadPrice(sign, convertTo) {
+  public loadPrice (sign, convertTo) {
     if (!this.priceProvider) return Promise.reject('priceProvider not defined');
 
     return this.priceProvider.getBCPrice(sign, convertTo);
   }
 
-  getAll() {
+  public getAll () {
     const {
       price_provider = this.defaultSettings.price_provider,
       show_total = this.defaultSettings.show_total
@@ -89,12 +89,12 @@ export class SettingsController {
     return { price_provider, show_total };
   }
 
-  getByKey(settingKey) {
+  public getByKey (settingKey) {
     const settings = this.getAll();
     return settings && settings[settingKey];
   }
 
-  setByKey(settingKey, settingValue) {
+  public setByKey (settingKey, settingValue) {
     switch (settingKey) {
       case 'price_provider':
       case 'show_total':
@@ -104,27 +104,27 @@ export class SettingsController {
     }
   }
 
-  setAll(nextSettings) {
+  public setAll (nextSettings) {
     if (this.checkAuth) {
       this.settings = nextSettings;
     }
   }
 
-  clearAll() {
+  public clearAll () {
     if (this.checkAuth) {
       this.settings = {};
     }
   }
 
-  get checkAuth() {
+  get checkAuth () {
     return this.accessController && this.accessController.isAuth();
   }
 
-  getPriceProviders() {
+  public getPriceProviders () {
     return Object.entries(this.priceProviders).map((ent: any) => ({ value: ent[0], label: ent[1].title }));
   }
 
-  usePriceProvider() {
+  public usePriceProvider () {
     const price_provider = this.getByKey('price_provider');
 
     if (price_provider && this.priceProviders[price_provider]) {

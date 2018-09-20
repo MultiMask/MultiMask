@@ -4,7 +4,7 @@ import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
 
-import NetworkMessage from 'models/NetworkMessage';
+import NetworkMessage from 'services/NetworkMessage';
 import { DanglingResolver } from 'models/DanglingResolver';
 
 import { CONTENT_APP } from 'constants/apps';

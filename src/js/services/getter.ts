@@ -1,5 +1,5 @@
 import config from '../config';
-import storage from './storage';
+import storage from 'services/Storage';
 
 export const getPass = () => storage.get(config.passKey);
 export const setPass = pass => storage.set(config.passKey, pass);

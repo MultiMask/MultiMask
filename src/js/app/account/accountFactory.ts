@@ -1,7 +1,8 @@
-import { getEntity, setEntity, removeEntity } from '../../models/getter';
-import { encode, decode } from '../../libs/cipher';
-import networks from '../../blockchain';
 import { debug } from 'loglevel';
+
+import { encode, decode } from 'libs/cipher';
+import networks from 'bcnetwork';
+import { getEntity, setEntity, removeEntity } from 'services/getter';
 
 import Account from '.';
 import BitcoinWallet from './wallet/bitcoin';
@@ -28,14 +29,14 @@ const createWallet = ({ blockchain }) => {
 };
 
 export default {
-  create(opts) {
+  create (opts) {
     const { blockchain } = opts;
     const wallet = createWallet({ blockchain });
 
     return new Account({ ...opts, wallet });
   },
 
-  save(pass, account): void {
+  save (pass, account): void {
     debug('save account > ', account);
     const id = account.id;
     const str = JSON.stringify(account.serialize());
@@ -47,11 +48,11 @@ export default {
     setEntity(id, encodedWallet);
   },
 
-  removeList(ids) {
+  removeList (ids) {
     return Promise.all(ids.map(id => removeEntity(id)));
   },
 
-  load(pass, id): Promise<Account> {
+  load (pass, id): Promise<Account> {
     return getEntity(id).then((str: string) => {
       debug('Account Load > raw >', str, id);
       // eslint-disable-next-line
@@ -63,11 +64,11 @@ export default {
     });
   },
 
-  loadListByIds(pass, ids) {
+  loadListByIds (pass, ids) {
     return Promise.all(ids.map(id => this.load(pass, id)));
   },
 
-  loadListSerializedByIds(pass, ids) {
+  loadListSerializedByIds (pass, ids) {
     return this.loadListByIds(pass, ids).then(result => {
       return result.map((account: any) => account.serialize());
     });

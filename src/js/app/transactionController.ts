@@ -1,14 +1,13 @@
 import uuid from 'uuid/v4';
-import windowCtrl from './../libs/txWindow';
 
-import { TXModel } from './../models/TxResolver';
+import windowCtrl from 'libs/txWindow';
+import { TXModel } from 'models/TxResolver';
+import { TX_APPROVE, TX_PAYMENT_GET, TX_APPROVE_RESULT, TX_SEND } from 'constants/tx';
 
 import { AccessController } from './accessController';
 import { MessageController } from './messageController';
 
 import { AccountController } from './account/accountController';
-
-import { TX_APPROVE, TX_PAYMENT_GET, TX_APPROVE_RESULT, TX_SEND } from './../constants/tx';
 
 const txs: TXModel[] = [];
 const find = id => {

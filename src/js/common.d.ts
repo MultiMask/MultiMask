@@ -29,11 +29,13 @@ declare module "web3-utils";
  * Custom API
  */
 declare var chrome: any;
+declare var browser: any;
 
 /**
  * Extend Window
  */
 interface Window {
+  notification: any;
   multiWeb: any;
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
 }

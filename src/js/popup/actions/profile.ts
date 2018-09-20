@@ -1,6 +1,6 @@
 import { downloadFile } from '../helpers';
 import { push, goBack } from 'connected-react-router';
-import InternalMessage from '../../models/InternalMessage';
+import InternalMessage from 'services/InternalMessage';
 
 import {
   PROFILE_GET,
@@ -14,7 +14,7 @@ import {
   PROFILE_SELECT,
   PROFILE_SELECT_RESULT,
   PROFILE_IMPORT_SET
-} from './../../constants/profile';
+} from 'constants/profile';
 
 import accountActions from './account';
 

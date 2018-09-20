@@ -1,7 +1,7 @@
-import { hidePass } from './../../libs/cipher';
+import { hidePass } from 'libs/cipher';
 import { push, goBack } from 'connected-react-router';
 
-import InternalMessage from '../../models/InternalMessage';
+import InternalMessage from 'services/InternalMessage';
 
 import {
   ACCOUNT_ACTIVE,
@@ -11,7 +11,7 @@ import {
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT,
   ACCOUNT_NETWORK_UPDATE
-} from './../../constants/account';
+} from 'constants/account';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {

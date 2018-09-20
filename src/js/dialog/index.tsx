@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 import Web3 = require('web3');
 
 import networks from 'bcnetwork';
-import InternalMessage from 'models/InternalMessage';
+import InternalMessage from 'services/InternalMessage';
 
 import { AUTH_IS_READY } from 'constants/auth';
 import { ACCOUNT_INFO } from 'constants/account';
