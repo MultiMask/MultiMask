@@ -4,7 +4,7 @@ import { ThemeProvider } from 'emotion-theming';
 
 import { theme } from './config/theme';
 
-import App from './dialog/index';
+import App from './prompt/index';
 import '../css/dialog.less';
 
 render(
