@@ -52,28 +52,29 @@ export default class BitcoinWallet implements IWallet {
   }
 
   public getInfo () {
-    return axios.get(`${this.networkUrl}/rawaddr/${this.address}`).then(res => {
-      const outputs = [];
+    return axios.get(`${this.networkUrl}/rawaddr/${this.address}`)
+        .then(res => {
+        const outputs = [];
 
-      res.data.txs.forEach(tx => {
-        tx.out.forEach((out, idx) => {
-          if (out.addr === this.address && !out.spent) {
-            outputs.push({
-              hash: tx.hash,
-              idx
-            })
-          }
+        res.data.txs.forEach(tx => {
+          tx.out.forEach((out, idx) => {
+            if (out.addr === this.address && !out.spent) {
+              outputs.push({
+                hash: tx.hash,
+                idx
+              })
+            }
+          })
         })
-      })
 
-      return {
-        address: res.data.address,
-        outputs,
-        balance: res.data.final_balance / 1e8,
-        network: this.network,
-        txs: res.data.txs
-      };
-    });
+        return {
+          address: res.data.address,
+          outputs,
+          balance: res.data.final_balance / 1e8,
+          network: this.network,
+          txs: res.data.txs
+        };
+      })
   }
 
   public sendCoins (opts) {
@@ -98,7 +99,7 @@ export default class BitcoinWallet implements IWallet {
       info('data: ', data);
       info('outputs: ', outputs);
 
-      const amountInSatoshi = amount * 1e8;
+      const amountInSatoshi = amount;
       const balanceInSatoshi = balance * 1e8;
       info('balance:', balanceInSatoshi);
 

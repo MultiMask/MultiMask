@@ -10,6 +10,7 @@ import { ProfileListController } from './app/profiles/profileListController';
 import { TransactionController } from './app/transactionController';
 import { EthereumController } from './app/ethereumController';
 import { EosController } from './app/eos';
+import { BtcController } from './app/btcController';
 
 import { SettingsController } from './app/settings/settingsController';
 
@@ -24,6 +25,7 @@ class Controller {
   private transactionController: TransactionController;
   private ethereumController: EthereumController;
   private eosController: EosController;
+  private btcController: BtcController;
   
   private settingsController: SettingsController;
 
@@ -66,6 +68,12 @@ class Controller {
       accountController: this.accountController,
     });
     
+    this.btcController = new BtcController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController
+    });
+
     this.ethereumController = new EthereumController({
       messageController: this.messageController,
       accessController: this.accessController,
@@ -76,7 +84,6 @@ class Controller {
       messageController: this.messageController,
       accessController: this.accessController,
       accountController: this.accountController,
-      transactionController: this.transactionController
     })
   }
 }

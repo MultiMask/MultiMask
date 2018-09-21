@@ -1,13 +1,14 @@
 import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
+import Account from './';
 import { AccessController } from './../accessController';
 import { MessageController } from './../messageController';
 
 import { info } from 'loglevel';
 
 export class AccountController {
-  public accounts = [];
+  public accounts: Account[] = [];
 
   private accessController: AccessController;
   private messageController: MessageController;
@@ -55,7 +56,7 @@ export class AccountController {
    * Find required account by ID
    * @param id 
    */
-  public getById (id) {
+  public getById (id): Account {
     return this.accounts.find(account => account.id === id);
   }
 
@@ -63,16 +64,27 @@ export class AccountController {
    * Find required account by address
    * @param address 
    */
-  public getByAddress (address: string) {
+  public getByAddress (address: string): Account {
     return this.accounts.find(account => account.getAddress() === address);
   }
 
   /**
    * Return all accounts
    */
-  public getAccounts () {
+  public getAccounts (): Account[] {
     if (this.accessController.isAuth()) {
       return this.accounts;
+    }
+
+    return [];
+  }
+
+  /**
+   * Return all accounts
+   */
+  public getAccountsBySign (sign: string): Account[] {
+    if (this.accessController.isAuth()) {
+      return this.accounts.filter(acc => acc.blockchain === sign);
     }
 
     return [];
@@ -96,7 +108,10 @@ export class AccountController {
     return null;
   }
 
-  public clearList () {
+  /**
+   * Clear all account instances
+   */
+  public clearList (): void {
     this.accounts = [];
   }
 }
