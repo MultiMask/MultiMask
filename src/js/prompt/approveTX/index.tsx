@@ -32,7 +32,6 @@ interface IAppState {
   isReady?: boolean;
 
   tx?: any;
-  txId?: string;
   blockchain?: string;
 
   accounts?: any[];
@@ -54,7 +53,6 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     isLoaded: false,
     isReady: false,
     tx: null,
-    txId: null,
     blockchain: null,
     accounts: [],
     account: null,
@@ -127,17 +125,12 @@ export default class App extends React.Component<IApproveProps, IAppState> {
   };
 
   public onSubmit = payload => {
-    const { tx, txId } = this.state;
+    const { tx } = this.state;
 
-    InternalMessage.payload(TX_APPROVE_RESULT, {
-      id: txId,
+    this.props.prompt.responder({
       tx
-    })
-      .send()
-      .then(() => {
-        // TODO: show txhash and loading to update info about it
-        window.close();
-      });
+    });
+    this.onReject();
   };
 
   public onReject = () => {

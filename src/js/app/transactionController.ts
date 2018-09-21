@@ -97,17 +97,4 @@ export class TransactionController {
       })
     })
   }
-  
-  /**
-   * 
-   * @param data 
-   */
-  public ApproveTX (data) {
-    return new Promise((res, rej) => {
-      const tx = new TXModel(data, uuid(), res);
-
-      txs.push(tx);
-      windowCtrl({});
-    });
-  }
 }

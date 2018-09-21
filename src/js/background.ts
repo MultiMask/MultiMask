@@ -69,8 +69,7 @@ class Controller {
     this.ethereumController = new EthereumController({
       messageController: this.messageController,
       accessController: this.accessController,
-      accountController: this.accountController,
-      transactionController: this.transactionController,
+      accountController: this.accountController
     });
 
     this.eosController = new EosController({

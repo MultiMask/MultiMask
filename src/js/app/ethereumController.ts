@@ -72,10 +72,11 @@ export class EthereumController {
     };
     const data = this.addDefaultsPropsToTx(preparedData);
     const responder = approval => {
-      console.log(approval);
-      // sendResponse({
-        //       payload: data
-        //     });
+      if(approval && approval.tx) {
+        sendResponse({
+          payload: approval.tx
+        });
+      }
     }
 
     NotificationService.open(new Prompt(APPROVAL, { data, responder }));
