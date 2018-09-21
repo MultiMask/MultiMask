@@ -9,7 +9,6 @@ import { APPROVAL } from 'constants/promptTypes';
 import { AccessController } from './accessController';
 import { MessageController } from './messageController';
 import { AccountController } from './account/accountController';
-import { TransactionController } from './transactionController';
 
 import { ETH_APPROVE_TX, ETH_GET_ACCOUNTS, ETH_SIGN_TX } from 'constants/blockchains/eth';
 
@@ -17,13 +16,11 @@ export class EthereumController {
   private accessController: AccessController;
   private messageController: MessageController;
   private accountController: AccountController;
-  private transactionController: TransactionController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
-    this.transactionController = opts.transactionController;
     
     this.startListening();
   }
@@ -66,11 +63,10 @@ export class EthereumController {
    * @param data 
    */
   private responseApproveTx = (sendResponse, payload) => {
-    const preparedData = {
+    const data = this.addDefaultsPropsToTx({
       blockchain: ntx.ETH.sign,
       tx: payload
-    };
-    const data = this.addDefaultsPropsToTx(preparedData);
+    });
     const responder = approval => {
       if(approval && approval.tx) {
         sendResponse({
@@ -82,6 +78,10 @@ export class EthereumController {
     NotificationService.open(new Prompt(APPROVAL, { data, responder }));
   }
   
+  /**
+   * Enrich txdata by defaults params
+   * @param data 
+   */
   private addDefaultsPropsToTx (data) {
     const account = this.getAccount(data.tx.from);
 
