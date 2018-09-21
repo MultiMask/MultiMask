@@ -47,9 +47,9 @@ export class BtcController {
     const responder = approval => {
       if(approval && approval.tx) {
         
-        account.sendTX(approval.tx).then(txHash => {
+        account.sendTX(approval.tx).then(data => {
           sendResponse({
-            txHash
+            success: true
           })
         })
       }

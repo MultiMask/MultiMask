@@ -8,7 +8,6 @@ import InternalMessage from 'services/InternalMessage';
 
 import { AUTH_IS_READY } from 'constants/auth';
 import { ACCOUNT_INFO } from 'constants/account';
-import { TX_PAYMENT_GET, TX_APPROVE_RESULT } from 'constants/tx';
 
 import Info from './Info';
 import Control from './Control';
@@ -151,7 +150,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const { tx, blockchain } = this.state;
 
     if (blockchain === networks.BTC.sign) {
-      return `${tx.amount / 1e8} BTC`;
+      return `${tx.amount} BTC`;
     }
     if (blockchain === networks.ETH.sign) {
       return `${web3.utils.fromWei(tx.value, 'ether')} ETH`;

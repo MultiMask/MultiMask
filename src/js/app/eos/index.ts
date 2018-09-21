@@ -3,7 +3,6 @@ import ntx from 'bcnetwork';
 import { AccessController } from '../accessController';
 import { MessageController } from '../messageController';
 import { AccountController } from '../account/accountController';
-import { TransactionController } from '../transactionController';
 
 import { REQUEST_SIGNATURE } from 'constants/blockchains/eos';
 import { SIGNATURE } from 'constants/promptTypes';
@@ -17,13 +16,11 @@ export class EosController {
   private accessController: AccessController;
   private messageController: MessageController;
   private accountController: AccountController;
-  private transactionController: TransactionController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
-    this.transactionController = opts.transactionController;
     
     this.startListening();
   }
