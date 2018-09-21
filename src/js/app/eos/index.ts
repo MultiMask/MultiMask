@@ -35,27 +35,26 @@ export class EosController {
   /**
    * When need to sign transaction
    */
-  private responseRequestSignature = (sendResponse, payload) => {
-    const requiredAccounts = EosEngine.actionParticipants(payload);
+  private responseRequestSignature = (sendResponse, data) => {
+    const requiredAccounts = EosEngine.actionParticipants(data);
     const requiredAccount = requiredAccounts ? requiredAccounts[0].split('@')[0] : null;
 
     // TODO: check network
 
     const account = this.findByAccountName(requiredAccount);
     if (account) {
-      const signature = EosEngine.sign(payload, account.getSeed());
-      
-      NotificationService.open(new Prompt(SIGNATURE, 
-        {
-          data:payload, 
-          responder: approval => {
-            console.log(approval);
-          }
-        }
-      ))
-      // sendResponse({
-      //   signatures:[signature]
-      // })
+      const responder = approval => {
+        const signature = approval.success 
+          ? EosEngine.sign(data, account.getSeed())
+          : null
+        
+        sendResponse({
+          signatures:[signature],
+          success: approval.success
+        })
+      }
+
+      NotificationService.open(new Prompt(SIGNATURE, { data, responder }));
     }
   }
 

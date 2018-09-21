@@ -15,7 +15,6 @@ export class NotificationService {
             openWindow = null;
         }
 
-
         const height = 670;
         const width = 370;
         const middleX = window.screen.availWidth/2 - (width/2);
@@ -79,5 +78,4 @@ export class NotificationService {
             window.close();
         }
     }
-
 }
