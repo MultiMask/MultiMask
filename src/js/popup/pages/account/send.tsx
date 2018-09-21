@@ -3,41 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import TextField from '../../ui/TextField';
-import Button from '../../ui/Button';
-import Wallet from './common/Wallet';
 
 import txActions from '../../actions/tx';
+import priceActions from '../../actions/prices';
 import { getCurrentWallet } from './../../select';
+
+import Wallet from './common/Wallet';
+import Button from '../../ui/Button';
+import TextField from '../../ui/TextField';
 import Typography from '../../ui/Typography';
 
-const Form = styled('form')`
-  background-color: ${props => props.theme.colors.background};
-  flex-grow: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const styles = {
-  title: css`
-    margin-bottom: 10px;
-    width: 100%;
-  `,
-  sign: css`
-    margin: 0 10px;
-    line-height: 40px;
-  `,
-  rowContainer: css`
-    display: flex;
-    background-color: inherit;
-  `,
-  button: css`
-    width: 75%;
-  `
-};
 class Send extends React.Component<any, any> {
   constructor (props) {
     super(props);
@@ -91,7 +66,7 @@ class Send extends React.Component<any, any> {
   };
 
   public render () {
-    const { account, settings } = this.props;
+    const { account } = this.props;
     const {
       errors: { to: toError, amount: amountError },
       to,
@@ -128,7 +103,7 @@ class Send extends React.Component<any, any> {
               =
             </Typography>
 
-            <TextField type="text" name="usd" value={`${amount} USD`} readOnly />
+            <TextField type="text" name="usd" value={`${this.props.getPrice(amount, account.blockchain)} USD`} readOnly />
           </div>
           <Typography variant="subheading" color="main" className={styles.title}>
             Transaction data (optional)
@@ -145,5 +120,36 @@ export default connect(
   (state: any) => ({
     account: getCurrentWallet(state)
   }),
-  dispatch => bindActionCreators(txActions, dispatch)
+  dispatch => bindActionCreators({
+    ...txActions,
+    ...priceActions
+  }, dispatch)
 )(Send);
+
+const Form = styled('form')`
+  background-color: ${props => props.theme.colors.background};
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const styles = {
+  title: css`
+    margin-bottom: 10px;
+    width: 100%;
+  `,
+  sign: css`
+    margin: 0 10px;
+    line-height: 40px;
+  `,
+  rowContainer: css`
+    display: flex;
+    background-color: inherit;
+  `,
+  button: css`
+    width: 75%;
+  `
+};
