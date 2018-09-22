@@ -1,7 +1,7 @@
 {
   "name": "multimask",
   "version": "0.2",
-  "description": "Wallet to bitcoin blockchains in Chrome",
+  "description": "Wallet for mutiple blockchains in Chrome",
   "scripts": {
     "postinstall": "rm -f node_modules/web3/*.d.ts",
     "build": "node utils/build.js",
