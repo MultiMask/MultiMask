@@ -10,8 +10,8 @@ import {AccountController} from './../account/accountController';
 import AccountFactory from './../account/accountFactory';
 import { Profile } from './Profile';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from './../../constants/account';
-import { PROFILE_SELECT } from './../../constants/profile';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
+import { PROFILE_SELECT } from 'constants/profile';
 
 export class ProfileController {
   private accessController: AccessController;
@@ -20,7 +20,7 @@ export class ProfileController {
   private profileListController: ProfileListController;
   private accountController: AccountController;
 
-  constructor(opts) {
+  constructor (opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     
@@ -33,16 +33,16 @@ export class ProfileController {
   /**
    * Messages
    */
-	private startListening() {
-		this.messageController.on(ACCOUNT_INFO, this.getAccounts);
-		this.messageController.on(ACCOUNT_CREATE, this.addAccount);
-		this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
-		this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
+  private startListening () {
+    this.messageController.on(ACCOUNT_INFO, this.getAccounts);
+    this.messageController.on(ACCOUNT_CREATE, this.addAccount);
+    this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
+    this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
     
     this.profileListController.on(PROFILE_SELECT, this.restoreProfile);
   }
 
-  private getPass() {
+  private getPass () {
     return this.accessController.getPass();
   }
 
@@ -65,7 +65,7 @@ export class ProfileController {
   /**
    * Get profiles list and restore first or create new
    */
-  private init() {
+  private init () {
     return this.profileListController.init()
       .then(this.restoreProfile);
   }
@@ -112,22 +112,22 @@ export class ProfileController {
       })
   }
 
-	/**
+  /**
    * Update account's wallet network
 	 * @param sendResponse 
    * @param accountData: {id, network} 
    */
 
-	public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
-		const account = this.accountController.getAccountById(accountData.id);
-		account.changeNetwork(accountData.network)
+  public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
+    const account = this.accountController.getById(accountData.id);
+    account.changeNetwork(accountData.network)
 
-		AccountFactory.save(this.getPass(), account)
+    AccountFactory.save(this.getPass(), account)
 
-		this.getAccounts(sendResponse);
-	}
-	
-	/**
+    this.getAccounts(sendResponse);
+  }
+  
+  /**
    * Return seed for Wallet to export
    * @param sendResponse 
    * @param id 

@@ -1,5 +1,5 @@
-import InternalMessage from '../../libs/InternalMessage';
 import { push } from 'connected-react-router';
+import InternalMessage from 'services/InternalMessage';
 
 import {
   AUTH_INIT,
@@ -11,9 +11,9 @@ import {
   AUTH_LOGOUT,
   AUTH_LOGOUT_SUCCESS,
   AUTH_LOGOUT_FAIL
-} from './../../constants/auth';
+} from 'constants/auth';
 
-import { getPass } from './../../models/getter';
+import { getPass } from 'services/getter';
 import AccountActions from './account';
 import SettingActions from './settings';
 
@@ -93,6 +93,6 @@ const AuthActions = {
 };
 export default AuthActions;
 
-function checkPass(cb) {
+function checkPass (cb) {
   getPass().then(result => cb(!!result));
 }

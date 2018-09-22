@@ -1,30 +1,16 @@
 import uuid from 'uuid/v4';
 
-import networks from './../blockchain';
-import Web3Provider from './plugins/eth';
-import NetworkMessage from './../libs/NetworkMessage';
+import BTC from './plugins/btcPlugin';
+import Eth from './plugins/ethPlugin';
+import EOS from './plugins/eosPlugin';
 
-import { TX_APPROVE } from '../constants/tx';
-import { CONTENT_APP } from '../constants/apps';
+import NetworkMessage from 'services/NetworkMessage';
+import { DanglingResolver } from 'models/DanglingResolver';
+
+import { CONTENT_APP } from 'constants/apps';
 
 let stream;
 let resolvers;
-
-/***
- * This is just a helper to manage resolving fake-async
- * requests using browser messaging.
- */
-class DanglingResolver {
-  public id;
-  public resolve;
-  public reject;
-
-  constructor(_id, _resolve, _reject) {
-    this.id = _id;
-    this.resolve = _resolve;
-    this.reject = _reject;
-  }
-}
 
 /***
  * Messages do not come back on the same thread.
@@ -52,39 +38,31 @@ const _subscribe = () => {
  */
 const _send = (type, payload) => {
   return new Promise((resolve, reject) => {
-    let id = uuid();
-    let message = new NetworkMessage(type, payload, id);
+    const id = uuid();
+    const message = new NetworkMessage(type, payload, id);
     resolvers.push(new DanglingResolver(id, resolve, reject));
     stream.send(message, CONTENT_APP);
   });
 };
 
-export default class MultiWeb {
-  public web3;
+/**
+ * Provide work with wallets
+ */
+export class MultiWeb {
+  public btc;
+  public eos;
+  public eth;
 
-  constructor(_stream) {
+  constructor (_stream) {
     stream = _stream;
 
     resolvers = [];
     _subscribe();
 
-    this.web3 = Web3Provider(_send);
+    this.btc = BTC(_send);
+    this.eth = Eth(_send);
+    this.eos = EOS(_send);
   }
 
-  isAuth() { }
-  getUser() { }
-  sendTransaction({ to, amount, data }) {
-    _send(TX_APPROVE, {
-      blockchain: networks.BTC.sign,
-      tx: {
-        to,
-        amount,
-        data
-      }
-    });
-  }
-
-  getWeb3Provider() {
-    return this.web3;
-  }
+  public isAuth () { }
 }

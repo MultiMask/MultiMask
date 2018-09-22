@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import Typography from '../popup/ui/Typography';
+import Typography from '../../popup/ui/Typography';
 
-type ContainerProps = { multi: boolean; }
+interface ContainerProps { multi: boolean }
 const Container = styled('div')`
   display: flex;
   align-items: ${(props: ContainerProps) => (props.multi ? 'start' : 'center')};
@@ -16,9 +16,9 @@ const FirstItem = styled(Typography)`
   flex-basis: 60px;
 `;
 
-type ContentProps = { center: boolean; }
+interface IContentProps { center: boolean }
 const Content = styled('div')`
-  margin: ${(props: ContentProps) => props.center && 'auto'};
+  margin: ${(props: IContentProps) => props.center && 'auto'};
   overflow: hidden;
 `;
 const styles = {
@@ -44,8 +44,8 @@ const Info: React.SFC<any> = ({ label, content, labelColor, center }) => {
       ))}
     </Content>
   ) : (
-      <Typography color="secondary">{content}</Typography>
-    );
+    <Typography color="secondary">{content}</Typography>
+  );
 
   return (
     <Container multi={multi}>

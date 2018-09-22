@@ -9,68 +9,83 @@ import { ProfileListController } from './app/profiles/profileListController';
 
 import { TransactionController } from './app/transactionController';
 import { EthereumController } from './app/ethereumController';
+import { EosController } from './app/eos';
+import { BtcController } from './app/btcController';
 
 import { SettingsController } from './app/settings/settingsController';
 
 class Controller {
-	private accessController: AccessController;
-	private messageController: MessageController;
-	
-	private accountController: AccountController;
-	private profileController: ProfileController;
-	private profileListController: ProfileListController;
+  private accessController: AccessController;
+  private messageController: MessageController;
+  
+  private accountController: AccountController;
+  private profileController: ProfileController;
+  private profileListController: ProfileListController;
 
-	private transactionController: TransactionController;
-	private ethereumController: EthereumController;
+  private transactionController: TransactionController;
+  private ethereumController: EthereumController;
+  private eosController: EosController;
+  private btcController: BtcController;
+  
+  private settingsController: SettingsController;
 
-	private settingsController: SettingsController;
+  constructor () {
+    // Webpack provide this from ./config.json
+    setLevel(logLevel);
 
-	constructor() {
-		// Set from settings in ./config.json
-		setLevel(logLevel);
+    this.messageController = new MessageController();
 
-		this.messageController = new MessageController();
+    this.accessController = new AccessController({
+      messageController: this.messageController
+    });
 
-		this.accessController = new AccessController({
-			messageController: this.messageController
-		});
+    this.accountController = new AccountController({
+      messageController: this.messageController,
+      accessController: this.accessController
+    });
 
-		this.accountController = new AccountController({
-			messageController: this.messageController,
-			accessController: this.accessController
-		});
+    this.profileListController = new ProfileListController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+    });
 
-		this.profileListController = new ProfileListController({
-			messageController: this.messageController,
-			accessController: this.accessController,
-			accountController: this.accountController,
-		});
+    this.profileController = new ProfileController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+      profileListController: this.profileListController,
+    });
 
-		this.profileController = new ProfileController({
-			messageController: this.messageController,
-			accessController: this.accessController,
-			accountController: this.accountController,
-			profileListController: this.profileListController,
-		});
+    this.settingsController = new SettingsController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+    });
 
-		this.settingsController = new SettingsController({
-			messageController: this.messageController,
-			accessController: this.accessController,
-		});
+    this.transactionController = new TransactionController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+    });
+    
+    this.btcController = new BtcController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController
+    });
 
-		this.transactionController = new TransactionController({
-			messageController: this.messageController,
-			accessController: this.accessController,
-			accountController: this.accountController,
-		});
-		
-		this.ethereumController = new EthereumController({
-			messageController: this.messageController,
-			accessController: this.accessController,
-			accountController: this.accountController,
-			transactionController: this.transactionController,
-		});
-	}
+    this.ethereumController = new EthereumController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController
+    });
+
+    this.eosController = new EosController({
+      messageController: this.messageController,
+      accessController: this.accessController,
+      accountController: this.accountController,
+    })
+  }
 }
 
 new Controller();

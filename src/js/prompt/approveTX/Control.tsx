@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import Typography from '../popup/ui/Typography';
+import Typography from '../../popup/ui/Typography';
 
 const Container = styled('div')`
   display: flex;

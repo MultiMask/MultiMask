@@ -3,39 +3,39 @@ import ProfileFactory from './profileFactory';
 export class Profile {
   public data: any;
 
-  constructor(data) {
+  constructor (data) {
     this.data = data;
   }
 
-  getId() {
+  public getId () {
     return this.data.id;
   }
 
-  getAccounts() {
+  public getAccounts () {
     return this.data.accounts;
   }
 
-  addAccount(pass, account) {
+  public addAccount (pass, account) {
     this.data.accounts.push(account.id);
     this.increaceVerion();
     return this.save(pass);
   }
 
-  increaceVerion() {
+  public increaceVerion () {
     this.data.version = this.data.version + 1;
   }
 
-  save(pass) {
+  public save (pass) {
     return ProfileFactory.save(pass, this);
   }
 
-  update(pass, newData) {
+  public update (pass, newData) {
     this.data = { ...this.data, ...newData };
     this.increaceVerion();
     return this.save(pass);
   }
 
-  serialize() {
+  public serialize () {
     return {
       ...this.data
     };

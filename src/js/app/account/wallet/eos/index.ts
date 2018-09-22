@@ -67,15 +67,24 @@ export class EosWallet implements IWallet {
     return this.eos.getAccount(accountName);
   }
 
-  public getInfo () {
-    return this._getInfoByAccount(this.account).then(accountInfo => {
-      return {
-        address: this.account,
-        balance: accountInfo.core_liquid_balance.split(' ')[0],
+  public getInfo (): Promise<any> {
+    if (this.account) {
+      return this._getInfoByAccount(this.account).then(accountInfo => {
+        return {
+          address: this.account,
+          balance: accountInfo.core_liquid_balance.split(' ')[0],
+          network: this.network.sign,
+          txs: []
+        }
+      })
+    } else {
+      return Promise.resolve({
+        address: this.public,
+        balance: 0,
         network: this.network.sign,
         txs: []
-      }
-    })
+      })
+    }
   }
 
   public getAddress () {

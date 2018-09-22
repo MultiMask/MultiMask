@@ -17,11 +17,16 @@ function getConfigParams(params) {
   }, {});
 }
 
-// load the secrets
-var alias = {};
+var alias = {
+  'bcnetwork': path.resolve(__dirname, 'src/js/blockchain/index.ts'),
+  'constants': path.resolve(__dirname, 'src/js/constants'),
+  'helpers': path.resolve(__dirname, 'src/js/helpers'),
+  'libs': path.resolve(__dirname, 'src/js/libs'),
+  'models': path.resolve(__dirname, 'src/js/models'),
+  'services': path.resolve(__dirname, 'src/js/services')
+};
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
-
 var fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
 
 if (fileSystem.existsSync(secretsPath)) {
@@ -33,7 +38,7 @@ var options = {
   // context: path.join(__dirname, 'src', 'js'),
   entry: {
     popup: path.join(__dirname, 'src', 'js', 'popup.tsx'),
-    dialog: path.join(__dirname, 'src', 'js', 'dialog.tsx'),
+    prompt: path.join(__dirname, 'src', 'js', 'prompt.tsx'),
     inpage: path.join(__dirname, 'src', 'js', 'inpage.ts'),
     options: path.join(__dirname, 'src', 'js', 'options.ts'),
     content: path.join(__dirname, 'src', 'js', 'content.ts'),
@@ -128,9 +133,9 @@ var options = {
       chunks: ['options']
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'dialog.html'),
-      filename: 'dialog.html',
-      chunks: ['dialog']
+      template: path.join(__dirname, 'src', 'prompt.html'),
+      filename: 'prompt.html',
+      chunks: ['prompt']
     }),
     new WriteFilePlugin()
   ]

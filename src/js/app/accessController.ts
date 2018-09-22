@@ -1,11 +1,11 @@
-import { setPass, checkPass } from '../models/getter';
-import { hidePass } from '../libs/cipher';
+import { setPass, checkPass } from 'services/getter';
+import { hidePass } from 'libs/cipher';
 
 import { MessageController } from './messageController';
 
-import { AUTH_IS_READY, AUTH_CHECK, AUTH_LOGIN, AUTH_LOGOUT, AUTH_INIT } from './../constants/auth';
+import { AUTH_IS_READY, AUTH_CHECK, AUTH_LOGIN, AUTH_LOGOUT, AUTH_INIT } from 'constants/auth';
 
-type AccessControllerProps = {
+interface AccessControllerProps {
   messageController: MessageController
 }
 
@@ -18,7 +18,7 @@ export class AccessController {
 
   private messageController: MessageController;
 
-  constructor(opts: AccessControllerProps) {
+  constructor (opts: AccessControllerProps) {
     this.messageController = opts.messageController;
 
     this.startListening();
@@ -27,7 +27,7 @@ export class AccessController {
   /** 
    * Listen message
    */
-  private startListening() {
+  private startListening () {
     // TODO: Maybe use AUTH_CHECK for this purpuse
     this.messageController.on(AUTH_IS_READY, (sendResponse) => {
       sendResponse({
@@ -72,14 +72,14 @@ export class AccessController {
   /**
    * Return pass for decode and encode profiles and wallets
    */
-  public getPass() {
+  public getPass () {
     return this.password;
   }
 
   /**
    * Check that user is authorize
    */
-  public isAuth() {
+  public isAuth () {
     return !!this.password;
   }
 
@@ -87,7 +87,7 @@ export class AccessController {
    * Create new pass
    * @param pass 
    */
-  private create(pass: string) {
+  private create (pass: string) {
     setPass(hidePass(pass));
     this.password = pass;
     this.inited = true;
@@ -97,7 +97,7 @@ export class AccessController {
    * Try login, check pass
    * @param pass 
    */
-  private async login(pass: string) {
+  private async login (pass: string) {
     const isAuth = await checkPass(hidePass(pass));
 
     if (isAuth) {
@@ -112,14 +112,14 @@ export class AccessController {
    * Check hash pass without send password
    * @param hashPass password hash
    */
-  private async check(hashPass: string) {
-    return await checkPass(hashPass);
+  private async check (hashPass: string) {
+    return checkPass(hashPass);
   }
 
   /**
    * Logout user from App
    */
-  private logout() {
+  private logout () {
     return delete this.password;
   }
 }

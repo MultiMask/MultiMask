@@ -1,7 +1,7 @@
-import { hidePass } from './../../../libs/cipher';
-import { checkPass } from './../../../models/getter';
+import { hidePass } from 'libs/cipher';
+import { checkPass } from 'services/getter';
 
-import { NEEDAUTH_START, NEEDAUTH_SUCCESS, NEEDAUTH_FAIL } from './../../../constants/ui/needauth';
+import { NEEDAUTH_START, NEEDAUTH_SUCCESS, NEEDAUTH_FAIL } from 'constants/ui/needauth';
 
 const NeedAuthActions = {
   start: () => (dispatch, getState) => {
