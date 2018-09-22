@@ -7,6 +7,8 @@ import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
 import { getCurrentWallet } from './../../select';
 
+import ntx from 'bcnetwork';
+
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
 import Menu from '../../ui/Menu';
@@ -20,8 +22,13 @@ const TXContainer = styled('div')`
 `;
 
 class AccountInfo extends React.Component<any, any> {
+
+  private isEos () {
+    return this.props.account === ntx.EOS.sign;
+  }
+
   public render () {
-    const { account, settings } = this.props;
+    const { account } = this.props;
     return (
       <React.Fragment>
         <Wallet
