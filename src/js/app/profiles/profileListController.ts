@@ -2,6 +2,7 @@ import EventEmitter = require('events');
 
 import { getProfiles, setProfiles } from 'services/getter';
 
+import { BusController } from './../busController';
 import { AccessController } from './../accessController';
 import { MessageController } from './../messageController';
 
@@ -25,12 +26,14 @@ export class ProfileListController extends EventEmitter {
   private current = null;
 
   private accessController: AccessController;
-  private messageController: MessageController;
   private accountController: AccountController;
+  private busController: BusController;
+  private messageController: MessageController;
 
   constructor (opts) {
     super();
 
+    this.busController = opts.busController;
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
@@ -82,7 +85,7 @@ export class ProfileListController extends EventEmitter {
   
     if (selectedProfile) {
       this.setCurrrent(selectedProfile);
-      this.emit(PROFILE_SELECT, selectedProfile);
+      this.busController.emit(PROFILE_SELECT, selectedProfile);
     }
 
     sendResponse({

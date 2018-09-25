@@ -2,7 +2,7 @@ import { LocalStream } from 'extension-streams';
 import { info } from 'loglevel';
 import EventEmitter = require('events');
 
-type MessageType = {
+interface IMessageType {
   type: string;
   payload: any;
 }
@@ -11,11 +11,11 @@ type MessageType = {
  * Receive message from site, popup and dialog
  */
 export class MessageController extends EventEmitter {
-  constructor() {
+  constructor () {
     super();
 
     // TODO: Add check for phishing
-    LocalStream.watch((msg: MessageType, sendResponse) => {
+    LocalStream.watch((msg: IMessageType, sendResponse) => {
       // logs
       const cb = (...args) => {
         info('background responsed > ', ...args, msg);
