@@ -48,7 +48,7 @@
       "libs/*":        ["src/js/libs/*"],
       "models/*":      ["src/js/models/*"],
       "services/*":    ["src/js/services/*"],
-      "ui/*":          ["src/js/ui/*"],
+      "ui/*":          ["src/js/popup/ui/*"],
       "app/*":         ["src/js/app/*"],
       "popup/*":       ["src/js/popup/*"],
       "prompt/*":      ["src/js/prompt/*"],
