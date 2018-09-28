@@ -1,8 +1,8 @@
 import { info } from 'loglevel';
 
 import { ProfileListController } from './profileListController';
-import ProfileFactory from './profileFactory';
 
+import {BusController} from './../busController';
 import { AccessController } from './../accessController';
 import { MessageController } from './../messageController';
 
@@ -15,6 +15,7 @@ import { PROFILE_SELECT } from 'constants/profile';
 
 export class ProfileController {
   private accessController: AccessController;
+  private busController: BusController;
   private messageController: MessageController;
 
   private profileListController: ProfileListController;
@@ -22,6 +23,7 @@ export class ProfileController {
 
   constructor (opts) {
     this.accessController = opts.accessController;
+    this.busController = opts.busController;
     this.messageController = opts.messageController;
     
     this.accountController = opts.accountController;
@@ -38,8 +40,8 @@ export class ProfileController {
     this.messageController.on(ACCOUNT_CREATE, this.addAccount);
     this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
     this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
-    
-    this.profileListController.on(PROFILE_SELECT, this.restoreProfile);
+
+    this.busController.on(PROFILE_SELECT, this.restoreProfile);
   }
 
   private getPass () {
@@ -76,7 +78,8 @@ export class ProfileController {
    */
   private restoreProfile = (profile: Profile) => {
     info('Profile changed > ', profile);
-    return this.restoreAccounts(profile.getAccounts());
+    // return this.restoreAccounts(profile.getAccounts());
+    return this.restoreAccounts([profile.getAccounts()[0]]);
   }
 
   /**

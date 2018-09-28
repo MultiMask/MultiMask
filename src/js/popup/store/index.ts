@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 
 export const history = createMemoryHistory();
 
-export function configureStore(initialState?) {
+export function configureStore (initialState?) {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   return createStore(

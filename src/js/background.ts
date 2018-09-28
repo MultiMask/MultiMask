@@ -1,5 +1,6 @@
 import { setLevel } from 'loglevel';
 
+import { BusController } from './app/busController';
 import { AccessController } from './app/accessController';
 import { MessageController } from './app/messageController';
 
@@ -15,6 +16,7 @@ import { BtcController } from './app/btcController';
 import { SettingsController } from './app/settings/settingsController';
 
 class Controller {
+  private busController: BusController;
   private accessController: AccessController;
   private messageController: MessageController;
   
@@ -35,6 +37,8 @@ class Controller {
 
     this.messageController = new MessageController();
 
+    this.busController = new BusController();
+
     this.accessController = new AccessController({
       messageController: this.messageController
     });
@@ -45,12 +49,14 @@ class Controller {
     });
 
     this.profileListController = new ProfileListController({
+      busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
       accountController: this.accountController,
     });
 
     this.profileController = new ProfileController({
+      busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
       accountController: this.accountController,
