@@ -8,8 +8,14 @@ import AccountFactory from './../../../app/account/accountFactory';
 import Typography from '../../ui/Typography';
 import Button from '../../ui/Button';
 
-import networks from './../../../blockchain';
+import ntx, {BCSign} from 'bcnetwork';
 import Account from './../../../app/account';
+
+interface IProps {
+  create (account): Promise<void>;
+  blockchain: BCSign;
+  onBack (): void;
+}
 
 interface IWalletState {
   seed?: string;
@@ -20,7 +26,7 @@ interface IWalletState {
   eos?: any;
 }
 
-class Wallet extends React.Component<any, IWalletState> {
+class Wallet extends React.Component<IProps, IWalletState> {
   private account: Account;
 
   public state: IWalletState = {
@@ -52,7 +58,7 @@ class Wallet extends React.Component<any, IWalletState> {
     this.props.create(this.account);
   }
 
-  public createAccount() {
+  public createAccount () {
     const { blockchain } = this.props;
 
     try {
@@ -72,7 +78,7 @@ class Wallet extends React.Component<any, IWalletState> {
     }
   }
 
-  private getInfo() {
+  private getInfo () {
     if (this.account) {
       this.account.getInfo().then(data => {
         this.setState({
@@ -84,7 +90,7 @@ class Wallet extends React.Component<any, IWalletState> {
     }
   }
 
-  private getEosAccounts() {
+  private getEosAccounts () {
     this.account.wallet.getKeyAccounts()
       .then(accounts => {
         this.setState(state => ({
@@ -95,11 +101,11 @@ class Wallet extends React.Component<any, IWalletState> {
       })
   }
 
-  private isEos() {
-    return this.account && this.account.blockchain === networks.EOS.sign;
+  private isEos () {
+    return this.account && this.account.blockchain === ntx.EOS.sign;
   }
 
-  private ethImport() {
+  private ethImport () {
     const { success, address, balance } = this.state;
 
     if (success) {
@@ -128,7 +134,7 @@ class Wallet extends React.Component<any, IWalletState> {
     }
   }
 
-  private eosImport() {
+  private eosImport () {
     const { success, eos } = this.state;
 
     if (success) {
@@ -159,7 +165,7 @@ class Wallet extends React.Component<any, IWalletState> {
     }
   }
 
-  public render() {
+  public render () {
     const { error, seed } = this.state;
 
     return (

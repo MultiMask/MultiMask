@@ -14,15 +14,15 @@ const styles = {
 };
 
 class TypeImportingStep extends React.Component<any, any> {
-  state = {
+  public state = {
     type: 'create'
   };
 
-  handleChange = event => {
+  public handleChange = event => {
     this.setState({ type: event.target.value });
   };
 
-  render() {
+  public render () {
     const { onSubmit } = this.props;
     const { type } = this.state;
     return (
