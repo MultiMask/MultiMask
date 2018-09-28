@@ -23,7 +23,11 @@ var alias = {
   'helpers': path.resolve(__dirname, 'src/js/helpers'),
   'libs': path.resolve(__dirname, 'src/js/libs'),
   'models': path.resolve(__dirname, 'src/js/models'),
-  'services': path.resolve(__dirname, 'src/js/services')
+  'services': path.resolve(__dirname, 'src/js/services'),
+  'ui': path.resolve(__dirname, 'src/js/ui'),
+  'app': path.resolve(__dirname, 'src/js/app'),
+  'popup': path.resolve(__dirname, 'src/js/popup'),
+  'prompt': path.resolve(__dirname, 'src/js/prompt'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
