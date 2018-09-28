@@ -1,3 +1,9 @@
+export enum BCSign {
+  BTC = 'BTC',
+  ETH = 'ETH',
+  EOS = 'EOS'
+}
+
 export default {
   BTC: {
     name: 'Bitcoin',
