@@ -49,14 +49,15 @@ export class EosAccount extends React.Component<IProps, IState> {
 
         return (
           <React.Fragment key={idx}>
+
             <div>
               <Typography variant="subheading" color="main">
-                Account: {account.account_name}
+                <NonEmphasis>Account:</NonEmphasis> {account.account_name}
               </Typography>
               <Typography variant="subheading" color="main">
-                Balance:
+                <NonEmphasis>Balance:</NonEmphasis> {account.core_liquid_balance}
               </Typography>
-              <Typography color="secondary">{account.core_liquid_balance}</Typography>
+              {/* <Typography color="secondary">{account.core_liquid_balance}</Typography> */}
           </div>
           <Button
             className={css`
@@ -72,3 +73,7 @@ export class EosAccount extends React.Component<IProps, IState> {
     }
   }
 }
+
+const NonEmphasis = styled('span')`
+  font-weight: normal;
+`;

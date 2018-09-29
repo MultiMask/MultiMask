@@ -49,13 +49,11 @@ export class EthAccount extends React.Component<IProps, IState> {
       <React.Fragment>
           <div>
             <Typography variant="subheading" color="main">
-              Address:
+              <NonEmphasis>Account:</NonEmphasis> {address}
             </Typography>
-            <Typography color="secondary">{address}</Typography>
             <Typography variant="subheading" color="main">
-              Balance:
+              <NonEmphasis>Balance:</NonEmphasis> {balance}
             </Typography>
-            <Typography color="secondary">{balance}</Typography>
           </div>
           <Button
             className={css`
@@ -69,3 +67,7 @@ export class EthAccount extends React.Component<IProps, IState> {
     )
   }
 }
+
+const NonEmphasis = styled('span')`
+  font-weight: normal;
+`;
