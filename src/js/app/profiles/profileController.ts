@@ -96,7 +96,7 @@ export class ProfileController {
    * @param sendResponse 
    * @param accountData 
    */
-  public addAccount = (sendResponse, accountData): void => {   
+  public addAccount = (sendResponse, accountData): Promise<void> => {   
     const profile = this.profileListController.getCurrent();
     let account = null;
 
