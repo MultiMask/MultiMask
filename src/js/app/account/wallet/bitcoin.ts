@@ -1,9 +1,10 @@
+import { info } from 'loglevel';
 import * as bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
-import networks from '../../../blockchain'
 
-import { info } from 'loglevel';
+import { BTCEngine } from './btc/engine';
+import networks from '../../../blockchain'
 
 
 export default class BitcoinWallet implements IWallet {
@@ -12,6 +13,9 @@ export default class BitcoinWallet implements IWallet {
   public address: any;
   public networkUrl: string;
 
+  public segWit = false;
+  public scriptPubkey;      // segWit scriptPubkey
+
   constructor (network) {
     this.network = network;
 
@@ -19,18 +23,23 @@ export default class BitcoinWallet implements IWallet {
   }
 
   public create (seed) {
-    const mnemonic = new Mnemonic(seed);
+    return this._createWallet(seed, bitcoin.networks.testnet).then(secret => {
+      console.log(secret);
+      Object.assign(this, secret);
 
-    const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
-
-    this.priv = HDPrivateKey.privateKey.toWIF();
-    this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
-
-    return Promise.resolve(mnemonic.toString());
+      return secret.seed;
+    });
   }
 
+  private _createWallet (seed, network) {
+    return this.segWit
+    ? BTCEngine.createSegWitWallet(seed, network)
+    : BTCEngine.createWallet(seed, network);
+  }
+ 
   public changeNetwork (network: string, seed: string) {
-    this.network = network
+    // TODO: use _createWallet to generate address
+    this.network = network;
 
     const mnemonic = new Mnemonic(seed);
   
@@ -79,7 +88,8 @@ export default class BitcoinWallet implements IWallet {
 
   public sendCoins (opts) {
     return this.buildTX(opts)
-      .then(this.signTXBuild)
+      .then(this.signTX)
+      .then(this.BuildToHex)
       .then(signedTX => {
         info('TX = ', signedTX);
 
@@ -107,7 +117,11 @@ export default class BitcoinWallet implements IWallet {
       const txb = new bitcoin.TransactionBuilder(testnet);
 
       outputs.forEach((out, idx) => {
-        txb.addInput(out.hash, out.idx);
+        if (this.segWit) {
+          txb.addInput(out.hash, out.idx, null, this.scriptPubkey);
+        } else {
+          txb.addInput(out.hash, out.idx);
+        }
       })
       
       // Put data in hex to OP_RETURN 
@@ -128,7 +142,7 @@ export default class BitcoinWallet implements IWallet {
     });
   }
 
-  private signTXBuild = (txb) => {
+  private signTX = (txb) => {
     const privateKey = this.priv;
     const testnet = bitcoin.networks.testnet;
     const keyPair = bitcoin.ECPair.fromWIF(privateKey, testnet);
@@ -138,6 +152,10 @@ export default class BitcoinWallet implements IWallet {
       txb.sign(idx, keyPair);
     });
 
+    return txb;
+  }
+
+  private BuildToHex = (txb) => {
     return txb.build().toHex();
   }
 }
