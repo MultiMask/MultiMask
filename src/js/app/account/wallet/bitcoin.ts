@@ -6,7 +6,6 @@ import axios from 'axios';
 import { BTCEngine } from './btc/engine';
 import networks from '../../../blockchain'
 
-
 export default class BitcoinWallet implements IWallet {
   public network: any;
   public priv: any;
@@ -24,7 +23,6 @@ export default class BitcoinWallet implements IWallet {
 
   public create (seed) {
     return this._createWallet(seed, bitcoin.networks.testnet).then(secret => {
-      console.log(secret);
       Object.assign(this, secret);
 
       return secret.seed;
@@ -38,17 +36,14 @@ export default class BitcoinWallet implements IWallet {
   }
  
   public changeNetwork (network: string, seed: string) {
-    // TODO: use _createWallet to generate address
     this.network = network;
-
-    const mnemonic = new Mnemonic(seed);
-  
-    const HDPrivateKey = mnemonic.toHDPrivateKey(null, this.network);
-  
-    this.priv = HDPrivateKey.privateKey.toWIF();
-    this.address = HDPrivateKey.privateKey.toAddress(this.network).toString();
     
-    this.setNetworkUrl(network)
+    return this._createWallet(seed, bitcoin.networks.testnet).then(secret => {
+      Object.assign(this, secret);
+
+      this.setNetworkUrl(network)
+      return network;
+    });
   }
 
   private setNetworkUrl (network) {
@@ -137,7 +132,7 @@ export default class BitcoinWallet implements IWallet {
       
       txb.addOutput(to, amountInSatoshi);
       txb.addOutput(this.address, +amountToReturn.toFixed(0));
-      
+
       return txb;
     });
   }
