@@ -9,6 +9,17 @@ type BCInfo = {
 }
 
 /**
+ * Props Wallet with info about balances
+ */
+type WalletInfo = {
+  blockchain: BCSign;
+  id: string;
+  name: string;
+  extra?: any;
+  info: BCInfo;
+}
+
+/**
  * Common interface for all blockchain wallets
  */
 interface IWallet {

@@ -1,20 +1,24 @@
 import * as React from 'react';
-import networks from './../../../../../blockchain';
+import ntx from 'bcnetwork';
 
 import BTC from './btc';
 import ETH from './eth';
 
-const TXList = ({
-  data: {
+interface IProps {
+  account: WalletInfo;
+}
+
+const TXList: React.SFC<IProps> = ({
+  account: {
     info: { txs, address },
     blockchain
   }
 }) => {
   switch (blockchain) {
-    case networks.BTC.sign: {
+    case ntx.BTC.sign: {
       return <BTC txs={txs} address={address} />;
     }
-    case networks.ETH.sign: {
+    case ntx.ETH.sign: {
       return <ETH txs={txs} address={address} />;
     }
     default:

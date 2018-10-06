@@ -51,11 +51,15 @@ export default class Account {
     return this.wallet.getAddress();
   }
 
-  public getInfo () {
+  /**
+   * Return info about this wallet wrapped into Promise
+   */
+  public getInfo (): Promise<WalletInfo> {
     return this.wallet.getInfo().then(info => ({
       id: this.id,
       name: this.name,
       blockchain: this.blockchain,
+      extra: this.extra,
       info
     }));
   }

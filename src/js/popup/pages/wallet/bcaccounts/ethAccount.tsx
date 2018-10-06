@@ -12,7 +12,7 @@ interface IProps {
 
 interface IState {
   address?: string;
-  balance?: string;
+  balance?: number;
   success?: boolean;
 }
 
