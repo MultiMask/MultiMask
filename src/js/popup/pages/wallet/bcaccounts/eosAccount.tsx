@@ -105,7 +105,7 @@ export class EosAccount extends React.Component<IProps, IState> {
         {accountList.map(this.accountViewRender)}
         <Button
           onClick={this.handleSave}
-          css={`
+          className={css`
             margin-top: 20px;
           `}
         >
