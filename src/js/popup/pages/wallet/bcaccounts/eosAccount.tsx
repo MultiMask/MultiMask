@@ -13,11 +13,14 @@ interface IProps {
 interface IState {
   eos?: any[];
   success?: boolean;
+  account?: string;
 }
 
 export class EosAccount extends React.Component<IProps, IState> {
 
-  public state: IState = {}
+  public state: IState = {
+    account: ''
+  }
 
   public componentDidMount () {
     this.getInfo();
@@ -36,44 +39,95 @@ export class EosAccount extends React.Component<IProps, IState> {
       })
   }
 
+  private handleSave = (e) => {
+    e.preventDefault();
+
+    const account = this.state.eos.find(acc => acc.account_name === this.state.account);
+    this.props.onImport(account);
+  }
+
+  private accountViewRender = (account, idx) => {
+    const acountSelected = this.state.account;
+
+    if (account) {
+      return (
+        <Container key={idx}>
+          <Radio 
+            type="radio" 
+            name="account" 
+            value={account.account_name} 
+            onChange={this.handleRadio} 
+            checked={acountSelected === account.account_name}
+          />
+          <Label>
+            <Typography variant="body1" color="main">
+              Account:<Emphasis>{account.account_name}</Emphasis> <br/>
+              Balance:<Emphasis>{account.core_liquid_balance}</Emphasis> 
+            </Typography>
+          </Label>
+        </Container>
+      )
+    } else {
+      return (
+        <Container key={idx}>
+          <Radio 
+            type="radio" 
+            name="account" 
+            value={''} 
+            onChange={this.handleRadio}
+            checked={acountSelected === ''}
+          />
+          <Label>
+            <Typography variant="body1" color="main">
+              <Emphasis>Without account</Emphasis>
+            </Typography>
+          </Label>
+        </Container>
+      )
+    }
+  }
+
+  public handleRadio = (e) => {
+    const value = e.target.value;
+    this.setState(state => ({...state, account: value}))
+  }
+
   public render () {
     const { success, eos } = this.state;
-
-    if (!success) {
+    if (!success || !eos) {
       return null;
     }
-
-    if (success) {
-      return eos.map((account, idx) => {
-        const handle = () => this.props.onImport(account);
-
-        return (
-          <React.Fragment key={idx}>
-
-            <div>
-              <Typography variant="subheading" color="main">
-                <NonEmphasis>Account:</NonEmphasis> {account.account_name}
-              </Typography>
-              <Typography variant="subheading" color="main">
-                <NonEmphasis>Balance:</NonEmphasis> {account.core_liquid_balance}
-              </Typography>
-              {/* <Typography color="secondary">{account.core_liquid_balance}</Typography> */}
-          </div>
-          <Button
-            className={css`
-              margin-top: 50px;
-            `}
-            onClick={handle}
-          >
-            Import
-          </Button>
-        </React.Fragment>
-        );
-      });
-    }
+    const accountList = [null, ...eos];
+    
+    return (
+      <React.Fragment>
+        <Typography variant="title" color="main" align="center">Choose your account:</Typography>
+        {accountList.map(this.accountViewRender)}
+        <Button
+          onClick={this.handleSave}
+          css={`
+            margin-top: 20px;
+          `}
+        >
+          Import
+        </Button>
+      </React.Fragment>
+    )
   }
 }
 
-const NonEmphasis = styled('span')`
-  font-weight: normal;
+const Emphasis = styled('span')`
+  font-weight: bold;
+`;
+
+const Container = styled('label')`
+  display: flex;
+`;
+
+const Radio = styled('input')`
+  margin: 13px 13px 0 0;
+`;
+
+const Label = styled('div')`
+
 `;
