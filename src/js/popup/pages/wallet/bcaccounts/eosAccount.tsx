@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styled, { css } from 'react-emotion';
 
-import Account from 'app/account';
 import Typography from 'ui/Typography';
 import Button from 'ui/Button';
 
 interface IProps {
-  account: Account;
+  accounts: any[];
   onImport: (extra: any) => void;
 }
 
@@ -22,27 +21,10 @@ export class EosAccount extends React.Component<IProps, IState> {
     account: ''
   }
 
-  public componentDidMount () {
-    this.getInfo();
-  }
-
-  private getInfo () {
-    const { account } = this.props;
-
-    account.wallet.getKeyAccounts()
-      .then(accounts => {
-        this.setState(state => ({
-          ...state,
-          success: true,
-          eos: accounts
-        }))
-      })
-  }
-
   private handleSave = (e) => {
     e.preventDefault();
 
-    const account = this.state.eos.find(acc => acc.account_name === this.state.account);
+    const account = this.props.accounts.find(acc => acc.account_name === this.state.account);
     this.props.onImport(account);
   }
 
@@ -93,11 +75,8 @@ export class EosAccount extends React.Component<IProps, IState> {
   }
 
   public render () {
-    const { success, eos } = this.state;
-    if (!success || !eos) {
-      return null;
-    }
-    const accountList = [null, ...eos];
+    const emptyAccount = null;
+    const accountList = [emptyAccount, ...this.props.accounts];
     
     return (
       <React.Fragment>
@@ -128,6 +107,4 @@ const Radio = styled('input')`
   margin: 13px 13px 0 0;
 `;
 
-const Label = styled('div')`
-
-`;
+const Label = styled('div')``;

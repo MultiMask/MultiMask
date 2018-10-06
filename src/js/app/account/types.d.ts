@@ -1,3 +1,5 @@
+type BCType = 'BTC' | 'ETH' | 'EOS';
+
 /**
  * Blockchain info to show in UI
  */
@@ -12,7 +14,7 @@ type BCInfo = {
  * Props Wallet with info about balances
  */
 type WalletInfo = {
-  blockchain: BCSign;
+  blockchain: BCType;
   id: string;
   name: string;
   extra?: any;

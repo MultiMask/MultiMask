@@ -23,6 +23,7 @@ interface IWalletState {
   error?: string;
   success?: boolean;
   bc?: BCSign;
+  data?: any;
 }
 
 class Wallet extends React.Component<IProps, IWalletState> {
@@ -40,8 +41,8 @@ class Wallet extends React.Component<IProps, IWalletState> {
   public handleCheck = e => {
     e.preventDefault();
     this.createAccount()
-      .then(account => {
-        this.setState({ success: true,  bc: account.blockchain });
+      .then(data => {
+        this.setState({ success: true,  bc: this.account.blockchain, data });
       })
   };
 
@@ -55,7 +56,14 @@ class Wallet extends React.Component<IProps, IWalletState> {
           seed: this.state.seed
         }
       }).init()
-        .then(account => this.account = account);
+        .then(account => this.account = account)
+        .then(account => {
+          if (account.blockchain === BCSign.EOS) {
+            return account.wallet.getKeyAccounts()
+          } else {
+            return account.getInfo();
+          }
+        })
     } catch (e) {
       this.setState({
         error: `Wrong wordlist: ${e}`
@@ -71,9 +79,9 @@ class Wallet extends React.Component<IProps, IWalletState> {
     switch (this.account.blockchain) {
       case BCSign.BTC:
       case BCSign.ETH:
-        return <EthAccount account={this.account} onImport={this.handleSave}/>
+        return <EthAccount data={this.state.data} onImport={this.handleSave}/>
       case BCSign.EOS:
-        return <EosAccount account={this.account} onImport={this.handleSave}/>
+        return <EosAccount accounts={this.state.data} onImport={this.handleSave}/>
       default:
         throw new Error(`Can't find this type account render`);
     }

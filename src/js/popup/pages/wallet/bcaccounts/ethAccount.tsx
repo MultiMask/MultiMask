@@ -6,7 +6,7 @@ import Typography from 'ui/Typography';
 import Button from 'ui/Button';
 
 interface IProps {
-  account: Account;
+  data: WalletInfo;
   onImport: (extra: any) => void;
 }
 
@@ -18,32 +18,8 @@ interface IState {
 
 export class EthAccount extends React.Component<IProps, IState> {
 
-  public state: IState = {}
-
-  public componentDidMount () {
-    this.getInfo();
-  }
-
-  private getInfo () {
-    const {account} = this.props;
-
-    if (account) {
-      account.getInfo().then(data => {
-        this.setState({
-          address: data.info.address,
-          balance: data.info.balance,
-          success: true
-        });
-      });
-    }
-  }
-
   public render () {
-    const {address, balance, success } = this.state;
-
-    if (!success) {
-      return null;
-    }
+    const {address, balance } = this.props.data.info;
 
     return (
       <React.Fragment>
