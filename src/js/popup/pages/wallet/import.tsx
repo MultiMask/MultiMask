@@ -88,7 +88,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
   }
 
   public handleSave = data => {
-    if (this.account.blockchain === BCSign.EOS) {
+    if (data && this.account.blockchain === BCSign.EOS) {
       this.account.setExtra({ account: data.account_name });
     }
 
