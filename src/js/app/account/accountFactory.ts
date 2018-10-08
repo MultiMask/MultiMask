@@ -36,7 +36,7 @@ export default {
     return new Account({ ...opts, wallet });
   },
 
-  save (pass, account): void {
+  save (pass: string, account: Account): void {
     debug('save account > ', account);
     const id = account.id;
     const str = JSON.stringify(account.serialize());

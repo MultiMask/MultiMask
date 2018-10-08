@@ -4,15 +4,15 @@ import styled, { css } from 'react-emotion';
 import Typography from 'ui/Typography';
 import Button from 'ui/Button';
 
-interface IProps {
-  accounts: any[];
-  onImport: (extra: any) => void;
-}
-
 interface IState {
   eos?: any[];
   success?: boolean;
   account?: string;
+}
+
+interface IProps {
+  accounts: any[];
+  onImport: (extra: any) => void;
 }
 
 export class EosAccount extends React.Component<IProps, IState> {
