@@ -77,13 +77,17 @@ export class EosController {
   /**
    * Assign eos account name to account
    */
-  private responseSetKeyAccount = (sendResponse, id: string, accountName: string): void => {
+  private responseSetKeyAccount = (sendResponse, {id, accountName}): void => {
     const account = this.accountController.getById(id);
 
-    account.wallet.setExtra({account: accountName});
-    AccountFactory.save(this.accessController.getPass(), account);
-
-    account.getInfo().then(sendResponse);
+    if (account) {
+      account.setExtra({account: accountName});
+      AccountFactory.save(this.accessController.getPass(), account);
+  
+      account.getInfo().then(sendResponse);  
+    } else {
+      sendResponse(null);
+    }
   }
 
   /**

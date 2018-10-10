@@ -7,6 +7,7 @@ import {
   ACCOUNT_ACTIVE,
   ACCOUNT_CREATE,
   ACCOUNT_INFO,
+  ACCOUNT_UPDATE,
   ACCOUNT_SET,
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT,
@@ -46,6 +47,13 @@ const AccountActions = {
     dispatch({
       type: ACCOUNT_SET,
       payload: accs
+    });
+  },
+
+  updateAccount: account => (dispatch, getState) => {
+    dispatch({
+      type: ACCOUNT_UPDATE,
+      payload: account
     });
   },
 

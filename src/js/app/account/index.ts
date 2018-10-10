@@ -75,6 +75,10 @@ export default class Account {
 
   public setExtra (data) {
     this.extra = data;
+
+    if (this.wallet.setExtra) {
+      this.wallet.setExtra(data);
+    }
   }
 
   public serialize () {

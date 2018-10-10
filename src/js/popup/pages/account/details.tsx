@@ -32,7 +32,7 @@ class AccountInfo extends React.Component<IProps, any> {
 
     switch (account.blockchain) {
       case ntx.EOS.sign: {
-        if (!account.extra.account) {
+        if (!(account.extra && account.extra.account)) {
           return <React.Fragment>
             <MenuItem component={Link} to="/account/assign">
               Assign EOS Account
@@ -93,7 +93,7 @@ class AccountInfo extends React.Component<IProps, any> {
 }
 
 export default connect(
-  (state: any) => ({
+  (state: IPopup.AppState) => ({
     account: getCurrentWallet(state)
   }),
   null
