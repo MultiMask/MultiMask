@@ -5,7 +5,7 @@ import { flatten } from 'helpers/func';
 
 export class EosEngine {
   public static actionParticipants (payload){
-    return flatten(
+    return flatten<string>(
         payload.messages
             .map(message => message.authorization
                 .map(auth => `${auth.actor}@${auth.permission}`))
