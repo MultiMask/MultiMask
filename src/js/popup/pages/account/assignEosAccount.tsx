@@ -19,7 +19,7 @@ interface IState {
 interface IProps {
   account: WalletInfo;
   getKeyAccounts (id: string): Promise<any[]>;
-  setAccountToKey (id: string, accountName: string): Promise<any[]>;
+  setAccountToKey (id: string, account: string): Promise<any[]>;
 }
 
 class Assign extends React.Component<IProps, IState> {
@@ -27,7 +27,7 @@ class Assign extends React.Component<IProps, IState> {
   public state: IState = {};
 
   public handleSave = (account) => {
-    this.props.setAccountToKey(this.props.account.id, account.account_name);
+    this.props.setAccountToKey(this.props.account.id, account);
   }
 
   public componentDidMount () {

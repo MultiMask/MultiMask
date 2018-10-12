@@ -13,8 +13,8 @@ const settingsActions = {
       .send();
   },
 
-  setAccountToKey: (id: string, accountName: string) => (dispatch, getState) => {
-    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {id, accountName})
+  setAccountToKey: (id: string, accountPermission) => (dispatch, getState) => {
+    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {id, accountPermission})
       .send()
       .then(account => {
         accountActions.updateAccount(account)(dispatch, getState);

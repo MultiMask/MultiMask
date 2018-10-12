@@ -1,11 +1,10 @@
 import Eos from 'eosjs';
 const {ecc, Fcbuffer} = Eos.modules;
 
-import networks from './../../../../blockchain';
+import {prettyAccount, IEosAccountPermission} from 'helpers/eos';
+import ntx from 'bcnetwork';
 
-const findNetwork = name => {
-  return networks.EOS.network.find(net => net.name === name);
-}
+const findNetwork = name => ntx.EOS.network.find(net => net.name === name);
 
 export class EosWallet implements IWallet {
   private eos;
@@ -14,7 +13,7 @@ export class EosWallet implements IWallet {
   private public: string;
   private private: string;
 
-  public account: string;
+  public accountPermission: IEosAccountPermission;
 
   constructor (network) {
     this.network = network;
@@ -68,10 +67,10 @@ export class EosWallet implements IWallet {
   }
 
   public getInfo (): Promise<any> {
-    if (this.account) {
-      return this._getInfoByAccount(this.account).then(accountInfo => {
+    if (this.accountPermission) {
+      return this._getInfoByAccount(this.accountPermission.account_name).then(accountInfo => {
         return {
-          address: this.account,
+          address: prettyAccount(this.accountPermission),
           balance: accountInfo.core_liquid_balance.split(' ')[0],
           network: this.network.sign,
           txs: []
@@ -88,16 +87,16 @@ export class EosWallet implements IWallet {
   }
 
   public getAddress () {
-    return this.account;
+    return this.accountPermission.account_name;
   }
 
-  public setExtra (data) {
-    if (data && data.account) {
-      this.account = data.account;
+  public setExtra (data: IEosAccountPermission) {
+    if (data && data.account_name) {
+      this.accountPermission = data;
     }
   }
 
   public sendCoins ({ to, amount, data }) {
-    return this.eos.transfer(this.account, to, `${amount.toFixed(4)} EOS`, data);
+    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} EOS`, data);
   }
 }

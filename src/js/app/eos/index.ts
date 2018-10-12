@@ -9,6 +9,7 @@ import { SIGNATURE } from 'constants/promptTypes';
 
 import {Prompt} from 'models/Prompt';
 import {NotificationService} from 'services/NotificationService';
+import {parseAccounts} from 'helpers/eos';
 
 import { EosEngine } from './engine';
 
@@ -68,7 +69,11 @@ export class EosController {
 
     if (account) {
       account.wallet.getKeyAccounts()
-        .then(sendResponse)
+        .then(accounts => {
+          const publicKey = account.wallet.public;
+
+          sendResponse(parseAccounts(accounts, publicKey));
+        })
     } else {
       sendResponse(null);
     }
@@ -77,11 +82,11 @@ export class EosController {
   /**
    * Assign eos account name to account
    */
-  private responseSetKeyAccount = (sendResponse, {id, accountName}): void => {
+  private responseSetKeyAccount = (sendResponse, {id, accountPermission}): void => {
     const account = this.accountController.getById(id);
 
     if (account) {
-      account.setExtra({account: accountName});
+      account.setExtra(accountPermission);
       AccountFactory.save(this.accessController.getPass(), account);
   
       account.getInfo().then(sendResponse);  

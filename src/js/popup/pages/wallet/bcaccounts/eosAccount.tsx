@@ -3,33 +3,34 @@ import styled, { css } from 'react-emotion';
 
 import Typography from 'ui/Typography';
 import Button from 'ui/Button';
+import {prettyAccount, IEosAccountPermission} from 'helpers/eos';
 
 interface IState {
   eos?: any[];
   success?: boolean;
-  account?: string;
+  selectedAccount?: string;
 }
 
 interface IProps {
-  accounts: any[];
+  accounts: IEosAccountPermission[];
   onImport: (extra: any) => void;
 }
 
 export class EosAccount extends React.Component<IProps, IState> {
 
   public state: IState = {
-    account: ''
+    selectedAccount: ''
   }
 
   private handleSave = (e) => {
     e.preventDefault();
 
-    const account = this.props.accounts.find(acc => acc.account_name === this.state.account);
+    const account = this.props.accounts.find(acc => prettyAccount(acc) === this.state.selectedAccount);
     this.props.onImport(account);
   }
 
-  private accountViewRender = (account, idx) => {
-    const acountSelected = this.state.account;
+  private accountViewRender = (account: IEosAccountPermission, idx) => {
+    const {selectedAccount} = this.state;
 
     if (account) {
       return (
@@ -37,13 +38,13 @@ export class EosAccount extends React.Component<IProps, IState> {
           <Radio 
             type="radio" 
             name="account" 
-            value={account.account_name} 
+            value={prettyAccount(account)} 
             onChange={this.handleRadio} 
-            checked={acountSelected === account.account_name}
+            checked={selectedAccount === prettyAccount(account)}
           />
           <Label>
             <Typography variant="body1" color="main">
-              Account:<Emphasis>{account.account_name}</Emphasis> <br/>
+              Account:<Emphasis>{prettyAccount(account)}</Emphasis> <br/>
               Balance:<Emphasis>{account.core_liquid_balance}</Emphasis> 
             </Typography>
           </Label>
@@ -57,7 +58,7 @@ export class EosAccount extends React.Component<IProps, IState> {
             name="account" 
             value={''} 
             onChange={this.handleRadio}
-            checked={acountSelected === ''}
+            checked={selectedAccount === ''}
           />
           <Label>
             <Typography variant="body1" color="main">
@@ -71,7 +72,7 @@ export class EosAccount extends React.Component<IProps, IState> {
 
   public handleRadio = (e) => {
     const value = e.target.value;
-    this.setState(state => ({...state, account: value}))
+    this.setState(state => ({...state, selectedAccount: value}))
   }
 
   public render () {
