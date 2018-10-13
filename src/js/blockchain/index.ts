@@ -1,7 +1,13 @@
+export enum BCSign {
+  BTC = 'BTC',
+  ETH = 'ETH',
+  EOS = 'EOS'
+}
+
 export default {
   BTC: {
     name: 'Bitcoin',
-    sign: 'BTC',
+    sign: BCSign.BTC,
     network: [
       // {
       // 	name: 'Mainnet',
@@ -20,7 +26,7 @@ export default {
   },
   ETH: {
     name: 'Ethereum',
-    sign: 'ETH',
+    sign: BCSign.ETH,
     network: [
       // {
       //   name: 'Main',
@@ -43,7 +49,7 @@ export default {
   },
   EOS: {
     name: 'EOS',
-    sign: 'EOS',
+    sign: BCSign.EOS,
     network: [
       {
         name: 'Jungle Testnet',

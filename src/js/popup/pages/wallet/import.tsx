@@ -3,28 +3,35 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
 import styled, { css } from 'react-emotion';
-import actions from './../../actions/account';
-import AccountFactory from './../../../app/account/accountFactory';
-import Typography from '../../ui/Typography';
-import Button from '../../ui/Button';
 
-import networks from './../../../blockchain';
-import Account from './../../../app/account';
+import AccountFactory from 'app/account/accountFactory';
+import Account from 'app/account';
+import actions from 'popup/actions/account';
+import ntx, {BCSign} from 'bcnetwork';
+
+import { EthAccount } from './bcaccounts/ethAccount';
+import { EosAccount } from './bcaccounts/eosAccount';
+
+interface IProps {
+  create (account): Promise<void>;
+  blockchain: BCSign;
+  onBack (): void;
+}
 
 interface IWalletState {
   seed?: string;
   error?: string;
-  address?: string;
-  balance?: string;
   success?: boolean;
-  eos?: any;
+  bc?: BCSign;
+  data?: any;
 }
 
-class Wallet extends React.Component<any, IWalletState> {
+class Wallet extends React.Component<IProps, IWalletState> {
   private account: Account;
 
   public state: IWalletState = {
-    seed: ''
+    seed: '',
+    bc: null
   };
 
   public handleInput = e => {
@@ -34,25 +41,12 @@ class Wallet extends React.Component<any, IWalletState> {
   public handleCheck = e => {
     e.preventDefault();
     this.createAccount()
-      .then(() => {
-        if (this.isEos()) {
-          this.getEosAccounts();
-        } else {
-          this.getInfo();
-        }
+      .then(data => {
+        this.setState({ success: true,  bc: this.account.blockchain, data });
       })
   };
 
-  public handleSave = () => {
-    this.props.create(this.account);
-  };
-
-  public handleSaveEos = data => {
-    this.account.setExtra({ account: data.account_name });
-    this.props.create(this.account);
-  }
-
-  public createAccount() {
+  public createAccount (): Promise<Account> {
     const { blockchain } = this.props;
 
     try {
@@ -62,7 +56,14 @@ class Wallet extends React.Component<any, IWalletState> {
           seed: this.state.seed
         }
       }).init()
-        .then(account => this.account = account);
+        .then(account => this.account = account)
+        .then(account => {
+          if (account.blockchain === BCSign.EOS) {
+            return account.wallet.getKeyAccounts()
+          } else {
+            return account.getInfo();
+          }
+        })
     } catch (e) {
       this.setState({
         error: `Wrong wordlist: ${e}`
@@ -72,94 +73,29 @@ class Wallet extends React.Component<any, IWalletState> {
     }
   }
 
-  private getInfo() {
-    if (this.account) {
-      this.account.getInfo().then(data => {
-        this.setState({
-          address: data.info.address,
-          balance: data.info.balance,
-          success: true
-        });
-      });
+  public bcAccountRender = () => {
+    if (!this.account) return null;
+
+    switch (this.account.blockchain) {
+      case BCSign.BTC:
+      case BCSign.ETH:
+        return <EthAccount data={this.state.data} onImport={this.handleSave}/>
+      case BCSign.EOS:
+        return <EosAccount accounts={this.state.data} onImport={this.handleSave}/>
+      default:
+        throw new Error(`Can't find this type account render`);
     }
   }
 
-  private getEosAccounts() {
-    this.account.wallet.getKeyAccounts()
-      .then(accounts => {
-        this.setState(state => ({
-          ...state,
-          success: true,
-          eos: accounts
-        }))
-      })
-  }
-
-  private isEos() {
-    return this.account && this.account.blockchain === networks.EOS.sign;
-  }
-
-  private ethImport() {
-    const { success, address, balance } = this.state;
-
-    if (success) {
-      return (
-        <React.Fragment>
-          <div>
-            <Typography variant="subheading" color="main">
-              Address:
-            </Typography>
-            <Typography color="secondary">{address}</Typography>
-            <Typography variant="subheading" color="main">
-              Balance:
-            </Typography>
-            <Typography color="secondary">{balance}</Typography>
-          </div>
-          <Button
-            className={css`
-              margin-top: 50px;
-            `}
-            onClick={this.handleSave}
-          >
-            Import
-          </Button>
-        </React.Fragment>
-      )
+  public handleSave = data => {
+    if (data && this.account.blockchain === BCSign.EOS) {
+      this.account.setExtra({ account: data.account_name });
     }
+
+    this.props.create(this.account);
   }
 
-  private eosImport() {
-    const { success, eos } = this.state;
-
-    if (success) {
-      return eos.map((account, idx) => {
-        const handleEos = this.handleSaveEos.bind(this, account);
-        return (
-          <React.Fragment key={idx}>
-            <div>
-              <Typography variant="subheading" color="main">
-                Account: {account.account_name}
-              </Typography>
-              <Typography variant="subheading" color="main">
-                Balance:
-              </Typography>
-              <Typography color="secondary">{account.core_liquid_balance}</Typography>
-          </div>
-          <Button
-            className={css`
-              margin-top: 50px;
-            `}
-            onClick={handleEos}
-          >
-            Import
-          </Button>
-        </React.Fragment>
-        );
-      });
-    }
-  }
-
-  public render() {
+  public render () {
     const { error, seed } = this.state;
 
     return (
@@ -171,8 +107,7 @@ class Wallet extends React.Component<any, IWalletState> {
       >
         <Textaria name="seed" type="text" value={seed} onChange={this.handleInput} cols={40} rows={5} />
         {error && <div>{error}</div>}
-        {!this.isEos() && this.ethImport()}
-        {this.isEos() && this.eosImport()}
+        {this.bcAccountRender()}
       </FormLayout>
     );
   }

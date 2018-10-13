@@ -1,12 +1,13 @@
 import uuid from 'uuid/v4';
 import { info } from 'loglevel';
+import { BCSign } from 'bcnetwork';
 
 export default class Account {
   private secret: any;
   
   public wallet: any;
   
-  public blockchain: string;
+  public blockchain: BCSign;
   public id: string;
   public name: string;
   public extra: any;
@@ -33,7 +34,7 @@ export default class Account {
     return Date.now();
   }
 
-  public init () {
+  public init (): Promise<Account> {
     return this._create(this.secret.seed)
       .then(seed => {
         this.secret.seed = seed; 
@@ -50,11 +51,15 @@ export default class Account {
     return this.wallet.getAddress();
   }
 
-  public getInfo () {
+  /**
+   * Return info about this wallet wrapped into Promise
+   */
+  public getInfo (): Promise<WalletInfo> {
     return this.wallet.getInfo().then(info => ({
       id: this.id,
       name: this.name,
       blockchain: this.blockchain,
+      extra: this.extra,
       info
     }));
   }
@@ -70,6 +75,10 @@ export default class Account {
 
   public setExtra (data) {
     this.extra = data;
+
+    if (this.wallet.setExtra) {
+      this.wallet.setExtra(data);
+    }
   }
 
   public serialize () {

@@ -11,7 +11,7 @@ interface Typography {
   onClick?: any;
 }
 
-type Props = {
+interface Props {
   theme?: any;
   align?: string;
   color?: string;

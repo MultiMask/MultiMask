@@ -3,7 +3,7 @@
 * @param array
 * @returns {*}
 */
-export function flatten (array: any[]): any[] {
+export function flatten<T> (array: T[][]): T[] {
    return array.reduce(
        (a, b) => a.concat(Array.isArray(b) ? this.flatten(b) : b), []
    );

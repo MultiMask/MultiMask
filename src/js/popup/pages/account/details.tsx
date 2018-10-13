@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
@@ -21,14 +21,32 @@ const TXContainer = styled('div')`
   flex-grow: 1;
 `;
 
-class AccountInfo extends React.Component<any, any> {
+interface IProps extends RouteComponentProps {
+  account: WalletInfo;
+}
 
-  private isEos () {
-    return this.props.account === ntx.EOS.sign;
+class AccountInfo extends React.Component<IProps, any> {
+  private bcMenuItems () {
+    const { account } = this.props;
+
+    switch (account.blockchain) {
+      case ntx.EOS.sign: {
+        if (!(account.extra && account.extra.account)) {
+          return (
+            <React.Fragment>
+              <MenuItem component={Link} to="/account/assign">
+                Assign EOS Account
+              </MenuItem>
+            </React.Fragment>
+          );
+        }
+      }
+    }
   }
 
   public render () {
     const { account } = this.props;
+
     return (
       <React.Fragment>
         <Wallet
@@ -50,6 +68,7 @@ class AccountInfo extends React.Component<any, any> {
                 `}
                 iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
               >
+                {this.bcMenuItems()}
                 <MenuItem>View Account</MenuItem>
                 <MenuItem>Show QR-code</MenuItem>
                 <MenuItem component={Link} to="/account/exportpk">
@@ -67,7 +86,7 @@ class AccountInfo extends React.Component<any, any> {
           }
         />
         <TXContainer>
-          <TXList data={account} />
+          <TXList account={account} />
         </TXContainer>
       </React.Fragment>
     );
@@ -75,7 +94,7 @@ class AccountInfo extends React.Component<any, any> {
 }
 
 export default connect(
-  (state: any) => ({
+  (state: IPopup.AppState) => ({
     account: getCurrentWallet(state)
   }),
   null

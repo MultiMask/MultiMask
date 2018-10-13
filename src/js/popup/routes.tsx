@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+
 import Login from './pages/Login';
 import Account from './pages/account/list';
 import CreateAccount from './pages/CreateAccount';
@@ -14,6 +16,7 @@ import ExportPK from './pages/account/exportpk';
 import Details from './pages/account/details';
 import Send from './pages/account/send';
 import EditAccount from './pages/account/edit';
+import Assign from './pages/account/assignEosAccount';
 import CreateWallet from './pages/wallet';
 
 const routes = () => {
@@ -25,12 +28,17 @@ const routes = () => {
       <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
       <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
       <AppRoute exact path="/account/edit/:id" component={EditAccount} layout={MainLayout} />
+      <AppRoute exact path="/account/assign" component={Assign} layout={MainLayout} />
+
       <AppRoute exact path="/wallets/create" component={CreateWallet} layout={MainLayout} />
+
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
+
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
       <AppRoute exact path="/profiles/:id/qrcode" component={ProfileQRCode} layout={MainLayout} needAuth />
       <AppRoute exact path="/profiles/:id/export" component={ProfileExport} layout={MainLayout} />
       <AppRoute exact path="/profiles/import" component={ImportProfile} layout={MainLayout} />
+
       <AppRoute exact path="/login" component={Login} layout={AuthLayout} />
     </Switch>
   );

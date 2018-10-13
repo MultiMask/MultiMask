@@ -7,7 +7,11 @@ import { APPROVAL, SIGNATURE } from 'constants/promptTypes';
 
 import ApproveTX from './prompt/approveTX';
 import { SignEosTX } from './prompt/signEosTX';
-import '../css/dialog.less';
+import '../css/prompt.less';
+
+import { Prompt } from 'models/Prompt';
+// import { DATA_EOS_CONTRACT } from 'mock/prompt';
+// const prompt = Prompt.fromJson(JSON.parse(DATA_EOS_CONTRACT));
 
 const prompt = window.data;
 

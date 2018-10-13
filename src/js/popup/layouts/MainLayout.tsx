@@ -32,13 +32,13 @@ const Header = styled('div')`
   box-sizing: border-box;
 `;
 
-interface HeaderItemProps {
-  theme?: any,
-  color?: any
+interface IHeaderItemProps {
+  theme?: any;
+  color?: any;
 }
 
 const HeaderItem = styled('div')`
-  color: ${(props: HeaderItemProps) => props.theme.colors[props.color] || props.theme.colors.primary};
+  color: ${(props: IHeaderItemProps) => props.theme.colors[props.color] || props.theme.colors.primary};
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -55,11 +55,11 @@ const styles = {
 };
 
 class MainLayout extends React.Component<any, any> {
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.check();
   }
 
-  public render() {
+  public render () {
     const {
       logout,
       children,
