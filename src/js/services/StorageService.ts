@@ -1,6 +1,6 @@
 import * as CONST from 'constants/storage';
 import storage from 'libs/Storage';
-import { hashPass } from 'libs/cipher';
+import { hashPass, checkPass } from 'libs/cipher';
 
 /**
  * Provide all query to read or write in storage
@@ -18,9 +18,11 @@ export const StorageService = {
 
   Pass: {
     get: () => storage.get(CONST.PASS),
-    set: (pass: string) => storage.set(CONST.PASS, hashPass(pass)),
+    set: (pass: string) => {
+      return storage.set(CONST.PASS, hashPass(pass))
+    },
     check: (pass: string) => {
-      return StorageService.Pass.get().then(savedPassHash => hashPass(pass) === savedPassHash);
+      return StorageService.Pass.get().then(savedPassHash => checkPass(pass, savedPassHash));
     }
   },
 
