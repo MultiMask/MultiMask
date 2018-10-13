@@ -1,6 +1,5 @@
 import { error } from 'loglevel';
 
-import { getSettings, setSettings } from 'services/getter';
 import ntx from 'bcnetwork';
 
 import { AccessController } from './../accessController';

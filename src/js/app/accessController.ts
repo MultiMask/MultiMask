@@ -1,4 +1,4 @@
-import { setPass, checkPass } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 import { hidePass } from 'libs/cipher';
 
 import { MessageController } from './messageController';
@@ -88,7 +88,7 @@ export class AccessController {
    * @param pass 
    */
   private create (pass: string) {
-    setPass(hidePass(pass));
+    StorageService.Pass.set(hidePass(pass));
     this.password = pass;
     this.inited = true;
   }
@@ -98,7 +98,7 @@ export class AccessController {
    * @param pass 
    */
   private async login (pass: string) {
-    const isAuth = await checkPass(hidePass(pass));
+    const isAuth = await StorageService.Pass.check(hidePass(pass));
 
     if (isAuth) {
       this.password = pass;
@@ -113,7 +113,7 @@ export class AccessController {
    * @param hashPass password hash
    */
   private async check (hashPass: string) {
-    return checkPass(hashPass);
+    return StorageService.Pass.check(hashPass);
   }
 
   /**
