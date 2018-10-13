@@ -23,7 +23,9 @@
     "one-variable-per-declaration": false,
     "no-use-before-declare": true,
     "deprecation": true,
-    "no-floating-promises": false
+    "no-floating-promises": false,
+    "no-unnecessary-qualifier": true,
+    "no-empty": false
   },
   "rulesDirectory": []
 }
