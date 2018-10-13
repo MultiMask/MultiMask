@@ -28,6 +28,7 @@ var alias = {
   'app': path.resolve(__dirname, 'src/js/app'),
   'popup': path.resolve(__dirname, 'src/js/popup'),
   'prompt': path.resolve(__dirname, 'src/js/prompt'),
+  'mock': path.resolve(__dirname, 'utils/mock'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
