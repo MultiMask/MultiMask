@@ -1,3 +1,4 @@
+import { info } from 'loglevel';
 import * as React from 'react';
 import { css } from 'emotion';
 import styled from 'react-emotion';
@@ -71,7 +72,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
         this.setTxInfo(this.props.prompt.data);
       })
       .catch(e => {
-        console.log(e);
+        info(e);
         this.setState(state => ({
           ...state,
           isLoaded: true,
@@ -82,11 +83,9 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public setTxInfo (data: any) {
     const accounts = this.state.accounts.filter(acc => acc.blockchain === data.blockchain);
-    const account = data.tx.from
-      ? accounts.find(acc => acc.info.address === data.tx.from)
-      : accounts[0];
+    const account = data.tx.from ? accounts.find(acc => acc.info.address === data.tx.from) : accounts[0];
 
-    console.log('receive tx > ', data);
+    info('receive tx > ', data);
 
     this.setState(state => ({
       ...state,
@@ -175,12 +174,12 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public handleUpdateTX (field, e) {
     const value = e && e.target ? e.target.value : e;
-    const getValue = (field, value = 0) => {
-      switch (field) {
+    const getValue = (prop, vl = 0) => {
+      switch (prop) {
         case 'gasPrice':
-          return web3.utils.toHex(web3.utils.toWei(value.toString(), 'gwei'));
+          return web3.utils.toHex(web3.utils.toWei(vl.toString(), 'gwei'));
         case 'gasLimit':
-          return web3.utils.toHex(value.toString());
+          return web3.utils.toHex(vl.toString());
       }
     };
     const hexValue = getValue(field, value);
@@ -219,46 +218,52 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     } = this.state;
     const isEth = blockchain === networks.ETH.sign;
 
-    console.log('tx', tx);
+    info('tx', tx);
 
     return (
       <DialogLayout>
-        <div
-          className={css`
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <Typography
+        <Inner>
+          <div
             className={css`
-              margin-right: 10px;
+              display: flex;
+              flex-direction: column;
             `}
-            color="main"
-            variant="subheading"
           >
-            Select wallet:
+            <Typography
+              className={css`
+                margin-right: 10px;
+              `}
+              color="main"
+              variant="subheading"
+            >
+              Select wallet:
+            </Typography>
+            <Select options={this.options} onChange={value => this.handleChooseAccount(value)} value={selectValue} />
+          </div>
+          <Typography color="main" variant="subheading">
+            Send TX with params:
           </Typography>
-          <Select options={this.options} onChange={value => this.handleChooseAccount(value)} value={selectValue} />
-        </div>
-        <Typography color="main" variant="subheading">
-          Send TX with params:
-        </Typography>
-        <Info label="From:" content={[address, `${balance} ${blockchain}`]} />
-        <Info label="To:" content={to} />
-        <Divider />
-        <Info label="Amount:" center content={[this.amount]} />
-        <Divider />
-        {isEth && this.gasControls}
-        {data && <Info label="Data:" content={data} />}
-        <Actions>
-          <Button large outlined onClick={this.onReject}>
-            Reject
-          </Button>
-          <Button large onClick={this.onSubmit}>
-            Submit
-          </Button>
-        </Actions>
+          <Info label="From:" content={[address, `${balance} ${blockchain}`]} />
+          <Info label="To:" content={to} />
+          <Divider />
+          <Info label="Amount:" center content={[this.amount]} />
+          <Divider />
+          {isEth && this.gasControls}
+          {data && <Info label="Data:" content={data} />}
+          <Actions>
+            <Button large outlined onClick={this.onReject}>
+              Reject
+            </Button>
+            <Button large onClick={this.onSubmit}>
+              Submit
+            </Button>
+          </Actions>
+        </Inner>
       </DialogLayout>
     );
   }
 }
+
+const Inner = styled('div')`
+  padding: 0 20px;
+`;
