@@ -1,6 +1,6 @@
 import * as CONST from 'constants/storage';
 import storage from 'libs/Storage';
-// import { hidePass } from 'libs/cipher';
+import { hashPass } from 'libs/cipher';
 
 /**
  * Provide all query to read or write in storage
@@ -11,26 +11,26 @@ export const StorageService = {
    * Profiles and Wallets
    */
   Entities: {
-    get: id => storage.get(id),
-    set: (key, entity) => storage.set(key, entity),
-    remove: key => storage.remove(key)
+    get: (id: string) => storage.get(id),
+    set: (key: string, entity: string) => storage.set(key, entity),
+    remove: (key: string) => storage.remove(key)
   },
 
   Pass: {
     get: () => storage.get(CONST.PASS),
-    set: pass => storage.set(CONST.PASS, pass),
-    check: pass => {
-      return StorageService.Pass.get().then(savedPassHash => pass === savedPassHash);
+    set: (pass: string) => storage.set(CONST.PASS, pass),
+    check: (pass: string) => {
+      return StorageService.Pass.get().then(savedPassHash => hashPass(pass) === savedPassHash);
     }
   },
 
   ProfileList: {
     get: () => storage.get(CONST.PROFILES),
-    set: list => storage.set(CONST.PROFILES, list)
+    set: (list: string[]) => storage.set(CONST.PROFILES, list)
   },
 
   Settings: {
     get: () => storage.get(CONST.SETTINGS),
-    set:  nextSettings => storage.set(CONST.SETTINGS, nextSettings)
+    set: nextSettings => storage.set(CONST.SETTINGS, nextSettings)
   }
 }
