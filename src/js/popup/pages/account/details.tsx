@@ -26,18 +26,19 @@ interface IProps extends RouteComponentProps {
 }
 
 class AccountInfo extends React.Component<IProps, any> {
-
   private bcMenuItems () {
-    const {account} = this.props;
+    const { account } = this.props;
 
     switch (account.blockchain) {
       case ntx.EOS.sign: {
         if (!(account.extra && account.extra.account)) {
-          return <React.Fragment>
-            <MenuItem component={Link} to="/account/assign">
-              Assign EOS Account
-            </MenuItem>
-          </React.Fragment>
+          return (
+            <React.Fragment>
+              <MenuItem component={Link} to="/account/assign">
+                Assign EOS Account
+              </MenuItem>
+            </React.Fragment>
+          );
         }
       }
     }

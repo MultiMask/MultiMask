@@ -6,8 +6,9 @@ import Typography from '../ui/Typography';
 import { BaseContainer } from './BaseContainer';
 
 const Container = styled(BaseContainer)`
-  padding: 20px;
-  height: 600px;
+  padding: 20px 0;
+  width: 100%;
+  height: 100%;
 `;
 
 const Header = styled('header')`
