@@ -1,3 +1,4 @@
+import {error} from 'loglevel';
 import {apis} from 'helpers/browsers';
 import InternalMessage from './InternalMessage'
 
@@ -44,7 +45,7 @@ export class NotificationService {
                     return win;
                 }
             } catch (e) {
-                console.log('notification error', e);
+                error('notification error', e);
                 return null;
             }
         }
