@@ -9,7 +9,7 @@ export class Prompt implements IPrompt {
     domain = '',
     network = null,
     data = {},
-    responder = null}: IPromptConstruct = null
+    responder = null}: IPromptConstruct = {}
   ){
     this.type = type;
     this.domain = domain;
