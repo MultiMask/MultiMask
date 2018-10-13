@@ -18,7 +18,7 @@ export const StorageService = {
 
   Pass: {
     get: () => storage.get(CONST.PASS),
-    set: (pass: string) => storage.set(CONST.PASS, pass),
+    set: (pass: string) => storage.set(CONST.PASS, hashPass(pass)),
     check: (pass: string) => {
       return StorageService.Pass.get().then(savedPassHash => hashPass(pass) === savedPassHash);
     }
