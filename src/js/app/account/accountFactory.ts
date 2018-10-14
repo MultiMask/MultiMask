@@ -2,7 +2,7 @@ import { debug } from 'loglevel';
 
 import { encode, decode } from 'libs/cipher';
 import networks from 'bcnetwork';
-import { getEntity, setEntity, removeEntity } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 
 import Account from '.';
 import BitcoinWallet from './wallet/bitcoin';
@@ -45,15 +45,15 @@ export default {
 
     debug('Account Save > ', encodedWallet);
 
-    setEntity(id, encodedWallet);
+    StorageService.Entities.set(id, encodedWallet);
   },
 
   removeList (ids) {
-    return Promise.all(ids.map(id => removeEntity(id)));
+    return Promise.all(ids.map(id => StorageService.Entities.remove(id)));
   },
 
   load (pass, id): Promise<Account> {
-    return getEntity(id).then((str: string) => {
+    return StorageService.Entities.get(id).then((str: string) => {
       debug('Account Load > raw >', str, id);
       // eslint-disable-next-line
       const decoded = encryptEntities ? JSON.parse(decode(pass, str)) : JSON.parse(str);

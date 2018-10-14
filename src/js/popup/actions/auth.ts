@@ -13,7 +13,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
-import { getPass } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
 import SettingActions from './settings';
 
@@ -36,7 +36,7 @@ const AuthActions = {
           });
           AuthActions.success()(dispatch, getState);
         } else {
-          checkPass(hasPass => {
+          isPassExist(hasPass => {
             dispatch({
               type: AUTH_CHECK_FAIL,
               payload: {
@@ -93,6 +93,10 @@ const AuthActions = {
 };
 export default AuthActions;
 
-function checkPass (cb) {
-  getPass().then(result => cb(!!result));
+/**
+ * Check that App initiated
+ * @param cb 
+ */
+function isPassExist (cb) {
+  StorageService.Pass.get().then(result => cb(!!result));
 }

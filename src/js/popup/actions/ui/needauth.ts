@@ -1,5 +1,4 @@
-import { hidePass } from 'libs/cipher';
-import { checkPass } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 
 import { NEEDAUTH_START, NEEDAUTH_SUCCESS, NEEDAUTH_FAIL } from 'constants/ui/needauth';
 
@@ -11,9 +10,7 @@ const NeedAuthActions = {
   },
 
   check: pass => (dispatch, getState) => {
-    const hashPass = hidePass(pass);
-
-    checkPass(hashPass)
+    StorageService.Pass.check(pass)
       .then(isAuth => {
         if (isAuth) {
           dispatch({

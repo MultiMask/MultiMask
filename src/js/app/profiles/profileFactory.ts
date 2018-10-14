@@ -1,7 +1,7 @@
 import uuid from 'uuid/v4';
 import { debug } from 'loglevel';
 
-import { getEntity, setEntity, removeEntity } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 import BlockCipher, { cipherTypes } from 'libs/blockCipher';
 
 import {Profile} from './Profile';
@@ -16,11 +16,11 @@ export default class ProfileFactory {
 
     debug('Save Profile > ', encodedProfile);
 
-    return setEntity(key, encodedProfile);
+    return StorageService.Entities.set(key, encodedProfile);
   }
 
   public static load (pass, key) {
-    return getEntity(key).then(encodedStr => {
+    return StorageService.Entities.get(key).then(encodedStr => {
       const profileData = blockCipher.decrypt(pass, encodedStr);
 
       debug('Load Profile > ', profileData);
@@ -30,7 +30,7 @@ export default class ProfileFactory {
   }
 
   public static remove (id) {
-    return removeEntity(id);
+    return StorageService.Entities.remove(id);
   }
 
   public static create (pass, data) {

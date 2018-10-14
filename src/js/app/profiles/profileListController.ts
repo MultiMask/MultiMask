@@ -1,6 +1,6 @@
 import EventEmitter = require('events');
 
-import { getProfiles, setProfiles } from 'services/getter';
+import { StorageService } from 'services/StorageService';
 
 import { BusController } from './../busController';
 import { AccessController } from './../accessController';
@@ -165,7 +165,7 @@ export class ProfileListController extends EventEmitter {
    * Load profile list from storage
    */
   private _loadProfileList () {
-    return getProfiles()
+    return StorageService.ProfileList.get()
       .then((ids: any[]) => {
         if (ids && ids.length > 0) {
           return Promise.all(
@@ -229,7 +229,7 @@ export class ProfileListController extends EventEmitter {
   private save (): Promise<void> {
     const profileIds = this.list.map(profile => profile.getId());
 
-    return setProfiles(profileIds);
+    return StorageService.ProfileList.set(profileIds);
   }
 
   /**

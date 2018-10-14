@@ -1,4 +1,3 @@
-import { hidePass } from 'libs/cipher';
 import { push, goBack } from 'connected-react-router';
 
 import InternalMessage from 'services/InternalMessage';
@@ -69,8 +68,6 @@ const AccountActions = {
   },
 
   getSeed: (pass, id) => (dispatch, getState) => {
-    const hashPass = hidePass(pass);
-
     InternalMessage.payload(ACCOUNT_GETSEED, id)
       .send()
       .then(seed => {

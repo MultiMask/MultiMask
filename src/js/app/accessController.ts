@@ -1,11 +1,9 @@
-import { setPass, checkPass } from 'services/getter';
-import { hidePass } from 'libs/cipher';
-
+import { StorageService } from 'services/StorageService';
 import { MessageController } from './messageController';
 
 import { AUTH_IS_READY, AUTH_CHECK, AUTH_LOGIN, AUTH_LOGOUT, AUTH_INIT } from 'constants/auth';
 
-interface AccessControllerProps {
+interface IAccessControllerProps {
   messageController: MessageController
 }
 
@@ -18,7 +16,7 @@ export class AccessController {
 
   private messageController: MessageController;
 
-  constructor (opts: AccessControllerProps) {
+  constructor (opts: IAccessControllerProps) {
     this.messageController = opts.messageController;
 
     this.startListening();
@@ -88,7 +86,7 @@ export class AccessController {
    * @param pass 
    */
   private create (pass: string) {
-    setPass(hidePass(pass));
+    StorageService.Pass.set(pass);
     this.password = pass;
     this.inited = true;
   }
@@ -98,7 +96,7 @@ export class AccessController {
    * @param pass 
    */
   private async login (pass: string) {
-    const isAuth = await checkPass(hidePass(pass));
+    const isAuth = await StorageService.Pass.check(pass);
 
     if (isAuth) {
       this.password = pass;
@@ -110,10 +108,10 @@ export class AccessController {
 
   /**
    * Check hash pass without send password
-   * @param hashPass password hash
+   * @param hashedPass password hash
    */
-  private async check (hashPass: string) {
-    return checkPass(hashPass);
+  private async check (hashedPass: string) {
+    return StorageService.Pass.check(hashedPass);
   }
 
   /**
