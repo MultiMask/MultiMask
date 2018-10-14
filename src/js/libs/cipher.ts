@@ -1,4 +1,4 @@
-import {hashSync, compareSync} from 'bcrypt';
+import { hashSync, compareSync } from 'bcryptjs';
 import sha256 from 'sha256';
 import aes256 from 'aes256';
 
