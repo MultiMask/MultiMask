@@ -19,4 +19,5 @@ class Inpage {
   }
 }
 
+// tslint:disable-next-line
 new Inpage();

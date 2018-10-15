@@ -1,14 +1,13 @@
 import ntx from 'bcnetwork';
 
-import { NotificationService } from 'services/NotificationService';
 import { Prompt } from 'models/Prompt';
 import { APPROVAL } from 'constants/promptTypes';
+import { BTC_APPROVE, BTC_GET_ACCOUNTS } from 'constants/blockchains/btc';
+import { NotificationService } from 'services/NotificationService';
 
 import { AccessController } from './accessController';
 import { MessageController } from './messageController';
 import { AccountController } from './account/accountController';
-
-import { BTC_APPROVE, BTC_GET_ACCOUNTS } from 'constants/blockchains/btc';
 
 export class BtcController {
   private accessController: AccessController;

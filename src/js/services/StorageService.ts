@@ -34,5 +34,9 @@ export const StorageService = {
   Settings: {
     get: () => storage.get(CONST.SETTINGS),
     set: nextSettings => storage.set(CONST.SETTINGS, nextSettings)
+  },
+
+  Domains: {
+
   }
 }
