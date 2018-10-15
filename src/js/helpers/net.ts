@@ -1,4 +1,4 @@
-export const strippedHost = () => {
+export const strippedHost = (): string => {
   let host = location.hostname;
 
   // Replacing www. only if the domain starts with it.

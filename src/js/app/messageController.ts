@@ -1,10 +1,13 @@
 import { LocalStream } from 'extension-streams';
 import { info } from 'loglevel';
 import EventEmitter = require('events');
+import { CONTENT_APP } from 'constants/apps';
 
 interface IMessageType {
   type: string;
+  from?: string;
   payload: any;
+  domain: string;
 }
 
 /**
@@ -22,6 +25,10 @@ export class MessageController extends EventEmitter {
         sendResponse(...args);
       }
       info('background received > ', msg);
+
+      if (msg.from === CONTENT_APP && !msg.domain) {
+        throw new Error('In content query must be attached domain');
+      }
 
       this.emit(msg.type, cb, msg.payload);
     });

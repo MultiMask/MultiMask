@@ -1,14 +1,14 @@
-export default class NetworkMessage {
+export class NetworkMessage {
   public type;
   public payload;
   public resolver;
   public domain;
 
-  constructor (_type = '', _payload = {}, _resolver = '', _domain = '') {
-    this.type = _type;
-    this.payload = _payload;
-    this.resolver = _resolver;
-    this.domain = _domain;
+  constructor (type = '', payload = {}, resolver = '', domain = '') {
+    this.type = type;
+    this.payload = payload;
+    this.resolver = resolver;
+    this.domain = domain;
   }
 
   public static placeholder () {

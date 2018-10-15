@@ -1,9 +1,11 @@
 import { EncryptedStream } from 'extension-streams';
 import { setLevel, info } from 'loglevel';
 
+import {   strippedHost } from 'helpers/net';
+
 import IdGenerator from 'models/IdGenerator';
+import { NetworkMessage } from 'models/NetworkMessage';
 import InternalMessage from 'services/InternalMessage';
-import NetworkMessage from 'services/NetworkMessage';
 
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 
@@ -47,17 +49,20 @@ class Content {
 
   /**
    * Listing injected messages
-   * @param {MessageType} message
+   * @param message
    */
   public contentListener (message) {
-    const nonSyncMessage = NetworkMessage.fromJson(message);
+    const nonSyncMessage = NetworkMessage.fromJson({
+      ...message,
+      domain: strippedHost()
+    });
 
     // log.info('content receive > ', nonSyncMessage);
     this.sendBackground(nonSyncMessage);
   }
 
-  public sendBackground (message) {
-    InternalMessage.payload(message.type, message.payload)
+  public sendBackground (message: NetworkMessage) {
+    InternalMessage.payload(message.type, message)
       .send()
       .then(res => this.respond(message, res));
   }
@@ -67,12 +72,13 @@ class Content {
    * @param {Message} message
    * @param {Message} response
    */
-  public respond (message, payload) {
+  public respond (message, responseResult) {
     // log.info('response < ', message, payload);
-    const response = message.respond(payload);
+    const response = message.respond(responseResult);
 
     this.stream.send(response, INPAGE_APP);
   }
 }
 
+// tslint:disable-next-line
 new Content();
