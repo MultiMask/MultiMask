@@ -320,7 +320,7 @@ export class ProfileListController extends EventEmitter {
   private import (pass, encryptedProfile) {
     const decryptProfile = ProfileFactory.decryptFullProfile(pass, encryptedProfile);
 
-    if (!decryptProfile) return;
+    if (!decryptProfile) { return; }
 
     const oldProfile = this.findById(decryptProfile.data.id);
 

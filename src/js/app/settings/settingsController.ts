@@ -75,7 +75,7 @@ export class SettingsController {
   }
 
   public loadPrice (sign, convertTo) {
-    if (!this.priceProvider) return Promise.reject('priceProvider not defined');
+    if (!this.priceProvider) { return Promise.reject('priceProvider not defined'); }
 
     return this.priceProvider.getBCPrice(sign, convertTo);
   }

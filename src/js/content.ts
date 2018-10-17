@@ -1,13 +1,11 @@
 import { EncryptedStream } from 'extension-streams';
 import { setLevel, info } from 'loglevel';
 
-import {   strippedHost } from 'helpers/net';
-
 import IdGenerator from 'models/IdGenerator';
 import { NetworkMessage } from 'models/NetworkMessage';
 import InternalMessage from 'services/InternalMessage';
-
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
+import { strippedHost } from 'helpers/net';
 
 const INJECT_FILENAME = 'inpage.bundle.js';
 
@@ -15,7 +13,6 @@ class Content {
   public stream;
 
   constructor () {
-    // eslint-disable-next-line
     setLevel(logLevel);
 
     this.setupInpageStream();
@@ -62,7 +59,7 @@ class Content {
   }
 
   public sendBackground (message: NetworkMessage) {
-    InternalMessage.payload(message.type, message)
+    InternalMessage.payload(message.type, message.payload)
       .send()
       .then(res => this.respond(message, res));
   }

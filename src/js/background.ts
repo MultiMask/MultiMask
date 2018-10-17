@@ -3,6 +3,7 @@ import { setLevel } from 'loglevel';
 import { BusController } from './app/busController';
 import { AccessController } from './app/accessController';
 import { MessageController } from './app/messageController';
+import { DomainController } from './app/domainController';
 
 import { AccountController } from './app/account/accountController';
 import { ProfileController } from './app/profiles/profileController';
@@ -19,6 +20,7 @@ class Controller {
   private busController: BusController;
   private accessController: AccessController;
   private messageController: MessageController;
+  private domainController: DomainController;
   
   private accountController: AccountController;
   private profileController: ProfileController;
@@ -35,8 +37,10 @@ class Controller {
     // Webpack provide this from ./config.json
     setLevel(logLevel);
 
-    this.messageController = new MessageController();
-
+    this.domainController = new DomainController();
+    this.messageController = new MessageController({
+      domainController: this.domainController
+    });
     this.busController = new BusController();
 
     this.accessController = new AccessController({
@@ -94,4 +98,5 @@ class Controller {
   }
 }
 
+// tslint:disable-next-line
 new Controller();

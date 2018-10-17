@@ -7,7 +7,6 @@ import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 
 class Inpage {
   constructor () {
-    // eslint-disable-next-line
     setLevel(logLevel);
 
     const stream = new EncryptedStream(INPAGE_APP, IdGenerator.text(64)) as any;
