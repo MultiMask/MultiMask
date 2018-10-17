@@ -1,5 +1,10 @@
 import EventEmitter = require('events');
-import {StorageService } from 'services/StorageService';
+import { StorageService } from 'services/StorageService';
+
+import { NotificationService } from 'services/NotificationService';
+import { Prompt } from 'models/Prompt';
+import { DOMAIN } from 'constants/promptTypes';
+import { BusController } from 'app/busController';
 
 interface IDomainData {
   [K: string]: string[];
@@ -9,17 +14,34 @@ interface IDomainData {
  * Filter phishing sites and manage domains 
  */
 export class DomainController extends EventEmitter {
+  private busController: BusController;
+  
   public data: IDomainData;
 
-  constructor () {
+  constructor (opts) {
     super();
+
+    this.busController = opts.busController;
     this.load();
   }
 
   public checkDomain (domain: string): Promise<boolean> {
-    console.log(domain);
+    const isExist = this.checkExist(domain);
+    if (isExist) {
+      return Promise.resolve(isExist);
+    }
 
-    return Promise.resolve(true);
+    return new Promise((res, rej) => {
+      const responder = approval => {
+        res(approval);
+      }
+
+      NotificationService.open(new Prompt(DOMAIN, { responder }))
+    })
+  }
+
+  private checkExist (domain: string): boolean {
+    return !!this.data[domain];
   }
 
   /**

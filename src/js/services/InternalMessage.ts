@@ -6,8 +6,8 @@ interface InternalMessageResponse {
 }
 
 export default class InternalMessage {
-  public type: string = '';
-  public payload: any = '';
+  public type: string;
+  public payload: any;
 
   public static placeholder () {
     return new InternalMessage();

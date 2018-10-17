@@ -1,3 +1,4 @@
+export const CHECKER_IS_AUTH = /^auth:/;
 export const AUTH_IS_READY = 'auth:isready';
 
 export const AUTH_INIT = 'auth:init';

@@ -37,13 +37,18 @@ class Controller {
     // Webpack provide this from ./config.json
     setLevel(logLevel);
 
-    this.domainController = new DomainController();
+    this.busController = new BusController();
+    this.domainController = new DomainController({
+      busController: this.busController
+    });
+
     this.messageController = new MessageController({
+      busController: this.busController,
       domainController: this.domainController
     });
-    this.busController = new BusController();
 
     this.accessController = new AccessController({
+      busController: this.busController,
       messageController: this.messageController
     });
 

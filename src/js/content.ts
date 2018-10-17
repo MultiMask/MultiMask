@@ -53,13 +53,11 @@ class Content {
       ...message,
       domain: strippedHost()
     });
-
-    // log.info('content receive > ', nonSyncMessage);
     this.sendBackground(nonSyncMessage);
   }
 
   public sendBackground (message: NetworkMessage) {
-    InternalMessage.payload(message.type, message.payload)
+    InternalMessage.payload(message.type, message)
       .send()
       .then(res => this.respond(message, res));
   }
