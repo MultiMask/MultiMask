@@ -68,7 +68,6 @@ class Content {
    * @param {Message} response
    */
   public respond (message, backResponse) {
-    // log.info('response < ', message, payload);
     const response = backResponse && backResponse.type === 'error'
       ? message.error({ error: backResponse.error })
       : message.respond(backResponse);
