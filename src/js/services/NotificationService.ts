@@ -1,6 +1,7 @@
 import {error} from 'loglevel';
 import {apis} from 'helpers/browsers';
-import InternalMessage from './InternalMessage'
+import InternalMessage from './InternalMessage';
+import { Prompt } from 'models/Prompt';
 
 let openWindow = null;
 
@@ -10,14 +11,13 @@ export class NotificationService {
      * Opens a prompt window outside of the extension
      * @param notification
      */
-    public static async open (notification){
+    public static async open (notification: Prompt){
         if(openWindow){
             openWindow.close();
             openWindow = null;
         }
 
-        const height = 670;
-        const width = 370;
+        const [ height, width ] = getWindowSize(notification.type);
         const middleX = window.screen.availWidth/2 - (width/2);
         const middleY = window.screen.availHeight/2 - (height/2);
 
@@ -79,4 +79,11 @@ export class NotificationService {
             window.close();
         }
     }
+}
+
+const getWindowSize = (type: string): number[] => {
+  switch (type) {
+    default:
+      return [670, 370];
+  }
 }
