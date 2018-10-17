@@ -67,9 +67,11 @@ class Content {
    * @param {Message} message
    * @param {Message} response
    */
-  public respond (message, responseResult) {
+  public respond (message, backResponse) {
     // log.info('response < ', message, payload);
-    const response = message.respond(responseResult);
+    const response = backResponse && backResponse.type === 'error'
+      ? message.error({ error: backResponse.error })
+      : message.respond(backResponse);
 
     this.stream.send(response, INPAGE_APP);
   }

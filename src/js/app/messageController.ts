@@ -5,6 +5,9 @@ import EventEmitter = require('events');
 import { BusController } from 'app/busController';
 import { DomainController } from 'app/domainController';
 import InternalMessage from 'services/InternalMessage';
+import { NotificationService } from 'services/NotificationService';
+import { Prompt } from 'models/Prompt';
+import { NOAUTH } from 'constants/promptTypes';
 
 import { CHECKER_IS_AUTH } from 'constants/auth';
 import { CHECK_IS_READY } from 'constants/appInternal';
@@ -68,6 +71,7 @@ export class MessageController extends EventEmitter {
               })
           } else {
             this.showNoAuthPrompt();
+            sendResponse({ error: 'No auth ', type: 'error' });
           }
         });
 
@@ -94,6 +98,6 @@ export class MessageController extends EventEmitter {
   }
 
   private showNoAuthPrompt () {
-    console.log('show prompt');
+    NotificationService.open(new Prompt(NOAUTH));
   }
 }
