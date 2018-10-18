@@ -10,7 +10,7 @@ import { Prompt } from 'models/Prompt';
 import { NOAUTH } from 'constants/promptTypes';
 
 import { CHECKER_IS_AUTH } from 'constants/auth';
-import { CHECK_IS_READY } from 'constants/appInternal';
+import { CHECK_IS_READY, SET_CURRENT_DOMAIN } from 'constants/appInternal';
 
 type AuthCheckFn = (isReady: boolean) => void;
 
@@ -49,6 +49,11 @@ export class MessageController extends EventEmitter {
       const cb = (...args) => {
         info('responsed >> ', ...args, request);
         sendResponse(...args);
+      }
+
+      // Set current open domain
+      if (payload.domain) {
+        this.busController.emit(SET_CURRENT_DOMAIN, payload.domain);
       }
 
       // Miss sync messages

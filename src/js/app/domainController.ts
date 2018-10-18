@@ -5,7 +5,7 @@ import Account from 'app/account';
 import { NotificationService } from 'services/NotificationService';
 import { Prompt } from 'models/Prompt';
 import { DOMAIN } from 'constants/promptTypes';
-import { GET_ACCOUNTS } from 'constants/appInternal'
+import { GET_ACCOUNTS, SET_CURRENT_DOMAIN } from 'constants/appInternal'
 import { BusController } from 'app/busController';
 
 interface IDomainData {
@@ -18,15 +18,31 @@ interface IDomainData {
 export class DomainController extends EventEmitter {
   private busController: BusController;
   
+  private domain: string;
   public data: IDomainData;
 
   constructor (opts) {
     super();
 
     this.busController = opts.busController;
+    
     this.load();
+    this.listening();
   }
 
+  private listening = () => {
+    this.busController.on(SET_CURRENT_DOMAIN, this.setCurrentDomain)
+  }
+
+  private setCurrentDomain = (domain: string) => {
+    this.domain = domain;
+  }
+
+  /**
+   * Check permissions for domain
+   * of show prompt to allow/deny
+   * @param domain 
+   */
   public checkDomain (domain: string): Promise<boolean> {
     const isExist = this.checkExist(domain);
     if (isExist) {
@@ -55,6 +71,13 @@ export class DomainController extends EventEmitter {
 
   private checkExist (domain: string): boolean {
     return !!this.data[domain];
+  }
+
+  /**
+   * return current domain
+   */
+  public getCurrentDomain () {
+    return this.domain;
   }
 
   /**
