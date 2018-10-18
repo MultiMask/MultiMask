@@ -12,10 +12,11 @@ import { DomainAccess } from './prompt/domainAccess';
 import '../css/prompt.less';
 
 import { Prompt } from 'models/Prompt';
-import { DATA_DOMAIN } from 'mock/prompt';
-const prompt = Prompt.fromJson(JSON.parse(DATA_DOMAIN));
+// import { DATA_DOMAIN } from 'mock/prompt';
+// const prompt = Prompt.fromJson(JSON.parse(DATA_DOMAIN));
 
-// const prompt = window.data;
+const prompt = window.data as Prompt;
+// console.log(JSON.stringify(prompt));
 
 const getApp = () => {
   switch (prompt.routeName()) {

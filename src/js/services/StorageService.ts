@@ -37,6 +37,7 @@ export const StorageService = {
   },
 
   Domains: {
-
+    get: () => storage.get(CONST.DOMAINS),
+    set: domains => storage.set(CONST.DOMAINS, domains)
   }
 }

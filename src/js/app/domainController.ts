@@ -1,9 +1,11 @@
 import EventEmitter = require('events');
 import { StorageService } from 'services/StorageService';
 
+import Account from 'app/account';
 import { NotificationService } from 'services/NotificationService';
 import { Prompt } from 'models/Prompt';
 import { DOMAIN } from 'constants/promptTypes';
+import { GET_ACCOUNTS } from 'constants/appInternal'
 import { BusController } from 'app/busController';
 
 interface IDomainData {
@@ -32,11 +34,22 @@ export class DomainController extends EventEmitter {
     }
 
     return new Promise((res, rej) => {
-      const responder = approval => {
-        res(approval);
-      }
-
-      NotificationService.open(new Prompt(DOMAIN, { responder }))
+      this.busController.emit(GET_ACCOUNTS, (accounts: Account[]) => {
+        Promise.all(accounts.map(acc => acc.getInfo()))
+          .then(accInfo => {
+            accInfo.forEach(item => delete item.info.txs);
+            const responder = approval => {
+              console.log(approval);
+              res(approval);
+            }
+      
+            NotificationService.open(new Prompt(DOMAIN, { 
+              data: accInfo,
+              domain,
+              responder
+            }))
+          })
+      })
     })
   }
 

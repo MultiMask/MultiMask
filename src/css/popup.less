@@ -1,4 +1,5 @@
 @import "common.less";
+@import "wallet.less";
 
 @headerHeight: 33px;
 
@@ -190,55 +191,6 @@ body {
   &-Value {
     font-size: 14px;
     color: #32325d;
-  }
-}
-
-.Wallet {
-  margin: 0 -25px;
-  padding: 15px 25px;
-  width: auto;
-  cursor: pointer;
-  box-sizing: border-box;
-
-  &:hover {
-    background-color: rgba(199, 204, 215, 0.1);
-  }
-
-  &-Inner {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-  &-Icon {
-    height: 35px;
-    width: 35px;
-    margin-right: 20px;
-  }
-  &-Info {
-    flex-grow: 1;
-    margin-right: 20px;
-    width: auto;
-    overflow: hidden;
-  }
-  &-Address {
-    color: #c7ccd7;
-    font-size: 10px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  &-Balance {
-    color: #32325d;
-  }
-  &-Balance-USD {
-    color: #c7ccd7;
-  }
-  &-Network {
-    padding: 0.5em;
-    color: #bdc2ce;
-    border-radius: 3px;
-    background-color: #ebeef5;
   }
 }
 

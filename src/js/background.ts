@@ -53,6 +53,7 @@ class Controller {
     });
 
     this.accountController = new AccountController({
+      busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController
     });

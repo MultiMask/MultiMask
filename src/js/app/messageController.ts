@@ -65,10 +65,12 @@ export class MessageController extends EventEmitter {
 
         this.checkAuth(payload.type, isReady => {
           if (isReady) {
-            this.domainController.checkDomain(payload.domain)
-              .then(result => {
-                console.log('domain check result > ', result);
-              })
+            // console.log('check domain');
+            // this.domainController.checkDomain(payload.domain)
+            //   .then(result => {
+              this.emit(payload.type, cb, payload.payload);
+                // console.log('domain check result > ', result);
+              // })
           } else {
             this.showNoAuthPrompt();
             sendResponse({ error: 'No auth ', type: 'error' });

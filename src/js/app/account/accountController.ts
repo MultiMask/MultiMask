@@ -2,8 +2,10 @@ import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
 import Account from './';
-import { AccessController } from './../accessController';
-import { MessageController } from './../messageController';
+import { BusController } from 'app/busController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { GET_ACCOUNTS } from 'constants/appInternal';
 
 import { info } from 'loglevel';
 
@@ -11,11 +13,22 @@ export class AccountController {
   public accounts: Account[] = [];
 
   private accessController: AccessController;
+  private busController: BusController;
   private messageController: MessageController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
+    this.busController = opts.busController;
     this.messageController = opts.messageController;
+
+    this.listening();
+  }
+
+  /**
+   * Listen internal bus
+   */
+  private listening () {
+    this.busController.on(GET_ACCOUNTS, cb => cb(this.getAccounts()));
   }
 
   /**
