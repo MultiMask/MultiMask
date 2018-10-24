@@ -3,25 +3,24 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import AuthForm from './AuthForm';
 import needAuthActions from '../../../actions/ui/needauth';
-import { formToJson } from './../../../helpers';
+import { formToJson } from 'helpers/forms';
 
 class NeedAuth extends React.Component<any, any> {
-
   private pass;
 
-  static defaultProps = {
+  public static defaultProps = {
     onSubmit: null
   };
 
-  componentDidMount() {
+  public componentDidMount () {
     this.props.start();
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount () {
     this.props.start();
   }
 
-  handleSubmit = e => {
+  public handleSubmit = e => {
     e.preventDefault();
 
     const json: any = formToJson(e.target);
@@ -30,7 +29,7 @@ class NeedAuth extends React.Component<any, any> {
     this.props.check(this.pass);
   };
 
-  render() {
+  public render () {
     const { onSubmit, children, isAuth, error } = this.props;
     if (isAuth) {
       if (onSubmit) {
