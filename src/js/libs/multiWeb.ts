@@ -1,13 +1,14 @@
 import uuid from 'uuid/v4';
+import NetworkMessage from 'services/NetworkMessage';
+import { DanglingResolver } from 'models/DanglingResolver';
+import { CONTENT_APP } from 'constants/apps';
+import { AUTH_CHECK } from 'constants/auth';
+import InternalMessage from 'services/InternalMessage';
 
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
-
-import NetworkMessage from 'services/NetworkMessage';
-import { DanglingResolver } from 'models/DanglingResolver';
-
-import { CONTENT_APP } from 'constants/apps';
+import {parseDocument} from './grabber';
 
 let stream;
 let resolvers;
@@ -64,5 +65,15 @@ export class MultiWeb {
     this.eos = EOS(_send);
   }
 
-  public isAuth () { }
+  public isAuth () {
+    return _send(AUTH_CHECK, null);
+   }
+
+  private initGrabber = () => {
+    this.isAuth().then(({isAuth}) => {
+      if (isAuth) {
+        parseDocument();
+      }
+    })
+  }
 }

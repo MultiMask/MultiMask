@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Account from './pages/account/list';
 import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
+import Cards from './pages/cards';
 import Profiles from './pages/profile';
 import ProfileQRCode from './pages/profile/QRCodeView';
 import ProfileExport from './pages/profile/ExportProfile';
@@ -33,6 +34,7 @@ const routes = () => {
       <AppRoute exact path="/wallets/create" component={CreateWallet} layout={MainLayout} />
 
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
+      <AppRoute exact path="/cards" component={Cards} layout={MainLayout} />
 
       <AppRoute exact path="/profiles" component={Profiles} layout={MainLayout} />
       <AppRoute exact path="/profiles/:id/qrcode" component={ProfileQRCode} layout={MainLayout} needAuth />

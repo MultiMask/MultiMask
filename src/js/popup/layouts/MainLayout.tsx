@@ -78,6 +78,9 @@ class MainLayout extends React.Component<any, any> {
               </Link>
             )}
             <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+              <MenuItem component={Link} to="/cards">
+                Cards
+              </MenuItem>
               <MenuItem component={Link} to="/profiles">
                 Profiles
               </MenuItem>
