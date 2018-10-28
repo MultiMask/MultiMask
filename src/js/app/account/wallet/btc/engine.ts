@@ -16,7 +16,7 @@ export class BTCEngine {
 
     const priv = HDPrivateKey.privateKey.toWIF();
     const pblc = HDPrivateKey.publicKey.toString();
-    const address = HDPrivateKey.privateKey.toAddress('testnet').toString();
+    const address = HDPrivateKey.privateKey.toAddress(network).toString();
 
     return Promise.resolve({
       priv,

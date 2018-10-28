@@ -22,7 +22,7 @@ export default class BitcoinWallet implements IWallet {
   }
 
   public create (seed) {
-    return this._createWallet(seed, bitcoin.networks.testnet).then(secret => {
+    return this._createWallet(seed, this.network).then(secret => {
       Object.assign(this, secret);
 
       return secret.seed;
@@ -38,7 +38,7 @@ export default class BitcoinWallet implements IWallet {
   public changeNetwork (network: string, seed: string) {
     this.network = network;
     
-    return this._createWallet(seed, bitcoin.networks.testnet).then(secret => {
+    return this._createWallet(seed, this.network).then(secret => {
       Object.assign(this, secret);
 
       this.setNetworkUrl(network)
@@ -100,18 +100,18 @@ export default class BitcoinWallet implements IWallet {
     return this.getInfo().then(({ outputs, balance }) => {
       info('create TX with >> ');
       info('to: ', to);
-      info('amount: ', amount);
       info('data: ', data);
       info('outputs: ', outputs);
-
-      const amountInSatoshi = amount;
+      
+      const amountInSatoshi = amount * 1e8;
       const balanceInSatoshi = balance * 1e8;
+      info('amount: ', amountInSatoshi);
       info('balance:', balanceInSatoshi);
 
       const testnet = bitcoin.networks.testnet;
       const txb = new bitcoin.TransactionBuilder(testnet);
 
-      outputs.forEach((out, idx) => {
+      outputs.forEach(out => {
         if (this.segWit) {
           txb.addInput(out.hash, out.idx, null, this.scriptPubkey);
         } else {
@@ -121,8 +121,8 @@ export default class BitcoinWallet implements IWallet {
       
       // Put data in hex to OP_RETURN 
       if (data) {
-        const bitcoin_payload = Buffer.from(data, 'utf8');
-        const dataScript = bitcoin.script.nullData.output.encode(bitcoin_payload);
+        const bitcoinPayload = Buffer.from(data, 'utf8');
+        const dataScript = bitcoin.script.nullData.output.encode(bitcoinPayload);
         
         txb.addOutput(dataScript, 0);
       }
