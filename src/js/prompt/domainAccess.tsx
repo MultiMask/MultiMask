@@ -2,21 +2,18 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import DialogLayout from './../popup/layouts/DialogLayout';
 import { Prompt } from 'models/Prompt';
+import { processForm } from 'helpers/forms';
 
 import Icon from 'ui/components/Icon';
 import Button from 'ui/Button';
 
-// interface IState =
+const INPUT_NAME = 'accounts';
 
 interface IProps {
   prompt: Prompt;
 }
 
 export class DomainAccess extends React.Component<IProps, any> {
-  public componentDidMount () {
-    console.log(this.props.prompt);
-  }
-
   private getIcon = account => {
     return account.blockchain ? <Icon type={account.blockchain} /> : null;
   };
@@ -24,7 +21,7 @@ export class DomainAccess extends React.Component<IProps, any> {
   public renderSingleAccount = (account: WalletInfo) => {
     return (
       <label key={account.id} className="Wallet">
-        <Input type="checkbox" name={account.id} />
+        <Input type="checkbox" name={INPUT_NAME} value={account.id} />
         <div className="Wallet-Inner">
           <div className="Wallet-Icon">{this.getIcon(account)}</div>
           <div className="Wallet-Info">
@@ -40,7 +37,8 @@ export class DomainAccess extends React.Component<IProps, any> {
   };
 
   private handleSubmit = e => {
-    e.preventDefault();
+    const data = processForm(e);
+    this.props.prompt.responder(data[INPUT_NAME]);
   };
 
   public render () {
