@@ -42,6 +42,7 @@ export class DomainAccess extends React.Component<IProps, any> {
       accounts: data[INPUT_NAME],
       allowed: true
     });
+    window.close();
   };
 
   private handleDeny = e => {
@@ -49,6 +50,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     this.props.prompt.responder({
       allowed: false
     });
+    window.close();
   };
 
   public render () {

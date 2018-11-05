@@ -68,21 +68,25 @@ export class MessageController extends EventEmitter {
           throw new Error('In content query must be attached domain');
         }
 
+        // check user is login
         this.checkAuth(payload.type, isReady => {
           if (isReady) {
-            console.log('check domain');
+
+            // check domain is allow
             this.domainController.checkDomain(payload.domain)
-              .then(result => {
-                console.log('approve > ', result);
-                this.emit(payload.type, cb, payload.payload);
-                // console.log('domain check result > ', result);
+              .then(approve => {
+                if (approve) {
+                  this.emit(payload.type, cb, payload.payload);
+                } else {
+                  sendResponse({ error: 'Denied by user', type: 'error' });      
+                }
               })
               .catch(error => { 
                 sendResponse({ error, type: 'error' });
               })
           } else {
             this.showNoAuthPrompt();
-            sendResponse({ error: 'No auth ', type: 'error' });
+            sendResponse({ error: 'No auth', type: 'error' });
           }
         });
 

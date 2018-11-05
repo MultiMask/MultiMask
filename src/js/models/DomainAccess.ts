@@ -2,7 +2,7 @@ export class DomainAccess {
   private data: IDomainAccess = {};
 
   constructor (data: IDomainAccess) {
-    this.data = data;
+    this.data = data || {};
   }
 
   public getAllowedAccounts (domain: string): string[] {
@@ -11,10 +11,10 @@ export class DomainAccess {
 
       return domainAccount.allowed
         ? domainAccount.accounts
-        : null;
+        : undefined;
     }
 
-    return null;
+    return undefined;
   }
 
   public isAllowedDomain (domain: string): boolean {
@@ -24,7 +24,7 @@ export class DomainAccess {
       return domainAccount.allowed;
     }
     
-    return null;
+    return undefined;
   }
 
   public isAllowedAccount (domain: string, accountId: string): boolean {
@@ -41,7 +41,7 @@ export class DomainAccess {
     this.data[domain] = data;
   }
 
-  public serialize () {
+  public toJSON () {
     return this.data;
   }
 }
