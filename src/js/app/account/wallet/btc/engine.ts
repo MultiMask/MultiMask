@@ -1,7 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 
-interface WalletCrypto {
+interface IWalletCrypto {
   priv: any;
   pblc: any;
   address: string;
@@ -10,7 +10,7 @@ interface WalletCrypto {
 }
 
 export class BTCEngine {
-  public static createWallet (seed, network: bitcoin.Network): Promise<WalletCrypto> {
+  public static createWallet (seed, network: bitcoin.Network): Promise<IWalletCrypto> {
     const mnemonic = new Mnemonic(seed);
     const HDPrivateKey = mnemonic.toHDPrivateKey(null, network);
 
@@ -26,7 +26,7 @@ export class BTCEngine {
     });
   }
 
-  public static createSegWitWallet (seed, network): Promise<WalletCrypto> {
+  public static createSegWitWallet (seed, network): Promise<IWalletCrypto> {
     const mnemonic = new Mnemonic(seed);
     const HDPrivateKey = mnemonic.toHDPrivateKey(null, network);
 

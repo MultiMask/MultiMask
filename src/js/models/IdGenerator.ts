@@ -13,7 +13,7 @@ export default class IdGenerator {
   public static text (size): string {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < size; i++) text += possible.charAt(Math.floor(IdGenerator.rand() * possible.length));
+    for (let i = 0; i < size; i++) { text += possible.charAt(Math.floor(IdGenerator.rand() * possible.length)); }
     return text;
   }
 
@@ -26,7 +26,7 @@ export default class IdGenerator {
     const add = 1;
     let max = 12 - add;
 
-    if (size > max) return IdGenerator.numeric(max) + IdGenerator.numeric(size - max);
+    if (size > max) { return IdGenerator.numeric(max) + IdGenerator.numeric(size - max); }
 
     max = Math.pow(10, size + add);
     const min = max / 10,

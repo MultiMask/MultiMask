@@ -38,7 +38,17 @@ export class DomainAccess extends React.Component<IProps, any> {
 
   private handleSubmit = e => {
     const data = processForm(e);
-    this.props.prompt.responder(data[INPUT_NAME]);
+    this.props.prompt.responder({
+      accounts: data[INPUT_NAME],
+      allowed: true
+    });
+  };
+
+  private handleDeny = e => {
+    e.preventDefault();
+    this.props.prompt.responder({
+      allowed: false
+    });
   };
 
   public render () {
@@ -50,7 +60,7 @@ export class DomainAccess extends React.Component<IProps, any> {
         <form onSubmit={this.handleSubmit}>
           <List>{this.props.prompt.data.map(account => this.renderSingleAccount(account))}</List>
           <Actions>
-            <Button>Block</Button>
+            <Button onClick={this.handleDeny}>Block</Button>
             <Button type="submit">Allow</Button>
           </Actions>
         </form>

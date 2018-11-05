@@ -64,8 +64,8 @@ class Content {
 
   /**
    * Response from background
-   * @param {Message} message
-   * @param {Message} response
+   * @param message
+   * @param response
    */
   public respond (message, backResponse) {
     const response = backResponse && backResponse.type === 'error'

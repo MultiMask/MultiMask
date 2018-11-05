@@ -4,13 +4,11 @@ import { StorageService } from 'services/StorageService';
 import Account from 'app/account';
 import { NotificationService } from 'services/NotificationService';
 import { Prompt } from 'models/Prompt';
+import { DomainAccess } from 'models/DomainAccess';
 import { DOMAIN } from 'constants/promptTypes';
 import { GET_ACCOUNTS, SET_CURRENT_DOMAIN } from 'constants/appInternal'
 import { BusController } from 'app/busController';
-
-interface IDomainData {
-  [K: string]: string[];
-}
+import { isNull } from 'util';
 
 /*
  * Filter phishing sites and manage domains 
@@ -19,7 +17,7 @@ export class DomainController extends EventEmitter {
   private busController: BusController;
   
   private domain: string;
-  public data: IDomainData;
+  public data: DomainAccess;
 
   constructor (opts) {
     super();
@@ -44,8 +42,9 @@ export class DomainController extends EventEmitter {
    * @param domain 
    */
   public checkDomain (domain: string): Promise<boolean> {
-    const isExist = this.checkExist(domain);
-    if (isExist) {
+    const isExist = this.data.isAllowedDomain(domain);
+    console.log('isExist > ', isExist);
+    if (!isNull(isExist)) {
       return Promise.resolve(isExist);
     }
 
@@ -55,7 +54,14 @@ export class DomainController extends EventEmitter {
           .then(accInfo => {
             accInfo.forEach(item => delete item.info.txs);
             const responder = approval => {
+              // Check that user close or deny prompt
+              if (!approval || (approval && approval.type === 'error')) {
+                rej(approval);
+              }
+
               console.log(approval);
+              this.add(domain, approval);
+              this.save();
               res(approval);
             }
       
@@ -69,8 +75,9 @@ export class DomainController extends EventEmitter {
     })
   }
 
-  private checkExist (domain: string): boolean {
-    return !!this.data[domain];
+  private add = (domain: string, data: IDomainAccount) => {
+    this.data.add(domain, data);
+    this.save();
   }
 
   /**
@@ -83,15 +90,15 @@ export class DomainController extends EventEmitter {
   /**
    * Load data from storage
    */
-  public load () {
-    return StorageService.Domains.get().then(data => this.data = data || {});
+  private load () {
+    return StorageService.Domains.get().then(data => this.data = new DomainAccess(data || {}));
   }
 
   /**
    * Save current data to storage
    * @param data 
    */
-  public save (data: IDomainData) {
-    return StorageService.Domains.set(data);
+  private save () {
+    return StorageService.Domains.set(this.data.serialize());
   }
 }
