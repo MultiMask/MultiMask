@@ -31,6 +31,7 @@ export default {
       // {
       //   name: 'Main',
       //   sign: 'main',
+      //   url: 'https://mainnet.infura.io/',
       //   chainId: 1
       // },
       {
