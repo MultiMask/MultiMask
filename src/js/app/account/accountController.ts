@@ -5,6 +5,7 @@ import Account from './';
 import { BusController } from 'app/busController';
 import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
+import { DomainController} from 'app/domainController';
 import { GET_ACCOUNTS } from 'constants/appInternal';
 
 import { info } from 'loglevel';
@@ -25,11 +26,13 @@ export class AccountController {
   private accessController: AccessController;
   private busController: BusController;
   private messageController: MessageController;
+  private domainController: DomainController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
+    this.domainController = opts.domainController;
 
     this.listening();
   }
@@ -111,6 +114,10 @@ export class AccountController {
 
       if (opts && opts.bc) {
         list = list.filter(acc => acc.blockchain  === opts.bc);
+      }
+      
+      if (opts && opts.domain) {
+        list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, acc.id));
       }
 
       return list;

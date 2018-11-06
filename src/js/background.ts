@@ -49,13 +49,14 @@ class Controller {
 
     this.accessController = new AccessController({
       busController: this.busController,
-      messageController: this.messageController
+      messageController: this.messageController,
     });
 
     this.accountController = new AccountController({
       busController: this.busController,
       messageController: this.messageController,
-      accessController: this.accessController
+      accessController: this.accessController,
+      domainController: this.domainController
     });
 
     this.profileListController = new ProfileListController({

@@ -19,19 +19,15 @@ export class DomainAccess {
 
   public isAllowedDomain (domain: string): boolean {
     if (this.data.hasOwnProperty(domain)) {
-      const domainAccount = this.data[domain];
-
-      return domainAccount.allowed;
+      return this.data[domain].allowed;
     }
     
     return undefined;
   }
 
   public isAllowedAccount (domain: string, accountId: string): boolean {
-    if (this.data.hasOwnProperty(domain)) {
-      const domainAccount = this.data[domain];
-
-      return domainAccount.accounts.includes(accountId);
+    if (this.data.hasOwnProperty(domain) && this.data[domain].allowed) {
+      return this.data[domain].accounts.includes(accountId);
     }
     
     return false;

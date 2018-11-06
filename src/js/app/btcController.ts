@@ -5,9 +5,9 @@ import { APPROVAL } from 'constants/promptTypes';
 import { BTC_APPROVE, BTC_GET_ACCOUNTS } from 'constants/blockchains/btc';
 import { NotificationService } from 'services/NotificationService';
 
-import { AccessController } from './accessController';
-import { MessageController } from './messageController';
-import { AccountController } from './account/accountController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { AccountController } from 'app/account/accountController';
 
 export class BtcController {
   private accessController: AccessController;
@@ -64,9 +64,8 @@ export class BtcController {
   /**
    * Return list of BTC wallets
    */
-  private responseGetAccounts = (sendReponse, req, domain) => {
-    console.log('req > ', req, domain);
-    const accounts = this.accountController.getAccounts({ bc: ntx.BTC.sign });
+  private responseGetAccounts = (sendReponse, req, { domain }) => {
+    const accounts = this.accountController.getAccounts({ bc: ntx.BTC.sign, domain });
 
     sendReponse(accounts.map(acc => acc.getAddress()));
   }
