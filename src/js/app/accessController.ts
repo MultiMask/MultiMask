@@ -1,10 +1,13 @@
 import { StorageService } from 'services/StorageService';
 import { MessageController } from './messageController';
 
+import { BusController } from 'app/busController';
 import { AUTH_IS_READY, AUTH_CHECK, AUTH_LOGIN, AUTH_LOGOUT, AUTH_INIT } from 'constants/auth';
+import { CHECK_IS_READY } from 'constants/appInternal';
 
 interface IAccessControllerProps {
-  messageController: MessageController
+  messageController: MessageController;
+  busController: BusController;
 }
 
 /**
@@ -14,9 +17,11 @@ export class AccessController {
   private inited: boolean = false;
   private password: string;
 
+  private busController: BusController;
   private messageController: MessageController;
 
   constructor (opts: IAccessControllerProps) {
+    this.busController = opts.busController;
     this.messageController = opts.messageController;
 
     this.startListening();
@@ -65,6 +70,11 @@ export class AccessController {
     this.messageController.on(AUTH_LOGOUT, (sendResponse) => {
       sendResponse({ isLogout: this.logout() });
     })
+
+    /**
+     * Check Auth from app
+     */
+    this.busController.on(CHECK_IS_READY, cb => cb(this.isAuth()));
   }
 
   /**

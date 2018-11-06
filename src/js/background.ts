@@ -3,6 +3,7 @@ import { setLevel } from 'loglevel';
 import { BusController } from './app/busController';
 import { AccessController } from './app/accessController';
 import { MessageController } from './app/messageController';
+import { DomainController } from './app/domainController';
 
 import { AccountController } from './app/account/accountController';
 import { ProfileController } from './app/profiles/profileController';
@@ -19,6 +20,7 @@ class Controller {
   private busController: BusController;
   private accessController: AccessController;
   private messageController: MessageController;
+  private domainController: DomainController;
   
   private accountController: AccountController;
   private profileController: ProfileController;
@@ -35,17 +37,26 @@ class Controller {
     // Webpack provide this from ./config.json
     setLevel(logLevel);
 
-    this.messageController = new MessageController();
-
     this.busController = new BusController();
+    this.domainController = new DomainController({
+      busController: this.busController
+    });
+
+    this.messageController = new MessageController({
+      busController: this.busController,
+      domainController: this.domainController
+    });
 
     this.accessController = new AccessController({
-      messageController: this.messageController
+      busController: this.busController,
+      messageController: this.messageController,
     });
 
     this.accountController = new AccountController({
+      busController: this.busController,
       messageController: this.messageController,
-      accessController: this.accessController
+      accessController: this.accessController,
+      domainController: this.domainController
     });
 
     this.profileListController = new ProfileListController({
@@ -64,6 +75,7 @@ class Controller {
     });
 
     this.settingsController = new SettingsController({
+      busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
     });
@@ -94,4 +106,5 @@ class Controller {
   }
 }
 
+// tslint:disable-next-line
 new Controller();

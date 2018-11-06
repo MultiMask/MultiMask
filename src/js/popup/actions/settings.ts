@@ -4,11 +4,16 @@ import {
   SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS,
   SETTINGS_SET_PRICES,
   SETTINGS_SET_PRICE_DATA_PROVIDERS,
-  SETTINGS_SET_SETTING
+  SETTINGS_SET_SETTING,
+  SETTING_OPEN_DOMAINS
 } from 'constants/settings';
 import InternalMessage from 'services/InternalMessage';
 
 const settingsActions = {
+  openDomainControl: () => (dispatch, getState) => {
+    return InternalMessage.signal(SETTING_OPEN_DOMAINS)
+      .send();
+  },
   getPrices: () => (dispatch, getState) => {
     return InternalMessage.signal(SETTINGS_LOAD_CURRENCY_PRICE)
       .send()

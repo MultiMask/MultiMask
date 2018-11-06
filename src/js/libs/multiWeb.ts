@@ -4,7 +4,7 @@ import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
 
-import NetworkMessage from 'services/NetworkMessage';
+import { NetworkMessage } from 'models/NetworkMessage';
 import { DanglingResolver } from 'models/DanglingResolver';
 
 import { CONTENT_APP } from 'constants/apps';
@@ -19,11 +19,11 @@ let resolvers;
  * them to the open promises. */
 const _subscribe = () => {
   stream.listenWith(msg => {
-    if (!msg || !msg.hasOwnProperty('type')) return false;
+    if (!msg || !msg.hasOwnProperty('type')) { return false; }
     for (let i = 0; i < resolvers.length; i++) {
       if (resolvers[i].id === msg.resolver) {
-        if (msg.type === 'error') resolvers[i].reject(msg.payload);
-        else resolvers[i].resolve(msg.payload);
+        if (msg.type === 'error') { resolvers[i].reject(msg.payload); }
+        else { resolvers[i].resolve(msg.payload); }
         resolvers = resolvers.slice(i, 1);
       }
     }

@@ -2,10 +2,10 @@ import { EncryptedStream } from 'extension-streams';
 import { setLevel, info } from 'loglevel';
 
 import IdGenerator from 'models/IdGenerator';
+import { NetworkMessage } from 'models/NetworkMessage';
 import InternalMessage from 'services/InternalMessage';
-import NetworkMessage from 'services/NetworkMessage';
-
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
+import { strippedHost } from 'helpers/net';
 
 const INJECT_FILENAME = 'inpage.bundle.js';
 
@@ -13,7 +13,6 @@ class Content {
   public stream;
 
   constructor () {
-    // eslint-disable-next-line
     setLevel(logLevel);
 
     this.setupInpageStream();
@@ -47,32 +46,35 @@ class Content {
 
   /**
    * Listing injected messages
-   * @param {MessageType} message
+   * @param message
    */
   public contentListener (message) {
-    const nonSyncMessage = NetworkMessage.fromJson(message);
-
-    // log.info('content receive > ', nonSyncMessage);
+    const nonSyncMessage = NetworkMessage.fromJson({
+      ...message,
+      domain: strippedHost()
+    });
     this.sendBackground(nonSyncMessage);
   }
 
-  public sendBackground (message) {
-    InternalMessage.payload(message.type, message.payload)
+  public sendBackground (message: NetworkMessage) {
+    InternalMessage.payload(message.type, message)
       .send()
       .then(res => this.respond(message, res));
   }
 
   /**
    * Response from background
-   * @param {Message} message
-   * @param {Message} response
+   * @param message
+   * @param response
    */
-  public respond (message, payload) {
-    // log.info('response < ', message, payload);
-    const response = message.respond(payload);
+  public respond (message, backResponse) {
+    const response = backResponse && backResponse.type === 'error'
+      ? message.error({ error: backResponse.error })
+      : message.respond(backResponse);
 
     this.stream.send(response, INPAGE_APP);
   }
 }
 
+// tslint:disable-next-line
 new Content();

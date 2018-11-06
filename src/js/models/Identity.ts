@@ -57,10 +57,10 @@ export class IdentityRequiredFields {
   }
 
   public isValid (){
-      if(JSON.stringify(Object.keys(new IdentityRequiredFields())) !== JSON.stringify(Object.keys(this))) return false;
-      if(!this.personal.every(field => Object.keys(PersonalFields).includes(field))) return false;
-      if(!this.location.every(field => Object.keys(LocationFields).includes(field))) return false;
-      if(this.accounts.length && !this.accounts.every(network => network.isValid())) return false;
+      if(JSON.stringify(Object.keys(new IdentityRequiredFields())) !== JSON.stringify(Object.keys(this))) { return false; }
+      if(!this.personal.every(field => Object.keys(PersonalFields).includes(field))) { return false; }
+      if(!this.location.every(field => Object.keys(LocationFields).includes(field))) { return false; }
+      if(this.accounts.length && !this.accounts.every(network => network.isValid())) { return false; }
       return true;
   }
 
@@ -70,7 +70,7 @@ export class IdentityRequiredFields {
           if(key === IdentityBaseFields.account) {
               this[key].map(network => fields.push(`ACCOUNT: ${network.unique()}`));
           }
-          else this[key].map(subKey => fields.push(subKey))
+          else { this[key].map(subKey => fields.push(subKey)) }
       });
       return fields;
   }

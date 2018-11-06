@@ -65,7 +65,7 @@ export class EosController {
    * @param id AccountId
    */
   private responseGetKeyAccounts = (sendResponse, id: string): void => {
-    const account = this.accountController.getById(id);
+    const account = this.accountController.getAccount({ id });
 
     if (account) {
       account.wallet.getKeyAccounts()
@@ -83,7 +83,7 @@ export class EosController {
    * Assign eos account name to account
    */
   private responseSetKeyAccount = (sendResponse, {id, accountPermission}): void => {
-    const account = this.accountController.getById(id);
+    const account = this.accountController.getAccount({ id });
 
     if (account) {
       account.setExtra(accountPermission);
@@ -99,7 +99,7 @@ export class EosController {
    * Find required account by account_name
    * @param name 
    */
-  private findByAccountName (name: string) {
-    return this.accountController.getByAddress(name);
+  private findByAccountName (address: string) {
+    return this.accountController.getAccount({ address });
   }
 }

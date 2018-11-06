@@ -37,16 +37,17 @@ export class EthereumController {
   /**
    * Return Eth address list
    */
-  private responseGetAccounts = sendResponse => {
-    sendResponse(this.getEthAcounts().map(account => account.getAddress()));
+  private responseGetAccounts = (sendResponse, data, { domain }) => {
+    sendResponse(this.getEthAcounts(domain).map(account => account.getAddress()));
   }
 
   /**
    * Filter all account by blockchain
    */
-  private getEthAcounts () {
-    return this.accountController.getAccounts().filter(account => {
-      return account.blockchain === ntx.ETH.sign;
+  private getEthAcounts (domain?: string) {
+    return this.accountController.getAccounts({
+      bc: ntx.ETH.sign,
+      domain
     });
   }
   

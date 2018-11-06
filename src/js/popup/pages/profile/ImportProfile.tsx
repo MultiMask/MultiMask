@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from '../../actions/profile';
-import { formToJson } from '../../helpers';
+import { formToJson } from 'helpers/forms';
 
 class ImportProfile extends Component<any, any> {
   public handleImportProfile = e => {
@@ -16,7 +16,7 @@ class ImportProfile extends Component<any, any> {
     handleImport(pass, profile);
   };
 
-  public render() {
+  public render () {
     return <AuthForm handleSubmit={this.handleImportProfile} />;
   }
 }
@@ -24,7 +24,6 @@ class ImportProfile extends Component<any, any> {
 export default withRouter(
   connect(
     ({ profile }: any) => {
-      console.log(profile, 'state');
       return {
         profile: profile.importProfile
       };

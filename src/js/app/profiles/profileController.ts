@@ -102,8 +102,8 @@ export class ProfileController {
 
     return AccountFactory.create(accountData)
       .init()
-      .then(_account => {
-        account = _account;
+      .then(createdAccount => {
+        account = createdAccount;
 
         return profile.addAccount(this.getPass(), account)
       })
@@ -117,12 +117,11 @@ export class ProfileController {
 
   /**
    * Update account's wallet network
-	 * @param sendResponse 
-   * @param accountData: {id, network} 
+	 * @param sendResponse
+   * @param accountData
    */
-
-  public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
-    const account = this.accountController.getById(accountData.id);
+  public updateAccountNetwork = (sendResponse, accountData: {id: string, network: string}): void => {
+    const account = this.accountController.getAccount({ id: accountData.id });
     account.changeNetwork(accountData.network)
 
     AccountFactory.save(this.getPass(), account)

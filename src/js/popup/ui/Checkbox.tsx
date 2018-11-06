@@ -3,15 +3,15 @@ import * as PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
 class Checkbox extends React.Component<any, any> {
-  constructor(props) {
+  constructor (props) {
     super(props);
   }
 
-  onChange = e => {
+  public onChange = e => {
     typeof this.props.onChange === 'function' && this.props.onChange(e);
   };
 
-  render() {
+  public render () {
     const { name, checked, label, onChange } = this.props;
 
     return (
@@ -23,7 +23,7 @@ class Checkbox extends React.Component<any, any> {
     );
   }
 
-  static propTypes = {
+  public static propTypes = {
     name: PropTypes.string.isRequired,
     checked: PropTypes.bool,
     label: PropTypes.string,
@@ -41,7 +41,7 @@ const Input = styled('input')`
   opacity: 0;
 `;
 
-type CheckboxIconProps = {
+interface CheckboxIconProps {
   theme?: any;
   color?: string;
 }

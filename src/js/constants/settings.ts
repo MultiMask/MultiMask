@@ -5,3 +5,5 @@ export const SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS = 'settings:load:currency:pric
 export const SETTINGS_SET_PRICE_DATA_PROVIDERS = 'settings:set:price:data:providers';
 export const SETTINGS_SET_PRICES = 'settings:set:prices';
 export const SETTINGS_SET_SETTING = 'settings:set:setting';
+
+export const SETTING_OPEN_DOMAINS = 'setting:domain:open';

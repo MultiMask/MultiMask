@@ -6,14 +6,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import FontAwesome from 'react-fontawesome';
-import authAction from '../actions/auth';
-import routingActions from '../actions/routing';
+
+import authAction from 'popup/actions/auth';
+import routingActions from 'popup/actions/routing';
+import settingsActions from 'popup/actions/settings';
+
 import { BaseContainer } from './BaseContainer';
-import Typography from '../ui/Typography';
-import Menu from '../ui/Menu';
-import MenuItem from '../ui/MenuItem';
-import Icon from '../ui/Icon';
-import NeedAuth from '../ui/components/NeedAuth';
+import Typography from 'ui/Typography';
+import Menu from 'ui/Menu';
+import MenuItem from 'ui/MenuItem';
+import Icon from 'ui/Icon';
+import NeedAuth from 'ui/components/NeedAuth';
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -65,7 +68,8 @@ class MainLayout extends React.Component<any, any> {
       children,
       goBack,
       needAuth,
-      location: { pathname }
+      location: { pathname },
+      openDomainControl
     } = this.props;
 
     return (
@@ -78,6 +82,7 @@ class MainLayout extends React.Component<any, any> {
               </Link>
             )}
             <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+              <MenuItem onClick={openDomainControl}>Domain Control</MenuItem>
               <MenuItem component={Link} to="/profiles">
                 Profiles
               </MenuItem>
@@ -106,6 +111,6 @@ class MainLayout extends React.Component<any, any> {
 export default withRouter(
   connect(
     null,
-    dispatch => bindActionCreators({ ...authAction, ...routingActions }, dispatch)
+    dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
   )(MainLayout)
 );
