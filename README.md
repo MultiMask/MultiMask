@@ -10,7 +10,7 @@ MultiMask is browser extension. You can see transaction history and send transac
 
 **From The Repository** 
 * Clone repository
-* [In some cases](https://github.com/MultiMask/MultiMask) on a Windows system you will need to run `npm install --global --production windows-build-tools`
+* In some cases on a Windows system you will need to run `npm install --global --production windows-build-tools`
 * `npm install` or `yarn` to get dependencies
 * `npm start` or `yarn start` to compile a `build` folder.
 
