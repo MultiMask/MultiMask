@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import DialogLayout from './../popup/layouts/DialogLayout';
+
+import DialogLayout from 'popup/layouts/DialogLayout';
 import { Prompt } from 'models/Prompt';
 import { processForm } from 'helpers/forms';
 
@@ -19,9 +20,11 @@ export class DomainAccess extends React.Component<IProps, any> {
   };
 
   public renderSingleAccount = (account: WalletInfo) => {
+    const permissions: string[] = this.props.prompt.data.permissions || [];
+
     return (
       <label key={account.id} className="Wallet">
-        <Input type="checkbox" name={INPUT_NAME} value={account.id} />
+        <Input type="checkbox" name={INPUT_NAME} value={account.id} defaultChecked={permissions.includes(account.id)} />
         <div className="Wallet-Inner">
           <div className="Wallet-Icon">{this.getIcon(account)}</div>
           <div className="Wallet-Info">
@@ -60,7 +63,7 @@ export class DomainAccess extends React.Component<IProps, any> {
           Select accounts to this domain: <b>{this.props.prompt.domain}</b>
         </Title>
         <form onSubmit={this.handleSubmit}>
-          <List>{this.props.prompt.data.map(account => this.renderSingleAccount(account))}</List>
+          <List>{this.props.prompt.data.accounts.map(account => this.renderSingleAccount(account))}</List>
           <Actions>
             <Button onClick={this.handleDeny}>Block</Button>
             <Button type="submit">Allow</Button>

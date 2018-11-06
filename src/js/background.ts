@@ -75,6 +75,7 @@ class Controller {
     });
 
     this.settingsController = new SettingsController({
+      busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
     });

@@ -1,3 +1,5 @@
+import parse from 'url-parse';
+
 export const strippedHost = (): string => {
   let host = location.hostname;
 
@@ -6,3 +8,14 @@ export const strippedHost = (): string => {
 
   return host;
 };
+
+export const parseUrlToHost = (url: string): string => {
+  const URI = parse(url);
+  let hostname = URI.hostname;
+
+   // Replacing www. only if the domain starts with it.
+   if(hostname.indexOf('www.') === 0) { hostname = hostname.replace('www.', ''); }
+
+   return hostname;
+  
+}

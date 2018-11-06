@@ -1,11 +1,15 @@
 import { error } from 'loglevel';
 
 import ntx from 'bcnetwork';
+import { apis } from 'helpers/browsers';
 
-import { AccessController } from './../accessController';
-import { MessageController } from './../messageController';
+import { parseUrlToHost } from 'helpers/net';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { BusController } from 'app/busController';
 
 import {
+  SETTING_OPEN_DOMAINS,
   SETTINGS_LOAD_CURRENCY_PRICE,
   SETTINGS_LOAD_CURRENCY_PRICE_FAIL,
   SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS
@@ -16,6 +20,7 @@ import priceProviders from './priceProviders';
 export class SettingsController {
   private accessController: AccessController;
   private messageController: MessageController;
+  private busController: BusController;
 
   public priceProviders;
   public priceProvider;
@@ -29,6 +34,7 @@ export class SettingsController {
 
   constructor (opts) {
     this.accessController = opts.accessController;
+    this.busController = opts.busController;
     this.messageController = opts.messageController;
 
     this.priceProviders = priceProviders;
@@ -70,8 +76,15 @@ export class SettingsController {
           type: SETTINGS_LOAD_CURRENCY_PRICE_FAIL
         });
       }
-
     });
+
+    this.messageController.on(SETTING_OPEN_DOMAINS, sendResponse => {
+      apis.tabs.getSelected(null, tab => {
+        const url = parseUrlToHost(tab.url);
+
+        this.busController.emit(SETTING_OPEN_DOMAINS, url);
+      });
+    })
   }
 
   public loadPrice (sign, convertTo) {
