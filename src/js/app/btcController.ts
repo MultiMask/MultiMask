@@ -34,11 +34,12 @@ export class BtcController {
    * Enhance TX and send to
    * @param data 
    */
-  private responseApproveTx = (sendResponse, data) => {
-    const account = this.accountController.getByAddress(data.tx.from);
+  private responseApproveTx = (sendResponse: InternalResponseFn, data) => {
+    const account = this.accountController.getAccount({ address: data.tx.from });
 
     if (!account) {
       sendResponse({
+        success: false,
         error: 'Account not found'
       });
     }
@@ -46,9 +47,12 @@ export class BtcController {
     const responder = approval => {
       if(approval && approval.tx) {
         
-        account.sendTX(approval.tx).then(data => {
+        account.sendTX(approval.tx).then(TxHash => {
           sendResponse({
-            success: true
+            success: true,
+            payload: {
+              TxHash
+            }
           })
         })
       }
@@ -60,8 +64,9 @@ export class BtcController {
   /**
    * Return list of BTC wallets
    */
-  private responseGetAccounts = (sendReponse) => {
-    const accounts = this.accountController.getAccountsBySign(ntx.BTC.sign);
+  private responseGetAccounts = (sendReponse, req, domain) => {
+    console.log('req > ', req, domain);
+    const accounts = this.accountController.getAccounts({ bc: ntx.BTC.sign });
 
     sendReponse(accounts.map(acc => acc.getAddress()));
   }

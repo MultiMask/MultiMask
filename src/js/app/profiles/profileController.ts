@@ -121,8 +121,8 @@ export class ProfileController {
    * @param accountData: {id, network} 
    */
 
-  public updateAccountNetwork = (sendResponse: any, accountData: {id: string, network: string}): void => {
-    const account = this.accountController.getById(accountData.id);
+  public updateAccountNetwork = (sendResponse, accountData: {id: string, network: string}): void => {
+    const account = this.accountController.getAccount({ id: accountData.id });
     account.changeNetwork(accountData.network)
 
     AccountFactory.save(this.getPass(), account)

@@ -76,7 +76,7 @@ export class MessageController extends EventEmitter {
             this.domainController.checkDomain(payload.domain)
               .then(approve => {
                 if (approve) {
-                  this.emit(payload.type, cb, payload.payload);
+                  this.emit(payload.type, cb, payload.payload, { domain: payload.domain });
                 } else {
                   sendResponse({ error: 'Denied by user', type: 'error' });      
                 }
