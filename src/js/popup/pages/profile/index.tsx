@@ -16,36 +16,36 @@ class Profiles extends React.Component<any, any> {
   private pass;
   private textInput;
 
-  state = {
+  public state = {
     editProfileId: false,
     profileName: ''
   };
 
-  componentDidMount() {
+  public componentDidMount () {
     this.props.getList();
   }
 
-  onAdd = () => {
+  public onAdd = () => {
     this.props.add();
   };
 
-  onRemove = id => {
+  public onRemove = id => {
     this.props.remove(id);
   };
 
-  onExport = id => {
+  public onExport = id => {
     this.props.export(id);
   };
 
-  handleEdit = ({ name, id }) => () => {
+  public handleEdit = ({ name, id }) => () => {
     this.setState({ editProfileId: id, profileName: name });
   };
 
-  handleProfileNameChange = event => {
+  public handleProfileNameChange = event => {
     this.setState({ profileName: event.target.value });
   };
 
-  handleOnBlurInput = (profile, name) => () => {
+  public handleOnBlurInput = (profile, name) => () => {
     const { id, name: oldName } = profile;
 
     if (oldName !== name) {
@@ -56,7 +56,7 @@ class Profiles extends React.Component<any, any> {
     this.setState({ editProfileId: null });
   };
 
-  handleImportProfile = () => {
+  public handleImportProfile = () => {
     const { setImportingProfile } = this.props;
 
     const onImport = encryptedProfile => {
@@ -66,14 +66,14 @@ class Profiles extends React.Component<any, any> {
     readFile(onImport);
   };
 
-  handleSelect = profileId => event => {
+  public handleSelect = profileId => event => {
     event.preventDefault();
     const { select } = this.props;
 
     select(profileId);
   };
 
-  get list() {
+  get list () {
     const { list, selectedProfileId } = this.props;
     const { editProfileId, profileName } = this.state;
 
@@ -92,17 +92,17 @@ class Profiles extends React.Component<any, any> {
               onBlur={this.handleOnBlurInput(profile, profileName)}
             />
           ) : (
-              <Typography
-                className={css`
-                  cursor: pointer;
-                `}
-                onClick={this.handleSelect(profile.id)}
-                color={profile.id === selectedProfileId ? 'primary' : 'main'}
-                variant="subheading"
-              >
-                {profile.name}
-              </Typography>
-            )}
+            <Typography
+              className={css`
+                cursor: pointer;
+              `}
+              onClick={this.handleSelect(profile.id)}
+              color={profile.id === selectedProfileId ? 'primary' : 'main'}
+              variant="subheading"
+            >
+              {profile.name}
+            </Typography>
+          )}
           <ItemDescription isEdit={isEdit} color="hint">
             {profile.accounts.length} wallets
           </ItemDescription>
@@ -121,7 +121,7 @@ class Profiles extends React.Component<any, any> {
     });
   }
 
-  render() {
+  public render () {
     return (
       <Wrapper>
         <List>{this.list}</List>
@@ -182,7 +182,7 @@ const Item = styled('div')`
   padding: 10px 0;
 `;
 
-type ItemDescriptionProps = {
+interface ItemDescriptionProps {
   isEdit?: boolean;
 }
 const ItemDescription = styled(Typography)`

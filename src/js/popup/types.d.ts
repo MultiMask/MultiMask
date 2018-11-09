@@ -7,5 +7,6 @@ declare namespace IPopup {
    */
   export interface AppState {
     account: State.Accounts;
+    router: State.Router;
   }
 }

@@ -51,21 +51,21 @@ class Edit extends React.Component<any, any> {
     super(props);
 
     this.state = {
-     selectValue: this.options[0]
+      selectValue: this.options[0]
     };
   }
 
   public componentDidMount () {
-    const {account } = this.props;
+    const { account } = this.props;
 
-    const currentSelectValue = networks[account.blockchain].network.find(item => item.sign === account.info.network)
-    this.setState({selectValue: {value: currentSelectValue.sign, label: currentSelectValue.name}})
+    const currentSelectValue = networks[account.blockchain].network.find(item => item.sign === account.info.network);
+    this.setState({ selectValue: { value: currentSelectValue.sign, label: currentSelectValue.name } });
   }
 
   get options () {
-    const {account} = this.props
+    const { account } = this.props;
     if (account) {
-      return networks[account.blockchain].network.map((network) => {
+      return networks[account.blockchain].network.map(network => {
         return this.getOption(network);
       });
     }
@@ -78,16 +78,16 @@ class Edit extends React.Component<any, any> {
 
   public handleSubmit = event => {
     event.preventDefault();
-    
-    const { 
+
+    const {
       changeNetwork,
       match: {
         params: { id }
       }
     } = this.props;
 
-    const {selectValue} = this.state;
-    changeNetwork(id, selectValue.value)
+    const { selectValue } = this.state;
+    changeNetwork(id, selectValue.value);
   };
 
   public handleChooseNetwork = e => {
@@ -96,32 +96,30 @@ class Edit extends React.Component<any, any> {
 
   public render () {
     const { account, settings } = this.props;
-    const {
-      selectValue
-    } = this.state;
+    const { selectValue } = this.state;
 
     return (
       <React.Fragment>
         <Wallet data={account} />
         <Form onSubmit={this.handleSubmit}>
-        <div
-          className={css`
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-          `}
-        >
-          <Typography
+          <div
             className={css`
-              margin-right: 10px;
+              display: flex;
+              flex-direction: column;
+              width: 100%;
             `}
-            color="main"
-            variant="subheading"
           >
-            Choose network
-          </Typography>
-          <Select options={this.options} onChange={value => this.handleChooseNetwork(value)} value={selectValue} />
-        </div>
+            <Typography
+              className={css`
+                margin-right: 10px;
+              `}
+              color="main"
+              variant="subheading"
+            >
+              Choose network
+            </Typography>
+            <Select options={this.options} onChange={value => this.handleChooseNetwork(value)} value={selectValue} />
+          </div>
           <Button className={styles.button}>Choose</Button>
         </Form>
       </React.Fragment>
@@ -129,9 +127,11 @@ class Edit extends React.Component<any, any> {
   }
 }
 
-export default withRouter(connect(
-  (state: any) => ({
-    account: getCurrentWallet(state)
-  }),
-  dispatch => bindActionCreators(accountActions, dispatch)
-)(Edit));
+export default withRouter<any>(
+  connect(
+    (state: any) => ({
+      account: getCurrentWallet(state)
+    }),
+    dispatch => bindActionCreators(accountActions, dispatch)
+  )(Edit)
+);

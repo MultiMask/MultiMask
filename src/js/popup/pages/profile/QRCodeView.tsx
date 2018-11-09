@@ -8,12 +8,12 @@ import Typography from '../../ui/Typography';
 import { withRouter } from 'react-router';
 
 class QRCodeView extends React.Component<any, any> {
-  state = {
+  public state = {
     profile: '',
     profileId: null
   };
 
-  componentDidMount() {
+  public componentDidMount () {
     const {
       getProfile,
       match: {
@@ -26,7 +26,7 @@ class QRCodeView extends React.Component<any, any> {
     });
   }
 
-  render() {
+  public render () {
     const { profile } = this.state;
 
     return (
@@ -40,12 +40,10 @@ class QRCodeView extends React.Component<any, any> {
   }
 }
 
-export default withRouter(
-  connect(
-    null,
-    dispatch => bindActionCreators(profileActions, dispatch)
-  )(QRCodeView)
-);
+export default withRouter(connect(
+  null,
+  dispatch => bindActionCreators(profileActions, dispatch)
+)(QRCodeView) as any);
 
 const Container = styled('div')`
   padding: 20px;

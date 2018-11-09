@@ -21,19 +21,17 @@ class ImportProfile extends Component<any, any> {
   }
 }
 
-export default withRouter(
-  connect(
-    ({ profile }: any) => {
-      return {
-        profile: profile.importProfile
-      };
-    },
-    dispatch =>
-      bindActionCreators(
-        {
-          handleImport: profileActions.import
-        },
-        dispatch
-      )
-  )(ImportProfile)
-);
+export default withRouter(connect(
+  ({ profile }: any) => {
+    return {
+      profile: profile.importProfile
+    };
+  },
+  dispatch =>
+    bindActionCreators(
+      {
+        handleImport: profileActions.import
+      },
+      dispatch
+    )
+)(ImportProfile) as any);

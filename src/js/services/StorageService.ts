@@ -39,5 +39,10 @@ export const StorageService = {
   Domains: {
     get: () => storage.get(CONST.DOMAINS),
     set: domains => storage.set(CONST.DOMAINS, domains)
+  },
+
+  PopupState: {
+    get: () => storage.get(CONST.POPUP_STATE),
+    set: state => storage.set(CONST.POPUP_STATE, state)
   }
 }

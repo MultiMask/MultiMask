@@ -7,8 +7,8 @@ import InternalMessage from 'services/InternalMessage';
 
 import accountActions from './account';
 
-const settingsActions = {
-  getKeyAccounts: (id) => (dispatch, getState) => {
+export const eosActions = {
+  getKeyAccounts: (id: string) => (dispatch, getState) => {
     return InternalMessage.payload(GET_KEY_ACCOUNTS, id)
       .send();
   },
@@ -22,5 +22,3 @@ const settingsActions = {
       })
   }
 };
-
-export default settingsActions;

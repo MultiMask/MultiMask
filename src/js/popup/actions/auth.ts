@@ -82,7 +82,9 @@ const AuthActions = {
   success: () => (dispatch, getState) => {
     AccountActions.getInfo()(dispatch, getState);
     SettingActions.getPrices()(dispatch, getState);
-    dispatch(push('/'));
+
+    const state: IPopup.AppState = getState();
+    dispatch(push(state.router.url || '/'));
   },
 
   fail: () => (dispatch, getState) => {

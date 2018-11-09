@@ -6,7 +6,7 @@ import NeedAuth from '../../ui/components/NeedAuth';
 import profileActions from '../../actions/profile';
 
 class ExportProfile extends Component<any, any> {
-  handleExportProfile = () => {
+  public handleExportProfile = () => {
     const {
       handleExport,
       match: {
@@ -17,20 +17,18 @@ class ExportProfile extends Component<any, any> {
     handleExport(id);
   };
 
-  render() {
+  public render () {
     return <NeedAuth onSubmit={this.handleExportProfile} />;
   }
 }
 
-export default withRouter(
-  connect(
-    null,
-    dispatch =>
-      bindActionCreators(
-        {
-          handleExport: profileActions.export
-        },
-        dispatch
-      )
-  )(ExportProfile)
-);
+export default withRouter(connect(
+  null,
+  dispatch =>
+    bindActionCreators(
+      {
+        handleExport: profileActions.export
+      },
+      dispatch
+    )
+)(ExportProfile) as any);

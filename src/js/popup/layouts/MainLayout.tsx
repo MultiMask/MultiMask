@@ -108,9 +108,7 @@ class MainLayout extends React.Component<any, any> {
   }
 }
 
-export default withRouter(
-  connect(
-    null,
-    dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
-  )(MainLayout)
-);
+export default withRouter(connect(
+  null,
+  dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
+)(MainLayout) as any);

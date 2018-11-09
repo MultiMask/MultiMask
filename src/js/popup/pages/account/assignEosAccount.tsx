@@ -1,40 +1,40 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { bindActionCreators, ActionCreator, Dispatch } from 'redux';
 import { withRouter } from 'react-router';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
 import { getCurrentWallet } from './../../select';
 import Wallet from './common/Wallet';
-import eosActions from '../../actions/eos';
+import { eosActions } from '../../actions/eos';
 import Typography from '../../ui/Typography';
 
 import { EosAccount } from './../wallet/bcaccounts/eosAccount';
+import { any } from 'prop-types';
 
 interface IState {
   accounts?: any[];
 }
 
-interface IProps {
+type OmitMiddleFunction<T> = T extends (...args: infer A1) => (...args: any[]) => infer F ? (...args: A1) => F : never;
+type Actions<T> = { [K in keyof T]: OmitMiddleFunction<T[K]> };
+interface IProps extends Actions<typeof eosActions> {
   account: WalletInfo;
-  getKeyAccounts (id: string): Promise<any[]>;
-  setAccountToKey (id: string, account: string): Promise<any[]>;
 }
 
 class Assign extends React.Component<IProps, IState> {
-
   public state: IState = {};
 
-  public handleSave = (account) => {
+  public handleSave = account => {
     this.props.setAccountToKey(this.props.account.id, account);
-  }
+  };
 
   public componentDidMount () {
-    this.props.getKeyAccounts(this.props.account.id)
-      .then(accounts => {
-        this.setState({accounts});
-      })
+    this.props.getKeyAccounts(this.props.account.id).then(accounts => {
+      this.setState({ accounts });
+    });
   }
 
   public render () {
@@ -46,7 +46,7 @@ class Assign extends React.Component<IProps, IState> {
         <Wallet data={account} />
         {accounts && (
           <Wrap>
-            <EosAccount accounts={accounts} onImport={this.handleSave}/>
+            <EosAccount accounts={accounts} onImport={this.handleSave} />
           </Wrap>
         )}
       </React.Fragment>
@@ -54,12 +54,14 @@ class Assign extends React.Component<IProps, IState> {
   }
 }
 
-export default withRouter(connect(
-  (state: any) => ({
-    account: getCurrentWallet(state)
-  }),
-  dispatch => bindActionCreators(eosActions, dispatch)
-)(Assign));
+export default withRouter<any>(
+  connect(
+    (state: IPopup.AppState) => ({
+      account: getCurrentWallet(state)
+    }),
+    eosActions as any
+  )(Assign)
+);
 
 const Wrap = styled('div')`
   padding: 10px 20px;
