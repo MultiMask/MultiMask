@@ -17,7 +17,9 @@ export function configureStore (): Promise<PopupStore> {
     StorageService.PopupState.get()
       .then(initialState => {
         // backup location
-        initialState.router.url = clearUrl(initialState.router.location.pathname);
+        if (initialState) {
+          initialState.router.url = clearUrl(initialState.router.location.pathname);
+        }
 
         resolve(createStore(
           connectRouter(history)(rootReducer),
