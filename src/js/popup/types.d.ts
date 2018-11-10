@@ -14,3 +14,5 @@ declare namespace IPopup {
 
 type OmitMiddleFunction<T> = T extends (...args: infer A1) => (...args: any[]) => infer F ? (...args: A1) => F : never;
 type Actions<T> = { [K in keyof T]: OmitMiddleFunction<T[K]> };
+
+type GetStateFn = () => IPopup.AppState;

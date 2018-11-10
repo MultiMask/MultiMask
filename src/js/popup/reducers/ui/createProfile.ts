@@ -1,6 +1,6 @@
 import {
-  PROFILE_CREARE_DONE, PROFILE_CREATE_GENERATE
-} from 'constants/ui/createProfile';
+  PROFILE_CREATE_DONE, PROFILE_CREATE_GENERATE
+} from 'constants/profile';
 
 const initialState = {
   seed: ''
@@ -12,7 +12,7 @@ export default function profileCreateReducer (state = initialState, action) {
       return {
         seed: action.payload.seed,
       }
-    case PROFILE_CREARE_DONE:
+    case PROFILE_CREATE_DONE:
       return {
         seed: null,
       }

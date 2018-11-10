@@ -19,3 +19,6 @@ export const PROFILE_SELECT = 'profile:select';
 export const PROFILE_SELECT_RESULT = 'profile:select:result';
 
 export const PROFILE_IMPORT_SET = 'profile:import:set';
+
+export const PROFILE_CREATE_GENERATE = 'profile:create:generate';
+export const PROFILE_CREATE_DONE = 'profile:create:done';
