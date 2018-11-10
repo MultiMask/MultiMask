@@ -14,4 +14,10 @@ declare namespace IPopup.State {
     }
     url?: string;
   }
+
+  export interface UI {
+    profileCreate: {
+      seed: string;
+    }
+  }
 }

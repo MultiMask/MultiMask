@@ -11,6 +11,7 @@ const dynamicStyle = props => css`
 `;
 
 const ButtonBase = styled('button')`
+  outline: none;
   color: white;
   border-radius: 4px;
   line-height: 16px;
