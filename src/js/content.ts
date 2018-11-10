@@ -1,7 +1,7 @@
 import { EncryptedStream } from 'extension-streams';
 import { setLevel, info } from 'loglevel';
 
-import IdGenerator from 'models/IdGenerator';
+import { Randomizer } from 'services/Randomizer';
 import { NetworkMessage } from 'models/NetworkMessage';
 import InternalMessage from 'services/InternalMessage';
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
@@ -25,7 +25,7 @@ class Content {
    * Create encrypted strem to inject script in user page
    */
   public setupInpageStream () {
-    this.stream = new EncryptedStream(CONTENT_APP, IdGenerator.text(256));
+    this.stream = new EncryptedStream(CONTENT_APP, Randomizer.text(256));
     this.stream.listenWith(msg => this.contentListener(msg));
 
     this.stream.onSync(() => { });
