@@ -20,6 +20,7 @@ function getConfigParams(params) {
 var alias = {
   'bcnetwork': path.resolve(__dirname, 'src/js/blockchain/index.ts'),
   'constants': path.resolve(__dirname, 'src/js/constants'),
+  'config': path.resolve(__dirname, 'src/js/config'),
   'helpers': path.resolve(__dirname, 'src/js/helpers'),
   'libs': path.resolve(__dirname, 'src/js/libs'),
   'models': path.resolve(__dirname, 'src/js/models'),

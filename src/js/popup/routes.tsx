@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import AuthLayout from './layouts/AuthLayout';
+import EmptyLayout from './layouts/EmptyLayout';
 import MainLayout from './layouts/MainLayout';
 
 import Login from './pages/Login';
@@ -18,11 +19,14 @@ import Send from './pages/account/send';
 import EditAccount from './pages/account/edit';
 import Assign from './pages/account/assignEosAccount';
 import CreateWallet from './pages/wallet';
+import Loading from 'popup/pages/Loading';
+
+import { MAIN, LOGIN, LOADING } from 'constants/popupUrl';
 
 const routes = () => {
   return (
     <Switch>
-      <AppRoute exact path="/" component={Account} layout={MainLayout} />
+      <AppRoute exact path={MAIN} component={Account} layout={MainLayout} />
       <AppRoute exact path="/create/account" component={CreateAccount} layout={AuthLayout} />
       <AppRoute exact path="/account/details" component={Details} layout={MainLayout} />
       <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
@@ -39,7 +43,8 @@ const routes = () => {
       <AppRoute exact path="/profiles/:id/export" component={ProfileExport} layout={MainLayout} />
       <AppRoute exact path="/profiles/import" component={ImportProfile} layout={MainLayout} />
 
-      <AppRoute exact path="/login" component={Login} layout={AuthLayout} />
+      <AppRoute exact path={LOGIN} component={Login} layout={AuthLayout} />
+      <AppRoute exact path={LOADING} component={Loading} layout={EmptyLayout} />
     </Switch>
   );
 };
