@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { ThunkAction } from 'redux-thunk';
-import { bindActionCreators, ActionCreator, Dispatch } from 'redux';
 import { withRouter } from 'react-router';
 import styled from 'react-emotion';
 import { css } from 'emotion';
@@ -9,17 +7,13 @@ import { css } from 'emotion';
 import { getCurrentWallet } from './../../select';
 import Wallet from './common/Wallet';
 import { eosActions } from '../../actions/eos';
-import Typography from '../../ui/Typography';
 
 import { EosAccount } from './../wallet/bcaccounts/eosAccount';
-import { any } from 'prop-types';
 
 interface IState {
   accounts?: any[];
 }
 
-type OmitMiddleFunction<T> = T extends (...args: infer A1) => (...args: any[]) => infer F ? (...args: A1) => F : never;
-type Actions<T> = { [K in keyof T]: OmitMiddleFunction<T[K]> };
 interface IProps extends Actions<typeof eosActions> {
   account: WalletInfo;
 }
