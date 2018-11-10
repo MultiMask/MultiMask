@@ -8,6 +8,7 @@ import Button from 'ui/Button';
 import { PROFILE_CREATE } from 'constants/popupUrl';
 
 const Header = styled('header')`
+  padding-top: 100px;
   display: flex;
   align-items: center;
   text-align: center;
