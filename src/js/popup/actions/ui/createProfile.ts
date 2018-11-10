@@ -12,16 +12,16 @@ const ProfileCreateAction = {
     });
   },
 
-  done: () => (dispatch, getState: GetStateFn) => {
-    dispatch({
-      type: PROFILE_CREATE_DONE,
-    });
-    
+  done: () => (dispatch, getState: GetStateFn) => {    
     const seed = getState().ui.profileCreate.seed;
-    InternalMessage.payload(PROFILE_CREATE_DONE, { payload: seed })
+    InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed }})
       .send()
       .then(({ success }) => {
         if (success) {
+          dispatch({
+            type: PROFILE_CREATE_DONE,
+          });
+
           // TODO: go to main screen
         }
       });
