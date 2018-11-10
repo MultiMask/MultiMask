@@ -30,6 +30,7 @@ var alias = {
   'popup': path.resolve(__dirname, 'src/js/popup'),
   'prompt': path.resolve(__dirname, 'src/js/prompt'),
   'mock': path.resolve(__dirname, 'utils/mock'),
+  'img': path.resolve(__dirname, 'src/img'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');

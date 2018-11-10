@@ -20,8 +20,9 @@ import EditAccount from './pages/account/edit';
 import Assign from './pages/account/assignEosAccount';
 import CreateWallet from './pages/wallet';
 import Loading from 'popup/pages/Loading';
+import Introduction from 'popup/pages/Introduction';
 
-import { MAIN, LOGIN, LOADING } from 'constants/popupUrl';
+import { MAIN, LOGIN, LOADING, PROFILE_CREATE, INTRODUCTION } from 'constants/popupUrl';
 
 const routes = () => {
   return (
@@ -42,9 +43,12 @@ const routes = () => {
       <AppRoute exact path="/profiles/:id/qrcode" component={ProfileQRCode} layout={MainLayout} needAuth />
       <AppRoute exact path="/profiles/:id/export" component={ProfileExport} layout={MainLayout} />
       <AppRoute exact path="/profiles/import" component={ImportProfile} layout={MainLayout} />
+      <AppRoute exact path="/profiles/import" component={ImportProfile} layout={MainLayout} />
+      <AppRoute exact path={PROFILE_CREATE} component={ImportProfile} layout={MainLayout} />
 
       <AppRoute exact path={LOGIN} component={Login} layout={AuthLayout} />
       <AppRoute exact path={LOADING} component={Loading} layout={EmptyLayout} />
+      <AppRoute exact path={INTRODUCTION} component={Introduction} layout={EmptyLayout} />
     </Switch>
   );
 };

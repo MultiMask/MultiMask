@@ -1,3 +1,4 @@
+export const PROFILE_GET_CURRENT = 'profile:get:current'
 export const PROFILE_GET = 'profile:get';
 export const PROFILE_GET_RESULT = 'profile:get:result';
 

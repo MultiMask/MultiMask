@@ -13,9 +13,12 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
+import { MAIN, LOADING, LOGIN, INTRODUCTION } from 'constants/popupUrl'
+
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
 import SettingActions from './settings';
+import ProfileActions from './profile';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
@@ -43,7 +46,7 @@ const AuthActions = {
                 hasPass
               }
             });
-            const next = hasPass ? '/login' : '/create/account';
+            const next = hasPass ? LOGIN : '/create/account';
             dispatch(push(next));
           });
         }
@@ -70,7 +73,7 @@ const AuthActions = {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
           });
-          dispatch(push('/login'));
+          dispatch(push(LOGIN));
         } else {
           dispatch({
             type: AUTH_LOGOUT_FAIL
@@ -78,13 +81,20 @@ const AuthActions = {
         }
       });
   },
-
+  
   success: () => (dispatch, getState) => {
-    AccountActions.getInfo()(dispatch, getState);
-    SettingActions.getPrices()(dispatch, getState);
-
-    const state: IPopup.AppState = getState();
-    dispatch(push(state.router.url || '/'));
+    dispatch(push(LOADING));
+    // AccountActions.getInfo()(dispatch, getState),
+    // SettingActions.getPrices()(dispatch, getState)
+    ProfileActions.getCurrentProfile()(dispatch, getState).then(({ success }) => {
+      if (success) {
+        const state: IPopup.AppState = getState();
+        const url = state && state.router && state.router.url ? state.router.url : MAIN;
+        dispatch(push(url));
+      } else {
+        dispatch(push(INTRODUCTION));
+      }
+    })
   },
 
   fail: () => (dispatch, getState) => {

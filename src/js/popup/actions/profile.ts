@@ -13,12 +13,17 @@ import {
   PROFILE_IMPORT,
   PROFILE_SELECT,
   PROFILE_SELECT_RESULT,
-  PROFILE_IMPORT_SET
+  PROFILE_IMPORT_SET,
+  PROFILE_GET_CURRENT
 } from 'constants/profile';
 
 import accountActions from './account';
 
 const ProfileActions = {
+  getCurrentProfile: () => (dispatch, getState) => {
+    return InternalMessage.signal(PROFILE_GET_CURRENT)
+      .send();
+  },
   getProfile: id => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_EXPORT, id)
       .send()
