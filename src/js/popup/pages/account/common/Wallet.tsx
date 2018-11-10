@@ -87,7 +87,7 @@ class Wallet extends React.Component<any, any> {
           {actions}
         </WalletContent>
       </WalletContainer>
-    )
+    );
   }
 }
 

@@ -17,30 +17,29 @@ interface IState {
 }
 
 export class EthAccount extends React.Component<IProps, IState> {
-
   public render () {
-    const {address, balance } = this.props.data.info;
+    const { address, balance } = this.props.data.info;
 
     return (
       <React.Fragment>
-          <div>
-            <Typography variant="subheading" color="main">
-              <NonEmphasis>Account:</NonEmphasis> {address}
-            </Typography>
-            <Typography variant="subheading" color="main">
-              <NonEmphasis>Balance:</NonEmphasis> {balance}
-            </Typography>
-          </div>
-          <Button
-            className={css`
-              margin-top: 50px;
-            `}
-            onClick={this.props.onImport}
-          >
-            Import
-          </Button>
-        </React.Fragment>
-    )
+        <div>
+          <Typography variant="subheading" color="main">
+            <NonEmphasis>Account:</NonEmphasis> {address}
+          </Typography>
+          <Typography variant="subheading" color="main">
+            <NonEmphasis>Balance:</NonEmphasis> {balance}
+          </Typography>
+        </div>
+        <Button
+          className={css`
+            margin-top: 50px;
+          `}
+          onClick={this.props.onImport}
+        >
+          Import
+        </Button>
+      </React.Fragment>
+    );
   }
 }
 

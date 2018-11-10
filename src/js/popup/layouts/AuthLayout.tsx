@@ -9,7 +9,7 @@ const Container = styled(BaseContainer)`
   padding: 20px;
 `;
 
-type HeaderProps = {
+interface HeaderProps {
   login?: boolean;
 }
 const Header = styled('header')`
@@ -24,7 +24,7 @@ const Image = styled('img')`
   width: 90px;
 `;
 
-type AuthLayoutProps = {
+interface AuthLayoutProps {
   login?: boolean;
 }
 const AuthLayout: React.SFC<AuthLayoutProps> = ({ children }) => (

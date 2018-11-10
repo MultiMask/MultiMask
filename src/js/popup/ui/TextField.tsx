@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-type fullWidth = { fullWidth: boolean; }
+interface IFullWidth {
+  fullWidth: boolean;
+}
 const InputContainer = styled('div')`
   position: relative;
   background-color: inherit;
-  width: ${(props: fullWidth) => props.fullWidth && '100%'};
+  width: ${(props: IFullWidth) => props.fullWidth && '100%'};
 `;
 
 const Input = styled('input')`
@@ -20,13 +22,13 @@ const Input = styled('input')`
   background-color: inherit;
 `;
 
-type LabelProps = {
+interface ILabelProps {
   theme?: any;
   htmlFor: string;
 }
 const Label = styled('label')`
   position: absolute;
-  color: ${(props: LabelProps) => props.theme.colors.secondary};
+  color: ${(props: ILabelProps) => props.theme.colors.secondary};
   top: -8px;
   left: 7px;
   padding: 0 4px;
@@ -34,9 +36,11 @@ const Label = styled('label')`
   background-color: inherit;
 `;
 
-type ErrorProps = { error: boolean }
+interface IErrorProps {
+  error: boolean;
+}
 const Error = styled('div')`
-  display: ${(props: ErrorProps) => (props.error ? 'block' : 'none')};
+  display: ${(props: IErrorProps) => (props.error ? 'block' : 'none')};
   color: ${props => props.theme.colors.error};
   font-size: 10px;
   text-align: left;
@@ -44,7 +48,7 @@ const Error = styled('div')`
   padding-top: 4px;
 `;
 
-type TextFieldProps = {
+interface ITextFieldProps {
   className?: string;
   label?: string;
   type?: string;
@@ -58,7 +62,15 @@ type TextFieldProps = {
   autoFocus?: any;
   onBlur?: any;
 }
-const TextField: React.SFC<TextFieldProps> = ({ className, label, name, error, fullWidth, inputRef, ...props }: any) => {
+const TextField: React.SFC<ITextFieldProps> = ({
+  className,
+  label,
+  name,
+  error,
+  fullWidth,
+  inputRef,
+  ...props
+}: any) => {
   return (
     <InputContainer className={className} fullWidth>
       <Label htmlFor={name}>{label}</Label>

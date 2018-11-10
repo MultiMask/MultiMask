@@ -22,7 +22,7 @@ const styles = {
 };
 
 class Auth extends React.Component<any, any> {
-  constructor(opts) {
+  constructor (opts) {
     super(opts);
 
     this.state = {
@@ -32,11 +32,11 @@ class Auth extends React.Component<any, any> {
     };
   }
 
-  handleInput = e => {
+  public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = event => {
+  public handleSubmit = event => {
     event.preventDefault();
     const errors = this.validate(this.state);
 
@@ -48,7 +48,7 @@ class Auth extends React.Component<any, any> {
     }
   };
 
-  validate = values => {
+  public validate = values => {
     const errors: { password?: string; confirmPassword?: string } = {};
 
     if (!values.password) {
@@ -63,7 +63,7 @@ class Auth extends React.Component<any, any> {
     return errors;
   };
 
-  render() {
+  public render () {
     const {
       password,
       errors: { password: passwordError, confirmPassword: confirmPasswordError },

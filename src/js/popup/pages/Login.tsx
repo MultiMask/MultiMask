@@ -20,14 +20,9 @@ const styles = {
 };
 
 class Auth extends React.Component<any, any> {
-  constructor(opts) {
-    super(opts);
-
-    this.state = {
-      pass: '',
-      error: ''
-    };
-  }
+  public state = {
+    pass: ''
+  };
 
   public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -38,7 +33,7 @@ class Auth extends React.Component<any, any> {
     this.props.login(this.state.pass);
   };
 
-  public render() {
+  public render () {
     return (
       <React.Fragment>
         <Typography color="main" variant="subheading" align="center">
@@ -52,7 +47,7 @@ class Auth extends React.Component<any, any> {
             name="pass"
             onChange={this.handleInput}
             value={this.state.pass}
-            error={this.props.error}
+            error={this.props.error ? 'Wrong password' : null}
             fullWidth
           />
           <Button fullWidth className={styles.button} type="submit">
