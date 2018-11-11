@@ -22,7 +22,7 @@ export class Randomizer {
    * @param size - The length of the number to generate
    * @returns {string} - The generated random number ( as a string )
    */
-  public static hex (size: number): string {
+  public static hex (size: number = 8): string {
     let text = '';
     const possible = '012345678abcdef';
     for (let i = 0; i < size; i++) { text += possible.charAt(Math.floor(Randomizer.rand() * possible.length)); }
