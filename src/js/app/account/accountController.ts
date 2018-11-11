@@ -137,7 +137,8 @@ export class AccountController {
       if (account) {
         const seed = account.getSeed();
 
-        return encode(this.accessController.getPass(), seed);
+        // TODO: repair it
+        // return encode(this.accessController.getPass(), seed);
       }
     }
 

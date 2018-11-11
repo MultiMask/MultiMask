@@ -16,8 +16,10 @@ const ProfileCreateAction = {
     const seed = getState().ui.profileCreate.seed;
     InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed }})
       .send()
-      .then(({ success }) => {
+      .then(({ success, payload: { profileId} }) => {
         if (success) {
+          console.log( profileId );
+
           dispatch({
             type: PROFILE_CREATE_DONE,
           });

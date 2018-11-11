@@ -87,7 +87,7 @@ export class EosController {
 
     if (account) {
       account.setExtra(accountPermission);
-      AccountFactory.save(this.accessController.getPass(), account);
+      // AccountFactory.save(this.accessController.getPass(), account);
   
       account.getInfo().then(sendResponse);  
     } else {

@@ -1,6 +1,7 @@
+import { encode, decode } from 'libs/cipher';
 import { StorageService } from 'services/StorageService';
-import { MessageController } from './messageController';
 
+import { MessageController } from 'app/messageController';
 import { BusController } from 'app/busController';
 import { AUTH_IS_READY, AUTH_CHECK, AUTH_LOGIN, AUTH_LOGOUT, AUTH_INIT } from 'constants/auth';
 import { CHECK_IS_READY } from 'constants/appInternal';
@@ -78,20 +79,6 @@ export class AccessController {
   }
 
   /**
-   * Return pass for decode and encode profiles and wallets
-   */
-  public getPass () {
-    return this.password;
-  }
-
-  /**
-   * Check that user is authorize
-   */
-  public isAuth () {
-    return !!this.password;
-  }
-
-  /**
    * Create new pass
    * @param pass 
    */
@@ -129,5 +116,28 @@ export class AccessController {
    */
   private logout () {
     return delete this.password;
+  }
+
+  /**
+   * Check that user is authorize
+   */
+  public isAuth () {
+    return !!this.password;
+  }
+
+  /**
+   * Encode any data with master pass
+   * @param data 
+   */
+  public encode = (data: any): string => {
+    return encode(this.password, JSON.stringify(data));
+  }
+
+  /**
+   * Decode encrypted data
+   * @param data 
+   */
+  public decode = (data: string): any => {
+    return decode(this.password, JSON.parse(data));
   }
 }

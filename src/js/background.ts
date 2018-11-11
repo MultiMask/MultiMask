@@ -103,6 +103,12 @@ class Controller {
       accessController: this.accessController,
       accountController: this.accountController,
     })
+
+    this.booststrap();
+  }
+
+  private booststrap () {
+    this.profileListController.init();
   }
 }
 
