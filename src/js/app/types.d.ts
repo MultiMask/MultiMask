@@ -11,12 +11,12 @@ interface IMeseeageInternal {
 
 interface IMessageInternalResultSuccess {
   success: true;
-  payload: any;
+  payload?: any;
 }
 
 interface IMessageInternalResultFailed {
-  success: false;
-  error: string;
+  success: boolean;
+  error?: string;
 }
 
 type IMeseeageInternalResult = IMessageInternalResultSuccess | IMessageInternalResultFailed;
