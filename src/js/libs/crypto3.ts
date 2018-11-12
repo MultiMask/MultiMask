@@ -48,7 +48,7 @@ const _send = (type, payload) => {
 /**
  * Provide work with wallets
  */
-export class MultiWeb {
+export class Crypto3 {
   public btc;
   public eos;
   public eth;
@@ -64,5 +64,5 @@ export class MultiWeb {
     this.eos = EOS(_send);
   }
 
-  public isAuth () { }
+  public isAuth () {}
 }

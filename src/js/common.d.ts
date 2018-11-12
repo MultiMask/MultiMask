@@ -32,7 +32,7 @@ declare var browser: any;
 interface Window {
   data: IPrompt;
   notification: any;
-  multiWeb: any;
+  crypto3: any;
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
 }
 
