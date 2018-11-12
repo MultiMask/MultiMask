@@ -1,4 +1,3 @@
-import { encode } from '../../libs/cipher';
 import AccountFactory from './accountFactory';
 
 import Account from './';
@@ -9,6 +8,8 @@ import { DomainController} from 'app/domainController';
 import { GET_ACCOUNTS } from 'constants/appInternal';
 
 import { info } from 'loglevel';
+
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
 
 interface IGetAccountOptions {
   id?: string;
@@ -42,6 +43,28 @@ export class AccountController {
    */
   private listening () {
     this.busController.on(GET_ACCOUNTS, cb => cb(this.getAccounts()));
+
+    this.messageController.on(ACCOUNT_INFO, this.responseAccountInfo);
+  }
+
+  /**
+   * Return accountInfo
+   */
+  private responseAccountInfo = (sendResponse: InternalResponseFn) => {
+    sendResponse({
+      success: true,
+      payload: {
+        accounts: []
+      }
+    })
+  }
+
+  /**
+   * Set new plenty of accounts
+   * @param accounts 
+   */
+  public assignAccounts (accounts: IAccountKeyData[]) {
+    
   }
 
   /**

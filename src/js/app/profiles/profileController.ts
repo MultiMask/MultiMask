@@ -1,6 +1,7 @@
 import { info } from 'loglevel';
 
 import { BusController } from 'app/busController';
+import { KeyController } from 'app/keyController';
 import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
 import { ProfileListController } from 'app/profiles/profileListController';
@@ -8,6 +9,7 @@ import { AccountController } from 'app/account/accountController';
 import AccountFactory from 'app/account/accountFactory';
 
 import { Profile } from 'models/Profile';
+import { StorageService } from 'services/StorageService';
 
 import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
 import { PROFILE_SELECT } from 'constants/profile';
@@ -16,6 +18,7 @@ export class ProfileController {
   private accessController: AccessController;
   private busController: BusController;
   private messageController: MessageController;
+  private keyController: KeyController;
 
   private profileListController: ProfileListController;
   private accountController: AccountController;
@@ -24,6 +27,7 @@ export class ProfileController {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
+    this.keyController = opts.keyController;
     
     this.accountController = opts.accountController;
     this.profileListController =  opts.profileListController;
@@ -35,19 +39,37 @@ export class ProfileController {
    * Messages
    */
   private startListening () {
+    this.busController.on(PROFILE_SELECT, this.activateProfile);
+
     // this.messageController.on(ACCOUNT_INFO, this.getAccounts);
     // this.messageController.on(ACCOUNT_CREATE, this.addAccount);
     // this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
     // this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
+  }
+    
+  /**
+   * Restore all accounts from Profile
+   * @param {Profile} profile
+   */
+  private activateProfile = async (profileId: string, cb) => {
+    const profile = Profile.fromJSON(await StorageService.Entities.get(profileId));
+    const profileData = profile.getKeysAndAccounts(this.accessController.decode);
 
-    // this.busController.on(PROFILE_SELECT, this.restoreProfile);
+    this.keyController.assignKeys( profileData.keys );
+    this.accountController.assignAccounts( profileData.accounts );
+
+    cb(true);
+    // info('Profile changed > ', profile);
+    // return this.restoreAccounts(profile.getAccounts());
+    // // return this.restoreAccounts([profile.getAccounts());
   }
 
-  private getPass () {
-    // return this.accessController.getPass();
-  }
+  // private getPass () {
+  //   // return this.accessController.getPass();
+  // }
 
   /**
+   * DEPRICATED
    * Return accounts for current Profile
    * @param sendResponse
    */
@@ -66,19 +88,9 @@ export class ProfileController {
   /**
    * Get profiles list and restore first or create new
    */
-  private init () {
+  // private init () {
     // return this.profileListController.init()
     //   .then(this.restoreProfile);
-  }
-
-  /**
-   * Restore all accounts from Profile
-   * @param {Profile} profile
-   */
-  // private restoreProfile = (profile: Profile) => {
-  //   info('Profile changed > ', profile);
-  //   return this.restoreAccounts(profile.getAccounts());
-  //   // return this.restoreAccounts([profile.getAccounts());
   // }
 
   /**

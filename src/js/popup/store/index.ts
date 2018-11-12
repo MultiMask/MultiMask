@@ -7,38 +7,52 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 import { StorageService } from 'services/StorageService';
 
+import { MAIN, LOGIN, LOADING, PROFILE_CREATE } from 'constants/popupUrl';
+
 export const history = createMemoryHistory();
 export type PopupStore = Store<IPopup.AppState, any>;
+
+const TIMEOUT = 1000 * 60 * 15; // 15 minutes
 
 export function configureStore (): Promise<PopupStore> {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   
   return new Promise(resolve => {
     StorageService.PopupState.get()
-      .then(initialState => {
-        // backup location
-        if (initialState) {
+    .then(initialState => {
+      // backup location
+      if (initialState) {
+        if (initialState.timestamp && Date.now() - initialState.timestamp < TIMEOUT) {
+          delete initialState.auth;
           initialState.router.url = clearUrl(initialState.router.location.pathname);
+          
+          info('Restore state', initialState);
         }
+        delete initialState.timestamp;
+      }
 
-        resolve(createStore(
-          connectRouter(history)(rootReducer),
-          initialState,
-          composeEnhancers(applyMiddleware(thunk, routerMiddleware(history)))
-        ));
-      })
+      resolve(createStore(
+        connectRouter(history)(rootReducer),
+        initialState,
+        composeEnhancers(applyMiddleware(thunk, routerMiddleware(history)))
+      ));
+    })
   })
-  
 }
 
 export const subscriber = (store: PopupStore) => () => {
-  StorageService.PopupState.set(store.getState());
+  // info(store.getState().router.location.pathname);
+  StorageService.PopupState.set({
+    ...store.getState(),
+    timestamp: Date.now()
+  });
 }
 
 export const clearUrl = (url) => {
   switch (url) {
-    case '/login':
-      return '/'
+    case LOGIN:
+    case LOADING:
+      return MAIN;
     default:
       return url;
   }

@@ -9,6 +9,8 @@ declare namespace IPopup {
     account: State.Accounts;
     router: State.Router;
     ui: State.UI;
+
+    timestamp?: number;
   }
 }
 

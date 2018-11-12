@@ -5,6 +5,7 @@ import { AccessController } from './app/accessController';
 import { MessageController } from './app/messageController';
 import { DomainController } from './app/domainController';
 
+import { KeyController } from 'app/keyController';
 import { AccountController } from './app/account/accountController';
 import { ProfileController } from './app/profiles/profileController';
 import { ProfileListController } from './app/profiles/profileListController';
@@ -21,6 +22,7 @@ class Controller {
   private accessController: AccessController;
   private messageController: MessageController;
   private domainController: DomainController;
+  private keyController: KeyController;
   
   private accountController: AccountController;
   private profileController: ProfileController;
@@ -52,6 +54,8 @@ class Controller {
       messageController: this.messageController,
     });
 
+    this.keyController = new KeyController();
+
     this.accountController = new AccountController({
       busController: this.busController,
       messageController: this.messageController,
@@ -63,7 +67,7 @@ class Controller {
       busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
-      accountController: this.accountController,
+      accountController: this.accountController
     });
 
     this.profileController = new ProfileController({
@@ -72,6 +76,7 @@ class Controller {
       accessController: this.accessController,
       accountController: this.accountController,
       profileListController: this.profileListController,
+      keyController: this.keyController
     });
 
     this.settingsController = new SettingsController({

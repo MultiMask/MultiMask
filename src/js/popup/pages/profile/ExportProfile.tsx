@@ -27,7 +27,8 @@ export default withRouter(connect(
   dispatch =>
     bindActionCreators(
       {
-        handleExport: profileActions.export
+        // TODO: fix me
+        // handleExport: profileActions.export
       },
       dispatch
     )

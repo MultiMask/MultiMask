@@ -138,6 +138,6 @@ export class AccessController {
    * @param data 
    */
   public decode = (data: string): any => {
-    return decode(this.password, JSON.parse(data));
+    return JSON.parse(decode(this.password, data));
   }
 }

@@ -31,8 +31,8 @@ export default class Engine {
     const addrNode = root.derive("m/44'/60'/0'/0/0");
 
     return {
-      priv: ethUtil.bufferToHex(addrNode._privateKey),
-      privHex: addrNode._privateKey
+      priv: ethUtil.bufferToHex(addrNode.privateKey),
+      privHex: addrNode.privateKey
     };
   }
 

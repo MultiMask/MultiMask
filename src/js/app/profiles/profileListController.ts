@@ -1,18 +1,20 @@
+import { info } from 'loglevel';
 import EventEmitter = require('events');
 
 import { StorageService } from 'services/StorageService';
 
-import { BusController } from './../busController';
-import { AccessController } from './../accessController';
-import { MessageController } from './../messageController';
-import {AccountController} from '../account/accountController';
+import { BusController } from 'app/busController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { AccountController } from 'app/account/accountController';
+import { KeyController } from 'app/keyController';
 
 import { 
   PROFILE_GET_CURRENT,
   PROFILE_CREATE_DONE,
   // PROFILE_GETLIST, 
   // PROFILE_ADD, 
-  // PROFILE_SELECT, 
+  PROFILE_SELECT, 
   // PROFILE_REMOVE, 
   // PROFILE_UPDATE,
   // PROFILE_EXPORT,
@@ -28,6 +30,7 @@ export class ProfileListController extends EventEmitter {
   private accountController: AccountController;
   private busController: BusController;
   private messageController: MessageController;
+  private keyController: KeyController;
 
   constructor (opts) {
     super();
@@ -36,6 +39,7 @@ export class ProfileListController extends EventEmitter {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
+    this.keyController = opts.keyController;
 
     this.startListening();
   }
@@ -49,7 +53,7 @@ export class ProfileListController extends EventEmitter {
 
     // this.messageController.on(PROFILE_GETLIST, this.responseList);
     // this.messageController.on(PROFILE_ADD,     this.responseAdd);
-    // this.messageController.on(PROFILE_SELECT, this.responseSelect);
+    this.messageController.on(PROFILE_SELECT, this.responseSelect);
     // this.messageController.on(PROFILE_REMOVE, this.responseRemove);
     // this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     
@@ -89,6 +93,15 @@ export class ProfileListController extends EventEmitter {
       }
     })
   }
+   
+  /**
+   * Select certain Profile and emit event that Profile changed
+   */
+  private responseSelect = async (sendResponse: InternalResponseFn, {payload: { profileId }}) => {
+    sendResponse({
+      success: await this.activate(profileId)
+    });
+  }
 
   /**
    * Read profile list from storage and restore all profiles
@@ -111,6 +124,7 @@ export class ProfileListController extends EventEmitter {
         }
       }
 
+      info('load profiles complete');
       return this.current;
     })
   }
@@ -137,6 +151,32 @@ export class ProfileListController extends EventEmitter {
   }
 
   /**
+   * Activate Profile
+   * @param profileId 
+   */
+  private async activate (profileId: string): Promise<any> {
+    return new Promise((res, rej) => {
+      if (!this.list.includes(profileId)) {
+        return rej(false);
+      }
+  
+      this.busController.emit(PROFILE_SELECT, profileId, (success) => {
+        return success ? res(success) : rej(success);
+      });
+    })
+  }
+
+    /**
+   * Set new current account
+   * @param profile 
+   */
+  // private setCurrrent (profile) {
+  //   this.current = profile;
+
+  //   return this.current;
+  // }
+
+  /**
    * Response with list of profiles
    */
   // private responseList = sendResponse => {
@@ -154,22 +194,6 @@ export class ProfileListController extends EventEmitter {
 
   //   sendResponse({
   //     list: this.getListSerialized(),
-  //     profileId: this.current.getId()
-  //   });
-  // }
-  
-  /**
-   * Select certain Profile and emit event that Profile changed
-   */
-  // private responseSelect = (sendResponse, selectId) => {
-  //   const selectedProfile = this.findById(selectId);
-  
-  //   if (selectedProfile) {
-  //     this.setCurrrent(selectedProfile);
-  //     this.busController.emit(PROFILE_SELECT, selectedProfile);
-  //   }
-
-  //   sendResponse({
   //     profileId: this.current.getId()
   //   });
   // }
@@ -265,16 +289,6 @@ export class ProfileListController extends EventEmitter {
   //   this.addProfileInList(profile);
 
   //   return this.setCurrrent(profile);
-  // }
-
-  /**
-   * Set new current account
-   * @param profile 
-   */
-  // private setCurrrent (profile) {
-  //   this.current = profile;
-
-  //   return this.current;
   // }
 
   /**

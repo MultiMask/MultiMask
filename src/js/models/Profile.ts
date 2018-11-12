@@ -27,6 +27,20 @@ export class Profile {
     return toJSON(clone);
   }
 
+  public getKeysAndAccounts (decodeFn: (payload) => any): IProfileData {
+    const keys = {
+      master: decodeFn(this.seed),
+    };
+
+    return {
+      keys,
+      accounts: []
+    }
+  }
+
+  public static fromJSON (data): Profile {
+    return Object.assign(new Profile(''), data);
+  }
   
   // public getId () {
   //   return this.data.id;

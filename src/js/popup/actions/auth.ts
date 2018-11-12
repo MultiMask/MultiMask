@@ -1,3 +1,4 @@
+import { info } from 'loglevel';
 import { push } from 'connected-react-router';
 import InternalMessage from 'services/InternalMessage';
 
@@ -22,7 +23,7 @@ import ProfileActions from './profile';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
-    InternalMessage.payload(AUTH_INIT, { pass })
+    return InternalMessage.payload(AUTH_INIT, { pass })
       .send()
       .then(() => {
         AuthActions.success()(dispatch, getState);
@@ -30,7 +31,7 @@ const AuthActions = {
   },
 
   check: () => (dispatch, getState) => {
-    InternalMessage.signal(AUTH_CHECK)
+    return InternalMessage.signal(AUTH_CHECK)
       .send()
       .then(({ isAuth }) => {
         if (isAuth) {
@@ -54,7 +55,7 @@ const AuthActions = {
   },
 
   login: pass => (dispatch, getState) => {
-    InternalMessage.payload(AUTH_LOGIN, { pass })
+    return InternalMessage.payload(AUTH_LOGIN, { pass })
       .send()
       .then(({ isLogin }) => {
         if (isLogin) {
@@ -66,7 +67,7 @@ const AuthActions = {
   },
 
   logout: () => (dispatch, getState) => {
-    InternalMessage.signal(AUTH_LOGOUT)
+    return InternalMessage.signal(AUTH_LOGOUT)
       .send()
       .then(({ payload: { isLogout } }) => {
         if (isLogout) {
@@ -82,18 +83,34 @@ const AuthActions = {
       });
   },
   
-  success: () => (dispatch, getState) => {
+  success: () => async (dispatch, getState) => {
     dispatch(push(LOADING));
-    // AccountActions.getInfo()(dispatch, getState),
-    // SettingActions.getPrices()(dispatch, getState)
-    ProfileActions.getCurrentProfile()(dispatch, getState).then(({ success }) => {
-      if (success) {
-        const state: IPopup.AppState = getState();
-        const url = state && state.router && state.router.url ? state.router.url : MAIN;
-        dispatch(push(url));
-      } else {
-        dispatch(push(INTRODUCTION));
-      }
+    const { success, payload } = await ProfileActions.getCurrentProfile()(dispatch, getState);
+    
+    // No profile: new user
+    if (!success) {
+      info('No profile');
+      return dispatch(push(INTRODUCTION));
+    }
+    
+    const { profileId } = payload;
+    const { success: activate } = await ProfileActions.select(profileId)(dispatch, getState);
+
+    // Error with profile: create new
+    if (!activate) {
+      info('Fail on activate profile', profileId)
+      return dispatch(push(INTRODUCTION));
+    }
+    
+    Promise.all([
+      AccountActions.getInfo()(dispatch, getState),
+      SettingActions.getPrices()(dispatch, getState)
+    ]).then(() => {
+      const state: IPopup.AppState = getState();
+      const url = state && state.router && state.router.url ? state.router.url : MAIN;
+
+      info('Restore url > ', url);
+      dispatch(push(url));
     })
   },
 

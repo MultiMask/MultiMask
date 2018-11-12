@@ -30,7 +30,8 @@ export default withRouter(connect(
   dispatch =>
     bindActionCreators(
       {
-        handleImport: profileActions.import
+        // TODO: fix me
+        // handleImport: profileActions.import
       },
       dispatch
     )
