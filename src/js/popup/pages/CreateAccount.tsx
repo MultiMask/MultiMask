@@ -42,7 +42,6 @@ class Auth extends React.Component<any, any> {
 
     if (Object.keys(errors).length === 0) {
       this.props.init(this.state.password);
-      this.props.success();
     } else {
       this.setState({ errors });
     }
