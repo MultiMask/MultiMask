@@ -94,6 +94,10 @@ const AuthActions = {
     }
     
     const { profileId } = payload;
+    AuthActions.entrance(profileId)(dispatch, getState);
+  },
+
+  entrance: (profileId, forceRedirect = false) => async (dispatch, getState) => {
     const { success: activate } = await ProfileActions.select(profileId)(dispatch, getState);
 
     // Error with profile: create new
@@ -107,8 +111,10 @@ const AuthActions = {
       SettingActions.getPrices()(dispatch, getState)
     ]).then(() => {
       const state: IPopup.AppState = getState();
-      const url = state && state.router && state.router.url ? state.router.url : MAIN;
-
+      const url = forceRedirect
+        ? MAIN
+        : (state && state.router && state.router.url ? state.router.url : MAIN);
+      
       info('Restore url > ', url);
       dispatch(push(url));
     })

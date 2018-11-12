@@ -9,8 +9,12 @@ import ProfileCreateActions from 'popup/actions/ui/createProfile';
 import Button from 'ui/Button';
 import SeedView from 'ui/SeedView';
 import Typograhy from 'ui/Typography';
+import Modal from 'ui/Modal';
+import Loading from 'popup/pages/Loading';
 
 const Wrapper = styled('div')`
+  position: relative;
+  height: 100%;
   padding: 20px;
   text-align: center;
 `;
@@ -34,8 +38,15 @@ const styles = {
 interface IProps extends Actions<typeof ProfileCreateActions> {
   seed?: string;
 }
+interface IState {
+  show: boolean;
+}
 
-class CreateProfile extends Component<IProps, {}> {
+class CreateProfile extends Component<IProps, IState> {
+  public state = {
+    show: false
+  };
+
   public componentDidMount () {
     if (!this.props.seed) {
       this.handleGenerete();
@@ -46,13 +57,18 @@ class CreateProfile extends Component<IProps, {}> {
     this.props.generate();
   };
 
-  public hundleDone = () => {
-    this.props.done();
+  public handleDone = () => {
+    this.setState({ show: true }, () => {
+      this.props.done();
+    });
   };
 
   public render () {
     return (
       <Wrapper>
+        <Modal show={this.state.show}>
+          <Loading />
+        </Modal>
         <Typograhy color="main" variant="headline" align="center">
           Create Profile
         </Typograhy>
@@ -67,7 +83,7 @@ class CreateProfile extends Component<IProps, {}> {
           </Button>
         </BtnRow>
         <BtnRow className={styles.confirm}>
-          <Button onClick={this.props.done}>I saved my Mnemonic Phrase</Button>
+          <Button onClick={this.handleDone}>I saved my Mnemonic Phrase</Button>
         </BtnRow>
       </Wrapper>
     );

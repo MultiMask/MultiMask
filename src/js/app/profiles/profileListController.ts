@@ -6,8 +6,8 @@ import { StorageService } from 'services/StorageService';
 import { BusController } from 'app/busController';
 import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
-import { AccountController } from 'app/account/accountController';
 import { KeyController } from 'app/keyController';
+import { ProfileController } from 'app/profiles/profileController';
 
 import { 
   PROFILE_GET_CURRENT,
@@ -27,10 +27,10 @@ export class ProfileListController extends EventEmitter {
   private current = null;
 
   private accessController: AccessController;
-  private accountController: AccountController;
   private busController: BusController;
   private messageController: MessageController;
   private keyController: KeyController;
+  private profileController: ProfileController;
 
   constructor (opts) {
     super();
@@ -38,8 +38,8 @@ export class ProfileListController extends EventEmitter {
     this.busController = opts.busController;
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
-    this.accountController = opts.accountController;
     this.keyController = opts.keyController;
+    this.profileController = opts.profileController;
 
     this.startListening();
   }
@@ -84,7 +84,7 @@ export class ProfileListController extends EventEmitter {
     const profile = new Profile(seed);
     
     this.addProfile(profile);
-    this.saveProfile(profile);
+    this.profileController.save(profile);
 
     sendResponse({
       success: true,
@@ -99,7 +99,10 @@ export class ProfileListController extends EventEmitter {
    */
   private responseSelect = async (sendResponse: InternalResponseFn, {payload: { profileId }}) => {
     sendResponse({
-      success: await this.activate(profileId)
+      success: true,
+      payload: {
+        profileId: await this.activate(profileId)
+      }
     });
   }
 
@@ -119,8 +122,7 @@ export class ProfileListController extends EventEmitter {
         if (list && list[0]) {
           const first = list[0];
 
-          StorageService.ProfileList.setCurrnet(first);
-          this.current = first;
+          this.setCurrrent(first);
         }
       }
 
@@ -141,16 +143,6 @@ export class ProfileListController extends EventEmitter {
   }
 
   /**
-   * 
-   * @param profile 
-   */
-  private saveProfile (profile: Profile) {
-    const encodedProfile = profile.getEncodedData(this.accessController.encode);
-
-    return StorageService.Entities.set(encodedProfile.id, encodedProfile);
-  }
-
-  /**
    * Activate Profile
    * @param profileId 
    */
@@ -160,21 +152,23 @@ export class ProfileListController extends EventEmitter {
         return rej(false);
       }
   
-      this.busController.emit(PROFILE_SELECT, profileId, (success) => {
-        return success ? res(success) : rej(success);
-      });
+      this.profileController.activateProfile(profileId)
+        .then(() => {
+          this.setCurrrent(profileId);
+          res(profileId);
+        })
+        .catch(rej);
     })
   }
 
-    /**
+  /**
    * Set new current account
    * @param profile 
    */
-  // private setCurrrent (profile) {
-  //   this.current = profile;
-
-  //   return this.current;
-  // }
+  private setCurrrent (profileId: string) {
+    this.current = profileId;
+    return StorageService.ProfileList.setCurrnet(profileId);
+  }
 
   /**
    * Response with list of profiles

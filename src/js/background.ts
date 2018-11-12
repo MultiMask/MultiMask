@@ -63,20 +63,19 @@ class Controller {
       domainController: this.domainController
     });
 
-    this.profileListController = new ProfileListController({
-      busController: this.busController,
-      messageController: this.messageController,
-      accessController: this.accessController,
-      accountController: this.accountController
-    });
-
     this.profileController = new ProfileController({
       busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
       accountController: this.accountController,
-      profileListController: this.profileListController,
       keyController: this.keyController
+    });
+
+    this.profileListController = new ProfileListController({
+      busController: this.busController,
+      messageController: this.messageController,
+      accessController: this.accessController,
+      profileController: this.profileController
     });
 
     this.settingsController = new SettingsController({

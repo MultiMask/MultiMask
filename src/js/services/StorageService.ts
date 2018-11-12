@@ -26,7 +26,7 @@ export const StorageService = {
     get: () => storage.get(CONST.PROFILES),
     set: (list: string[]) => storage.set(CONST.PROFILES, list),
     getCurrent: () => storage.get(CONST.PROFILE_CURRENT),
-    setCurrnet: (list: string[]) => storage.set(CONST.PROFILE_CURRENT, list),
+    setCurrnet: (current: string) => storage.set(CONST.PROFILE_CURRENT, current),
   },
 
   Settings: {

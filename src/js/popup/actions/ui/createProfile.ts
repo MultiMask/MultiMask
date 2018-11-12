@@ -2,6 +2,9 @@ import * as bip39 from 'bip39';
 import { PROFILE_CREATE_DONE, PROFILE_CREATE_GENERATE } from 'constants/profile';
 import InternalMessage from 'services/InternalMessage';
 
+import AuthActions from 'popup/actions/auth';
+import ProfileActions from 'popup/actions/profile';
+
 const ProfileCreateAction = {
   generate: () => (dispatch, getState) => {
     dispatch({
@@ -17,17 +20,20 @@ const ProfileCreateAction = {
     InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed }})
       .send()
       .then(({ success, payload: { profileId} }) => {
-        if (success) {
-          console.log( profileId );
-
-          dispatch({
-            type: PROFILE_CREATE_DONE,
-          });
-
-          // TODO: go to main screen
+        if (!success) {
+          throw new Error('Error on create new profile');
         }
+        return ProfileActions.select(profileId)(dispatch, getState);
+      })
+      .then(({ payload: { profileId} }) => {
+        return AuthActions.entrance(profileId, true)(dispatch, getState);
+      })
+      .then(() => {
+        dispatch({
+          type: PROFILE_CREATE_DONE,
+        });
       });
-  }
+    }
 };
 
 export default ProfileCreateAction;
