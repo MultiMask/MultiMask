@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-
+import { ACCOUNT_INFO_DOMAIN } from '../constants/account';
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
@@ -19,11 +19,16 @@ let resolvers;
  * them to the open promises. */
 const _subscribe = () => {
   stream.listenWith(msg => {
-    if (!msg || !msg.hasOwnProperty('type')) { return false; }
+    if (!msg || !msg.hasOwnProperty('type')) {
+      return false;
+    }
     for (let i = 0; i < resolvers.length; i++) {
       if (resolvers[i].id === msg.resolver) {
-        if (msg.type === 'error') { resolvers[i].reject(msg.payload); }
-        else { resolvers[i].resolve(msg.payload); }
+        if (msg.type === 'error') {
+          resolvers[i].reject(msg.payload);
+        } else {
+          resolvers[i].resolve(msg.payload);
+        }
         resolvers = resolvers.slice(i, 1);
       }
     }
@@ -36,7 +41,7 @@ const _subscribe = () => {
  * @param type
  * @param payload
  */
-const _send = (type, payload) => {
+const _send = (type: string, payload?: any) => {
   return new Promise((resolve, reject) => {
     const id = uuid();
     const message = new NetworkMessage(type, payload, id);
@@ -65,4 +70,8 @@ export class Crypto3 {
   }
 
   public isAuth () {}
+
+  public async getIdentity () {
+    return await _send(ACCOUNT_INFO_DOMAIN);
+  }
 }
