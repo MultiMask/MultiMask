@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import { ACCOUNT_INFO_DOMAIN } from '../constants/account';
+import { TX_SEND } from '../constants/tx';
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
@@ -57,6 +58,7 @@ export class Crypto3 {
   public btc;
   public eos;
   public eth;
+  private account: WalletInfo;
 
   constructor (_stream) {
     stream = _stream;
@@ -69,9 +71,42 @@ export class Crypto3 {
     this.eos = EOS(_send);
   }
 
-  public isAuth () {}
+  public async getIdentity (entity: IIdentityProps) {
+    const accounts = (await _send(ACCOUNT_INFO_DOMAIN)) as WalletInfo[];
+    const account = accounts.find(item => item.blockchain === entity.blockchain && item.info.balance >= entity.amount);
 
-  public async getIdentity () {
-    return await _send(ACCOUNT_INFO_DOMAIN);
+    if (account) {
+      this.account = account;
+      return { to: entity.address, from: account.info.address, amount: entity.amount };
+    }
+
+    return Error('not found account for payment');
   }
+
+  public async pay (payParams) {
+    const tx = this.formatTX(payParams);
+    const result = await _send(TX_SEND, { id: this.account.id, tx });
+    return result;
+  }
+
+  private formatTX ({ to, amount, data }: IPayParams) {
+    return {
+      to,
+      data,
+      amount: parseFloat(amount)
+    };
+  }
+}
+
+interface IPayParams {
+  to: string;
+  amount: string;
+  data?: string;
+}
+
+interface IIdentityProps {
+  address: string;
+  blockchain: BCType;
+  chainId: number;
+  amount: number;
 }
