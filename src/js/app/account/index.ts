@@ -10,14 +10,16 @@ export default class Account {
   public name: string;
   public extra: any;
   public data: string;
+  public key: string;
 
-  constructor ({ wallet, bc, network, name, extra, data }) {
+  constructor ({ wallet, bc, network, name, extra, data, key }) {
     this.name = name ? name : Date.now();
     
     this.bc = bc;
     this.network = network;
     this.extra = extra;
     this.data = data;
+    this.key = key;
 
     this.wallet = wallet;
     if (this.extra && this.wallet.setExtra) {

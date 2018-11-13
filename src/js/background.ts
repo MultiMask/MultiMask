@@ -1,21 +1,22 @@
 import { setLevel } from 'loglevel';
 
-import { BusController } from './app/busController';
-import { AccessController } from './app/accessController';
-import { MessageController } from './app/messageController';
-import { DomainController } from './app/domainController';
+import { BusController } from 'app/busController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { DomainController } from 'app/domainController';
+import { CacheController } from 'app/cacheController';
 
 import { KeyController } from 'app/keyController';
-import { AccountController } from './app/account/accountController';
-import { ProfileController } from './app/profiles/profileController';
-import { ProfileListController } from './app/profiles/profileListController';
+import { AccountController } from 'app/account/accountController';
+import { ProfileController } from 'app/profiles/profileController';
+import { ProfileListController } from 'app/profiles/profileListController';
 
-import { TransactionController } from './app/transactionController';
-import { EthereumController } from './app/ethereumController';
-import { EosController } from './app/eos';
-import { BtcController } from './app/btcController';
+import { TransactionController } from 'app/transactionController';
+import { EthereumController } from 'app/ethereumController';
+import { EosController } from 'app/eos';
+import { BtcController } from 'app/btcController';
 
-import { SettingsController } from './app/settings/settingsController';
+import { SettingsController } from 'app/settings/settingsController';
 
 class Controller {
   private busController: BusController;
@@ -23,6 +24,7 @@ class Controller {
   private messageController: MessageController;
   private domainController: DomainController;
   private keyController: KeyController;
+  private cacheController: CacheController;
   
   private accountController: AccountController;
   private profileController: ProfileController;
@@ -55,6 +57,7 @@ class Controller {
     });
 
     this.keyController = new KeyController();
+    this.cacheController = new CacheController();
 
     this.accountController = new AccountController({
       busController: this.busController,
@@ -62,6 +65,7 @@ class Controller {
       accessController: this.accessController,
       domainController: this.domainController,
       keyController: this.keyController,
+      cacheController: this.cacheController
     });
 
     this.profileController = new ProfileController({
@@ -114,6 +118,7 @@ class Controller {
 
   private booststrap () {
     this.profileListController.init();
+    this.cacheController.init();
   }
 }
 

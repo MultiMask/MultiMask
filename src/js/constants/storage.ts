@@ -5,3 +5,4 @@ export const SETTINGS = 'settings';
 export const POPUP_STATE = 'popupstate';
 
 export const DOMAINS = 'domains';
+export const CACHE = 'cache';

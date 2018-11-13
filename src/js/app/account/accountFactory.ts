@@ -27,7 +27,7 @@ export class AccountFactory {
   public static create (opts) {
     const { bc } = opts;
     const wallet = createWallet({ bc });
-    const network = ntx[bc].network[0].sign;
+    const network = opts.network || ntx[bc].network[0].sign;
 
     return new Account({ ...opts, wallet, network });
   }

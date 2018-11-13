@@ -8,6 +8,7 @@ import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
 import { DomainController} from 'app/domainController';
 import { KeyController } from 'app/keyController';
+import { CacheController } from 'app/cacheController';
 
 import { GET_ACCOUNTS } from 'constants/appInternal';
 import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
@@ -30,6 +31,7 @@ export class AccountController {
   private messageController: MessageController;
   private domainController: DomainController;
   private keyController: KeyController;
+  private cacheController: CacheController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
@@ -37,6 +39,7 @@ export class AccountController {
     this.messageController = opts.messageController;
     this.domainController = opts.domainController;
     this.keyController = opts.keyController;
+    this.cacheController = opts.cacheController;
 
     this.listening();
   }
@@ -71,7 +74,9 @@ export class AccountController {
    */
   private responseChangeNetwork = (sendResponse: InternalResponseFn, {address, network}): void => {
     const account = this.getAccount({ address });
+
     account.changeNetwork(network, this.keyController.derivePrivateKey(account));
+    this.cacheController.set(`wallet.${account.key}.network`, network);
 
     sendResponse({
       success: true
@@ -84,8 +89,12 @@ export class AccountController {
    */
   public assignAccounts (accounts: IAccountKeyData[]) {
     this.accounts = accounts.map(accountLink => {
-      const accountInstane = AccountFactory.create(accountLink);
-      
+      const network = this.cacheController.get(`wallet.${accountLink.key}.network`);
+      const accountInstane = AccountFactory.create({
+        ...accountLink,
+        network
+      });
+
       accountInstane.init(this.keyController.derivePrivateKey(accountInstane));
 
       return accountInstane;

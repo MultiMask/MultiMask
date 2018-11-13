@@ -42,5 +42,10 @@ export const StorageService = {
   PopupState: {
     get: () => storage.get(CONST.POPUP_STATE),
     set: state => storage.set(CONST.POPUP_STATE, state)
+  },
+
+  Cache: {
+    get: () => storage.get(CONST.CACHE),
+    set: state => storage.set(CONST.CACHE, state)
   }
 }

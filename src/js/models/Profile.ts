@@ -61,7 +61,8 @@ export class Profile {
       chain.wallets.forEach(wallet => {
         accounts.push({
           ...wallet,
-          bc: chain.id
+          bc: chain.id,
+          key: processId(chain.id, wallet)
         })
       })
 
@@ -97,6 +98,10 @@ export class Profile {
     }
   }
 
+  /**
+   * Find max index in one chain to generate new wallet
+   * @param bc 
+   */
   private getLastIndex (bc: BCSign) {
     const chain = this.chains.find(ch => ch.id === bc);
     
@@ -111,6 +116,10 @@ export class Profile {
     }
   }
 
+  /**
+   * Restore instance from json
+   * @param data 
+   */
   public static fromJSON (data): Profile {
     return Object.assign(new Profile(''), data);
   }
@@ -148,4 +157,15 @@ export class Profile {
   //     ...this.data
   //   };
   // }
+}
+
+const processId = (bc, wallet) => {
+  const { data } = wallet;
+  
+  const type = data.slice(0,2);
+  const link = data.slice(2);
+
+  if (type === '02') {
+    return `${bc}${link}`;
+  }
 }
