@@ -40,7 +40,6 @@ export class ProfileController {
     this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
     // this.messageController.on(ACCOUNT_INFO, this.getAccounts);
     // this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
-    // this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
   }
 
   /**
@@ -55,22 +54,6 @@ export class ProfileController {
     sendResponse({
       success: true,
     });
-    // const profile = this.profileListController.getCurrent();
-    // let account = null;
-
-    // return AccountFactory.create(accountData)
-    //   .init()
-    //   .then(createdAccount => {
-    //     account = createdAccount;
-
-    //     return profile.addAccount(this.getPass(), account)
-    //   })
-    //   .then(() => {
-    //     AccountFactory.save(this.getPass(), account);
-    //     this.accountController.addAccountInstance(account);
-  
-    //     this.getAccounts(sendResponse);
-    //   })
   }
       
   /**
@@ -96,10 +79,6 @@ export class ProfileController {
 
     return StorageService.Entities.set(encodedProfile.id, encodedProfile);
   }
-
-  // private getPass () {
-  //   // return this.accessController.getPass();
-  // }
 
   /**
    * DEPRICATED
@@ -133,20 +112,6 @@ export class ProfileController {
   // private restoreAccounts = (accountIds: string[]) => {
   //   this.accountController.clearList();
   //   return this.accountController.restore(accountIds, this.getPass());
-  // }
-
-  /**
-   * Update account's wallet network
-	 * @param sendResponse
-   * @param accountData
-   */
-  // public updateAccountNetwork = (sendResponse, accountData: {id: string, network: string}): void => {
-  //   const account = this.accountController.getAccount({ id: accountData.id });
-  //   account.changeNetwork(accountData.network)
-
-  //   AccountFactory.save(this.getPass(), account)
-
-  //   this.getAccounts(sendResponse);
   // }
   
   /**

@@ -48,6 +48,7 @@ export class AccountController {
     this.busController.on(GET_ACCOUNTS, cb => cb(this.getAccounts()));
 
     this.messageController.on(ACCOUNT_INFO, this.responseAccountInfo);
+    this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.responseChangeNetwork);
   }
 
   /**
@@ -66,6 +67,18 @@ export class AccountController {
   }
 
   /**
+   * Update account's wallet network
+   */
+  private responseChangeNetwork = (sendResponse: InternalResponseFn, {address, network}): void => {
+    const account = this.getAccount({ address });
+    account.changeNetwork(network, this.keyController.derivePrivateKey(account));
+
+    sendResponse({
+      success: true
+    })
+  }
+
+  /**
    * Set new plenty of accounts
    * @param accounts 
    */
@@ -79,6 +92,45 @@ export class AccountController {
     });
   }
 
+  /**
+   * Get single account by filter
+   */
+  public getAccount (opts: IGetAccountOptions): Account {
+    if (opts && opts.id) {
+      const found = this.accounts.find(acc => acc.getAddress() === opts.id);
+
+      if (found) {
+        return found;
+      }
+    }
+    
+    if (opts && opts.address) {
+      const found = this.accounts.find(acc => acc.getAddress() === opts.address);
+
+      if (found) {
+        return found;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Get filtred accounts
+   */
+  public getAccounts (opts?: IGetAccountsOptions): Account[] {
+    let list = this.accounts.slice();
+
+    if (opts && opts.bc) {
+      list = list.filter(acc => acc.bc  === opts.bc);
+    }
+    
+    if (opts && opts.domain) {
+      list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, '1'));
+    }
+
+    return list;
+  }
 
 
 
@@ -119,54 +171,6 @@ export class AccountController {
     //   this.addAccountInstance(accountModel);
     // }
   };
-
-  /**
-   * Get single account by filter
-   */
-  public getAccount (opts: IGetAccountOptions): Account {
-    if (this.accessController.isAuth()) {
-      if (opts && opts.id) {
-        const found = this.accounts.find(acc => acc.getAddress() === opts.id);
-
-        if (found) {
-          return found;
-        }
-      }
-      
-      if (opts && opts.address) {
-        const found = this.accounts.find(acc => acc.getAddress() === opts.address);
-
-        if (found) {
-          return found;
-        }
-      }
-
-      return undefined;
-    }
-
-    throw new Error('User not Authorized');
-  }
-
-  /**
-   * Get filtred accounts
-   */
-  public getAccounts (opts?: IGetAccountsOptions): Account[] {
-    if (this.accessController.isAuth()) {
-      let list = this.accounts.slice();
-
-      if (opts && opts.bc) {
-        list = list.filter(acc => acc.bc  === opts.bc);
-      }
-      
-      if (opts && opts.domain) {
-        list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, '1'));
-      }
-
-      return list;
-    }
-
-    throw new Error('User not Authorized');
-  }
 
   /**
    * Return seed for required account

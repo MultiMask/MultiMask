@@ -1,10 +1,11 @@
 import { info } from 'loglevel';
 import * as bitcoin from 'bitcoinjs-lib';
-import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
 
 import { BTCEngine } from './engine';
-import ntx from 'bcnetwork'
+import ntx from 'bcnetwork';
+
+const DEFAULT_FEE = 5000; // Satoshi
 
 export default class BitcoinWallet implements IWallet {
   private private: any;
@@ -21,6 +22,10 @@ export default class BitcoinWallet implements IWallet {
     this.setNetworkUrl(network)
   }
 
+  /**
+   * Create PK, address
+   * @param pk 
+   */
   public create (pk: Buffer) {
     return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
@@ -29,17 +34,28 @@ export default class BitcoinWallet implements IWallet {
     });
   }
 
+  /**
+   * Choose segwit or not
+   * @param pk 
+   * @param network 
+   */
   private _createWallet (pk: Buffer, network: bitcoin.Network) {
     return this.segWit
     ? BTCEngine.createSegWitWallet(pk, network)
     : BTCEngine.createWallet(pk, network);
   }
  
+  /**
+   * Change network
+   * @param network 
+   * @param pk 
+   */
   public changeNetwork (network: string, pk: Buffer) {
     this.network = network;
     
-    return this._createWallet(pk, this.network).then(secret => {
+    return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
+      console.log(secret);
 
       this.setNetworkUrl(network)
       return network;
@@ -55,6 +71,9 @@ export default class BitcoinWallet implements IWallet {
     return this.address;
   }
 
+  /**
+   * Return info about blockchain
+   */
   public getInfo () {
     return axios.get(`${this.networkUrl}/rawaddr/${this.address}`)
         .then(res => {
@@ -81,6 +100,10 @@ export default class BitcoinWallet implements IWallet {
       })
   }
 
+  /**
+   * Send some coins
+   * @param opts 
+   */
   public sendCoins (opts) {
     return this.buildTX(opts)
       .then(this.signTX)
@@ -96,7 +119,7 @@ export default class BitcoinWallet implements IWallet {
       })
   }
 
-  private buildTX ({ to, amount, data }) {
+  private buildTX ({ to, amount, data, fee }) {
     return this.getInfo().then(({ outputs, balance }) => {
       info('create TX with >> ');
       info('to: ', to);
@@ -127,8 +150,8 @@ export default class BitcoinWallet implements IWallet {
         txb.addOutput(dataScript, 0);
       }
       
-      const fee = 5000;
-      const amountToReturn = balanceInSatoshi - amountInSatoshi - fee;
+      const minorFee = fee || DEFAULT_FEE;
+      const amountToReturn = balanceInSatoshi - amountInSatoshi - minorFee;
       
       txb.addOutput(to, amountInSatoshi);
       txb.addOutput(this.address, +amountToReturn.toFixed(0));

@@ -32,16 +32,20 @@ const AccountActions = {
       });
   },
 
-  changeNetwork: (id, network) => (dispatch, getState) => {
-    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
+  changeNetwork: (address, network) => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { address, network })
       .send()
       .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
-
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
         dispatch(goBack());
-      });
+      })
   },
 
+  /**
+   * Set accounts in app
+   */
   setAccount: accounts => (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_SET,
@@ -49,6 +53,9 @@ const AccountActions = {
     });
   },
 
+  /**
+   * Set extra on wallet
+   */
   updateAccount: account => (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_UPDATE,
@@ -67,15 +74,15 @@ const AccountActions = {
     dispatch(push('/account/details'));
   },
 
-  getSeed: (pass, id) => (dispatch, getState) => {
-    return InternalMessage.payload(ACCOUNT_GETSEED, id)
-      .send()
-      .then(seed => {
-        dispatch({
-          type: ACCOUNT_GETSEED_RESULT,
-          payload: { seed }
-        });
-      });
-  }
+  // getSeed: (pass, id) => (dispatch, getState) => {
+  //   return InternalMessage.payload(ACCOUNT_GETSEED, id)
+  //     .send()
+  //     .then(seed => {
+  //       dispatch({
+  //         type: ACCOUNT_GETSEED_RESULT,
+  //         payload: { seed }
+  //       });
+  //     });
+  // }
 };
 export default AccountActions;

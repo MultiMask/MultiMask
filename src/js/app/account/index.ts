@@ -52,8 +52,9 @@ export default class Account {
     }));
   }
 
-  public changeNetwork (network: string) {
-    // this.wallet.changeNetwork(network, this.secret.seed)
+  public changeNetwork (network: string, privateKey) {
+    this.network = network;
+    this.wallet.changeNetwork(network, privateKey)
   }
 
   public sendTX (tx) {

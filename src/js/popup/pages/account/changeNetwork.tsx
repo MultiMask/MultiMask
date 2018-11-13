@@ -46,7 +46,7 @@ interface ISelectOption {
   label: string;
 }
 
-class Edit extends React.Component<any, any> {
+class ChangeNetwork extends React.Component<any, any> {
   constructor (props) {
     super(props);
 
@@ -81,13 +81,16 @@ class Edit extends React.Component<any, any> {
 
     const {
       changeNetwork,
+      account: {
+        info: { address }
+      },
       match: {
         params: { id }
       }
     } = this.props;
 
     const { selectValue } = this.state;
-    changeNetwork(id, selectValue.value);
+    changeNetwork(address, selectValue.value);
   };
 
   public handleChooseNetwork = e => {
@@ -133,5 +136,5 @@ export default withRouter<any>(
       account: getCurrentWallet(state)
     }),
     dispatch => bindActionCreators(accountActions, dispatch)
-  )(Edit)
+  )(ChangeNetwork)
 );
