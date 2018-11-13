@@ -96,7 +96,7 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public sendCoins ({ to, amount, data }) {
-    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} EOS`, data);
+  public sendCoins ({ to, amount, data, token = 'EOS' }) {
+    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} ${token}`, data);
   }
 }
