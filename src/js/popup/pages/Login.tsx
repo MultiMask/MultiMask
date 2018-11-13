@@ -20,9 +20,14 @@ const styles = {
 };
 
 class Auth extends React.Component<any, any> {
+  private input = React.createRef<any>();
   public state = {
     pass: ''
   };
+
+  public componentDidMount () {
+    this.input.current.focus();
+  }
 
   public handleInput = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -41,6 +46,7 @@ class Auth extends React.Component<any, any> {
         </Typography>
         <form onSubmit={this.handleDone} className={styles.form}>
           <TextField
+            inputRef={this.input}
             className={styles.textField}
             label="Enter password"
             type="password"

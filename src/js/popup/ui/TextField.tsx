@@ -74,7 +74,7 @@ const TextField: React.SFC<ITextFieldProps> = ({
   return (
     <InputContainer className={className} fullWidth>
       <Label htmlFor={name}>{label}</Label>
-      <Input id={name} ref={inputRef} name={name} {...props} />
+      <Input id={name} innerRef={inputRef} name={name} {...props} />
       <Error error>{error}</Error>
     </InputContainer>
   );
