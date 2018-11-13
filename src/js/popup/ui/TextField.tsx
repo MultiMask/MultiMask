@@ -32,8 +32,8 @@ const Label = styled('label')`
   top: -8px;
   left: 7px;
   padding: 0 4px;
-  font-size: 10px;
-  background-color: inherit;
+  font-size: 12px;
+  background-color: white;
 `;
 
 interface IErrorProps {
