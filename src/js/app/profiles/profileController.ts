@@ -62,8 +62,9 @@ export class ProfileController {
    */
   public activateProfile = async (profileId: string) => {
     this.profile = Profile.fromJSON(await StorageService.Entities.get(profileId));
-    const profileData = this.profile.getKeysAndAccounts(this.accessController.decode);
-
+    this.profile.decode(this.accessController.decode);
+    
+    const profileData = this.profile.getKeysAndAccounts();
     this.keyController.assignKeys( profileData.keys );
     this.accountController.assignAccounts( profileData.accounts );
 

@@ -1,5 +1,5 @@
 // import ProfileFactory from './profileFactory';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, max } from 'lodash';
 import { Randomizer } from 'services/Randomizer';
 import { isSeed } from 'helpers/checkers';
 import { toJSON } from 'helpers/func';
@@ -32,6 +32,12 @@ export class Profile {
     return !isSeed(this.seed);
   }
 
+  public decode (decodeFn: (payload) => any) {
+    if (this.isEncoded) {
+      this.seed = decodeFn(this.seed);
+    }
+  }
+
   public getEncodedData (encodeFn: (payload) => string) {
     const clone = cloneDeep(this);
     clone.seed = encodeFn(clone.seed);
@@ -39,13 +45,11 @@ export class Profile {
     return toJSON(clone);
   }
 
-  public getKeysAndAccounts (decodeFn: (payload) => any): IProfileData {
-    const keys = {
-      master: decodeFn(this.seed),
-    };
-
+  public getKeysAndAccounts (): IProfileData {
     return {
-      keys,
+      keys: {
+        master: this.seed
+      },
       accounts: this.getAccounts()
     }
   }
@@ -63,22 +67,45 @@ export class Profile {
     }, []);
   }
 
+  /**
+   * Add new Wallet into profile
+   * @param bc 
+   */
   public addWallet (bc: BCSign) {
     const chain = this.chains.find(ch => ch.id === bc);
+    const idx = this.getLastIndex(bc) + 1;
 
     if (chain) {
-
+      chain.wallets.push({
+        data: `02${idx}`,
+        segwit: false,
+        name: 'Default wallet'
+      })
     } else {
       this.chains.push({
         id: bc,
         wallets: [
           {
-            data: '0200',
+            data: '020',
             segwit: false,
             name: 'Default wallet'
           }
         ]
       })
+    }
+  }
+
+  private getLastIndex (bc: BCSign) {
+    const chain = this.chains.find(ch => ch.id === bc);
+    
+    if (!chain) {
+      return 0;
+    } else {
+      const indexes = chain.wallets
+        .filter(wal => wal.data.substr(0,2) === '02')
+        .map(wal => parseInt(wal.data.substr(2), 10));
+
+      return max(indexes);
     }
   }
 
