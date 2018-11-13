@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
 import styled, { css } from 'react-emotion';
 
-import AccountFactory from 'app/account/accountFactory';
+import { AccountFactory } from 'app/account/accountFactory';
 import Account from 'app/account';
 import actions from 'popup/actions/account';
 import ntx, { BCSign } from 'bcnetwork';
@@ -13,9 +13,9 @@ import { EthAccount } from './bcaccounts/ethAccount';
 import { EosAccount } from './bcaccounts/eosAccount';
 
 interface IProps {
-  create (account): Promise<void>;
+  create(account): Promise<void>;
   blockchain: BCSign;
-  onBack (): void;
+  onBack(): void;
 }
 
 interface IWalletState {
@@ -39,38 +39,38 @@ class Wallet extends React.Component<IProps, IWalletState> {
   };
 
   public handleCheck = e => {
-    e.preventDefault();
-    this.createAccount().then(data => {
-      this.setState({ success: true, bc: this.account.blockchain, data });
-    });
+    // TODO: fix me
+    // e.preventDefault();
+    // this.createAccount().then(data => {
+    //   this.setState({ success: true, bc: this.account.blockchain, data });
+    // });
   };
 
-  public createAccount (): Promise<Account> {
-    const { blockchain } = this.props;
-
-    try {
-      return AccountFactory.create({
-        blockchain,
-        secret: {
-          seed: this.state.seed
-        }
-      })
-        .init()
-        .then(account => (this.account = account))
-        .then(account => {
-          if (account.blockchain === BCSign.EOS) {
-            return account.wallet.getKeyAccounts();
-          } else {
-            return account.getInfo();
-          }
-        });
-    } catch (e) {
-      this.setState({
-        error: `Wrong wordlist: ${e}`
-      });
-
-      return Promise.reject();
-    }
+  public createAccount() {
+    // TODO: fix me
+    // const { blockchain } = this.props;
+    // try {
+    //   return AccountFactory.create({
+    //     blockchain,
+    //     secret: {
+    //       seed: this.state.seed
+    //     }
+    //   })
+    //     .init()
+    //     .then(account => (this.account = account))
+    //     .then(account => {
+    //       if (account.blockchain === BCSign.EOS) {
+    //         return account.wallet.getKeyAccounts();
+    //       } else {
+    //         return account.getInfo();
+    //       }
+    //     });
+    // } catch (e) {
+    //   this.setState({
+    //     error: `Wrong wordlist: ${e}`
+    //   });
+    //   return Promise.reject();
+    // }
   }
 
   public bcAccountRender = () => {
@@ -78,7 +78,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
       return null;
     }
 
-    switch (this.account.blockchain) {
+    switch (this.account.bc) {
       case BCSign.BTC:
       case BCSign.ETH:
         return <EthAccount data={this.state.data} onImport={this.handleSave} />;
@@ -90,14 +90,14 @@ class Wallet extends React.Component<IProps, IWalletState> {
   };
 
   public handleSave = data => {
-    if (data && this.account.blockchain === BCSign.EOS) {
+    if (data && this.account.bc === BCSign.EOS) {
       this.account.setExtra({ account: data.account_name });
     }
 
     this.props.create(this.account);
   };
 
-  public render () {
+  public render() {
     const { error, seed } = this.state;
 
     return (

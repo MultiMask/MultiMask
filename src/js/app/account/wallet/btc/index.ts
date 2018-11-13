@@ -3,17 +3,17 @@ import * as bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 import axios from 'axios';
 
-import { BTCEngine } from './btc/engine';
-import networks from '../../../blockchain'
+import { BTCEngine } from './engine';
+import ntx from 'bcnetwork'
 
 export default class BitcoinWallet implements IWallet {
+  private private: any;
   public network: any;
-  public priv: any;
   public address: any;
+  public scriptPubkey;      // segWit scriptPubkey
   public networkUrl: string;
 
   public segWit = false;
-  public scriptPubkey;      // segWit scriptPubkey
 
   constructor (network) {
     this.network = network;
@@ -21,24 +21,24 @@ export default class BitcoinWallet implements IWallet {
     this.setNetworkUrl(network)
   }
 
-  public create (seed) {
-    return this._createWallet(seed, this.network).then(secret => {
+  public create (pk: Buffer) {
+    return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
-
-      return secret.seed;
+      
+      return true;
     });
   }
 
-  private _createWallet (seed, network) {
+  private _createWallet (pk: Buffer, network: bitcoin.Network) {
     return this.segWit
-    ? BTCEngine.createSegWitWallet(seed, network)
-    : BTCEngine.createWallet(seed, network);
+    ? BTCEngine.createSegWitWallet(pk, network)
+    : BTCEngine.createWallet(pk, network);
   }
  
-  public changeNetwork (network: string, seed: string) {
+  public changeNetwork (network: string, pk: Buffer) {
     this.network = network;
     
-    return this._createWallet(seed, this.network).then(secret => {
+    return this._createWallet(pk, this.network).then(secret => {
       Object.assign(this, secret);
 
       this.setNetworkUrl(network)
@@ -47,7 +47,7 @@ export default class BitcoinWallet implements IWallet {
   }
 
   private setNetworkUrl (network) {
-    const networkProps = networks.BTC.network.find(item => item.sign === network)
+    const networkProps = ntx.BTC.network.find(item => item.sign === network)
     this.networkUrl = networkProps.url;
   }
 
@@ -138,9 +138,8 @@ export default class BitcoinWallet implements IWallet {
   }
 
   private signTX = (txb) => {
-    const privateKey = this.priv;
     const testnet = bitcoin.networks.testnet;
-    const keyPair = bitcoin.ECPair.fromWIF(privateKey, testnet);
+    const keyPair = bitcoin.ECPair.fromWIF(this.private, testnet);
 
     // Sign all inputs
     txb.inputs.forEach((input, idx) => {
@@ -152,5 +151,14 @@ export default class BitcoinWallet implements IWallet {
 
   private BuildToHex = (txb) => {
     return txb.build().toHex();
+  }
+}
+
+const mapNetwork = (network: string) => {
+  switch (network) {
+    case 'testnet':
+      return bitcoin.networks.testnet;
+    case 'mainnet':
+      return bitcoin.networks.bitcoin;
   }
 }

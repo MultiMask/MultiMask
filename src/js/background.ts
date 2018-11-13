@@ -60,7 +60,8 @@ class Controller {
       busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
-      domainController: this.domainController
+      domainController: this.domainController,
+      keyController: this.keyController,
     });
 
     this.profileController = new ProfileController({

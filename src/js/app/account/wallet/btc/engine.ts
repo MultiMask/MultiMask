@@ -2,51 +2,34 @@ import * as bitcoin from 'bitcoinjs-lib';
 import Mnemonic from 'bitcore-mnemonic';
 
 interface IWalletCrypto {
-  priv: any;
-  pblc: any;
+  private: string;
   address: string;
-  seed: string;
   scriptPubkey?: Buffer;
 }
 
 export class BTCEngine {
-  public static createWallet (seed, network: bitcoin.Network): Promise<IWalletCrypto> {
-    const mnemonic = new Mnemonic(seed);
-    const HDPrivateKey = mnemonic.toHDPrivateKey(null, network);
-
-    const priv = HDPrivateKey.privateKey.toWIF();
-    const pblc = HDPrivateKey.publicKey.toString();
-    const address = HDPrivateKey.privateKey.toAddress(network).toString();
+  public static createWallet (pk: Buffer, network?: bitcoin.Network): Promise<IWalletCrypto> {
+    const keyPair = bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
 
     return Promise.resolve({
-      priv,
-      pblc,
-      address,
-      seed: mnemonic.toString(),
+      private: keyPair.toWIF(),
+      address: keyPair.getAddress(),
     });
   }
 
-  public static createSegWitWallet (seed, network): Promise<IWalletCrypto> {
-    const mnemonic = new Mnemonic(seed);
-    const HDPrivateKey = mnemonic.toHDPrivateKey(null, network);
+  public static createSegWitWallet (pk: Buffer, network?: bitcoin.Network): Promise<IWalletCrypto> {
+    const keyPair = bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
 
-    const priv = HDPrivateKey.privateKey.toWIF();
-    const pblc = HDPrivateKey.publicKey.toString();
-
-    const keypair = bitcoin.ECPair.fromWIF(priv, network);
     const scriptPubkey = bitcoin.script.witnessPubKeyHash.output.encode(
         bitcoin.crypto.hash160(	
-            keypair.getPublicKeyBuffer()
+          keyPair.getPublicKeyBuffer()
         )
     );
-
     const address = bitcoin.address.fromOutputScript(scriptPubkey, network);
 
     return Promise.resolve({
-      priv,
-      pblc,
+      private: keyPair.toWIF(),
       address,
-      seed: mnemonic.toString(),
       scriptPubkey
     });
   }

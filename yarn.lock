@@ -725,6 +725,12 @@
     "@types/bn.js" "*"
     "@types/node" "*"
 
+"@types/hdkey@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@types/hdkey/-/hdkey-0.7.0.tgz#6734d138e3c597f241be8fae2e60c2949bc3af87"
+  dependencies:
+    "@types/node" "*"
+
 "@types/history@*":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.0.tgz#2fac51050c68f7d6f96c5aafc631132522f4aa3f"

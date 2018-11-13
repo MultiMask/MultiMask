@@ -1,14 +1,15 @@
-import AccountFactory from './accountFactory';
+import { info } from 'loglevel';
 
 import Account from './';
+import { AccountFactory } from './accountFactory';
+
 import { BusController } from 'app/busController';
 import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
 import { DomainController} from 'app/domainController';
+import { KeyController } from 'app/keyController';
+
 import { GET_ACCOUNTS } from 'constants/appInternal';
-
-import { info } from 'loglevel';
-
 import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
 
 interface IGetAccountOptions {
@@ -28,12 +29,14 @@ export class AccountController {
   private busController: BusController;
   private messageController: MessageController;
   private domainController: DomainController;
+  private keyController: KeyController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
     this.domainController = opts.domainController;
+    this.keyController = opts.keyController;
 
     this.listening();
   }
@@ -51,12 +54,15 @@ export class AccountController {
    * Return accountInfo
    */
   private responseAccountInfo = (sendResponse: InternalResponseFn) => {
-    sendResponse({
-      success: true,
-      payload: {
-        accounts: []
-      }
-    })
+    Promise.all(this.accounts.map(acc => acc.getInfo()))
+      .then(accountsInfo => {
+        sendResponse({
+          success: true,
+          payload: {
+            accounts: accountsInfo
+          }
+        })
+      })
   }
 
   /**
@@ -64,8 +70,21 @@ export class AccountController {
    * @param accounts 
    */
   public assignAccounts (accounts: IAccountKeyData[]) {
-    
+    this.accounts = accounts.map(accountLink => {
+      const accountInstane = AccountFactory.create(accountLink);
+      
+      accountInstane.init(this.keyController.derivePrivateKey(accountInstane));
+
+      return accountInstane;
+    });
   }
+
+
+
+
+
+
+
 
   /**
    * Restore accounts by Ids from storage
@@ -73,32 +92,32 @@ export class AccountController {
    * @param pass 
    */
   public restore (accounts, pass: string) {
-    info('AccountController > load all accounts > ', accounts);
+    // info('AccountController > load all accounts > ', accounts);
 
-    if (accounts && accounts.length > 0) {
-      return AccountFactory.loadListByIds(pass, accounts).then(accountsFull => {
-        accountsFull.forEach(this.addAccountInstance);
+    // if (accounts && accounts.length > 0) {
+    //   return AccountFactory.loadListByIds(pass, accounts).then(accountsFull => {
+    //     accountsFull.forEach(this.addAccountInstance);
 
-        return this.accounts;
-      });
-    } else {
-      return Promise.resolve([]);
-    }
+    //     return this.accounts;
+    //   });
+    // } else {
+    //   return Promise.resolve([]);
+    // }
   }
 
   public addAccountInstance = account => {
-    if (!this.getAccount({ id: account.id })) {
-      this.accounts.push(account);
-    }
+    // if (!this.getAccount({ id: account.id })) {
+    //   this.accounts.push(account);
+    // }
   };
 
   public import = (pass, accountRaw) => {
-    if (!this.getAccount({ id: accountRaw.id })) {
-      const accountModel = AccountFactory.create(accountRaw);
+    // if (!this.getAccount({ id: accountRaw.id })) {
+    //   const accountModel = AccountFactory.create(accountRaw);
 
-      AccountFactory.save(pass, accountModel);
-      this.addAccountInstance(accountModel);
-    }
+    //   AccountFactory.save(pass, accountModel);
+    //   this.addAccountInstance(accountModel);
+    // }
   };
 
   /**
@@ -107,7 +126,7 @@ export class AccountController {
   public getAccount (opts: IGetAccountOptions): Account {
     if (this.accessController.isAuth()) {
       if (opts && opts.id) {
-        const found = this.accounts.find(acc => acc.id === opts.id);
+        const found = this.accounts.find(acc => acc.getAddress() === opts.id);
 
         if (found) {
           return found;
@@ -136,11 +155,11 @@ export class AccountController {
       let list = this.accounts.slice();
 
       if (opts && opts.bc) {
-        list = list.filter(acc => acc.blockchain  === opts.bc);
+        list = list.filter(acc => acc.bc  === opts.bc);
       }
       
       if (opts && opts.domain) {
-        list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, acc.id));
+        list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, '1'));
       }
 
       return list;

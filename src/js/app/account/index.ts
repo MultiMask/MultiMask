@@ -1,50 +1,39 @@
-import uuid from 'uuid/v4';
 import { info } from 'loglevel';
 import { BCSign } from 'bcnetwork';
 
 export default class Account {
-  private secret: any;
-  
   public wallet: any;
   
-  public blockchain: BCSign;
-  public id: string;
+  public bc: BCSign;
+  public network: string;
+  
   public name: string;
   public extra: any;
+  public data: string;
 
-  constructor ({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
-    this.name = name ? name : this._createName();
+  constructor ({ wallet, bc, network, name, extra, data }) {
+    this.name = name ? name : Date.now();
     
-    this.blockchain = blockchain;
-    this.id = id;
-    this.secret = secret;
+    this.bc = bc;
+    this.network = network;
     this.extra = extra;
-    
+    this.data = data;
+
     this.wallet = wallet;
     if (this.extra && this.wallet.setExtra) {
       this.wallet.setExtra(this.extra);
     }
   }
-  
-  private _create (seed) {
-    return this.wallet.create(seed);
-  }
-  
-  private _createName () {
-    return Date.now();
-  }
 
-  public init (): Promise<Account> {
-    return this._create(this.secret.seed)
-      .then(seed => {
-        this.secret.seed = seed; 
-        
-        return this;
-      });
+  public init (privateKey): Promise<Account> {
+    return this.wallet.create(privateKey);
   }
  
+  /**
+   * DEPRICATED
+   */
   public getSeed () {
-    return this.secret.seed;
+    // return this.secret.seed;
   }
 
   public getAddress () {
@@ -56,20 +45,19 @@ export default class Account {
    */
   public getInfo (): Promise<WalletInfo> {
     return this.wallet.getInfo().then(info => ({
-      id: this.id,
       name: this.name,
-      blockchain: this.blockchain,
+      blockchain: this.bc,
       extra: this.extra,
       info
     }));
   }
 
   public changeNetwork (network: string) {
-    this.wallet.changeNetwork(network, this.secret.seed)
+    // this.wallet.changeNetwork(network, this.secret.seed)
   }
 
   public sendTX (tx) {
-    info('Sending tx > ', this.blockchain, this.name, tx);
+    info('Sending tx > ', this.bc, this.name, tx);
     return this.wallet.sendCoins(tx);
   }
 
@@ -81,16 +69,19 @@ export default class Account {
     }
   }
 
-  public serialize () {
-    return {
-      id: this.id,
-      name: this.name,
-      blockchain: this.blockchain,
-      extra: this.extra,
+  /**
+   * DEPRICATED
+   */
+  // public serialize () {
+  //   return {
+  //     id: this.id,
+  //     name: this.name,
+  //     blockchain: this.blockchain,
+  //     extra: this.extra,
 
-      secret: {
-        seed: this.secret.seed
-      }
-    };
-  }
+  //     secret: {
+  //       seed: this.secret.seed
+  //     }
+  //   };
+  // }
 }

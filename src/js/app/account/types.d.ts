@@ -26,9 +26,11 @@ type WalletInfo = {
  */
 interface IWallet {
   
-  changeNetwork (network: string, seed?: string): void;
+  // TODO: set pk in Buffer
+  changeNetwork (network: string, pk?: any): void;
   
-  create (seed: string): Promise<string>;
+  // TODO: set pk in Buffer
+  create (pk: any): Promise<any>;
   
   getAddress (): string;
   getInfo (): Promise<BCInfo>;

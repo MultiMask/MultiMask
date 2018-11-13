@@ -1,5 +1,5 @@
 import { push, goBack } from 'connected-react-router';
-
+import { MAIN } from 'constants/popupUrl';
 import InternalMessage from 'services/InternalMessage';
 
 import {
@@ -17,23 +17,23 @@ const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
       .send()
-      .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
+      .then(({payload: { accounts }}) => {
+        AccountActions.setAccount(accounts)(dispatch, getState);
       });
   },
 
-  create: account => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_CREATE, account)
+  create: bc => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc }})
       .send()
       .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
 
-        dispatch(goBack());
+        dispatch(push(MAIN));
       });
   },
 
   changeNetwork: (id, network) => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
+    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
       .send()
       .then(payload => {
         AccountActions.setAccount(payload)(dispatch, getState);
@@ -42,10 +42,10 @@ const AccountActions = {
       });
   },
 
-  setAccount: accs => (dispatch, getState) => {
+  setAccount: accounts => (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_SET,
-      payload: accs
+      payload: accounts
     });
   },
 
@@ -68,7 +68,7 @@ const AccountActions = {
   },
 
   getSeed: (pass, id) => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_GETSEED, id)
+    return InternalMessage.payload(ACCOUNT_GETSEED, id)
       .send()
       .then(seed => {
         dispatch({

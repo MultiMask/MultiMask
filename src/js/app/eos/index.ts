@@ -1,5 +1,3 @@
-import AccountFactory from 'app/account/accountFactory';
-
 import { AccessController } from '../accessController';
 import { MessageController } from '../messageController';
 import { AccountController } from '../account/accountController';

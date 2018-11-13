@@ -15,10 +15,12 @@ interface IProfileData {
 }
 
 interface IAccountKeyData {
+  data?: string;
   name?: string;
   segwit?: boolean;
-  data?: string;
-  key?: string;
+
+  bc?: string;
+  network?: string;
 }
 
 interface IMeseeageInternal {
