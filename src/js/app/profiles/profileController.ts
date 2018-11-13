@@ -47,9 +47,11 @@ export class ProfileController {
    * @param sendResponse 
    * @param accountData 
    */
-  public responseAddAccount = async (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
+  public responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
     this.profile.addWallet(bc);
-    await this.save(this.profile);
+    this.updateKeysAndAccounts();
+
+    this.save(this.profile);
 
     sendResponse({
       success: true,
@@ -63,11 +65,8 @@ export class ProfileController {
   public activateProfile = async (profileId: string) => {
     this.profile = Profile.fromJSON(await StorageService.Entities.get(profileId));
     this.profile.decode(this.accessController.decode);
-    
-    const profileData = this.profile.getKeysAndAccounts();
-    this.keyController.assignKeys( profileData.keys );
-    this.accountController.assignAccounts( profileData.accounts );
 
+    this.updateKeysAndAccounts();
     return this.profile.id;
   }
 
@@ -79,6 +78,16 @@ export class ProfileController {
     const encodedProfile = profile.getEncodedData(this.accessController.encode);
 
     return StorageService.Entities.set(encodedProfile.id, encodedProfile);
+  }
+
+  /**
+   * Update accounts and keys
+   */
+  private updateKeysAndAccounts () {
+    const profileData = this.profile.getKeysAndAccounts();
+    
+    this.keyController.assignKeys( profileData.keys );
+    this.accountController.assignAccounts( profileData.accounts );
   }
 
   /**

@@ -16,6 +16,8 @@ export interface IProfileChain {
   wallets: IWalletRaw[];
 }
 
+const DEFAULT_NAME = 'Default wallet';
+
 export class Profile {
   private seed: string;
 
@@ -79,7 +81,7 @@ export class Profile {
       chain.wallets.push({
         data: `02${idx}`,
         segwit: false,
-        name: 'Default wallet'
+        name: DEFAULT_NAME
       })
     } else {
       this.chains.push({
@@ -88,7 +90,7 @@ export class Profile {
           {
             data: '020',
             segwit: false,
-            name: 'Default wallet'
+            name: DEFAULT_NAME
           }
         ]
       })

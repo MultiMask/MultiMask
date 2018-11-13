@@ -26,8 +26,9 @@ const AccountActions = {
     return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc }})
       .send()
       .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
-
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
         dispatch(push(MAIN));
       });
   },

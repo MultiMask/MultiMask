@@ -21,6 +21,7 @@ interface IAccountKeyData {
 
   bc?: string;
   network?: string;
+  key?: string;
 }
 
 interface IMeseeageInternal {
