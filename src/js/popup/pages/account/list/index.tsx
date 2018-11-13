@@ -23,7 +23,7 @@ class AccountList extends React.Component<any, any> {
                 total.balanceInBTC += getPriceInBTC(account.info.balance, account.blockchain);
 
                 return (
-                  <div key={account.name} className="Wallets-Item">
+                  <div key={account.info.address} className="Wallets-Item">
                     <Item account={account} />
                   </div>
                 );
@@ -33,9 +33,7 @@ class AccountList extends React.Component<any, any> {
               <div className="Wallets-Total">
                 <div className="Wallets-Label">total:</div>
                 <div className="Wallets-Value">{total.balanceInBTC} BTC</div>
-                <div className="Wallets-Label">
-                  {getPrice(total.balanceInBTC, 'BTC')} USD
-                </div>
+                <div className="Wallets-Label">{getPrice(total.balanceInBTC, 'BTC')} USD</div>
               </div>
             ) : null}
           </div>

@@ -55,7 +55,6 @@ export default class BitcoinWallet implements IWallet {
     
     return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
-      console.log(secret);
 
       this.setNetworkUrl(network)
       return network;
