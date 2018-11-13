@@ -7,7 +7,7 @@ import ntx from 'bcnetwork';
 
 const DEFAULT_FEE = 5000; // Satoshi
 
-export default class BitcoinWallet implements IWallet {
+export class BitcoinWallet implements IWallet {
   private private: any;
   public network: any;
   public address: any;
@@ -16,18 +16,13 @@ export default class BitcoinWallet implements IWallet {
 
   public segWit = false;
 
-  constructor (network) {
-    this.network = network;
-
-    this.setNetworkUrl(network)
-  }
-
   /**
    * Create PK, address
    * @param pk 
    */
-  public create (pk: Buffer) {
-    return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
+  public create (pk: Buffer, network?: string) {
+    this.setNewNetwork(network);
+    return this.createFacrory(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
       
       return true;
@@ -39,7 +34,7 @@ export default class BitcoinWallet implements IWallet {
    * @param pk 
    * @param network 
    */
-  private _createWallet (pk: Buffer, network: bitcoin.Network) {
+  private createFacrory (pk: Buffer, network: bitcoin.Network) {
     return this.segWit
     ? BTCEngine.createSegWitWallet(pk, network)
     : BTCEngine.createWallet(pk, network);
@@ -53,17 +48,19 @@ export default class BitcoinWallet implements IWallet {
   public changeNetwork (network: string, pk: Buffer) {
     this.network = network;
     
-    return this._createWallet(pk, mapNetwork(this.network)).then(secret => {
+    return this.createFacrory(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
 
-      this.setNetworkUrl(network)
+      this.setNewNetwork(network)
       return network;
     });
   }
 
-  private setNetworkUrl (network) {
-    const networkProps = ntx.BTC.network.find(item => item.sign === network)
+  private setNewNetwork (network) {
+    const networkProps = ntx.BTC.network.find(item => item.sign === network);
+
     this.networkUrl = networkProps.url;
+    this.network = network;
   }
 
   public getAddress () {

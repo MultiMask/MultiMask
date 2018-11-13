@@ -26,7 +26,7 @@ export default class Account {
   }
 
   public init (privateKey): Promise<Account> {
-    return this.wallet.create(privateKey);
+    return this.wallet.create(privateKey, this.network);
   }
  
   /**
