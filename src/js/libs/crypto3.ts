@@ -1,6 +1,5 @@
 import uuid from 'uuid/v4';
 import { ACCOUNT_INFO_DOMAIN } from '../constants/account';
-import { TX_SEND } from '../constants/tx';
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
@@ -9,6 +8,8 @@ import { NetworkMessage } from 'models/NetworkMessage';
 import { DanglingResolver } from 'models/DanglingResolver';
 
 import { CONTENT_APP } from 'constants/apps';
+import TransportLocator from './plugins/TransportLocator';
+import { IIdentityProps, ISenderParams } from './plugins/types';
 
 let stream;
 let resolvers;
@@ -42,7 +43,7 @@ const _subscribe = () => {
  * @param type
  * @param payload
  */
-const _send = (type: string, payload?: any) => {
+export const _send = (type: string, payload?: any) => {
   return new Promise((resolve, reject) => {
     const id = uuid();
     const message = new NetworkMessage(type, payload, id);
@@ -58,7 +59,6 @@ export class Crypto3 {
   public btc;
   public eos;
   public eth;
-  private account: WalletInfo;
 
   constructor (_stream) {
     stream = _stream;
@@ -71,42 +71,28 @@ export class Crypto3 {
     this.eos = EOS(_send);
   }
 
-  public async getIdentity (entity: IIdentityProps) {
+  public async getIdentity (entity: IIdentityProps): Promise<ISenderParams | Error> {
     const accounts = (await _send(ACCOUNT_INFO_DOMAIN)) as WalletInfo[];
     const account = accounts.find(item => item.blockchain === entity.blockchain && item.info.balance >= entity.amount);
 
     if (account) {
-      this.account = account;
-      return { to: entity.address, from: account.info.address, amount: entity.amount };
+      return {
+        to: entity.address,
+        from: account.info.address,
+        amount: entity.amount,
+        blockchainType: account.blockchain
+      };
     }
 
     return Error('not found account for payment');
   }
 
-  public async pay (payParams) {
-    const tx = this.formatTX(payParams);
-    const result = await _send(TX_SEND, { id: this.account.id, tx });
+  public async pay (params): Promise<string | Error> {
+    const sender = TransportLocator.create(params);
+
+    const result = await sender.send();
+    console.log('txhash', result);
+
     return result;
   }
-
-  private formatTX ({ to, amount, data }: IPayParams) {
-    return {
-      to,
-      data,
-      amount: parseFloat(amount)
-    };
-  }
-}
-
-interface IPayParams {
-  to: string;
-  amount: string;
-  data?: string;
-}
-
-interface IIdentityProps {
-  address: string;
-  blockchain: BCType;
-  chainId: number;
-  amount: number;
 }
