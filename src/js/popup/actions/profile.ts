@@ -1,4 +1,4 @@
-import { downloadFile } from '../../helpers/files';
+import { downloadFile } from 'helpers/files';
 import { push, goBack } from 'connected-react-router';
 import InternalMessage from 'services/InternalMessage';
 
@@ -50,6 +50,14 @@ const ProfileActions = {
       });
   },
 
+  export: id => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_EXPORT, { payload: { id }})
+      .send()
+      .then(({ payload: { encodedProfile }}) => {
+        downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
+        dispatch(goBack());
+      });
+  },
 
 
 
@@ -73,14 +81,6 @@ const ProfileActions = {
   //     .then(updateProfileListFn(dispatch));
   // },
 
-  // export: id => (dispatch, getState) => {
-  //   return InternalMessage.payload(PROFILE_EXPORT, id)
-  //     .send()
-  //     .then(({ encodedProfile }) => {
-  //       downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
-  //       dispatch(goBack());
-  //     });
-  // },
 
   // import: (pass, encryptedProfile) => (dispatch, getState) => {
   //   return InternalMessage.payload(PROFILE_IMPORT, { pass, encryptedProfile })
