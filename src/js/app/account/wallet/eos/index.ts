@@ -1,3 +1,4 @@
+import wif from 'wif';
 import Eos from 'eosjs';
 const {ecc, Fcbuffer} = Eos.modules;
 
@@ -31,14 +32,16 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public create (_private) {
-    const promise = _private
-      ? Promise.resolve(_private)
-      : ecc.randomKey();
+  public create (pk: Buffer | string) {
+    const privateKey = Buffer.isBuffer(pk)
+      ? wif.encode(128, pk, false)
+      : pk;
+
+    const promise = Promise.resolve(privateKey);
 
     return promise
-      .then(key => {
-        this.private = key;
+      .then(priv => {
+        this.private = priv;
 
         this.eos = Eos({
           keyProvider: this.private,
@@ -48,8 +51,8 @@ export class EosWallet implements IWallet {
         
         return ecc.privateToPublic(this.private);
       })
-      .then(_public => {
-        this.public = _public;
+      .then(pub => {
+        this.public = pub;
 
         return this.private;
       });
