@@ -24,16 +24,22 @@ export default class Engine {
     return bip39.mnemonicToSeed(mnemonic);
   }
 
-  public getPrivKeyFromSeed (seed) {
-    const root = hdkey.fromMasterSeed(seed);
-    // Get first eth wallet from HDwallet
-    // eslint-disable-next-line
-    const addrNode = root.derive("m/44'/60'/0'/0/0");
+  public getPrivKeyFromSeed (pk: Buffer | string) {
+    if (Buffer.isBuffer(pk)) {
+      return {
+        priv: ethUtil.bufferToHex(pk),
+        privHex: pk
+      }
+    }
+    // const root = hdkey.fromMasterSeed(seed);
+    // // Get first eth wallet from HDwallet
+    // // eslint-disable-next-line
+    // const addrNode = root.derive("m/44'/60'/0'/0/0");
 
-    return {
-      priv: ethUtil.bufferToHex(addrNode.privateKey),
-      privHex: addrNode.privateKey
-    };
+    // return {
+    //   priv: ethUtil.bufferToHex(addrNode.privateKey),
+    //   privHex: addrNode.privateKey
+    // };
   }
 
   public getEthereumAddress (privKey) {

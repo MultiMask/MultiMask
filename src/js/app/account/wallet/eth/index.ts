@@ -1,12 +1,12 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
 import EthEngine from './engine';
-import networks from '../../../../blockchain'
+import networks from 'bcnetwork'
 
 const web3 = new Web3();
 
 export default class EthWallet implements IWallet {
-  public engine: any;
+  public engine: EthEngine;
   public network: any;
   public priv: any;
   public privHex: any;
@@ -20,14 +20,13 @@ export default class EthWallet implements IWallet {
     this.changeNetwork(network)
   }
 
-  public create (_seed) {
-    const seed = _seed || this.engine.generateMnemonic();
-    ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(seed));
+  public create (pk: Buffer | string) {
+    ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(pk));
 
     this.public = this.engine.getPublic(this.priv);
     this.address = this.engine.getEthereumAddress(this.priv);
 
-    return Promise.resolve(seed);
+    return Promise.resolve();
   }
 
   public changeNetwork (network: string) {
@@ -43,7 +42,7 @@ export default class EthWallet implements IWallet {
     return this.address;
   }
 
-  public getInfo () {
+  public getInfo (): any {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txs]) => {
         this.nonce = txs && txs[0] ? +txs[0].nonce : 0;

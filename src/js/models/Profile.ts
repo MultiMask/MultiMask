@@ -117,7 +117,7 @@ export class Profile {
    */
   public addWallet (bc: BCSign, pk?: string) {
     const chain = this.chains.find(ch => ch.id === bc);
-    const idx = this.getLastIndex(bc) + 1;
+    const idx = this.getNewIndex(bc);
     const idxImport = !isSeed(pk)
       ? `00${pk}`
       : `01${stringToHex(pk)}`;
@@ -141,7 +141,7 @@ export class Profile {
    * Find max index in one chain to generate new wallet
    * @param bc 
    */
-  private getLastIndex (bc: BCSign) {
+  private getNewIndex (bc: BCSign) {
     const chain = this.chains.find(ch => ch.id === bc);
     
     if (!chain) {
@@ -151,7 +151,7 @@ export class Profile {
         .filter(wal => wal.data.substr(0,2) === '02')
         .map(wal => parseInt(wal.data.substr(2), 10));
 
-      return max(indexes);
+      return max(indexes) + 1;
     }
   }
 
