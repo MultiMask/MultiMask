@@ -77,9 +77,7 @@ class Controller {
     });
 
     this.profileListController = new ProfileListController({
-      busController: this.busController,
       messageController: this.messageController,
-      accessController: this.accessController,
       profileController: this.profileController
     });
 

@@ -1,4 +1,4 @@
-import { downloadFile } from '../helpers';
+import { downloadFile } from '../../helpers/files';
 import { push, goBack } from 'connected-react-router';
 import InternalMessage from 'services/InternalMessage';
 
@@ -36,6 +36,12 @@ const ProfileActions = {
       .then(updateProfileListFn(dispatch));
   },
 
+  update: (id, data) => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_UPDATE, { payload: { id, data }})
+      .send()
+      .then(updateProfileListFn(dispatch));
+  },
+
 
 
 
@@ -63,12 +69,6 @@ const ProfileActions = {
 
   // remove: id => (dispatch, getState) => {
   //   InternalMessage.payload(PROFILE_REMOVE, id)
-  //     .send()
-  //     .then(updateProfileListFn(dispatch));
-  // },
-
-  // update: (id, data) => (dispatch, getState) => {
-  //   return InternalMessage.payload(PROFILE_UPDATE, { id, data })
   //     .send()
   //     .then(updateProfileListFn(dispatch));
   // },

@@ -82,6 +82,16 @@ export class ProfileController {
       cb();
     }
   }
+
+  /**
+   * Update accounts and keys
+   */
+  private updateKeysAndAccounts () {
+    const profileData = this.profile.getKeysAndAccounts();
+    
+    this.keyController.assignKeys( profileData.keys );
+    this.accountController.assignAccounts( profileData.accounts );
+  }
       
   /**
    * Restore all accounts from Profile
@@ -106,12 +116,20 @@ export class ProfileController {
   }
 
   /**
-   * Update accounts and keys
+   * Updaate profile name in current instane and in storage
+   * @param id 
+   * @param name 
    */
-  private updateKeysAndAccounts () {
-    const profileData = this.profile.getKeysAndAccounts();
-    
-    this.keyController.assignKeys( profileData.keys );
-    this.accountController.assignAccounts( profileData.accounts );
+  public updateName (id: string, name: string) {
+    if (id === this.profile.id) {
+      this.profile.name = name;
+    }
+
+    return StorageService.Entities.get(id)
+      .then((profile) => {
+        profile.name = name;
+        
+        return StorageService.Entities.set(id, profile);
+      })
   }
 }

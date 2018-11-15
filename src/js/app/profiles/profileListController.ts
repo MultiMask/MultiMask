@@ -3,10 +3,7 @@ import EventEmitter = require('events');
 
 import { StorageService } from 'services/StorageService';
 
-import { BusController } from 'app/busController';
-import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
-import { KeyController } from 'app/keyController';
 import { ProfileController } from 'app/profiles/profileController';
 
 import { getWalletsCount } from 'helpers/profiles';
@@ -15,10 +12,10 @@ import {
   PROFILE_GET_CURRENT,
   PROFILE_CREATE_DONE,
   PROFILE_GETLIST, 
-  // PROFILE_ADD, 
   PROFILE_SELECT, 
+  PROFILE_UPDATE,
+  // PROFILE_ADD, 
   // PROFILE_REMOVE, 
-  // PROFILE_UPDATE,
   // PROFILE_EXPORT,
   // PROFILE_IMPORT
  } from 'constants/profile';
@@ -28,19 +25,13 @@ export class ProfileListController extends EventEmitter {
   private list: string[] = [];
   private current = null;
 
-  private accessController: AccessController;
-  private busController: BusController;
   private messageController: MessageController;
-  private keyController: KeyController;
   private profileController: ProfileController;
 
   constructor (opts) {
     super();
 
-    this.busController = opts.busController;
-    this.accessController = opts.accessController;
     this.messageController = opts.messageController;
-    this.keyController = opts.keyController;
     this.profileController = opts.profileController;
 
     this.startListening();
@@ -56,9 +47,9 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_SELECT, this.responseSelect);
     this.messageController.on(PROFILE_GETLIST, this.responseGetList);
 
+    this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     // this.messageController.on(PROFILE_ADD,     this.responseAdd);
     // this.messageController.on(PROFILE_REMOVE, this.responseRemove);
-    // this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     
     // this.messageController.on(PROFILE_EXPORT, this.responseExport);
     // this.messageController.on(PROFILE_IMPORT, this.responseImport);
@@ -113,14 +104,25 @@ export class ProfileListController extends EventEmitter {
    * Return list of profiles with info
    */
   private responseGetList = (sendResponse: InternalResponseFn) => {
-    this.loadProfiles()
-      .then(profiles => {
+    this.loadProfilesAndCurrent()
+      .then(payload => {
         sendResponse({
           success: true,
-          payload: {
-            list: profiles,
-            current: this.current,
-          }
+          payload
+        })
+      })
+  }
+
+  /**
+   * Update certain Profile
+   */
+  private responseUpdate = (sendResponse: InternalResponseFn, { payload: { id, data }}) => {
+    this.profileController.updateName(id, data.name)
+      .then(this.loadProfilesAndCurrent)
+      .then(payload => {
+        sendResponse({
+          success: true,
+          payload
         })
       })
   }
@@ -202,6 +204,17 @@ export class ProfileListController extends EventEmitter {
         }))
       })
   }
+
+  /**
+   * Hooks to enrich data
+   */
+  private loadProfilesAndCurrent = () => {
+    return this.loadProfiles()
+      .then(list => ({
+        list,
+        current: this.current
+      }))
+  }
   /**
    * Response with list of profiles
    */
@@ -229,18 +242,6 @@ export class ProfileListController extends EventEmitter {
    */
   // private responseRemove = (sendResponse, profileId) => {
   //   this.remove(profileId);
-
-  //   sendResponse({
-  //     list: this.getListSerialized(),
-  //     profileId: this.current.getId()
-  //   });
-  // }
-
-  /**
-   * Update certain Profile
-   */
-  // private responseUpdate = (sendResponse, {id, data}) => {
-  //   this.update(id, data);
 
   //   sendResponse({
   //     list: this.getListSerialized(),
