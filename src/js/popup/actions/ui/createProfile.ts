@@ -25,8 +25,8 @@ const ProfileCreateAction = {
         }
         return ProfileActions.select(profileId)(dispatch, getState);
       })
-      .then(({ payload: { profileId} }) => {
-        return AuthActions.entrance(profileId, true)(dispatch, getState);
+      .then(({ payload: { current } }) => {
+        return AuthActions.entrance(current, true)(dispatch, getState);
       })
       .then(() => {
         dispatch({

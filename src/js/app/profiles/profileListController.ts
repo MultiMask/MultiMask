@@ -95,7 +95,7 @@ export class ProfileListController extends EventEmitter {
     sendResponse({
       success: true,
       payload: {
-        profileId: await this.activate(profileId)
+        current: await this.activate(profileId)
       }
     });
   }
@@ -209,10 +209,10 @@ export class ProfileListController extends EventEmitter {
   /**
    * Load common information about profiles
    */
-  private loadProfiles () {
+  private loadProfiles (): Promise<ProfileInfo[]> {
     return Promise.all(this.list.map(id => StorageService.Entities.get(id)))
       .then(profiles => {
-        return profiles.map(profile => ({
+        return profiles.map((profile: Profile) => ({
           name: profile.name,
           id: profile.id,
           wallets: getWalletsCount(profile)

@@ -21,6 +21,12 @@ type WalletInfo = {
   info: BCInfo;
 }
 
+type ProfileInfo = {
+  id: string;
+  name: string;
+  wallets: number;
+}
+
 /**
  * Common interface for all blockchain wallets
  */

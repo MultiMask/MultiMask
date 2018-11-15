@@ -28,7 +28,17 @@ const ProfileActions = {
 
   select: profileId => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_SELECT, { payload: { profileId }})
-      .send();
+      .send()
+      .then(response => {
+        if (response.success) {
+          dispatch({
+            type: PROFILE_SELECT_RESULT,
+            payload: response.payload
+          })
+        }
+
+        return response;
+      });
   },
   
    getList: () => (dispatch, getState) => {

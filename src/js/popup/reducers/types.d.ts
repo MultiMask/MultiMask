@@ -20,4 +20,10 @@ declare namespace IPopup.State {
       seed: string;
     }
   }
+
+  export interface Profile {
+    list: ProfileInfo[];
+    current: string;
+    onImport: any;
+  }
 }

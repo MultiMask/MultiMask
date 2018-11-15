@@ -1,14 +1,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 
 import Icon from 'ui/components/Icon';
 import priceActions from 'popup/actions/prices';
 
 import Item from './item';
 
-class AccountList extends React.Component<any, any> {
+const actions = {
+  ...priceActions
+};
+type IPropsActions = Actions<typeof actions>;
+interface IProps extends IPropsActions {
+  accounts: WalletInfo[];
+  showTotal: boolean;
+}
+
+class AccountList extends React.Component<IProps, {}> {
   public render () {
     const { getPrice, getPriceInBTC } = this.props;
 
@@ -60,9 +68,9 @@ class AccountList extends React.Component<any, any> {
 }
 
 export default connect(
-  ({ account, settings }: any) => ({
+  ({ account, settings }: IPopup.AppState) => ({
     accounts: account.accounts,
     showTotal: settings.show_total
   }),
-  dispatch => bindActionCreators(priceActions, dispatch)
-)(AccountList);
+  actions
+)(AccountList as any);
