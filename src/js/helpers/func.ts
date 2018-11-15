@@ -75,16 +75,16 @@ export const hexToString = (tmp: string): string => {
  * @param {Buffer} buf
  * @return {String}
  */
-export const bufferToHex = (buf: Buffer) => {
-  buf = exports.toBuffer(buf);
-  return '0x' + buf.toString('hex');
+export const bufferToHex = (buf: Buffer | Uint8Array): string => {
+  const buff = toBuffer(buf);
+  return '0x' + buff.toString('hex');
 };
 
 /**
  * Convert to Buffer all staff
  * @param v 
  */
-export const toBuffer = (v) => {
+export const toBuffer = (v): Buffer => {
   if (!Buffer.isBuffer(v)) {
     if (Array.isArray(v)) {
       v = Buffer.from(v);

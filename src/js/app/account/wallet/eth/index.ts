@@ -8,19 +8,14 @@ const web3 = new Web3();
 export default class EthWallet implements IWallet {
   public engine: EthEngine;
   public network: any;
-  public priv: any;
-  public privHex: any;
-  public public: any;
+  private privateKey: any;
   public address: any;
   public nonce: any;
   public networkUrl: string;
 
   public create (pk: Buffer | string, network?: string) {
     this.changeNetwork(network);
-    ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(pk));
-
-    this.public = this.engine.getPublic(this.priv);
-    this.address = this.engine.getEthereumAddress(this.priv);
+    ({ address: this.address, privateKey: this.privateKey } = this.engine.getPrivKeyFromSeed(pk));
 
     return Promise.resolve();
   }
@@ -65,7 +60,7 @@ export default class EthWallet implements IWallet {
     const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
 
     const tx = this.engine.signEthTx({
-      privKey: this.privHex,
+      privKey: this.privateKey,
       amount: amountInWei,
       to,
       from: this.address
@@ -87,6 +82,6 @@ export default class EthWallet implements IWallet {
 
   // TODO: provide to Account entity
   public signRawTx (data) {
-    return this.engine.signRawTx(data, this.privHex);
+    return this.engine.signRawTx(data, this.privateKey);
   }
 }

@@ -2,10 +2,7 @@ import Web3 = require('web3');
 import ethTx = require('ethereumjs-tx');
 
 import * as ethUtil from 'ethereumjs-util';
-import * as bip39 from 'bip39';
-import hdkey from 'hdkey';
-
-import { isHexString } from 'helpers/func';
+import { isHexString, bufferToHex } from 'helpers/func';
 
 import EtherApi from 'etherscan-api';
 
@@ -18,33 +15,27 @@ export default class Engine {
     this.etherApi = EtherApi.init(etherscanApiKey, network, '10000');
   }
 
-  public generateMnemonic () {
-    return bip39.generateMnemonic();
-  }
-
-  public getSeedFromMnemonic (mnemonic) {
-    return bip39.mnemonicToSeed(mnemonic);
-  }
-
   public getPrivKeyFromSeed (pk: Buffer | string) {
     if (Buffer.isBuffer(pk)) {
+      const pkHex = bufferToHex(pk);
+
       return {
-        priv: ethUtil.bufferToHex(pk),
-        privHex: pk
+        address: this.getEthereumAddress(pkHex),
+        privateKey: pk
       }
     } else {
       const rightPk = isHexString(pk) ? pk : `0x${pk}`;
 
       return {
-        priv: rightPk,
-        privHex: Buffer.from(rightPk, 'hex'),
+        address: this.getEthereumAddress(rightPk),
+        privateKey: Buffer.from(rightPk, 'hex'),
       }
     }
   }
 
   public getEthereumAddress (privKey) {
     const addressHex = ethUtil.privateToAddress(privKey);
-    return ethUtil.bufferToHex(addressHex);
+    return bufferToHex(addressHex);
   }
 
   public getPublic (privKey) {
