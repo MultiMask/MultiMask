@@ -5,17 +5,14 @@ import { APPROVAL } from 'constants/promptTypes';
 import { BTC_APPROVE, BTC_GET_ACCOUNTS } from 'constants/blockchains/btc';
 import { NotificationService } from 'services/NotificationService';
 
-import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
 import { AccountController } from 'app/account/accountController';
 
 export class BtcController {
-  private accessController: AccessController;
   private messageController: MessageController;
   private accountController: AccountController;
 
   constructor (opts) {
-    this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
     

@@ -15,7 +15,7 @@ type BCInfo = {
  */
 type WalletInfo = {
   blockchain: BCType;
-  id: string;
+  key: string;
   name: string;
   extra?: any;
   info: BCInfo;

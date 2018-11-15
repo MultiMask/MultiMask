@@ -9,7 +9,7 @@ import { AccountController } from 'app/account/accountController';
 import { Profile } from 'models/Profile';
 import { StorageService } from 'services/StorageService';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE, ACCOUNT_IMPORT } from 'constants/account';
+import { ACCOUNT_CREATE, ACCOUNT_IMPORT, ACCOUNT_UPDATE } from 'constants/account';
 
 export class ProfileController {
   private profile: Profile;
@@ -38,7 +38,8 @@ export class ProfileController {
   private startListening () {
     this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
     this.messageController.on(ACCOUNT_IMPORT, this.responseImportAccount);
-    // this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
+
+    this.busController.on(ACCOUNT_UPDATE, this.responseUpdateAccount);
   }
 
   /**
@@ -71,6 +72,16 @@ export class ProfileController {
     });
   }
 
+  private responseUpdateAccount = (key: string, data, cb) => {
+    this.profile.updateWallet(key, data);
+
+    this.updateKeysAndAccounts();
+    this.save(this.profile);
+
+    if (cb) {
+      cb();
+    }
+  }
       
   /**
    * Restore all accounts from Profile
@@ -103,30 +114,4 @@ export class ProfileController {
     this.keyController.assignKeys( profileData.keys );
     this.accountController.assignAccounts( profileData.accounts );
   }
-
-  /**
-   * Get profiles list and restore first or create new
-   */
-  // private init () {
-    // return this.profileListController.init()
-    //   .then(this.restoreProfile);
-  // }
-
-  /**
-   * Restore all accounts from store
-   * @param accountIds
-   */
-  // private restoreAccounts = (accountIds: string[]) => {
-  //   this.accountController.clearList();
-  //   return this.accountController.restore(accountIds, this.getPass());
-  // }
-  
-  /**
-   * Return seed for Wallet to export
-   * @param sendResponse 
-   * @param id 
-   */
-  // public getSeed = (sendResponse, id): void => {
-  //   sendResponse(this.accountController.getSeed(id));
-  // }
 }

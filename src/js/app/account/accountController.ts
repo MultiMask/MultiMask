@@ -4,17 +4,16 @@ import Account from './';
 import { AccountFactory } from './accountFactory';
 
 import { BusController } from 'app/busController';
-import { AccessController } from 'app/accessController';
 import { MessageController } from 'app/messageController';
 import { DomainController} from 'app/domainController';
 import { KeyController } from 'app/keyController';
 import { CacheController } from 'app/cacheController';
 
 import { GET_ACCOUNTS } from 'constants/appInternal';
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
+import { ACCOUNT_INFO, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
 
 interface IGetAccountOptions {
-  id?: string;
+  key?: string;
   address?: string;
 }
 
@@ -26,7 +25,6 @@ interface IGetAccountsOptions {
 export class AccountController {
   public accounts: Account[] = [];
 
-  private accessController: AccessController;
   private busController: BusController;
   private messageController: MessageController;
   private domainController: DomainController;
@@ -34,7 +32,6 @@ export class AccountController {
   private cacheController: CacheController;
 
   constructor (opts) {
-    this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
     this.domainController = opts.domainController;
@@ -105,8 +102,8 @@ export class AccountController {
    * Get single account by filter
    */
   public getAccount (opts: IGetAccountOptions): Account {
-    if (opts && opts.id) {
-      const found = this.accounts.find(acc => acc.getAddress() === opts.id);
+    if (opts && opts.key) {
+      const found = this.accounts.find(acc => acc.key === opts.key);
 
       if (found) {
         return found;
@@ -139,65 +136,6 @@ export class AccountController {
     }
 
     return list;
-  }
-
-
-
-
-
-
-
-  /**
-   * Restore accounts by Ids from storage
-   * @param accounts 
-   * @param pass 
-   */
-  public restore (accounts, pass: string) {
-    // info('AccountController > load all accounts > ', accounts);
-
-    // if (accounts && accounts.length > 0) {
-    //   return AccountFactory.loadListByIds(pass, accounts).then(accountsFull => {
-    //     accountsFull.forEach(this.addAccountInstance);
-
-    //     return this.accounts;
-    //   });
-    // } else {
-    //   return Promise.resolve([]);
-    // }
-  }
-
-  public addAccountInstance = account => {
-    // if (!this.getAccount({ id: account.id })) {
-    //   this.accounts.push(account);
-    // }
-  };
-
-  public import = (pass, accountRaw) => {
-    // if (!this.getAccount({ id: accountRaw.id })) {
-    //   const accountModel = AccountFactory.create(accountRaw);
-
-    //   AccountFactory.save(pass, accountModel);
-    //   this.addAccountInstance(accountModel);
-    // }
-  };
-
-  /**
-   * Return seed for required account
-   * @param id 
-   */
-  public getSeed (id: string): string {
-    if (this.accessController.isAuth()) {
-      const account = this.getAccount({ id });
-
-      if (account) {
-        // const seed = account.getSeed();
-
-        // TODO: repair it
-        // return encode(this.accessController.getPass(), seed);
-      }
-    }
-
-    return null;
   }
 
   /**

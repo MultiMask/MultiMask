@@ -22,16 +22,16 @@ class Assign extends React.Component<IProps, IState> {
   public state: IState = {};
 
   public handleSave = account => {
-    this.props.setAccountToKey(this.props.account.id, account);
+    this.props.setAccountToKey(this.props.account.key, account);
   };
 
-  public componentDidMount () {
-    this.props.getKeyAccounts(this.props.account.id).then(accounts => {
-      this.setState({ accounts });
+  public componentDidMount() {
+    this.props.getKeyAccounts(this.props.account.key).then(response => {
+      this.setState({ accounts: response.payload });
     });
   }
 
-  public render () {
+  public render() {
     const { account } = this.props;
     const { accounts } = this.state;
 

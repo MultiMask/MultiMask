@@ -33,6 +33,7 @@ interface IMeseeageInternal {
 interface IMessageInternalResultSuccess {
   success: true;
   payload?: any;
+  message?: string;
 }
 
 interface IMessageInternalResultFailed {

@@ -97,20 +97,19 @@ class Controller {
     
     this.btcController = new BtcController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController
     });
 
     this.ethereumController = new EthereumController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController
     });
 
     this.eosController = new EosController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController,
+      busController: this.busController,
+      keyController: this.keyController
     })
 
     this.booststrap();

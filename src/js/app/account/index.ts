@@ -15,7 +15,7 @@ export default class Account {
 
   constructor ({ bc, name, extra, key, wallet, network, data = '020'}: IAccountCreate) {
     this.name = name ? name : Date.now().toString();
-    
+
     this.bc = bc;
     this.network = network;
     this.extra = extra;

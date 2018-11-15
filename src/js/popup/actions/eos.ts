@@ -8,13 +8,13 @@ import InternalMessage from 'services/InternalMessage';
 import accountActions from './account';
 
 export const eosActions = {
-  getKeyAccounts: (id: string) => (dispatch, getState) => {
-    return InternalMessage.payload(GET_KEY_ACCOUNTS, id)
+  getKeyAccounts: (key: string) => (dispatch, getState) => {
+    return InternalMessage.payload(GET_KEY_ACCOUNTS, { key })
       .send();
   },
 
-  setAccountToKey: (id: string, accountPermission) => (dispatch, getState) => {
-    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {id, accountPermission})
+  setAccountToKey: (key: string, accountPermission) => (dispatch, getState) => {
+    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {key, accountPermission})
       .send()
       .then(account => {
         accountActions.updateAccount(account)(dispatch, getState);

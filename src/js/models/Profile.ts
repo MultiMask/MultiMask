@@ -9,6 +9,7 @@ import { getParams, generateId } from 'helpers/profiles';
 export interface IWalletRaw {
   data?: string;
   segwit?: boolean;
+  extra?: string
   name?: string;
 }
 
@@ -39,14 +40,12 @@ export class Profile {
     if (this.isEncoded) {
       this.seed = decodeFn(this.seed);
 
-      this.chains.forEach(chain => {
-        chain.wallets.forEach(wallet => {
-          const [ type, data ] = getParams(wallet.data);
-  
-          if (type === '01' || type === '00') {
-            wallet.data = `${type}${decodeFn(data)}`;
-          }
-        })
+      this.iterateWallets((wallet, bc) => {
+        const [ type, data ] = getParams(wallet.data);
+
+        if (type === '01' || type === '00') {
+          wallet.data = `${type}${decodeFn(data)}`;
+        }
       })
     }
   }
@@ -96,18 +95,16 @@ export class Profile {
       pk: {}
     };
 
-    this.chains.forEach(chain => {
-      chain.wallets.forEach(wallet => {
-        const [ type, key ] = getParams(wallet.data);
-        if (type === '00' || type === '01') {
-          const dir = type === '00' ? 'pk' : 'seed';
-          const pk = type === '00' ? key : hexToString(key);
-          
-          keys[dir][generateId(chain.id, wallet.data)] = pk;
-        }
-      });
-    });
-
+    this.iterateWallets((wallet, bc) => {
+      const [ type, key ] = getParams(wallet.data);
+      if (type === '00' || type === '01') {
+        const dir = type === '00' ? 'pk' : 'seed';
+        const pk = type === '00' ? key : hexToString(key);
+        
+        keys[dir][generateId(bc, wallet.data)] = pk;
+      }
+    })
+    
     return keys;
   }
 
@@ -138,6 +135,23 @@ export class Profile {
   }
 
   /**
+   * Update info about wallets (name, account, segwit)
+   * @param key 
+   * @param payload 
+   */
+  public updateWallet (key, payload) {
+    if (payload.data) {
+      delete payload.data;
+    }
+
+    this.iterateWallets((wallet, bc) => {
+      if (generateId(bc, wallet.data) === key) {
+        Object.assign(wallet, payload);
+      }
+    })
+  }
+
+  /**
    * Find max index in one chain to generate new wallet
    * @param bc 
    */
@@ -153,6 +167,14 @@ export class Profile {
 
       return max(indexes) + 1;
     }
+  }
+
+  private iterateWallets (cb: (wallet, bc) => void) {
+    this.chains.forEach(chain => {
+      chain.wallets.forEach(wallet => {
+        cb(wallet, chain.id);
+      });
+    });
   }
 
   /**

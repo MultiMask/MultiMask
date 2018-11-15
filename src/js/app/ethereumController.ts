@@ -6,19 +6,16 @@ import { NotificationService } from 'services/NotificationService';
 import { Prompt } from 'models/Prompt';
 import { APPROVAL } from 'constants/promptTypes';
 
-import { AccessController } from './accessController';
 import { MessageController } from './messageController';
 import { AccountController } from './account/accountController';
 
 import { ETH_APPROVE_TX, ETH_GET_ACCOUNTS, ETH_SIGN_TX } from 'constants/blockchains/eth';
 
 export class EthereumController {
-  private accessController: AccessController;
   private messageController: MessageController;
   private accountController: AccountController;
 
   constructor (opts) {
-    this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
     
