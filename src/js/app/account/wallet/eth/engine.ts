@@ -5,6 +5,8 @@ import * as ethUtil from 'ethereumjs-util';
 import * as bip39 from 'bip39';
 import hdkey from 'hdkey';
 
+import { isHexString } from 'helpers/func';
+
 import EtherApi from 'etherscan-api';
 
 const web3 = new Web3();
@@ -30,16 +32,14 @@ export default class Engine {
         priv: ethUtil.bufferToHex(pk),
         privHex: pk
       }
-    }
-    // const root = hdkey.fromMasterSeed(seed);
-    // // Get first eth wallet from HDwallet
-    // // eslint-disable-next-line
-    // const addrNode = root.derive("m/44'/60'/0'/0/0");
+    } else {
+      const rightPk = isHexString(pk) ? pk : `0x${pk}`;
 
-    // return {
-    //   priv: ethUtil.bufferToHex(addrNode.privateKey),
-    //   privHex: addrNode.privateKey
-    // };
+      return {
+        priv: rightPk,
+        privHex: Buffer.from(rightPk, 'hex'),
+      }
+    }
   }
 
   public getEthereumAddress (privKey) {

@@ -11,8 +11,7 @@ const createWallet = ({ bc }) => {
   }
 
   if (bc === ntx.ETH.sign) {
-    const defaultETHNetwork = ntx.ETH.network[0].sign;
-    return new EthWallet(defaultETHNetwork);
+    return new EthWallet();
   }
 
   if (bc === ntx.EOS.sign) {

@@ -15,12 +15,8 @@ export default class EthWallet implements IWallet {
   public nonce: any;
   public networkUrl: string;
 
-  constructor ( network ) {
-    this.engine = new EthEngine(network);
-    this.changeNetwork(network)
-  }
-
-  public create (pk: Buffer | string) {
+  public create (pk: Buffer | string, network?: string) {
+    this.changeNetwork(network);
     ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(pk));
 
     this.public = this.engine.getPublic(this.priv);
