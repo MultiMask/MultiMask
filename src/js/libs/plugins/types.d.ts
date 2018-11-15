@@ -3,7 +3,7 @@ export interface ISender {
   from: string;
   data?: string;
   amount: number;
-  send(): Promise<string | Error>;
+  send<T>();
 }
 
 export interface ISenderParams {

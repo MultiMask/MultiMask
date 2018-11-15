@@ -1,5 +1,5 @@
 import BTCSender from './btcSender';
-// import ETHSender from './ethSender';
+import ETHSender from './ethSender';
 import { ISenderParams } from './types';
 
 enum BlockchainsTypes {
@@ -11,6 +11,10 @@ enum BlockchainsTypes {
 class TransportLocator {
   private [BlockchainsTypes.Btc] (params: ISenderParams) {
     return new BTCSender(params);
+  }
+
+  private [BlockchainsTypes.Eth] (params: ISenderParams) {
+    return new ETHSender(params);
   }
 
   public create (props) {
