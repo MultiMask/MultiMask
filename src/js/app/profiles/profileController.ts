@@ -9,8 +9,7 @@ import { AccountController } from 'app/account/accountController';
 import { Profile } from 'models/Profile';
 import { StorageService } from 'services/StorageService';
 
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
-import { PROFILE_SELECT } from 'constants/profile';
+import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE, ACCOUNT_IMPORT } from 'constants/account';
 
 export class ProfileController {
   private profile: Profile;
@@ -38,7 +37,7 @@ export class ProfileController {
    */
   private startListening () {
     this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
-    // this.messageController.on(ACCOUNT_INFO, this.getAccounts);
+    this.messageController.on(ACCOUNT_IMPORT, this.responseImportAccount);
     // this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
   }
 
@@ -47,7 +46,7 @@ export class ProfileController {
    * @param sendResponse 
    * @param accountData 
    */
-  public responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
+  private responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
     this.profile.addWallet(bc);
     this.updateKeysAndAccounts();
 
@@ -57,6 +56,21 @@ export class ProfileController {
       success: true,
     });
   }
+
+  /**
+   * Import seed or PK 
+   */
+  private responseImportAccount = (sendResponse: InternalResponseFn, { payload: {bc, privateKey}}) => {
+    this.profile.addWallet(bc, privateKey);
+    
+    this.updateKeysAndAccounts();
+    this.save(this.profile);
+
+    sendResponse({
+      success: true,
+    });
+  }
+
       
   /**
    * Restore all accounts from Profile
@@ -88,23 +102,6 @@ export class ProfileController {
     
     this.keyController.assignKeys( profileData.keys );
     this.accountController.assignAccounts( profileData.accounts );
-  }
-
-  /**
-   * DEPRICATED
-   * Return accounts for current Profile
-   * @param sendResponse
-   */
-  public getAccounts = (sendResponse): void => {
-    // const resolver = this.profileListController.getCurrent()
-    //   ? Promise.resolve(this.accountController.getAccounts())
-    //   : this.init();
-
-    // resolver
-    //   .then(accounts => {
-    //     return Promise.all(accounts.map(account => account.getInfo()));
-    //   })
-    //   .then(sendResponse);
   }
 
   /**

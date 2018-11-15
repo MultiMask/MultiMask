@@ -6,7 +6,8 @@ interface IDomainAccess extends Record<string, IDomainAccount> {}
 
 interface IKeyStore {
   master: string;
-  [K: number]: string;
+  pk?: Record<string, string>;
+  seed?: Record<string, string>;
 }
 
 interface IProfileData {

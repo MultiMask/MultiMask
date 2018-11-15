@@ -46,8 +46,9 @@ export class EosController {
     if (account) {
       const responder = approval => {
         const signature = approval.success 
-          ? EosEngine.sign(data, account.getSeed())
-          : null
+          // TODO: put PrivateKey
+          // ? EosEngine.sign(data, account.getSeed())
+          // : null
         
         sendResponse({
           signatures:[signature],

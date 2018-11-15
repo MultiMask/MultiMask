@@ -1,9 +1,10 @@
-// import ProfileFactory from './profileFactory';
 import { cloneDeep, max } from 'lodash';
+
+import { BCSign } from 'bcnetwork';
 import { Randomizer } from 'services/Randomizer';
 import { isSeed } from 'helpers/checkers';
-import { toJSON } from 'helpers/func';
-import { BCSign } from 'bcnetwork';
+import { toJSON, hexToString, stringToHex } from 'helpers/func';
+import { getParams, generateId } from 'helpers/profiles';
 
 export interface IWalletRaw {
   data?: string;
@@ -37,6 +38,16 @@ export class Profile {
   public decode (decodeFn: (payload) => any) {
     if (this.isEncoded) {
       this.seed = decodeFn(this.seed);
+
+      this.chains.forEach(chain => {
+        chain.wallets.forEach(wallet => {
+          const [ type, data ] = getParams(wallet.data);
+  
+          if (type === '01' || type === '00') {
+            wallet.data = `${type}${decodeFn(data)}`;
+          }
+        })
+      })
     }
   }
 
@@ -44,16 +55,24 @@ export class Profile {
     const clone = cloneDeep(this);
     clone.seed = encodeFn(clone.seed);
 
+    clone.chains.forEach(chain => {
+      chain.wallets.forEach(wallet => {
+        const [ type, data ] = getParams(wallet.data);
+
+        if (type === '01' || type === '00') {
+          wallet.data = `${type}${encodeFn(data)}`;
+        }
+      })
+    })
+
     return toJSON(clone);
   }
 
   public getKeysAndAccounts (): IProfileData {
     return {
-      keys: {
-        master: this.seed
-      },
+      keys: this.getKeys(),
       accounts: this.getAccounts()
-    }
+    };
   }
 
   private getAccounts (): IAccountKeyData[] {
@@ -62,7 +81,7 @@ export class Profile {
         accounts.push({
           ...wallet,
           bc: chain.id,
-          key: processId(chain.id, wallet)
+          key: generateId(chain.id, wallet.data)
         })
       })
 
@@ -70,30 +89,50 @@ export class Profile {
     }, []);
   }
 
+  private getKeys () {
+    const keys = {
+      master: this.seed,
+      seed: {},
+      pk: {}
+    };
+
+    this.chains.forEach(chain => {
+      chain.wallets.forEach(wallet => {
+        const [ type, key ] = getParams(wallet.data);
+        if (type === '00' || type === '01') {
+          const dir = type === '00' ? 'pk' : 'seed';
+          const pk = type === '00' ? key : hexToString(key);
+          
+          keys[dir][generateId(chain.id, wallet.data)] = pk;
+        }
+      });
+    });
+
+    return keys;
+  }
+
   /**
    * Add new Wallet into profile
    * @param bc 
    */
-  public addWallet (bc: BCSign) {
+  public addWallet (bc: BCSign, pk?: string) {
     const chain = this.chains.find(ch => ch.id === bc);
     const idx = this.getLastIndex(bc) + 1;
+    const idxImport = !isSeed(pk)
+      ? `00${pk}`
+      : `01${stringToHex(pk)}`;
+    const walletData = {
+      data: pk ? idxImport : `02${idx}`,
+      segwit: false,
+      name: DEFAULT_NAME
+    };
 
     if (chain) {
-      chain.wallets.push({
-        data: `02${idx}`,
-        segwit: false,
-        name: DEFAULT_NAME
-      })
+      chain.wallets.push(walletData)
     } else {
       this.chains.push({
         id: bc,
-        wallets: [
-          {
-            data: '020',
-            segwit: false,
-            name: DEFAULT_NAME
-          }
-        ]
+        wallets: [walletData]
       })
     }
   }
@@ -122,50 +161,5 @@ export class Profile {
    */
   public static fromJSON (data): Profile {
     return Object.assign(new Profile(''), data);
-  }
-  
-  // public getId () {
-  //   return this.data.id;
-  // }
-
-  // public getAccounts () {
-  //   return this.data.accounts;
-  // }
-
-  // public addAccount (pass, account) {
-  //   this.data.accounts.push(account.id);
-  //   this.increaceVerion();
-  //   return this.save(pass);
-  // }
-
-  // public increaceVerion () {
-  //   this.data.version = this.data.version + 1;
-  // }
-
-  // public save (pass) {
-  //   return ProfileFactory.save(pass, this);
-  // }
-
-  // public update (pass, newData) {
-  //   this.data = { ...this.data, ...newData };
-  //   this.increaceVerion();
-  //   return this.save(pass);
-  // }
-
-  // public serialize () {
-  //   return {
-  //     ...this.data
-  //   };
-  // }
-}
-
-const processId = (bc, wallet) => {
-  const { data } = wallet;
-  
-  const type = data.slice(0,2);
-  const link = data.slice(2);
-
-  if (type === '02') {
-    return `${bc}${link}`;
   }
 }

@@ -190,7 +190,7 @@ export class AccountController {
       const account = this.getAccount({ id });
 
       if (account) {
-        const seed = account.getSeed();
+        // const seed = account.getSeed();
 
         // TODO: repair it
         // return encode(this.accessController.getPass(), seed);

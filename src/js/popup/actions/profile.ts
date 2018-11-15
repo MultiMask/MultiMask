@@ -27,14 +27,6 @@ const ProfileActions = {
   select: profileId => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_SELECT, { payload: { profileId }})
       .send();
-      // .then(({ profileId } ) => {
-      //   dispatch({
-      //     type: PROFILE_SELECT_RESULT,
-      //     payload: { profileId }
-      //   });
-
-      //   return accountActions.getInfo()(dispatch, getState);
-      // });
   },
   
   // getProfile: id => (dispatch, getState) => {

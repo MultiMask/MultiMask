@@ -1,10 +1,11 @@
 import { info } from 'loglevel';
-import { BCSign } from 'bcnetwork';
+
+const DEFAULT_DATA = '020';     // mean use profile seed and index 0
 
 export default class Account {
   public wallet: any;
   
-  public bc: BCSign;
+  public bc: string;
   public network: string;
   
   public name: string;
@@ -12,8 +13,8 @@ export default class Account {
   public data: string;
   public key: string;
 
-  constructor ({ wallet, bc, network, name, extra, data, key }) {
-    this.name = name ? name : Date.now();
+  constructor ({ bc, name, extra, key, wallet, network, data = '020'}: IAccountCreate) {
+    this.name = name ? name : Date.now().toString();
     
     this.bc = bc;
     this.network = network;
@@ -27,18 +28,38 @@ export default class Account {
     }
   }
 
-  public init (privateKey): Promise<Account> {
-    return this.wallet.create(privateKey, this.network);
-  }
- 
   /**
-   * DEPRICATED
+   * Create 
+   * @param privateKey 
    */
-  public getSeed () {
-    // return this.secret.seed;
+  public init (privateKey): Promise<Account> {
+    return this.wallet.create(privateKey, this.network)
+      .then(() => this);
   }
 
-  public getAddress () {
+  public changeNetwork (network: string, privateKey) {
+    this.network = network;
+    this.wallet.changeNetwork(network, privateKey)
+  }
+
+  public setExtra (data: any): void {
+    this.extra = data;
+
+    if (this.wallet.setExtra) {
+      this.wallet.setExtra(data);
+    }
+  }
+
+  /**
+   * Send transaction with params to pay
+   * @param tx 
+   */
+  public sendTX (tx): Promise<any> {
+    info('Sending tx > ', this.bc, this.name, tx);
+    return this.wallet.sendCoins(tx);
+  }
+
+  public getAddress (): string {
     return this.wallet.getAddress();
   }
 
@@ -53,38 +74,4 @@ export default class Account {
       info
     }));
   }
-
-  public changeNetwork (network: string, privateKey) {
-    this.network = network;
-    this.wallet.changeNetwork(network, privateKey)
-  }
-
-  public sendTX (tx) {
-    info('Sending tx > ', this.bc, this.name, tx);
-    return this.wallet.sendCoins(tx);
-  }
-
-  public setExtra (data) {
-    this.extra = data;
-
-    if (this.wallet.setExtra) {
-      this.wallet.setExtra(data);
-    }
-  }
-
-  /**
-   * DEPRICATED
-   */
-  // public serialize () {
-  //   return {
-  //     id: this.id,
-  //     name: this.name,
-  //     blockchain: this.blockchain,
-  //     extra: this.extra,
-
-  //     secret: {
-  //       seed: this.secret.seed
-  //     }
-  //   };
-  // }
 }

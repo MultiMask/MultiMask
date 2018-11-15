@@ -1,5 +1,5 @@
 import * as bitcoin from 'bitcoinjs-lib';
-import Mnemonic from 'bitcore-mnemonic';
+import { isString } from 'lodash';
 
 interface IWalletCrypto {
   private: string;
@@ -8,8 +8,10 @@ interface IWalletCrypto {
 }
 
 export class BTCEngine {
-  public static createWallet (pk: Buffer, network?: bitcoin.Network): Promise<IWalletCrypto> {
-    const keyPair = bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
+  public static createWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
+    const keyPair = isString(pk)
+      ? bitcoin.ECPair.fromWIF(pk)
+      : bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
 
     return Promise.resolve({
       private: keyPair.toWIF(),
@@ -17,13 +19,15 @@ export class BTCEngine {
     });
   }
 
-  public static createSegWitWallet (pk: Buffer, network?: bitcoin.Network): Promise<IWalletCrypto> {
-    const keyPair = bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
+  public static createSegWitWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
+    const keyPair = isString(pk)
+      ? bitcoin.ECPair.fromWIF(pk)
+      : bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
 
     const scriptPubkey = bitcoin.script.witnessPubKeyHash.output.encode(
-        bitcoin.crypto.hash160(	
-          keyPair.getPublicKeyBuffer()
-        )
+      bitcoin.crypto.hash160(	
+        keyPair.getPublicKeyBuffer()
+      )
     );
     const address = bitcoin.address.fromOutputScript(scriptPubkey, network);
 

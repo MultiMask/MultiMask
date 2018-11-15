@@ -20,7 +20,7 @@ export class BitcoinWallet implements IWallet {
    * Create PK, address
    * @param pk 
    */
-  public create (pk: Buffer, network?: string) {
+  public create (pk: Buffer | string, network?: string) {
     this.setNewNetwork(network);
     return this.createFacrory(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
@@ -34,7 +34,7 @@ export class BitcoinWallet implements IWallet {
    * @param pk 
    * @param network 
    */
-  private createFacrory (pk: Buffer, network: bitcoin.Network) {
+  private createFacrory (pk: Buffer | string, network: bitcoin.Network) {
     return this.segWit
     ? BTCEngine.createSegWitWallet(pk, network)
     : BTCEngine.createWallet(pk, network);

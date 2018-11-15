@@ -62,6 +62,7 @@ const MainLayout = props => {
     logout,
     children,
     goBack,
+    goMain,
     needAuth,
     location: { pathname },
     openDomainControl
@@ -89,7 +90,7 @@ const MainLayout = props => {
         </HeaderItem>
 
         {pathname !== '/' && (
-          <HeaderItem onClick={goBack}>
+          <HeaderItem onClick={goMain}>
             <FontAwesome name="chevron-left" />
             <Typography className={styles.buttonText} color="primary">
               Back

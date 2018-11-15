@@ -37,3 +37,20 @@ interface IWallet {
   
   sendCoins({ to, amount, data }): Promise<any>;
 }
+
+/**
+ * Options to create Account instance
+ */
+interface IAccountFactory {
+  bc?: string;
+  network?: string;
+  data?: string;
+  key?: string;
+  name?: string;
+  extra?: any;
+  segwit?: boolean;
+}
+
+interface IAccountCreate extends IAccountFactory {
+  wallet?: IWallet;
+}

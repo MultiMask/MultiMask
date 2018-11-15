@@ -10,7 +10,8 @@ import {
   ACCOUNT_SET,
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT,
-  ACCOUNT_NETWORK_UPDATE
+  ACCOUNT_NETWORK_UPDATE,
+  ACCOUNT_IMPORT
 } from 'constants/account';
 
 const AccountActions = {
@@ -24,6 +25,17 @@ const AccountActions = {
 
   create: bc => (dispatch, getState) => {
     return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc }})
+      .send()
+      .then(payload => {
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
+        dispatch(push(MAIN));
+      });
+  },
+
+  import: ({ bc, privateKey }) => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_IMPORT, { payload: { bc, privateKey }})
       .send()
       .then(payload => {
         return AccountActions.getInfo()(dispatch, getState);
@@ -64,6 +76,9 @@ const AccountActions = {
     });
   },
 
+  /**
+   * Select in popup to show detail view
+   */
   setActive: name => (dispatch, getState) => {
     const action = {
       type: ACCOUNT_ACTIVE,

@@ -1,4 +1,4 @@
-import ntx from 'bcnetwork';
+import ntx, { BCSign } from 'bcnetwork';
 
 import Account from '.';
 import { BitcoinWallet } from './wallet/btc';
@@ -24,10 +24,10 @@ const createWallet = ({ bc }) => {
 };
 
 export class AccountFactory {
-  public static create (opts) {
-    const { bc } = opts;
+  public static create (opts: IAccountFactory) {
+    const { bc, network: forceNetwork } = opts;
     const wallet = createWallet({ bc });
-    const network = opts.network || ntx[bc].network[0].sign;
+    const network = forceNetwork || ntx[bc].network[0].sign;
 
     return new Account({ ...opts, wallet, network });
   }
