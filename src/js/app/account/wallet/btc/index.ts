@@ -22,7 +22,7 @@ export class BitcoinWallet implements IWallet {
    */
   public create (pk: Buffer | string, network?: string) {
     this.setNewNetwork(network);
-    return this.createFacrory(pk, mapNetwork(this.network)).then(secret => {
+    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
       
       return true;
@@ -34,7 +34,7 @@ export class BitcoinWallet implements IWallet {
    * @param pk 
    * @param network 
    */
-  private createFacrory (pk: Buffer | string, network: bitcoin.Network) {
+  private createFactory (pk: Buffer | string, network: bitcoin.Network) {
     return this.segWit
     ? BTCEngine.createSegWitWallet(pk, network)
     : BTCEngine.createWallet(pk, network);
@@ -48,7 +48,7 @@ export class BitcoinWallet implements IWallet {
   public changeNetwork (network: string, pk: Buffer) {
     this.network = network;
     
-    return this.createFacrory(pk, mapNetwork(this.network)).then(secret => {
+    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
       Object.assign(this, secret);
 
       this.setNewNetwork(network)
