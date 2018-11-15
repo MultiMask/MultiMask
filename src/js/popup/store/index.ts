@@ -19,7 +19,7 @@ export function configureStore (): Promise<PopupStore> {
   
   return new Promise(resolve => {
     StorageService.PopupState.get()
-    .then(initialState => {
+    .then((initialState: IPopup.AppState) => {
       // backup location
       if (initialState) {
         if (initialState.timestamp && Date.now() - initialState.timestamp < TIMEOUT) {
@@ -33,7 +33,7 @@ export function configureStore (): Promise<PopupStore> {
 
       resolve(createStore(
         connectRouter(history)(rootReducer),
-        initialState,
+        initialState as any,
         composeEnhancers(applyMiddleware(thunk, routerMiddleware(history)))
       ));
     })
@@ -41,7 +41,7 @@ export function configureStore (): Promise<PopupStore> {
 }
 
 export const subscriber = (store: PopupStore) => () => {
-  // info(store.getState().router.location.pathname);
+  info(store.getState().router.location.pathname);
   StorageService.PopupState.set({
     ...store.getState(),
     timestamp: Date.now()
