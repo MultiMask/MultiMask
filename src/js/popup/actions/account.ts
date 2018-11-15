@@ -1,5 +1,5 @@
 import { push, goBack } from 'connected-react-router';
-import { MAIN } from 'constants/popupUrl';
+import { URL_MAIN } from 'constants/popupUrl';
 import InternalMessage from 'services/InternalMessage';
 
 import {
@@ -30,7 +30,7 @@ const AccountActions = {
         return AccountActions.getInfo()(dispatch, getState);
       })
       .then(() => {
-        dispatch(push(MAIN));
+        dispatch(push(URL_MAIN));
       });
   },
 
@@ -41,7 +41,7 @@ const AccountActions = {
         return AccountActions.getInfo()(dispatch, getState);
       })
       .then(() => {
-        dispatch(push(MAIN));
+        dispatch(push(URL_MAIN));
       });
   },
 

@@ -5,7 +5,7 @@ import Typography from 'ui/Typography';
 import { Link } from 'react-router-dom';
 
 import Button from 'ui/Button';
-import { PROFILE_CREATE } from 'constants/popupUrl';
+import { URL_PROFILE_CREATE } from 'constants/popupUrl';
 
 const Header = styled('header')`
   padding-top: 100px;
@@ -33,7 +33,7 @@ const Introduction: React.SFC<{}> = () => (
       To continue you have to create profile
     </Typography>
     <BtnWrap>
-      <Link to={PROFILE_CREATE}>
+      <Link to={URL_PROFILE_CREATE}>
         <Button>Create Profile</Button>
       </Link>
     </BtnWrap>

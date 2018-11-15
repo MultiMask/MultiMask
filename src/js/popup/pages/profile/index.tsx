@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
-import Typography from '../../ui/Typography';
-import Menu from '../../ui/Menu';
-import MenuItem from '../../ui/MenuItem';
-import BaseButton from '../../ui/Button';
-import TextField from '../../ui/TextField';
+import Typography from 'ui/Typography';
+import Menu from 'ui/Menu';
+import MenuItem from 'ui/MenuItem';
+import BaseButton from 'ui/Button';
+import TextField from 'ui/TextField';
 
-import profileActions from './../../actions/profile';
+import profileActions from 'popup/actions/profile';
 import { readFile } from 'helpers/files';
 
 class Profiles extends React.Component<any, any> {

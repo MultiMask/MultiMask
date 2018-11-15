@@ -18,6 +18,7 @@ import {
 } from 'constants/profile';
 
 import accountActions from './account';
+import { URL_PROFILE_ADD } from 'constants/popupUrl';
 
 const ProfileActions = {
   getCurrentProfile: () => (dispatch, getState) => {
@@ -57,7 +58,11 @@ const ProfileActions = {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
         dispatch(goBack());
       });
-  },
+    },
+    
+    add: () => (dispatch, getState) => {
+     dispatch(push(URL_PROFILE_ADD))
+    },
 
 
 
@@ -68,12 +73,6 @@ const ProfileActions = {
 
 
 
-
-  // add: () => (dispatch, getState) => {
-  //   InternalMessage.signal(PROFILE_ADD)
-  //     .send()
-  //     .then(updateProfileListFn(dispatch));
-  // },
 
   // remove: id => (dispatch, getState) => {
   //   InternalMessage.payload(PROFILE_REMOVE, id)

@@ -14,7 +14,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
-import { MAIN, LOADING, LOGIN, INTRODUCTION } from 'constants/popupUrl'
+import { URL_MAIN, URL_LOADING, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl'
 
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
@@ -47,7 +47,7 @@ const AuthActions = {
                 hasPass
               }
             });
-            const next = hasPass ? LOGIN : '/create/account';
+            const next = hasPass ? URL_LOGIN : '/create/account';
             dispatch(push(next));
           });
         }
@@ -74,7 +74,7 @@ const AuthActions = {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
           });
-          dispatch(push(LOGIN));
+          dispatch(push(URL_LOGIN));
         } else {
           dispatch({
             type: AUTH_LOGOUT_FAIL
@@ -84,13 +84,13 @@ const AuthActions = {
   },
   
   success: () => async (dispatch, getState) => {
-    dispatch(push(LOADING));
+    dispatch(push(URL_LOADING));
     const { success, payload } = await ProfileActions.getCurrentProfile()(dispatch, getState);
     
     // No profile: new user
     if (!success) {
       info('No profile');
-      return dispatch(push(INTRODUCTION));
+      return dispatch(push(URL_INTRODUCTION));
     }
     
     const { profileId } = payload;
@@ -103,7 +103,7 @@ const AuthActions = {
     // Error with profile: create new
     if (!activate) {
       info('Fail on activate profile', profileId)
-      return dispatch(push(INTRODUCTION));
+      return dispatch(push(URL_INTRODUCTION));
     }
     
     Promise.all([
@@ -112,8 +112,8 @@ const AuthActions = {
     ]).then(() => {
       const state: IPopup.AppState = getState();
       const url = forceRedirect
-        ? MAIN
-        : (state && state.router && state.router.url ? state.router.url : MAIN);
+        ? URL_MAIN
+        : (state && state.router && state.router.url ? state.router.url : URL_MAIN);
       
       info('Restore url > ', url);
       dispatch(push(url));

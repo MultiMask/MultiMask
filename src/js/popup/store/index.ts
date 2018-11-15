@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 import { StorageService } from 'services/StorageService';
 
-import { MAIN, LOGIN, LOADING, PROFILE_CREATE } from 'constants/popupUrl';
+import { URL_MAIN, URL_LOGIN, URL_LOADING, URL_PROFILE_CREATE } from 'constants/popupUrl';
 
 export const history = createMemoryHistory();
 export type PopupStore = Store<IPopup.AppState, any>;
@@ -50,9 +50,9 @@ export const subscriber = (store: PopupStore) => () => {
 
 export const clearUrl = (url) => {
   switch (url) {
-    case LOGIN:
-    case LOADING:
-      return MAIN;
+    case URL_LOGIN:
+    case URL_LOADING:
+      return URL_MAIN;
     default:
       return url;
   }
