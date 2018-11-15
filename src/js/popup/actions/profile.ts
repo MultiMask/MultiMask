@@ -24,23 +24,35 @@ const ProfileActions = {
     return InternalMessage.signal(PROFILE_GET_CURRENT)
       .send();
   },
+
   select: profileId => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_SELECT, { payload: { profileId }})
       .send();
   },
   
+   getList: () => (dispatch, getState) => {
+    InternalMessage.signal(PROFILE_GETLIST)
+      .send()
+      .then(updateProfileListFn(dispatch));
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   // getProfile: id => (dispatch, getState) => {
   //   return InternalMessage.payload(PROFILE_EXPORT, id)
   //     .send()
   //     .then(({ encodedProfile }) => {
   //       return encodedProfile;
   //     });
-  // },
-
-  // getList: () => (dispatch, getState) => {
-  //   InternalMessage.signal(PROFILE_GETLIST)
-  //     .send()
-  //     .then(updateProfileListFn(dispatch));
   // },
 
   // add: () => (dispatch, getState) => {
@@ -88,7 +100,7 @@ const ProfileActions = {
   // }
 };
 
-const updateProfileListFn = dispatch => payload => {
+const updateProfileListFn = dispatch => ({ payload }) => {
   dispatch({
     type: PROFILE_GETLIST_RESULT,
     payload

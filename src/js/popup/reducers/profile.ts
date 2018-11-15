@@ -6,7 +6,7 @@ const initialState = {
   importProfile: null
 };
 
-export default function accountReducer(state = initialState, action) {
+export default function accountReducer (state = initialState, action) {
   switch (action.type) {
     case PROFILE_GETLIST_RESULT:
       return {

@@ -104,7 +104,7 @@ class Profiles extends React.Component<any, any> {
             </Typography>
           )}
           <ItemDescription isEdit={isEdit} color="hint">
-            {profile.accounts.length} wallets
+            {profile.wallets} wallets
           </ItemDescription>
           <Menu iconProps={{ color: 'secondary', name: 'ellipsis-h' }}>
             <MenuItem onClick={this.handleEdit(profile)}>Edit</MenuItem>
@@ -137,17 +137,13 @@ class Profiles extends React.Component<any, any> {
 }
 
 export default connect(
-  ({ profile, state }: any) => ({
+  ({ profile, state }: IPopup.AppState) => ({
     list: profile.list,
     selectedProfileId: profile.selectedId
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        ...profileActions
-      },
-      dispatch
-    )
+  {
+    ...profileActions
+  }
 )(Profiles);
 
 const Wrapper = styled('div')`

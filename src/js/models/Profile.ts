@@ -4,7 +4,7 @@ import { BCSign } from 'bcnetwork';
 import { Randomizer } from 'services/Randomizer';
 import { isSeed } from 'helpers/checkers';
 import { toJSON, hexToString, stringToHex } from 'helpers/func';
-import { getParams, generateId } from 'helpers/profiles';
+import { getParams, generateId, iterateWallets } from 'helpers/profiles';
 
 export interface IWalletRaw {
   data?: string;
@@ -23,11 +23,13 @@ const DEFAULT_NAME = 'Default wallet';
 export class Profile {
   private seed: string;
 
+  public name: string;
   public id: string;
   public version = 0x0;
   public chains: IProfileChain[] = [];
 
   constructor (seed: string) {
+    this.name = 'Default name';
     this.seed = seed;
     this.id = Randomizer.hex();
   }
@@ -40,7 +42,7 @@ export class Profile {
     if (this.isEncoded) {
       this.seed = decodeFn(this.seed);
 
-      this.iterateWallets((wallet, bc) => {
+      iterateWallets(this.chains, (wallet, bc) => {
         const [ type, data ] = getParams(wallet.data);
 
         if (type === '01' || type === '00') {
@@ -54,14 +56,12 @@ export class Profile {
     const clone = cloneDeep(this);
     clone.seed = encodeFn(clone.seed);
 
-    clone.chains.forEach(chain => {
-      chain.wallets.forEach(wallet => {
-        const [ type, data ] = getParams(wallet.data);
+    iterateWallets(clone.chains, (wallet, bc) => {
+      const [ type, data ] = getParams(wallet.data);
 
-        if (type === '01' || type === '00') {
-          wallet.data = `${type}${encodeFn(data)}`;
-        }
-      })
+      if (type === '01' || type === '00') {
+        wallet.data = `${type}${encodeFn(data)}`;
+      }
     })
 
     return toJSON(clone);
@@ -95,7 +95,7 @@ export class Profile {
       pk: {}
     };
 
-    this.iterateWallets((wallet, bc) => {
+    iterateWallets(this.chains, (wallet, bc) => {
       const [ type, key ] = getParams(wallet.data);
       if (type === '00' || type === '01') {
         const dir = type === '00' ? 'pk' : 'seed';
@@ -144,7 +144,7 @@ export class Profile {
       delete payload.data;
     }
 
-    this.iterateWallets((wallet, bc) => {
+    iterateWallets(this.chains, (wallet, bc) => {
       if (generateId(bc, wallet.data) === key) {
         Object.assign(wallet, payload);
       }
@@ -167,14 +167,6 @@ export class Profile {
 
       return max(indexes) + 1;
     }
-  }
-
-  private iterateWallets (cb: (wallet, bc) => void) {
-    this.chains.forEach(chain => {
-      chain.wallets.forEach(wallet => {
-        cb(wallet, chain.id);
-      });
-    });
   }
 
   /**

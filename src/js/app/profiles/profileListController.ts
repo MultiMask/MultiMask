@@ -9,10 +9,12 @@ import { MessageController } from 'app/messageController';
 import { KeyController } from 'app/keyController';
 import { ProfileController } from 'app/profiles/profileController';
 
+import { getWalletsCount } from 'helpers/profiles';
+
 import { 
   PROFILE_GET_CURRENT,
   PROFILE_CREATE_DONE,
-  // PROFILE_GETLIST, 
+  PROFILE_GETLIST, 
   // PROFILE_ADD, 
   PROFILE_SELECT, 
   // PROFILE_REMOVE, 
@@ -51,9 +53,10 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_GET_CURRENT, this.responseGetCurrent);
     this.messageController.on(PROFILE_CREATE_DONE, this.responseCreateDone);
 
-    // this.messageController.on(PROFILE_GETLIST, this.responseList);
-    // this.messageController.on(PROFILE_ADD,     this.responseAdd);
     this.messageController.on(PROFILE_SELECT, this.responseSelect);
+    this.messageController.on(PROFILE_GETLIST, this.responseGetList);
+
+    // this.messageController.on(PROFILE_ADD,     this.responseAdd);
     // this.messageController.on(PROFILE_REMOVE, this.responseRemove);
     // this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     
@@ -104,6 +107,22 @@ export class ProfileListController extends EventEmitter {
         profileId: await this.activate(profileId)
       }
     });
+  }
+
+  /**
+   * Return list of profiles with info
+   */
+  private responseGetList = (sendResponse: InternalResponseFn) => {
+    this.loadProfiles()
+      .then(profiles => {
+        sendResponse({
+          success: true,
+          payload: {
+            list: profiles,
+            current: this.current,
+          }
+        })
+      })
   }
 
   /**
@@ -170,6 +189,19 @@ export class ProfileListController extends EventEmitter {
     return StorageService.ProfileList.setCurrnet(profileId);
   }
 
+  /**
+   * Load common information about profiles
+   */
+  private loadProfiles () {
+    return Promise.all(this.list.map(id => StorageService.Entities.get(id)))
+      .then(profiles => {
+        return profiles.map(profile => ({
+          name: profile.name,
+          id: profile.id,
+          wallets: getWalletsCount(profile)
+        }))
+      })
+  }
   /**
    * Response with list of profiles
    */
