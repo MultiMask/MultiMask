@@ -42,6 +42,13 @@ const ProfileActions = {
       .then(updateProfileListFn(dispatch));
   },
 
+  getProfile: id => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_EXPORT, { payload: { id }})
+      .send()
+      .then(({ payload: { encodedProfile }}) => {
+        return encodedProfile;
+      });
+  },
 
 
 
@@ -53,13 +60,6 @@ const ProfileActions = {
 
 
 
-  // getProfile: id => (dispatch, getState) => {
-  //   return InternalMessage.payload(PROFILE_EXPORT, id)
-  //     .send()
-  //     .then(({ encodedProfile }) => {
-  //       return encodedProfile;
-  //     });
-  // },
 
   // add: () => (dispatch, getState) => {
   //   InternalMessage.signal(PROFILE_ADD)

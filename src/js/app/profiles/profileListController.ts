@@ -16,7 +16,7 @@ import {
   PROFILE_UPDATE,
   // PROFILE_ADD, 
   // PROFILE_REMOVE, 
-  // PROFILE_EXPORT,
+  PROFILE_EXPORT,
   // PROFILE_IMPORT
  } from 'constants/profile';
 import { Profile } from 'models/Profile';
@@ -51,7 +51,7 @@ export class ProfileListController extends EventEmitter {
     // this.messageController.on(PROFILE_ADD,     this.responseAdd);
     // this.messageController.on(PROFILE_REMOVE, this.responseRemove);
     
-    // this.messageController.on(PROFILE_EXPORT, this.responseExport);
+    this.messageController.on(PROFILE_EXPORT, this.responseExport);
     // this.messageController.on(PROFILE_IMPORT, this.responseImport);
   }
 
@@ -124,6 +124,21 @@ export class ProfileListController extends EventEmitter {
           success: true,
           payload
         })
+      })
+  }
+
+  /**
+   * Export profile
+   */
+  private responseExport = (sendResponse: InternalResponseFn, { payload: {id}}) => {
+    this.profileController.export(id)
+      .then(encodedProfile => {
+        sendResponse({
+          success: true,
+          payload: {
+            encodedProfile
+          }
+        });
       })
   }
 
@@ -247,17 +262,6 @@ export class ProfileListController extends EventEmitter {
   //     list: this.getListSerialized(),
   //     profileId: this.current.getId()
   //   });
-  // }
-
-  /**
-   * Export profile
-   */
-  // private responseExport = (sendResponse, id) => {
-  //   this.export(id).then(encodedProfile => {
-  //     sendResponse({
-  //       encodedProfile
-  //     });
-  //   })
   // }
 
   // private responseImport = (sendResponse, { pass, encryptedProfile }) => {

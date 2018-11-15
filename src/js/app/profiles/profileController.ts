@@ -132,4 +132,20 @@ export class ProfileController {
         return StorageService.Entities.set(id, profile);
       })
   }
+
+  /**
+   * Return encrypted profile
+   * @param id 
+   */
+  public export (id: string): Promise<string> {
+    return StorageService.Entities.get(id)
+      .then(profileData => {
+        const profile = Profile.fromJSON(profileData);
+        profile.decode(this.accessController.decode);
+
+        console.log('before send:', JSON.stringify(profile));
+
+        return this.accessController.encode(JSON.stringify(profile));
+      })
+  }
 }

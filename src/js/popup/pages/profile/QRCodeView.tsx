@@ -3,9 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import QRCode = require('qrcode.react');
 import styled from 'react-emotion';
-import profileActions from './../../actions/profile';
-import Typography from '../../ui/Typography';
 import { withRouter } from 'react-router';
+
+import Typography from '../../ui/Typography';
+
+import profileActions from './../../actions/profile';
 
 class QRCodeView extends React.Component<any, any> {
   public state = {
@@ -13,7 +15,7 @@ class QRCodeView extends React.Component<any, any> {
     profileId: null
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     const {
       getProfile,
       match: {
@@ -26,7 +28,7 @@ class QRCodeView extends React.Component<any, any> {
     });
   }
 
-  public render () {
+  public render() {
     const { profile } = this.state;
 
     return (
@@ -42,7 +44,7 @@ class QRCodeView extends React.Component<any, any> {
 
 export default withRouter(connect(
   null,
-  dispatch => bindActionCreators(profileActions, dispatch)
+  profileActions
 )(QRCodeView) as any);
 
 const Container = styled('div')`
