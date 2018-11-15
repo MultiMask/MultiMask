@@ -68,6 +68,7 @@ export default class Account {
    */
   public getInfo (): Promise<WalletInfo> {
     return this.wallet.getInfo().then(info => ({
+      key: this.key,
       name: this.name,
       blockchain: this.bc,
       extra: this.extra,
