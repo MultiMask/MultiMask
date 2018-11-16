@@ -1,9 +1,8 @@
-import { PROFILE_GETLIST_RESULT, PROFILE_SELECT_RESULT, PROFILE_IMPORT_SET } from '../../constants/profile';
+import { PROFILE_GETLIST_RESULT, PROFILE_SELECT_RESULT } from '../../constants/profile';
 
 const initialState: IPopup.State.Profile = {
   list: [],
-  current: '',
-  onImport: null
+  current: ''
 };
 
 export default function accountReducer (state: IPopup.State.Profile = initialState, action) {
@@ -17,11 +16,6 @@ export default function accountReducer (state: IPopup.State.Profile = initialSta
       return {
         ...state,
         current: action.payload.current
-      };
-    case PROFILE_IMPORT_SET:
-      return {
-        ...state,
-        onImport: action.payload
       };
     default:
       return state;
