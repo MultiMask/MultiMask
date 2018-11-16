@@ -11,6 +11,7 @@ import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
 import Profiles from './pages/profile';
 import ProfileQRCode from './pages/profile/QRCodeView';
+import ProfileGetSeed from 'popup/pages/profile/GetMnemonic';
 import ProfileExport from './pages/profile/ExportProfile';
 import ImportProfile from './pages/profile/ImportProfile';
 import ExportPK from './pages/account/exportpk';
@@ -34,7 +35,8 @@ import {
   URL_PROFILE_IMPORT,
   URL_PROFILE_EXPORT,
   URL_PROFILE_MAIN,
-  URL_PROFILE_QRCODE
+  URL_PROFILE_QRCODE,
+  URL_PROFILE_SEED
 } from 'constants/popupUrl';
 
 const routes = () => {
@@ -54,6 +56,7 @@ const routes = () => {
 
       <AppRoute exact path={URL_PROFILE_MAIN} component={Profiles} layout={MainLayout} />
       <AppRoute exact path={URL_PROFILE_QRCODE} component={ProfileQRCode} layout={MainLayout} needAuth />
+      <AppRoute exact path={URL_PROFILE_SEED} component={ProfileGetSeed} layout={MainLayout} needAuth />
       <AppRoute exact path={URL_PROFILE_EXPORT} component={ProfileExport} layout={MainLayout} />
       <AppRoute exact path={URL_PROFILE_IMPORT} component={ImportProfile} layout={MainLayout} />
       <AppRoute exact path={URL_PROFILE_ADD} component={CreateProfile} layout={MainLayout} />

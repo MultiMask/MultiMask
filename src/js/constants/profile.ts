@@ -5,6 +5,7 @@ export const PROFILE_GET_RESULT = 'profile:get:result';
 export const PROFILE_ADD = 'profile:add';
 export const PROFILE_REMOVE = 'profile:remove';
 
+export const PROFILE_GET_SEED = 'profile:getseed';
 export const PROFILE_EXPORT = 'profile:export';
 export const PROFILE_EXPORT_RESULT = 'profile:export:result';
 

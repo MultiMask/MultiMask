@@ -14,7 +14,8 @@ import {
   PROFILE_SELECT,
   PROFILE_SELECT_RESULT,
   PROFILE_IMPORT_SET,
-  PROFILE_GET_CURRENT
+  PROFILE_GET_CURRENT,
+  PROFILE_GET_SEED
 } from 'constants/profile';
 
 import { URL_PROFILE_ADD, URL_INTRODUCTION, URL_PROFILE_IMPORT } from 'constants/popupUrl';
@@ -40,8 +41,8 @@ const ProfileActions = {
       });
   },
   
-   getList: () => (dispatch, getState) => {
-    InternalMessage.signal(PROFILE_GETLIST)
+  getList: () => (dispatch, getState) => {
+    return InternalMessage.signal(PROFILE_GETLIST)
       .send()
       .then(updateProfileListFn(dispatch));
   },
@@ -94,7 +95,12 @@ const ProfileActions = {
         payload: encryptedProfile
       });
       dispatch(push(URL_PROFILE_IMPORT));
-    }
+    },
+
+    getProfileSeed: (id: string) => (dispatch, getState) => {
+      return InternalMessage.payload(PROFILE_GET_SEED, { payload: { id }})
+        .send();
+    },
 };
 
 const updateProfileListFn = dispatch => ({ payload }) => {
