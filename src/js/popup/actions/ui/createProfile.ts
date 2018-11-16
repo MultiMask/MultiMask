@@ -15,8 +15,8 @@ const ProfileCreateAction = {
     });
   },
 
-  done: () => (dispatch, getState: GetStateFn) => {    
-    const seed = getState().ui.profileCreate.seed;
+  done: (userSeed?: string) => (dispatch, getState: GetStateFn) => {    
+    const seed = userSeed || getState().ui.profileCreate.seed;
     InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed }})
       .send()
       .then(({ success, payload: { profileId} }) => {

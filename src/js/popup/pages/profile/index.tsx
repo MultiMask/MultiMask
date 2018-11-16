@@ -165,6 +165,9 @@ class Profiles extends React.Component<IProps, IState> {
             <MenuItem component={Link} to={`/profiles/${profile.id}/export`}>
               Export
             </MenuItem>
+            <MenuItem component={Link} to={`/profiles/${profile.id}/seed`}>
+              Export Seed
+            </MenuItem>
             <MenuItem component={Link} to={`/profiles/${profile.id}/qrcode`}>
               Show QR-code
             </MenuItem>

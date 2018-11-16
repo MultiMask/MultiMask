@@ -10,6 +10,7 @@ import { Profile } from 'models/Profile';
 import { StorageService } from 'services/StorageService';
 
 import { ACCOUNT_CREATE, ACCOUNT_IMPORT, ACCOUNT_UPDATE } from 'constants/account';
+import { PROFILE_GET_SEED } from 'constants/profile';
 
 export class ProfileController {
   private profile: Profile;
@@ -38,6 +39,7 @@ export class ProfileController {
   private startListening () {
     this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
     this.messageController.on(ACCOUNT_IMPORT, this.responseImportAccount);
+    this.messageController.on(PROFILE_GET_SEED, this.responseGetProfileSeed);
 
     this.busController.on(ACCOUNT_UPDATE, this.responseUpdateAccount);
   }
@@ -72,6 +74,9 @@ export class ProfileController {
     });
   }
 
+  /**
+   * Update account params (name)
+   */
   private responseUpdateAccount = (key: string, data, cb) => {
     this.profile.updateWallet(key, data);
 
@@ -81,6 +86,22 @@ export class ProfileController {
     if (cb) {
       cb();
     }
+  }
+
+  /**
+   * Response profile seed
+   */
+  private responseGetProfileSeed = async (sendResponse: InternalResponseFn, {payload: {id}}) => {
+    const profileData = await StorageService.Entities.get(id);
+    const profile = Profile.fromJSON(profileData);
+    profile.decode(this.accessController.decode);
+
+    const seed = profile.getKeysAndAccounts().keys.master;
+
+    sendResponse({
+      success: true,
+      payload: { seed }
+    })
   }
 
   /**
