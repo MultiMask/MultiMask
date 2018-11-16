@@ -14,12 +14,14 @@ export default {
       {
         name: 'Mainnet',
         sign: 'mainnet',
-        url: 'https://blockchain.info'
+        url: 'https://blockchain.info',
+        chainId: 'mainnet'
       },
       {
         name: 'Testnet',
         sign: 'testnet',
-        url: 'https://testnet.blockchain.info'
+        url: 'https://testnet.blockchain.info',
+        chainId: 'testnet'
       }
       // {
       //   name: 'Livenet',
