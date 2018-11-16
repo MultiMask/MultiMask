@@ -77,6 +77,7 @@ class Controller {
     });
 
     this.profileListController = new ProfileListController({
+      accessController: this.accessController,
       messageController: this.messageController,
       profileController: this.profileController
     });

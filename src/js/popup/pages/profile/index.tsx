@@ -114,13 +114,7 @@ class Profiles extends React.Component<IProps, IState> {
   };
 
   public handleImportProfile = () => {
-    // TODO: fix me
-    // const { setImportingProfile } = this.props;
-
-    const onImport = encryptedProfile => {
-      // TODO: fix me
-      // setImportingProfile(encryptedProfile);
-    };
+    const onImport = encryptedProfile => this.props.setImportingProfile(encryptedProfile);
 
     readFile(onImport);
   };

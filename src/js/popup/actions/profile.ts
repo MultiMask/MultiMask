@@ -17,8 +17,7 @@ import {
   PROFILE_GET_CURRENT
 } from 'constants/profile';
 
-import accountActions from './account';
-import { URL_PROFILE_ADD, URL_INTRODUCTION } from 'constants/popupUrl';
+import { URL_PROFILE_ADD, URL_INTRODUCTION, URL_PROFILE_IMPORT } from 'constants/popupUrl';
 
 const ProfileActions = {
   getCurrentProfile: () => (dispatch, getState) => {
@@ -80,33 +79,22 @@ const ProfileActions = {
         .then(updateProfileListFn(dispatch));
     },
 
-
-
-
-
-
-
-
-
-
-
-
-  // import: (pass, encryptedProfile) => (dispatch, getState) => {
-  //   return InternalMessage.payload(PROFILE_IMPORT, { pass, encryptedProfile })
-  //     .send()
-  //     .then(() => {
-  //       updateProfileListFn(dispatch);
-  //       dispatch(goBack());
-  //     });
-  // },
-
-  // setImportingProfile: encryptedProfile => dispatch => {
-  //   dispatch({
-  //     type: PROFILE_IMPORT_SET,
-  //     payload: encryptedProfile
-  //   });
-  //   dispatch(push('/profiles/import'));
-  // }
+    import: (pass, encryptedProfile) => (dispatch, getState) => {
+      return InternalMessage.payload(PROFILE_IMPORT, { payload: { pass, encryptedProfile }})
+        .send()
+        .then(() => {
+          updateProfileListFn(dispatch);
+          dispatch(goBack());
+        });
+    },
+    
+    setImportingProfile: encryptedProfile => dispatch => {
+      dispatch({
+        type: PROFILE_IMPORT_SET,
+        payload: encryptedProfile
+      });
+      dispatch(push(URL_PROFILE_IMPORT));
+    }
 };
 
 const updateProfileListFn = dispatch => ({ payload }) => {

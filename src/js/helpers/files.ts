@@ -25,8 +25,7 @@ const clickElem = elem => {
   elem.dispatchEvent(eventMouse);
 };
 
-export const readFile = 
-callBack => {
+export const readFile = callBack => {
   const readFile = function (e) {
     const file = e.target.files[0];
     if (!file) {
