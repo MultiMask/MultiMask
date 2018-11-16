@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import { ACCOUNT_INFO_DOMAIN } from '../constants/account';
-import blockchainsConfig from '../blockchain/index';
+import networks from '../blockchain/index';
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
@@ -73,12 +73,24 @@ export class Crypto3 {
   }
 
   public async getIdentity (entity: IIdentityProps): Promise<ISenderParams | Error> {
-    const accounts = (await _send(ACCOUNT_INFO_DOMAIN)) as WalletInfo[];
+    const entityNetwork = this.getEntityNetwork(entity);
+
+    if (!entityNetwork) {
+      return Error(`MultiMask don't support chainId ${entity.chainId} of ${entity.blockchain}`);
+    }
+
+    const response = (await _send(ACCOUNT_INFO_DOMAIN)) as { success: boolean; payload: { accounts: WalletInfo[] } };
+
+    if (!response.success) {
+      return Error('Not found allowed accounts for this site ');
+    }
+
+    const { accounts } = response.payload;
     const account = accounts.find(
       item =>
         item.blockchain === entity.blockchain &&
         item.info.balance >= entity.amount &&
-        entity.chainId === blockchainsConfig[item.blockchain].network[item.info.network].chainId
+        entityNetwork.sign === item.info.network
     );
 
     if (account) {
@@ -86,8 +98,7 @@ export class Crypto3 {
         to: entity.address,
         from: account.info.address,
         amount: entity.amount,
-        blockchainType: account.blockchain,
-        chainId: entity.chainId
+        blockchainType: account.blockchain
       };
     }
 
@@ -101,5 +112,9 @@ export class Crypto3 {
     console.log('txhash', result);
 
     return result;
+  }
+
+  private getEntityNetwork (entity) {
+    return networks[entity.blockchain].network.find(item => item.chainId === entity.chainId);
   }
 }
