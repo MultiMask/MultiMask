@@ -3,7 +3,9 @@ import styled from 'react-emotion';
 import { css } from 'emotion';
 import Typography from '../../popup/ui/Typography';
 
-interface ContainerProps { multi: boolean }
+interface ContainerProps {
+  multi: boolean;
+}
 const Container = styled('div')`
   display: flex;
   align-items: ${(props: ContainerProps) => (props.multi ? 'start' : 'center')};
@@ -16,7 +18,9 @@ const FirstItem = styled(Typography)`
   flex-basis: 60px;
 `;
 
-interface IContentProps { center: boolean }
+interface IContentProps {
+  center: boolean;
+}
 const Content = styled('div')`
   margin: ${(props: IContentProps) => props.center && 'auto'};
   overflow: hidden;

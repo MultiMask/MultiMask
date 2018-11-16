@@ -1,5 +1,5 @@
 import { push, goBack } from 'connected-react-router';
-
+import { URL_MAIN } from 'constants/popupUrl';
 import InternalMessage from 'services/InternalMessage';
 
 import {
@@ -10,45 +10,65 @@ import {
   ACCOUNT_SET,
   ACCOUNT_GETSEED,
   ACCOUNT_GETSEED_RESULT,
-  ACCOUNT_NETWORK_UPDATE
+  ACCOUNT_NETWORK_UPDATE,
+  ACCOUNT_IMPORT
 } from 'constants/account';
 
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
       .send()
-      .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
+      .then(({payload: { accounts }}) => {
+        AccountActions.setAccount(accounts)(dispatch, getState);
       });
   },
 
-  create: account => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_CREATE, account)
+  create: bc => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc }})
       .send()
       .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
-
-        dispatch(goBack());
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
+        dispatch(push(URL_MAIN));
       });
   },
 
-  changeNetwork: (id, network) => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { id, network })
+  import: ({ bc, privateKey }) => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_IMPORT, { payload: { bc, privateKey }})
       .send()
       .then(payload => {
-        AccountActions.setAccount(payload)(dispatch, getState);
-
-        dispatch(goBack());
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
+        dispatch(push(URL_MAIN));
       });
   },
 
-  setAccount: accs => (dispatch, getState) => {
+  changeNetwork: (address, network) => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { address, network })
+      .send()
+      .then(payload => {
+        return AccountActions.getInfo()(dispatch, getState);
+      })
+      .then(() => {
+        dispatch(goBack());
+      })
+  },
+
+  /**
+   * Set accounts in app
+   */
+  setAccount: accounts => (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_SET,
-      payload: accs
+      payload: accounts
     });
   },
 
+  /**
+   * Set extra on wallet
+   */
   updateAccount: account => (dispatch, getState) => {
     dispatch({
       type: ACCOUNT_UPDATE,
@@ -56,6 +76,9 @@ const AccountActions = {
     });
   },
 
+  /**
+   * Select in popup to show detail view
+   */
   setActive: name => (dispatch, getState) => {
     const action = {
       type: ACCOUNT_ACTIVE,
@@ -67,15 +90,15 @@ const AccountActions = {
     dispatch(push('/account/details'));
   },
 
-  getSeed: (pass, id) => (dispatch, getState) => {
-    InternalMessage.payload(ACCOUNT_GETSEED, id)
-      .send()
-      .then(seed => {
-        dispatch({
-          type: ACCOUNT_GETSEED_RESULT,
-          payload: { seed }
-        });
-      });
-  }
+  // getSeed: (pass, id) => (dispatch, getState) => {
+  //   return InternalMessage.payload(ACCOUNT_GETSEED, id)
+  //     .send()
+  //     .then(seed => {
+  //       dispatch({
+  //         type: ACCOUNT_GETSEED_RESULT,
+  //         payload: { seed }
+  //       });
+  //     });
+  // }
 };
 export default AccountActions;

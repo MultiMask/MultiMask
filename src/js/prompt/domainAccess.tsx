@@ -23,8 +23,13 @@ export class DomainAccess extends React.Component<IProps, any> {
     const permissions: string[] = this.props.prompt.data.permissions || [];
 
     return (
-      <label key={account.id} className="Wallet">
-        <Input type="checkbox" name={INPUT_NAME} value={account.id} defaultChecked={permissions.includes(account.id)} />
+      <label key={account.key} className="Wallet">
+        <Input
+          type="checkbox"
+          name={INPUT_NAME}
+          value={account.key}
+          defaultChecked={permissions.includes(account.key)}
+        />
         <div className="Wallet-Inner">
           <div className="Wallet-Icon">{this.getIcon(account)}</div>
           <div className="Wallet-Info">
@@ -56,7 +61,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     window.close();
   };
 
-  public render () {
+  public render() {
     return (
       <DialogLayout>
         <Title>

@@ -1,25 +1,24 @@
-import AccountFactory from 'app/account/accountFactory';
-
-import { AccessController } from '../accessController';
-import { MessageController } from '../messageController';
-import { AccountController } from '../account/accountController';
+import { BusController } from 'app/busController';
+import { MessageController } from 'app/messageController';
+import { AccountController } from 'app/account/accountController';
 
 import { REQUEST_SIGNATURE, GET_KEY_ACCOUNTS, SET_ACCOUNT_TO_KEY } from 'constants/blockchains/eos';
 import { SIGNATURE } from 'constants/promptTypes';
+import { ACCOUNT_UPDATE } from 'constants/account';
 
 import {Prompt} from 'models/Prompt';
 import {NotificationService} from 'services/NotificationService';
-import {parseAccounts} from 'helpers/eos';
+import {parseAccounts, prettyAccount} from 'helpers/eos';
 
 import { EosEngine } from './engine';
 
 export class EosController {
-  private accessController: AccessController;
+  private busController: BusController;
   private messageController: MessageController;
   private accountController: AccountController;
 
   constructor (opts) {
-    this.accessController = opts.accessController;
+    this.busController = opts.busController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
     
@@ -48,8 +47,9 @@ export class EosController {
     if (account) {
       const responder = approval => {
         const signature = approval.success 
-          ? EosEngine.sign(data, account.getSeed())
-          : null
+          // TODO: put PrivateKey
+          // ? EosEngine.sign(data, account.getSeed())
+          // : null
         
         sendResponse({
           signatures:[signature],
@@ -64,32 +64,37 @@ export class EosController {
   /**
    * @param id AccountId
    */
-  private responseGetKeyAccounts = (sendResponse, id: string): void => {
-    const account = this.accountController.getAccount({ id });
+  private responseGetKeyAccounts = (sendResponse: InternalResponseFn, { key }): void => {
+    const account = this.accountController.getAccount({ key });
 
     if (account) {
       account.wallet.getKeyAccounts()
         .then(accounts => {
           const publicKey = account.wallet.public;
 
-          sendResponse(parseAccounts(accounts, publicKey));
+          sendResponse({
+            success: true,
+            payload: parseAccounts(accounts, publicKey)
+          });
         })
     } else {
-      sendResponse(null);
+      sendResponse({
+        success: true,
+        message: 'Not found account'
+      });
     }
   }
 
   /**
    * Assign eos account name to account
    */
-  private responseSetKeyAccount = (sendResponse, {id, accountPermission}): void => {
-    const account = this.accountController.getAccount({ id });
+  private responseSetKeyAccount = (sendResponse, {key, accountPermission}): void => {
+    const account = this.accountController.getAccount({ key });
 
     if (account) {
-      account.setExtra(accountPermission);
-      AccountFactory.save(this.accessController.getPass(), account);
-  
-      account.getInfo().then(sendResponse);  
+      this.busController.emit(ACCOUNT_UPDATE, key, { extra: prettyAccount(accountPermission)}, () => {
+        account.getInfo().then(sendResponse);  
+      });
     } else {
       sendResponse(null);
     }

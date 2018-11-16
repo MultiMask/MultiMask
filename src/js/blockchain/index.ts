@@ -1,3 +1,5 @@
+export { BCList } from './bp44list';
+
 export enum BCSign {
   BTC = 'BTC',
   ETH = 'ETH',
@@ -9,10 +11,11 @@ export default {
     name: 'Bitcoin',
     sign: BCSign.BTC,
     network: [
-      // {
-      // 	name: 'Mainnet',
-      // 	sign: 'mainnet'
-      // },
+      {
+        name: 'Mainnet',
+        sign: 'mainnet',
+        url: 'https://blockchain.info'
+      },
       {
         name: 'Testnet',
         sign: 'testnet',

@@ -22,7 +22,7 @@ const Image = styled('img')`
   width: 90px;
 `;
 
-const DialogLayout: React.SFC<any> = ({ children }) => (
+const DialogLayout: React.SFC<{}> = ({ children }) => (
   <Container>
     <Header>
       <Image alt="logo" src={logo} />

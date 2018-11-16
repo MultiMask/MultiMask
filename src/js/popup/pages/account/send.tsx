@@ -103,7 +103,12 @@ class Send extends React.Component<any, any> {
               =
             </Typography>
 
-            <TextField type="text" name="usd" value={`${this.props.getPrice(amount, account.blockchain)} USD`} readOnly />
+            <TextField
+              type="text"
+              name="usd"
+              value={`${this.props.getPrice(amount, account.blockchain)} USD`}
+              readOnly
+            />
           </div>
           <Typography variant="subheading" color="main" className={styles.title}>
             Transaction data (optional)
@@ -120,10 +125,14 @@ export default connect(
   (state: any) => ({
     account: getCurrentWallet(state)
   }),
-  dispatch => bindActionCreators({
-    ...txActions,
-    ...priceActions
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        ...txActions,
+        ...priceActions
+      },
+      dispatch
+    )
 )(Send);
 
 const Form = styled('form')`

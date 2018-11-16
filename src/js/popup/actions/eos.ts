@@ -7,14 +7,14 @@ import InternalMessage from 'services/InternalMessage';
 
 import accountActions from './account';
 
-const settingsActions = {
-  getKeyAccounts: (id) => (dispatch, getState) => {
-    return InternalMessage.payload(GET_KEY_ACCOUNTS, id)
+export const eosActions = {
+  getKeyAccounts: (key: string) => (dispatch, getState) => {
+    return InternalMessage.payload(GET_KEY_ACCOUNTS, { key })
       .send();
   },
 
-  setAccountToKey: (id: string, accountPermission) => (dispatch, getState) => {
-    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {id, accountPermission})
+  setAccountToKey: (key: string, accountPermission) => (dispatch, getState) => {
+    return InternalMessage.payload(SET_ACCOUNT_TO_KEY, {key, accountPermission})
       .send()
       .then(account => {
         accountActions.updateAccount(account)(dispatch, getState);
@@ -22,5 +22,3 @@ const settingsActions = {
       })
   }
 };
-
-export default settingsActions;

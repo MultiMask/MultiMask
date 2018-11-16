@@ -20,6 +20,7 @@ function getConfigParams(params) {
 var alias = {
   'bcnetwork': path.resolve(__dirname, 'src/js/blockchain/index.ts'),
   'constants': path.resolve(__dirname, 'src/js/constants'),
+  'config': path.resolve(__dirname, 'src/js/config'),
   'helpers': path.resolve(__dirname, 'src/js/helpers'),
   'libs': path.resolve(__dirname, 'src/js/libs'),
   'models': path.resolve(__dirname, 'src/js/models'),
@@ -29,6 +30,7 @@ var alias = {
   'popup': path.resolve(__dirname, 'src/js/popup'),
   'prompt': path.resolve(__dirname, 'src/js/prompt'),
   'mock': path.resolve(__dirname, 'utils/mock'),
+  'img': path.resolve(__dirname, 'src/img'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');

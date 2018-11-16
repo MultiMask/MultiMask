@@ -1,5 +1,8 @@
-export const PASS = 'multi_pass';
+export const PASS = 'multipass';
 export const PROFILES = 'profiles';
-export const SETTINGS = 'settings_';
+export const PROFILE_CURRENT = 'profilecurrent'
+export const SETTINGS = 'settings';
+export const POPUP_STATE = 'popupstate';
 
 export const DOMAINS = 'domains';
+export const CACHE = 'cache';

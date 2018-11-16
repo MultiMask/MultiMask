@@ -1,4 +1,4 @@
-import { downloadFile } from '../helpers';
+import { downloadFile } from 'helpers/files';
 import { push, goBack } from 'connected-react-router';
 import InternalMessage from 'services/InternalMessage';
 
@@ -13,90 +13,99 @@ import {
   PROFILE_IMPORT,
   PROFILE_SELECT,
   PROFILE_SELECT_RESULT,
-  PROFILE_IMPORT_SET
+  PROFILE_IMPORT_SET,
+  PROFILE_GET_CURRENT
 } from 'constants/profile';
 
-import accountActions from './account';
+import { URL_PROFILE_ADD, URL_INTRODUCTION, URL_PROFILE_IMPORT } from 'constants/popupUrl';
 
 const ProfileActions = {
-  getProfile: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_EXPORT, id)
-      .send()
-      .then(({ encodedProfile }) => {
-        return encodedProfile;
-      });
+  getCurrentProfile: () => (dispatch, getState) => {
+    return InternalMessage.signal(PROFILE_GET_CURRENT)
+      .send();
   },
 
-  getList: () => (dispatch, getState) => {
+  select: profileId => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_SELECT, { payload: { profileId }})
+      .send()
+      .then(response => {
+        if (response.success) {
+          dispatch({
+            type: PROFILE_SELECT_RESULT,
+            payload: response.payload
+          })
+        }
+
+        return response;
+      });
+  },
+  
+   getList: () => (dispatch, getState) => {
     InternalMessage.signal(PROFILE_GETLIST)
       .send()
       .then(updateProfileListFn(dispatch));
   },
 
-  add: () => (dispatch, getState) => {
-    InternalMessage.signal(PROFILE_ADD)
-      .send()
-      .then(updateProfileListFn(dispatch));
-  },
-
-  remove: id => (dispatch, getState) => {
-    InternalMessage.payload(PROFILE_REMOVE, id)
-      .send()
-      .then(updateProfileListFn(dispatch));
-  },
-
-  // TODO: Add loading
-  select: profileId => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_SELECT, profileId)
-      .send()
-      .then(({ profileId } ) => {
-        dispatch({
-          type: PROFILE_SELECT_RESULT,
-          payload: { profileId }
-        });
-
-        return accountActions.getInfo()(dispatch, getState);
-      });
-  },
-
   update: (id, data) => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_UPDATE, { id, data })
+    return InternalMessage.payload(PROFILE_UPDATE, { payload: { id, data }})
       .send()
       .then(updateProfileListFn(dispatch));
+  },
+
+  getProfile: id => (dispatch, getState) => {
+    return InternalMessage.payload(PROFILE_EXPORT, { payload: { id }})
+      .send()
+      .then(({ payload: { encodedProfile }}) => {
+        return encodedProfile;
+      });
   },
 
   export: id => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_EXPORT, id)
+    return InternalMessage.payload(PROFILE_EXPORT, { payload: { id }})
       .send()
-      .then(({ encodedProfile }) => {
+      .then(({ payload: { encodedProfile }}) => {
         downloadFile(encodedProfile, 'myfilename.mm', 'text/plain;charset=utf-8');
         dispatch(goBack());
       });
-  },
+    },
+    
+    add: () => (dispatch, getState) => {
+     dispatch(push(URL_PROFILE_ADD))
+    },
 
-  import: (pass, encryptedProfile) => (dispatch, getState) => {
-    return InternalMessage.payload(PROFILE_IMPORT, { pass, encryptedProfile })
-      .send()
-      .then(() => {
-        updateProfileListFn(dispatch);
-        dispatch(goBack());
+    remove: id => (dispatch, getState) => {
+      InternalMessage.payload(PROFILE_REMOVE, { payload: { id }})
+        .send()
+        .then(updateProfileListFn(dispatch));
+    },
+
+    import: (pass, encryptedProfile) => (dispatch, getState) => {
+      return InternalMessage.payload(PROFILE_IMPORT, { payload: { pass, encryptedProfile }})
+        .send()
+        .then(() => {
+          updateProfileListFn(dispatch);
+          dispatch(goBack());
+        });
+    },
+    
+    setImportingProfile: encryptedProfile => dispatch => {
+      dispatch({
+        type: PROFILE_IMPORT_SET,
+        payload: encryptedProfile
       });
-  },
-
-  setImportingProfile: encryptedProfile => dispatch => {
-    dispatch({
-      type: PROFILE_IMPORT_SET,
-      payload: encryptedProfile
-    });
-    dispatch(push('/profiles/import'));
-  }
+      dispatch(push(URL_PROFILE_IMPORT));
+    }
 };
 
-const updateProfileListFn = dispatch => payload => {
+const updateProfileListFn = dispatch => ({ payload }) => {
   dispatch({
     type: PROFILE_GETLIST_RESULT,
     payload
   });
+
+  if (payload.list.length === 0) {
+    dispatch(push(URL_INTRODUCTION));
+  }
 };
 
 export default ProfileActions;

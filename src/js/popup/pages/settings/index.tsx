@@ -10,23 +10,23 @@ import settingsActions from '../../actions/settings';
 class Settings extends React.Component<any, any> {
   public onChangeCurrenciesDataProvider;
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'price_provider');
   }
 
-  get selectedDataProvider() {
+  get selectedDataProvider () {
     const { settings } = this.props;
     const { price_providers = [] } = settings;
 
     return price_providers.find(i => i.value === settings.price_provider);
   }
 
-  onChange = e => {
+  public onChange = e => {
     const { target } = e;
 
-    if (typeof this.props.setSetting !== 'function') return;
+    if (typeof this.props.setSetting !== 'function') { return; }
 
     switch (target.name) {
       case 'show_total':
@@ -36,7 +36,7 @@ class Settings extends React.Component<any, any> {
     }
   };
 
-  onChangeSelect = (name, nextProvider) => {
+  public onChangeSelect = (name, nextProvider) => {
     // if (name && nextProvider) {
     //   this.setState(state => {
     //     const nextState = { ...state };
@@ -46,11 +46,11 @@ class Settings extends React.Component<any, any> {
     // }
   };
 
-  get debug() {
+  get debug () {
     return <pre>{JSON.stringify({ state: this.state, props: this.props }, null, 4)}</pre>;
   }
 
-  render() {
+  public render () {
     const { settings } = this.props;
 
     return (
@@ -93,7 +93,7 @@ const Form = styled('div')`
   justify-content: space-between;
 `;
 
-type SectionProps = {
+interface SectionProps {
   centered?: boolean;
   style?: any;
 }

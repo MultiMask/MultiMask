@@ -1,19 +1,24 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import FormLayout from './FormLayout';
 import styled, { css } from 'react-emotion';
 
-import AccountFactory from 'app/account/accountFactory';
+import { isSeed } from 'helpers/checkers';
+import { AccountFactory } from 'app/account/accountFactory';
 import Account from 'app/account';
-import actions from 'popup/actions/account';
-import ntx, {BCSign} from 'bcnetwork';
+import accountsActions from 'popup/actions/account';
+import ntx, { BCSign } from 'bcnetwork';
 
 import { EthAccount } from './bcaccounts/ethAccount';
 import { EosAccount } from './bcaccounts/eosAccount';
 
-interface IProps {
-  create (account): Promise<void>;
+import { KeyController } from 'app/keyController';
+
+const actions = {
+  import: accountsActions.import
+};
+type IPropsActions = Actions<typeof actions>;
+interface IProps extends IPropsActions {
   blockchain: BCSign;
   onBack (): void;
 }
@@ -22,7 +27,7 @@ interface IWalletState {
   seed?: string;
   error?: string;
   success?: boolean;
-  bc?: BCSign;
+  bc?: string;
   data?: any;
 }
 
@@ -40,69 +45,71 @@ class Wallet extends React.Component<IProps, IWalletState> {
 
   public handleCheck = e => {
     e.preventDefault();
-    this.createAccount()
-      .then(data => {
-        this.setState({ success: true,  bc: this.account.blockchain, data });
-      })
+    this.createAccount().then(data => {
+      this.setState({ success: true, bc: this.account.bc, data });
+    });
   };
 
-  public createAccount (): Promise<Account> {
+  public createAccount () {
     const { blockchain } = this.props;
+    const account = AccountFactory.create({
+      bc: blockchain
+    });
 
     try {
-      return AccountFactory.create({
-        blockchain,
-        secret: {
-          seed: this.state.seed
+      const pk = KeyController.generateKeyFromSeedOrPK(this.state.seed, blockchain);
+
+      return account.init(pk).then(acc => {
+        this.account = acc;
+        if (acc.bc === BCSign.EOS) {
+          return acc.wallet.getKeyAccounts();
+        } else {
+          return acc.getInfo();
         }
-      }).init()
-        .then(account => this.account = account)
-        .then(account => {
-          if (account.blockchain === BCSign.EOS) {
-            return account.wallet.getKeyAccounts()
-          } else {
-            return account.getInfo();
-          }
-        })
+      });
     } catch (e) {
       this.setState({
         error: `Wrong wordlist: ${e}`
       });
-
       return Promise.reject();
     }
   }
 
   public bcAccountRender = () => {
-    if (!this.account) return null;
+    if (!this.account) {
+      return null;
+    }
 
-    switch (this.account.blockchain) {
+    switch (this.account.bc) {
       case BCSign.BTC:
       case BCSign.ETH:
-        return <EthAccount data={this.state.data} onImport={this.handleSave}/>
+        return <EthAccount data={this.state.data} onImport={this.handleSave} />;
       case BCSign.EOS:
-        return <EosAccount accounts={this.state.data} onImport={this.handleSave}/>
+        return <EosAccount accounts={this.state.data} onImport={this.handleSave} />;
       default:
         throw new Error(`Can't find this type account render`);
     }
-  }
+  };
 
   public handleSave = data => {
-    if (data && this.account.blockchain === BCSign.EOS) {
+    if (data && this.account.bc === BCSign.EOS) {
       this.account.setExtra({ account: data.account_name });
     }
 
-    this.props.create(this.account);
-  }
+    this.props.import({
+      bc: this.props.blockchain,
+      privateKey: this.state.seed
+    });
+  };
 
   public render () {
     const { error, seed } = this.state;
 
     return (
-      <FormLayout 
-        onSubmit={this.handleCheck} 
-        title="Input seed:" 
-        onBack={this.props.onBack} 
+      <FormLayout
+        onSubmit={this.handleCheck}
+        title="Input your Seed or PrivateKey:"
+        onBack={this.props.onBack}
         submitButtonTitle="Check"
       >
         <Textaria name="seed" type="text" value={seed} onChange={this.handleInput} cols={40} rows={5} />
@@ -115,18 +122,12 @@ class Wallet extends React.Component<IProps, IWalletState> {
 
 export default connect(
   () => ({}),
-  dispatch =>
-    bindActionCreators(
-      {
-        create: actions.create
-      },
-      dispatch
-    )
-)(Wallet);
+  actions
+)(Wallet as any);
 
 type TextariaProps = Partial<HTMLTextAreaElement> & {
   theme?: any;
-}
+};
 const Textaria = styled('textarea')`
   outline: none;
   border: 1px solid ${(props: TextariaProps) => props.theme.colors.secondary};

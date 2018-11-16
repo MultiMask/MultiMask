@@ -1,33 +1,23 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
 import EthEngine from './engine';
-import networks from '../../../../blockchain'
+import networks from 'bcnetwork'
 
 const web3 = new Web3();
 
 export default class EthWallet implements IWallet {
-  public engine: any;
+  public engine: EthEngine;
   public network: any;
-  public priv: any;
-  public privHex: any;
-  public public: any;
+  private privateKey: any;
   public address: any;
   public nonce: any;
   public networkUrl: string;
 
-  constructor ( network ) {
-    this.engine = new EthEngine(network);
-    this.changeNetwork(network)
-  }
+  public create (pk: Buffer | string, network?: string) {
+    this.changeNetwork(network);
+    ({ address: this.address, privateKey: this.privateKey } = this.engine.getPrivKeyFromSeed(pk));
 
-  public create (_seed) {
-    const seed = _seed || this.engine.generateMnemonic();
-    ({ priv: this.priv, privHex: this.privHex } = this.engine.getPrivKeyFromSeed(seed));
-
-    this.public = this.engine.getPublic(this.priv);
-    this.address = this.engine.getEthereumAddress(this.priv);
-
-    return Promise.resolve(seed);
+    return Promise.resolve();
   }
 
   public changeNetwork (network: string) {
@@ -43,7 +33,7 @@ export default class EthWallet implements IWallet {
     return this.address;
   }
 
-  public getInfo () {
+  public getInfo (): any {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txs]) => {
         this.nonce = txs && txs[0] ? +txs[0].nonce : 0;
@@ -71,7 +61,7 @@ export default class EthWallet implements IWallet {
     const nonce = await web3.eth.getTransactionCount(this.address)
   
     const tx = this.engine.signEthTx({
-      privKey: this.privHex,
+      privKey: this.privateKey,
       amount: amountInWei,
       to,
       from: this.address,
@@ -94,6 +84,6 @@ export default class EthWallet implements IWallet {
 
   // TODO: provide to Account entity
   public signRawTx (data) {
-    return this.engine.signRawTx(data, this.privHex);
+    return this.engine.signRawTx(data, this.privateKey);
   }
 }

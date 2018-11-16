@@ -1,5 +1,3 @@
-import { injectGlobal } from 'emotion';
-
 export const theme = {
   colors: {
     primary: '#1888FE',
@@ -7,7 +5,8 @@ export const theme = {
     secondary: '#C7CCD7',
     hint: '#DEE3EC',
     background: '#FBFBFB',
-    error: '#FF3433'
+    error: '#FF3433',
+    multi: '#008bff'
   },
   shadows: {
     0: '0px 0px 40px 0px rgba(44,66,119,0.05)',
@@ -19,26 +18,7 @@ export const theme = {
     large: '17px'
   }
 };
-
-injectGlobal`
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: inherit;
-  }
-
-  #app-container {
-    width: 100%;
-  }
-
-  input[type="button"]:focus{
-    outline:none;
-  }
-
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-`;
+export type ITheme = typeof theme;
+export interface IPropsThemed {
+  theme?: ITheme;
+}
