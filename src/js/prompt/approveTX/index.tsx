@@ -63,12 +63,14 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
       .then(({ isReady }) => {
-        if (!isReady) { throw new Error('You need to authorize'); }
+        if (!isReady) {
+          throw new Error('You need to authorize');
+        }
 
         return InternalMessage.signal(ACCOUNT_INFO).send();
       })
-      .then(accounts => {
-        this.setAccounts(accounts);
+      .then(res => {
+        this.setAccounts(res.payload.accounts);
         this.setTxInfo(this.props.prompt.data);
       })
       .catch(e => {
@@ -114,12 +116,12 @@ export default class App extends React.Component<IApproveProps, IAppState> {
   }
 
   public getOption = (account): ISelectOption => {
-    return { value: account.id, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
+    return { value: account.key, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
   };
 
   public handleChooseAccount = e => {
     const { accounts } = this.state;
-    this.setState({ account: accounts.find(account => account.id === e.value), selectValue: e });
+    this.setState({ account: accounts.find(account => account.key === e.value), selectValue: e });
   };
 
   public onSubmit = payload => {
@@ -195,7 +197,9 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public render () {
     // TODO: return loader
-    if (!this.state.isLoaded) { return null; }
+    if (!this.state.isLoaded) {
+      return null;
+    }
 
     // TODO: style this caption
     if (!this.state.isReady || !this.state.tx) {
@@ -209,8 +213,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const {
       account: {
         info: { address, balance },
-        blockchain,
-        id
+        blockchain
       },
       tx: { to, amount, data },
       tx,
