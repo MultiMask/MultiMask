@@ -134,6 +134,16 @@ export class ProfileController {
   }
 
   /**
+   * Unload profile from memory
+   */
+  public clear () {
+    this.accountController.clearList();
+    this.keyController.clear();
+
+    this.profile = null;
+  }
+
+  /**
    * Return encrypted profile
    * @param id 
    */

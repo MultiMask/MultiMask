@@ -14,8 +14,7 @@ import {
   PROFILE_GETLIST, 
   PROFILE_SELECT, 
   PROFILE_UPDATE,
-  // PROFILE_ADD, 
-  // PROFILE_REMOVE, 
+  PROFILE_REMOVE, 
   PROFILE_EXPORT,
   // PROFILE_IMPORT
  } from 'constants/profile';
@@ -48,8 +47,7 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_GETLIST, this.responseGetList);
 
     this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
-    // this.messageController.on(PROFILE_ADD,     this.responseAdd);
-    // this.messageController.on(PROFILE_REMOVE, this.responseRemove);
+    this.messageController.on(PROFILE_REMOVE, this.responseRemove);
     
     this.messageController.on(PROFILE_EXPORT, this.responseExport);
     // this.messageController.on(PROFILE_IMPORT, this.responseImport);
@@ -130,7 +128,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Export profile
    */
-  private responseExport = (sendResponse: InternalResponseFn, { payload: {id}}) => {
+  private responseExport = (sendResponse: InternalResponseFn, { payload: { id }}) => {
     this.profileController.export(id)
       .then(encodedProfile => {
         sendResponse({
@@ -139,6 +137,37 @@ export class ProfileListController extends EventEmitter {
             encodedProfile
           }
         });
+      })
+  }
+
+  /**
+   * Remove certain Profile
+   */
+  private responseRemove = (sendResponse: InternalResponseFn, { payload: { id }}) => {
+    if (id === this.current) {
+      this.profileController.clear();
+      this.current = null;
+
+      StorageService.ProfileList.setCurrnet(null);
+    }
+    
+    this.list = this.list.filter(prId => prId !== id);
+
+    StorageService.ProfileList.set(this.list)
+      .then(() => StorageService.Entities.remove(id))
+      .then(() => {
+        if (this.list[0]) {
+          this.activate(this.list[0]);
+        }
+
+        return this.current;
+      })
+      .then(this.loadProfilesAndCurrent)
+      .then(payload => {
+        sendResponse({
+          success: true,
+          payload
+        })
       })
   }
 
@@ -230,39 +259,10 @@ export class ProfileListController extends EventEmitter {
         current: this.current
       }))
   }
-  /**
-   * Response with list of profiles
-   */
-  // private responseList = sendResponse => {
-  //   sendResponse({
-  //     list: this.getListSerialized(),
-  //     profileId: this.current.getId()
-  //   })
-  // }
 
-  /**
-   * Add new empty Profile and response with all profiles
-   */
-  // private responseAdd = sendResponse => {
-  //   this.createDefault();
 
-  //   sendResponse({
-  //     list: this.getListSerialized(),
-  //     profileId: this.current.getId()
-  //   });
-  // }
 
-  /**
-   * Remove certain Profile
-   */
-  // private responseRemove = (sendResponse, profileId) => {
-  //   this.remove(profileId);
 
-  //   sendResponse({
-  //     list: this.getListSerialized(),
-  //     profileId: this.current.getId()
-  //   });
-  // }
 
   // private responseImport = (sendResponse, { pass, encryptedProfile }) => {
   //   this.import(pass, encryptedProfile);
@@ -273,62 +273,11 @@ export class ProfileListController extends EventEmitter {
   //   });
   // }
 
-
-  /**
-   * Load profile list from storage
-   */
-  // private loadProfileList () {
-  //   return StorageService.ProfileList.get()
-  //     // .then((ids: any[]) => {
-  //     //   if (ids && ids.length > 0) {
-  //     //     return Promise.all(
-  //     //       ids.map(id => {
-  //     //         return ProfileFactory.load(this.accessController.getPass(), id);
-  //     //       })
-  //     //     );
-  //     //   } else {
-  //     //     return [];
-  //     //   }
-  //     // })
-  //     .then(profiles => {
-  //       this.list = profiles || [];
-  //       return this.list;
-  //     });
-  // }
-
-  /**
-   * Return current Profile
-   */
-  // public getCurrent (): Profile {
-  //   return this.current;
-  // }
-
   /**
    * Return list of profiles
    */
   // private getListSerialized () {
   //   return this.list.map(profile => profile.serialize());
-  // }
-
-  /**
-   * Create new default profile
-   */
-  // private createDefault () {
-  //   const profile = ProfileFactory.createDefault();
-
-  //   ProfileFactory.create(this.accessController.getPass(), profile);
-  //   this.addProfileInList(profile);
-
-  //   return this.setCurrrent(profile);
-  // }
-
-  /**
-   * Save List of profiles in storage
-   */
-  // private save (): Promise<void> {
-  //   const profileIds = this.list.map(profile => profile.getId());
-
-  //   return StorageService.ProfileList.set(profileIds);
   // }
 
   /**
@@ -358,38 +307,6 @@ export class ProfileListController extends EventEmitter {
   //   }
   // }
 
-  /**
-   * Update name of Profile
-   * @param id 
-   * @param data 
-   */
-  // private update (id, data) {
-  //   const idx = this.list.findIndex(profile => profile.getId() === id);
-  //   if (idx > -1) {
-  //     this.list[idx].update(this.accessController.getPass(), data);
-  //   }
-  // }
-
-  /**
-   * Create profile from data
-   * @param data 
-   */
-  // private create (data) {
-  //   const profile = new Profile(data);
-
-  //   ProfileFactory.create(this.accessController.getPass(), profile);
-  //   this.addProfileInList(profile);
-  // }
-
-  /**
-   * Load Profile full model and encrypt
-   * @param id 
-   */
-  // private export (id: string) {
-  //   return this.getFullInfo(id).then(profile => {
-  //     return ProfileFactory.encryptFullProfile(this.accessController.getPass(), profile, true);
-  //   });
-  // }
 
   /**
    * Get Profile Info with serialized wallets

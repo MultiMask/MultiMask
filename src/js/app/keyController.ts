@@ -13,6 +13,24 @@ export class KeyController {
   private keys: IKeyStore = null;
   private seed: Record<string, hdkey> = {};
   private root: hdkey;
+  
+  /**
+   * Generate key by seed phase or private key
+   * @param mnemonic 
+   * @param bc 
+   */
+  public static generateKeyFromSeedOrPK (mnemonic: string, bc: string): Buffer | string {
+    if (isSeed(mnemonic)) {
+      const bp44number = BCList[bc];
+      const seed = bip39.mnemonicToSeed(mnemonic);
+      const root = hdkey.fromMasterSeed(seed);
+      const path = `m/44'/${bp44number}/0'/0/0`;
+
+      return root.derive(path).privateKey;
+    } else {
+      return mnemonic;
+    }
+  }
 
   /**
    * Assign plenty of keys to generate PK
@@ -58,20 +76,11 @@ export class KeyController {
   }
 
   /**
-   * Generate key by seed phase or private key
-   * @param mnemonic 
-   * @param bc 
+   * Erase all credentionals
    */
-  public static generateKeyFromSeedOrPK (mnemonic: string, bc: string): Buffer | string {
-    if (isSeed(mnemonic)) {
-      const bp44number = BCList[bc];
-      const seed = bip39.mnemonicToSeed(mnemonic);
-      const root = hdkey.fromMasterSeed(seed);
-      const path = `m/44'/${bp44number}/0'/0/0`;
-
-      return root.derive(path).privateKey;
-    } else {
-      return mnemonic;
-    }
+  public clear () {
+    this.keys = null;
+    this.root = null;
+    this.seed = null;
   }
 }

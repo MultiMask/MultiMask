@@ -87,8 +87,7 @@ class Profiles extends React.Component<IProps, IState> {
   };
 
   public onRemove = id => {
-    // TODO: fix me
-    // this.props.remove(id);
+    this.props.remove(id);
   };
 
   public onExport = id => {

@@ -18,7 +18,7 @@ import {
 } from 'constants/profile';
 
 import accountActions from './account';
-import { URL_PROFILE_ADD } from 'constants/popupUrl';
+import { URL_PROFILE_ADD, URL_INTRODUCTION } from 'constants/popupUrl';
 
 const ProfileActions = {
   getCurrentProfile: () => (dispatch, getState) => {
@@ -74,6 +74,11 @@ const ProfileActions = {
      dispatch(push(URL_PROFILE_ADD))
     },
 
+    remove: id => (dispatch, getState) => {
+      InternalMessage.payload(PROFILE_REMOVE, { payload: { id }})
+        .send()
+        .then(updateProfileListFn(dispatch));
+    },
 
 
 
@@ -84,11 +89,6 @@ const ProfileActions = {
 
 
 
-  // remove: id => (dispatch, getState) => {
-  //   InternalMessage.payload(PROFILE_REMOVE, id)
-  //     .send()
-  //     .then(updateProfileListFn(dispatch));
-  // },
 
 
   // import: (pass, encryptedProfile) => (dispatch, getState) => {
@@ -114,6 +114,10 @@ const updateProfileListFn = dispatch => ({ payload }) => {
     type: PROFILE_GETLIST_RESULT,
     payload
   });
+
+  if (payload.list.length === 0) {
+    dispatch(push(URL_INTRODUCTION));
+  }
 };
 
 export default ProfileActions;
