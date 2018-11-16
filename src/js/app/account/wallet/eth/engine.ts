@@ -2,7 +2,7 @@ import Web3 = require('web3');
 import ethTx = require('ethereumjs-tx');
 
 import * as ethUtil from 'ethereumjs-util';
-import { isHexString, bufferToHex } from 'helpers/func';
+import { isHexString } from 'helpers/func';
 
 import EtherApi from 'etherscan-api';
 
@@ -17,7 +17,11 @@ export default class Engine {
 
   public getPrivKeyFromSeed (pk: Buffer | string) {
     if (Buffer.isBuffer(pk)) {
-      const pkHex = bufferToHex(pk);
+      const pkHex = ethUtil.bufferToHex(pk);
+
+      console.log('private', pkHex);
+      console.log('public', ethUtil.bufferToHex(ethUtil.privateToPublic(pk)))
+      console.log('address', ethUtil.bufferToHex(ethUtil.privateToAddress(pk)))
 
       return {
         address: this.getEthereumAddress(pkHex),
@@ -35,7 +39,7 @@ export default class Engine {
 
   public getEthereumAddress (privKey) {
     const addressHex = ethUtil.privateToAddress(privKey);
-    return bufferToHex(addressHex);
+    return ethUtil.bufferToHex(addressHex);
   }
 
   public getPublic (privKey) {

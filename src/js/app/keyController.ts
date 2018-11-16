@@ -1,3 +1,4 @@
+import bitcoin from 'bitcoinjs-lib/';
 import hdkey from 'hdkey';
 import * as bip39 from 'bip39';
 
@@ -5,6 +6,9 @@ import Account from 'app/account';
 import { BCList } from 'bcnetwork';
 import { isSeed } from 'helpers/checkers';
 import { getParams, generateId } from 'helpers/profiles';
+import { stringToHex } from 'helpers/func';
+
+console.log(bitcoin);
 
 /**
  * Store HD key in memory and devire key for wallets
@@ -12,7 +16,7 @@ import { getParams, generateId } from 'helpers/profiles';
 export class KeyController {
   private keys: IKeyStore = null;
   private seed: Record<string, hdkey> = {};
-  private root: hdkey;
+  private root: any;
   
   /**
    * Generate key by seed phase or private key
@@ -39,8 +43,25 @@ export class KeyController {
   public assignKeys (keys: IKeyStore): void {
     this.keys = keys;
 
-    const seed = bip39.mnemonicToSeed(this.keys.master);
-    this.root = hdkey.fromMasterSeed(seed);
+    const mnemonic = this.keys.master;
+    console.log('mnemonic', mnemonic);
+
+    const seed = bip39.mnemonicToSeed(mnemonic);
+    console.log('seed39', seed.toString('hex'));
+    
+    const master = bitcoin.bip32.fromSeed(seed);
+    console.log('master', master.toWIF());
+    
+    
+    
+    
+    
+    
+    
+    
+    // const seed = bip39.mnemonicToSeed(this.keys.master);
+    // this.root = hdkey.fromMasterSeed(seed);
+    this.root = master;
 
     if (this.keys.seed) {
       for (const key in this.keys.seed) {
@@ -63,9 +84,14 @@ export class KeyController {
     const id = generateId(account.bc, account.data);
 
     if (type === '02') {
-      const path = `m/44'/${bp44number}/0'/0/${parseInt(link, 10)}`;
+      const path = `m/44'/${bp44number}'/0'/0/${parseInt(link, 10)}`;
 
-      return this.root.derive(path).privateKey;
+      console.log(path);
+      const key = this.root.derivePath(path).privateKey;
+      console.log('key', key.toString('hex'));
+
+
+      return key;
     } else if (type === '00') {
       return this.keys.pk[id];
     } else if (type === '01') {
