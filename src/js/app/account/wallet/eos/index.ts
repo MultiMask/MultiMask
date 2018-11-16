@@ -1,7 +1,8 @@
+import wif from 'wif';
 import Eos from 'eosjs';
 const {ecc, Fcbuffer} = Eos.modules;
 
-import {prettyAccount, IEosAccountPermission} from 'helpers/eos';
+import {prettyAccount, parsePrettyAccount, IEosAccountPermission} from 'helpers/eos';
 import ntx from 'bcnetwork';
 
 const findNetwork = name => ntx.EOS.network.find(net => net.name === name);
@@ -31,14 +32,16 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public create (_private) {
-    const promise = _private
-      ? Promise.resolve(_private)
-      : ecc.randomKey();
+  public create (pk: Buffer | string) {
+    const privateKey = Buffer.isBuffer(pk)
+      ? wif.encode(128, pk, false)
+      : pk;
+
+    const promise = Promise.resolve(privateKey);
 
     return promise
-      .then(key => {
-        this.private = key;
+      .then(priv => {
+        this.private = priv;
 
         this.eos = Eos({
           keyProvider: this.private,
@@ -48,8 +51,8 @@ export class EosWallet implements IWallet {
         
         return ecc.privateToPublic(this.private);
       })
-      .then(_public => {
-        this.public = _public;
+      .then(pub => {
+        this.public = pub;
 
         return this.private;
       });
@@ -90,13 +93,17 @@ export class EosWallet implements IWallet {
     return this.accountPermission.account_name;
   }
 
-  public setExtra (data: IEosAccountPermission) {
-    if (data && data.account_name) {
-      this.accountPermission = data;
+  public setExtra (data: any) {
+    if (data) {
+      const [ account_name, permission ] = parsePrettyAccount(data);
+      this.accountPermission = {
+        account_name,
+        permission
+      };
     }
   }
 
-  public sendCoins ({ to, amount, data }) {
-    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} EOS`, data);
+  public sendCoins ({ to, amount, data, token = 'EOS' }) {
+    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} ${token}`, data);
   }
 }

@@ -63,7 +63,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
       .then(({ isReady }) => {
-        if (!isReady) throw new Error('You need to authorize');
+        if (!isReady) { throw new Error('You need to authorize'); }
 
         return InternalMessage.signal(ACCOUNT_INFO).send();
       })
@@ -195,7 +195,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public render () {
     // TODO: return loader
-    if (!this.state.isLoaded) return null;
+    if (!this.state.isLoaded) { return null; }
 
     // TODO: style this caption
     if (!this.state.isReady || !this.state.tx) {

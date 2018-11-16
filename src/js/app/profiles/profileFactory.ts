@@ -1,10 +1,9 @@
-import uuid from 'uuid/v4';
 import { debug } from 'loglevel';
 
 import { StorageService } from 'services/StorageService';
 import BlockCipher, { cipherTypes } from 'libs/blockCipher';
 
-import {Profile} from './Profile';
+import { Profile } from 'models/Profile';
 
 const blockCipher = new BlockCipher(cipherTypes.AES256);
 
@@ -38,7 +37,8 @@ export default class ProfileFactory {
     if (data instanceof Profile) {
       profile = data;
     } else {
-      profile = new Profile(ProfileFactory.createDefault(data));
+      // TODO: repair it
+      profile = new Profile('seed');
     }
 
     return ProfileFactory.save(pass, profile);
@@ -46,7 +46,8 @@ export default class ProfileFactory {
 
   public static createDefault (data?: any) {
     return new Profile({
-      id: uuid(),
+      // TODO: repair it
+      id: 0,
       name: 'Default profile',
       version: 0,
       accounts: [],

@@ -63,7 +63,7 @@ export class MessageController extends EventEmitter {
 
       // untrusted source (site)
       if (payload.from) {
-        info('untrusted sourse');
+        // info('untrusted sourse');
         if (!payload.domain) {
           throw new Error('In content query must be attached domain');
         }
@@ -92,7 +92,7 @@ export class MessageController extends EventEmitter {
 
       // msg from trusted source 
       } else if (!message.from) {
-        info('trusted sourse');
+        // info('trusted sourse');
         this.checkAuth(payload.type, isReady => {
           if (isReady) {
             this.emit(message.type, cb, message.payload);

@@ -2,8 +2,7 @@ import Web3 = require('web3');
 import ethTx = require('ethereumjs-tx');
 
 import * as ethUtil from 'ethereumjs-util';
-import * as bip39 from 'bip39';
-import hdkey from 'hdkey';
+import { isHexString, bufferToHex } from 'helpers/func';
 
 import EtherApi from 'etherscan-api';
 
@@ -16,29 +15,27 @@ export default class Engine {
     this.etherApi = EtherApi.init(etherscanApiKey, network, '10000');
   }
 
-  public generateMnemonic () {
-    return bip39.generateMnemonic();
-  }
+  public getPrivKeyFromSeed (pk: Buffer | string) {
+    if (Buffer.isBuffer(pk)) {
+      const pkHex = bufferToHex(pk);
 
-  public getSeedFromMnemonic (mnemonic) {
-    return bip39.mnemonicToSeed(mnemonic);
-  }
+      return {
+        address: this.getEthereumAddress(pkHex),
+        privateKey: pk
+      }
+    } else {
+      const rightPk = isHexString(pk) ? pk : `0x${pk}`;
 
-  public getPrivKeyFromSeed (seed) {
-    const root = hdkey.fromMasterSeed(seed);
-    // Get first eth wallet from HDwallet
-    // eslint-disable-next-line
-    const addrNode = root.derive("m/44'/60'/0'/0/0");
-
-    return {
-      priv: ethUtil.bufferToHex(addrNode._privateKey),
-      privHex: addrNode._privateKey
-    };
+      return {
+        address: this.getEthereumAddress(rightPk),
+        privateKey: Buffer.from(rightPk, 'hex'),
+      }
+    }
   }
 
   public getEthereumAddress (privKey) {
     const addressHex = ethUtil.privateToAddress(privKey);
-    return ethUtil.bufferToHex(addressHex);
+    return bufferToHex(addressHex);
   }
 
   public getPublic (privKey) {

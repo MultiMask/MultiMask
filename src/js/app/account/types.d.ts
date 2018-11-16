@@ -15,10 +15,16 @@ type BCInfo = {
  */
 type WalletInfo = {
   blockchain: BCType;
-  id: string;
+  key: string;
   name: string;
   extra?: any;
   info: BCInfo;
+}
+
+type ProfileInfo = {
+  id: string;
+  name: string;
+  wallets: number;
 }
 
 /**
@@ -26,12 +32,31 @@ type WalletInfo = {
  */
 interface IWallet {
   
-  changeNetwork (network: string, seed?: string): void;
+  // TODO: set pk in Buffer
+  changeNetwork (network: string, pk?: any): void;
   
-  create (seed: string): Promise<string>;
+  // TODO: set pk in Buffer
+  create (pk: any): Promise<any>;
   
   getAddress (): string;
   getInfo (): Promise<BCInfo>;
   
   sendCoins({ to, amount, data }): Promise<any>;
+}
+
+/**
+ * Options to create Account instance
+ */
+interface IAccountFactory {
+  bc?: string;
+  network?: string;
+  data?: string;
+  key?: string;
+  name?: string;
+  extra?: any;
+  segwit?: boolean;
+}
+
+interface IAccountCreate extends IAccountFactory {
+  wallet?: IWallet;
 }

@@ -1,26 +1,30 @@
 import { setLevel } from 'loglevel';
 
-import { BusController } from './app/busController';
-import { AccessController } from './app/accessController';
-import { MessageController } from './app/messageController';
-import { DomainController } from './app/domainController';
+import { BusController } from 'app/busController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { DomainController } from 'app/domainController';
+import { CacheController } from 'app/cacheController';
 
-import { AccountController } from './app/account/accountController';
-import { ProfileController } from './app/profiles/profileController';
-import { ProfileListController } from './app/profiles/profileListController';
+import { KeyController } from 'app/keyController';
+import { AccountController } from 'app/account/accountController';
+import { ProfileController } from 'app/profiles/profileController';
+import { ProfileListController } from 'app/profiles/profileListController';
 
-import { TransactionController } from './app/transactionController';
-import { EthereumController } from './app/ethereumController';
-import { EosController } from './app/eos';
-import { BtcController } from './app/btcController';
+import { TransactionController } from 'app/transactionController';
+import { EthereumController } from 'app/ethereumController';
+import { EosController } from 'app/eos';
+import { BtcController } from 'app/btcController';
 
-import { SettingsController } from './app/settings/settingsController';
+import { SettingsController } from 'app/settings/settingsController';
 
 class Controller {
   private busController: BusController;
   private accessController: AccessController;
   private messageController: MessageController;
   private domainController: DomainController;
+  private keyController: KeyController;
+  private cacheController: CacheController;
   
   private accountController: AccountController;
   private profileController: ProfileController;
@@ -52,18 +56,16 @@ class Controller {
       messageController: this.messageController,
     });
 
+    this.keyController = new KeyController();
+    this.cacheController = new CacheController();
+
     this.accountController = new AccountController({
       busController: this.busController,
       messageController: this.messageController,
       accessController: this.accessController,
-      domainController: this.domainController
-    });
-
-    this.profileListController = new ProfileListController({
-      busController: this.busController,
-      messageController: this.messageController,
-      accessController: this.accessController,
-      accountController: this.accountController,
+      domainController: this.domainController,
+      keyController: this.keyController,
+      cacheController: this.cacheController
     });
 
     this.profileController = new ProfileController({
@@ -71,7 +73,13 @@ class Controller {
       messageController: this.messageController,
       accessController: this.accessController,
       accountController: this.accountController,
-      profileListController: this.profileListController,
+      keyController: this.keyController
+    });
+
+    this.profileListController = new ProfileListController({
+      accessController: this.accessController,
+      messageController: this.messageController,
+      profileController: this.profileController
     });
 
     this.settingsController = new SettingsController({
@@ -88,21 +96,27 @@ class Controller {
     
     this.btcController = new BtcController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController
     });
 
     this.ethereumController = new EthereumController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController
     });
 
     this.eosController = new EosController({
       messageController: this.messageController,
-      accessController: this.accessController,
       accountController: this.accountController,
+      busController: this.busController,
+      keyController: this.keyController
     })
+
+    this.booststrap();
+  }
+
+  private booststrap () {
+    this.profileListController.init();
+    this.cacheController.init();
   }
 }
 

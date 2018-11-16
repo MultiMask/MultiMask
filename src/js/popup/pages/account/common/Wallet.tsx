@@ -42,7 +42,7 @@ class Wallet extends React.Component<any, any> {
       data: {
         info: { address, balance, network },
         blockchain,
-        id
+        key
       },
       menu,
       actions,
@@ -65,7 +65,7 @@ class Wallet extends React.Component<any, any> {
             className={css`
               text-decoration: none;
             `}
-            to={`/account/edit/${id}`}
+            to={`/account/edit/${key}`}
           >
             <Sing>{network}</Sing>
           </Link>
@@ -87,7 +87,7 @@ class Wallet extends React.Component<any, any> {
           {actions}
         </WalletContent>
       </WalletContainer>
-    )
+    );
   }
 }
 

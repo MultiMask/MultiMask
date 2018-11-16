@@ -1,6 +1,6 @@
 import { LocalStream } from 'extension-streams';
 
-interface InternalMessageResponse {
+export interface InternalMessageResponse {
   type: string;
   payload: any;
 }

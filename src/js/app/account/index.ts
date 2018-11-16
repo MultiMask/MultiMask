@@ -1,53 +1,65 @@
-import uuid from 'uuid/v4';
 import { info } from 'loglevel';
-import { BCSign } from 'bcnetwork';
+
+const DEFAULT_DATA = '020';     // mean use profile seed and index 0
 
 export default class Account {
-  private secret: any;
-  
   public wallet: any;
   
-  public blockchain: BCSign;
-  public id: string;
+  public bc: string;
+  public network: string;
+  
   public name: string;
   public extra: any;
+  public data: string;
+  public key: string;
 
-  constructor ({ wallet, blockchain, name, extra, secret = { seed: null }, id = uuid() }) {
-    this.name = name ? name : this._createName();
-    
-    this.blockchain = blockchain;
-    this.id = id;
-    this.secret = secret;
+  constructor ({ bc, name, extra, key, wallet, network, data = '020'}: IAccountCreate) {
+    this.name = name ? name : Date.now().toString();
+
+    this.bc = bc;
+    this.network = network;
     this.extra = extra;
-    
+    this.data = data;
+    this.key = key;
+
     this.wallet = wallet;
     if (this.extra && this.wallet.setExtra) {
       this.wallet.setExtra(this.extra);
     }
   }
-  
-  private _create (seed) {
-    return this.wallet.create(seed);
-  }
-  
-  private _createName () {
-    return Date.now();
+
+  /**
+   * Create 
+   * @param privateKey 
+   */
+  public init (privateKey): Promise<Account> {
+    return this.wallet.create(privateKey, this.network)
+      .then(() => this);
   }
 
-  public init (): Promise<Account> {
-    return this._create(this.secret.seed)
-      .then(seed => {
-        this.secret.seed = seed; 
-        
-        return this;
-      });
-  }
- 
-  public getSeed () {
-    return this.secret.seed;
+  public changeNetwork (network: string, privateKey) {
+    this.network = network;
+    this.wallet.changeNetwork(network, privateKey)
   }
 
-  public getAddress () {
+  public setExtra (data: any): void {
+    this.extra = data;
+
+    if (this.wallet.setExtra) {
+      this.wallet.setExtra(data);
+    }
+  }
+
+  /**
+   * Send transaction with params to pay
+   * @param tx 
+   */
+  public sendTX (tx): Promise<any> {
+    info('Sending tx > ', this.bc, this.name, tx);
+    return this.wallet.sendCoins(tx);
+  }
+
+  public getAddress (): string {
     return this.wallet.getAddress();
   }
 
@@ -56,41 +68,11 @@ export default class Account {
    */
   public getInfo (): Promise<WalletInfo> {
     return this.wallet.getInfo().then(info => ({
-      id: this.id,
+      key: this.key,
       name: this.name,
-      blockchain: this.blockchain,
+      blockchain: this.bc,
       extra: this.extra,
       info
     }));
-  }
-
-  public changeNetwork (network: string) {
-    this.wallet.changeNetwork(network, this.secret.seed)
-  }
-
-  public sendTX (tx) {
-    info('Sending tx > ', this.blockchain, this.name, tx);
-    return this.wallet.sendCoins(tx);
-  }
-
-  public setExtra (data) {
-    this.extra = data;
-
-    if (this.wallet.setExtra) {
-      this.wallet.setExtra(data);
-    }
-  }
-
-  public serialize () {
-    return {
-      id: this.id,
-      name: this.name,
-      blockchain: this.blockchain,
-      extra: this.extra,
-
-      secret: {
-        seed: this.secret.seed
-      }
-    };
   }
 }

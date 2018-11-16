@@ -1,33 +1,33 @@
 import { info } from 'loglevel';
 
-import { ProfileListController } from './profileListController';
+import { BusController } from 'app/busController';
+import { KeyController } from 'app/keyController';
+import { AccessController } from 'app/accessController';
+import { MessageController } from 'app/messageController';
+import { AccountController } from 'app/account/accountController';
 
-import {BusController} from './../busController';
-import { AccessController } from './../accessController';
-import { MessageController } from './../messageController';
+import { Profile } from 'models/Profile';
+import { StorageService } from 'services/StorageService';
 
-import {AccountController} from './../account/accountController';
-import AccountFactory from './../account/accountFactory';
-import { Profile } from './Profile';
-
-import { ACCOUNT_INFO, ACCOUNT_CREATE, ACCOUNT_GETSEED, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
-import { PROFILE_SELECT } from 'constants/profile';
+import { ACCOUNT_CREATE, ACCOUNT_IMPORT, ACCOUNT_UPDATE } from 'constants/account';
 
 export class ProfileController {
+  private profile: Profile;
+
   private accessController: AccessController;
   private busController: BusController;
   private messageController: MessageController;
+  private keyController: KeyController;
 
-  private profileListController: ProfileListController;
   private accountController: AccountController;
 
   constructor (opts) {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
+    this.keyController = opts.keyController;
     
     this.accountController = opts.accountController;
-    this.profileListController =  opts.profileListController;
 
     this.startListening();
   }
@@ -36,59 +36,10 @@ export class ProfileController {
    * Messages
    */
   private startListening () {
-    this.messageController.on(ACCOUNT_INFO, this.getAccounts);
-    this.messageController.on(ACCOUNT_CREATE, this.addAccount);
-    this.messageController.on(ACCOUNT_GETSEED, this.getSeed);
-    this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.updateAccountNetwork);
+    this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
+    this.messageController.on(ACCOUNT_IMPORT, this.responseImportAccount);
 
-    this.busController.on(PROFILE_SELECT, this.restoreProfile);
-  }
-
-  private getPass () {
-    return this.accessController.getPass();
-  }
-
-  /**
-   * Return accounts for current Profile
-   * @param sendResponse
-   */
-  public getAccounts = (sendResponse): void => {
-    const resolver = this.profileListController.getCurrent()
-      ? Promise.resolve(this.accountController.getAccounts())
-      : this.init();
-
-    resolver
-      .then(accounts => {
-        return Promise.all(accounts.map(account => account.getInfo()));
-      })
-      .then(sendResponse);
-  }
-
-  /**
-   * Get profiles list and restore first or create new
-   */
-  private init () {
-    return this.profileListController.init()
-      .then(this.restoreProfile);
-  }
-
-  /**
-   * Restore all accounts from Profile
-   * @param {Profile} profile
-   */
-  private restoreProfile = (profile: Profile) => {
-    info('Profile changed > ', profile);
-    return this.restoreAccounts(profile.getAccounts());
-    // return this.restoreAccounts([profile.getAccounts());
-  }
-
-  /**
-   * Restore all accounts from store
-   * @param accountIds
-   */
-  private restoreAccounts = (accountIds: string[]) => {
-    this.accountController.clearList();
-    return this.accountController.restore(accountIds, this.getPass());
+    this.busController.on(ACCOUNT_UPDATE, this.responseUpdateAccount);
   }
 
   /**
@@ -96,45 +47,113 @@ export class ProfileController {
    * @param sendResponse 
    * @param accountData 
    */
-  public addAccount = (sendResponse, accountData): Promise<void> => {   
-    const profile = this.profileListController.getCurrent();
-    let account = null;
+  private responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
+    this.profile.addWallet(bc);
+    this.updateKeysAndAccounts();
 
-    return AccountFactory.create(accountData)
-      .init()
-      .then(createdAccount => {
-        account = createdAccount;
+    this.save(this.profile);
 
-        return profile.addAccount(this.getPass(), account)
-      })
-      .then(() => {
-        AccountFactory.save(this.getPass(), account);
-        this.accountController.addAccountInstance(account);
-  
-        this.getAccounts(sendResponse);
-      })
+    sendResponse({
+      success: true,
+    });
   }
 
   /**
-   * Update account's wallet network
-	 * @param sendResponse
-   * @param accountData
+   * Import seed or PK 
    */
-  public updateAccountNetwork = (sendResponse, accountData: {id: string, network: string}): void => {
-    const account = this.accountController.getAccount({ id: accountData.id });
-    account.changeNetwork(accountData.network)
+  private responseImportAccount = (sendResponse: InternalResponseFn, { payload: {bc, privateKey}}) => {
+    this.profile.addWallet(bc, privateKey);
+    
+    this.updateKeysAndAccounts();
+    this.save(this.profile);
 
-    AccountFactory.save(this.getPass(), account)
-
-    this.getAccounts(sendResponse);
+    sendResponse({
+      success: true,
+    });
   }
-  
+
+  private responseUpdateAccount = (key: string, data, cb) => {
+    this.profile.updateWallet(key, data);
+
+    this.updateKeysAndAccounts();
+    this.save(this.profile);
+
+    if (cb) {
+      cb();
+    }
+  }
+
   /**
-   * Return seed for Wallet to export
-   * @param sendResponse 
+   * Update accounts and keys
+   */
+  private updateKeysAndAccounts () {
+    const profileData = this.profile.getKeysAndAccounts();
+    
+    this.keyController.assignKeys( profileData.keys );
+    this.accountController.assignAccounts( profileData.accounts );
+  }
+      
+  /**
+   * Restore all accounts from Profile
+   * @param {Profile} profile
+   */
+  public activateProfile = async (profileId: string) => {
+    this.profile = Profile.fromJSON(await StorageService.Entities.get(profileId));
+    this.profile.decode(this.accessController.decode);
+
+    this.updateKeysAndAccounts();
+    return this.profile.id;
+  }
+
+  /**
+   * Save profile in storage
+   * @param profile 
+   */
+  public save (profile: Profile) {
+    const encodedProfile = profile.getEncodedData(this.accessController.encode);
+
+    return StorageService.Entities.set(encodedProfile.id, encodedProfile);
+  }
+
+  /**
+   * Updaate profile name in current instane and in storage
+   * @param id 
+   * @param name 
+   */
+  public updateName (id: string, name: string) {
+    if (id === this.profile.id) {
+      this.profile.name = name;
+    }
+
+    return StorageService.Entities.get(id)
+      .then((profile) => {
+        profile.name = name;
+        
+        return StorageService.Entities.set(id, profile);
+      })
+  }
+
+  /**
+   * Unload profile from memory
+   */
+  public clear () {
+    this.accountController.clearList();
+    this.keyController.clear();
+
+    this.profile = null;
+  }
+
+  /**
+   * Return encrypted profile
    * @param id 
    */
-  public getSeed = (sendResponse, id): void => {
-    sendResponse(this.accountController.getSeed(id));
+  public export (id: string): Promise<string> {
+    return StorageService.Entities.get(id)
+      .then(profileData => {
+        const profile = Profile.fromJSON(profileData);
+        profile.decode(this.accessController.decode);
+
+        return this.accessController.encode(JSON.stringify(profile));
+      })
   }
 }

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Icon from '../../../ui/components/Icon';
+import Icon from 'ui/components/Icon';
 
-import accountActions from '../../../actions/account';
-import priceActions from '../../../actions/prices';
+import accountActions from 'popup/actions/account';
+import priceActions from 'popup/actions/prices';
 
 class AccountFastView extends React.Component<any, any> {
   get image () {
@@ -22,7 +22,7 @@ class AccountFastView extends React.Component<any, any> {
   public handleClick = () => {
     const { account, setActive } = this.props;
 
-    setActive(account.name);
+    setActive(account.key);
   };
 
   public render () {
@@ -48,8 +48,12 @@ class AccountFastView extends React.Component<any, any> {
 
 export default connect(
   null,
-  dispatch => bindActionCreators({
-    ...accountActions,
-    ...priceActions
-  }, dispatch)
+  dispatch =>
+    bindActionCreators(
+      {
+        ...accountActions,
+        ...priceActions
+      },
+      dispatch
+    )
 )(AccountFastView);

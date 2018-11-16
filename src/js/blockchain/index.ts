@@ -1,3 +1,5 @@
+export { BCList } from './bp44list';
+
 export enum BCSign {
   BTC = 'BTC',
   ETH = 'ETH',
@@ -9,10 +11,11 @@ export default {
     name: 'Bitcoin',
     sign: BCSign.BTC,
     network: [
-      // {
-      // 	name: 'Mainnet',
-      // 	sign: 'mainnet'
-      // },
+      {
+        name: 'Mainnet',
+        sign: 'mainnet',
+        url: 'https://blockchain.info'
+      },
       {
         name: 'Testnet',
         sign: 'testnet',
@@ -55,7 +58,7 @@ export default {
         name: 'Jungle Testnet',
         sign: 'testnet',
         chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
-        url: 'http://193.93.219.219:8888'
+        url: 'http://jungle.cryptolions.io:18888'
       }
     ]
   }

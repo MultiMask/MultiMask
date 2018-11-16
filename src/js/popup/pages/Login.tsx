@@ -20,13 +20,13 @@ const styles = {
 };
 
 class Auth extends React.Component<any, any> {
-  constructor(opts) {
-    super(opts);
+  private input = React.createRef<any>();
+  public state = {
+    pass: ''
+  };
 
-    this.state = {
-      pass: '',
-      error: ''
-    };
+  public componentDidMount () {
+    this.input.current.focus();
   }
 
   public handleInput = e => {
@@ -38,7 +38,7 @@ class Auth extends React.Component<any, any> {
     this.props.login(this.state.pass);
   };
 
-  public render() {
+  public render () {
     return (
       <React.Fragment>
         <Typography color="main" variant="subheading" align="center">
@@ -46,13 +46,14 @@ class Auth extends React.Component<any, any> {
         </Typography>
         <form onSubmit={this.handleDone} className={styles.form}>
           <TextField
+            inputRef={this.input}
             className={styles.textField}
             label="Enter password"
             type="password"
             name="pass"
             onChange={this.handleInput}
             value={this.state.pass}
-            error={this.props.error}
+            error={this.props.error ? 'Wrong password' : null}
             fullWidth
           />
           <Button fullWidth className={styles.button} type="submit">

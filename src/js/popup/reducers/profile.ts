@@ -1,28 +1,27 @@
 import { PROFILE_GETLIST_RESULT, PROFILE_SELECT_RESULT, PROFILE_IMPORT_SET } from '../../constants/profile';
 
-const initialState = {
+const initialState: IPopup.State.Profile = {
   list: [],
-  selectedId: '',
-  importProfile: null
+  current: '',
+  onImport: null
 };
 
-export default function accountReducer(state = initialState, action) {
+export default function accountReducer (state: IPopup.State.Profile = initialState, action) {
   switch (action.type) {
     case PROFILE_GETLIST_RESULT:
       return {
         ...state,
-        list: action.payload.list,
-        selectedId: action.payload.profileId
+        ...action.payload
       };
     case PROFILE_SELECT_RESULT:
       return {
         ...state,
-        selectedId: action.payload.profileId
+        current: action.payload.current
       };
     case PROFILE_IMPORT_SET:
       return {
         ...state,
-        importProfile: action.payload
+        onImport: action.payload
       };
     default:
       return state;

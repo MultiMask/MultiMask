@@ -57,60 +57,53 @@ const styles = {
   `
 };
 
-class MainLayout extends React.Component<any, any> {
-  public componentDidMount () {
-    this.props.check();
-  }
+const MainLayout = props => {
+  const {
+    logout,
+    children,
+    goBack,
+    goMain,
+    needAuth,
+    location: { pathname },
+    openDomainControl
+  } = props;
 
-  public render () {
-    const {
-      logout,
-      children,
-      goBack,
-      needAuth,
-      location: { pathname },
-      openDomainControl
-    } = this.props;
-
-    return (
-      <Container>
-        <Header>
-          <HeaderItem color="secondary">
-            {pathname !== '/wallets/create' && (
-              <Link to="wallets/create">
-                <Icon className={styles.icon} name="plus-circle" />
-              </Link>
-            )}
-            <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
-              <MenuItem onClick={openDomainControl}>Domain Control</MenuItem>
-              <MenuItem component={Link} to="/profiles">
-                Profiles
-              </MenuItem>
-              <MenuItem component={Link} to="/settings">
-                Settings
-              </MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
-            </Menu>
-          </HeaderItem>
-
-          {pathname !== '/' && (
-            <HeaderItem onClick={goBack}>
-              <FontAwesome name="chevron-left" />
-              <Typography className={styles.buttonText} color="primary">
-                Back
-              </Typography>
-            </HeaderItem>
+  return (
+    <Container>
+      <Header>
+        <HeaderItem color="secondary">
+          {pathname !== '/wallets/create' && (
+            <Link to="wallets/create">
+              <Icon className={styles.icon} name="plus-circle" />
+            </Link>
           )}
-        </Header>
-        {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
-      </Container>
-    );
-  }
-}
+          <Menu iconProps={{ className: styles.icon, color: 'secondary', name: 'cog' }}>
+            <MenuItem onClick={openDomainControl}>Domain Control</MenuItem>
+            <MenuItem component={Link} to="/profiles">
+              Profiles
+            </MenuItem>
+            <MenuItem component={Link} to="/settings">
+              Settings
+            </MenuItem>
+            <MenuItem onClick={logout}>Logout</MenuItem>
+          </Menu>
+        </HeaderItem>
 
-export default withRouter(
-  connect(
-    null,
-    dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
-  )(MainLayout)
-);
+        {pathname !== '/' && (
+          <HeaderItem onClick={goMain}>
+            <FontAwesome name="chevron-left" />
+            <Typography className={styles.buttonText} color="primary">
+              Back
+            </Typography>
+          </HeaderItem>
+        )}
+      </Header>
+      {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
+    </Container>
+  );
+};
+
+export default withRouter(connect(
+  null,
+  dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
+)(MainLayout) as any);

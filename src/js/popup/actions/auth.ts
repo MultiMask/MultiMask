@@ -1,3 +1,4 @@
+import { info } from 'loglevel';
 import { push } from 'connected-react-router';
 import InternalMessage from 'services/InternalMessage';
 
@@ -13,13 +14,16 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
+import { URL_MAIN, URL_LOADING, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl'
+
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
 import SettingActions from './settings';
+import ProfileActions from './profile';
 
 const AuthActions = {
   init: pass => (dispatch, getState) => {
-    InternalMessage.payload(AUTH_INIT, { pass })
+    return InternalMessage.payload(AUTH_INIT, { pass })
       .send()
       .then(() => {
         AuthActions.success()(dispatch, getState);
@@ -27,7 +31,7 @@ const AuthActions = {
   },
 
   check: () => (dispatch, getState) => {
-    InternalMessage.signal(AUTH_CHECK)
+    return InternalMessage.signal(AUTH_CHECK)
       .send()
       .then(({ isAuth }) => {
         if (isAuth) {
@@ -43,7 +47,7 @@ const AuthActions = {
                 hasPass
               }
             });
-            const next = hasPass ? '/login' : '/create/account';
+            const next = hasPass ? URL_LOGIN : '/create/account';
             dispatch(push(next));
           });
         }
@@ -51,7 +55,7 @@ const AuthActions = {
   },
 
   login: pass => (dispatch, getState) => {
-    InternalMessage.payload(AUTH_LOGIN, { pass })
+    return InternalMessage.payload(AUTH_LOGIN, { pass })
       .send()
       .then(({ isLogin }) => {
         if (isLogin) {
@@ -63,14 +67,14 @@ const AuthActions = {
   },
 
   logout: () => (dispatch, getState) => {
-    InternalMessage.signal(AUTH_LOGOUT)
+    return InternalMessage.signal(AUTH_LOGOUT)
       .send()
       .then(({ payload: { isLogout } }) => {
         if (isLogout) {
           dispatch({
             type: AUTH_LOGOUT_SUCCESS
           });
-          dispatch(push('/login'));
+          dispatch(push(URL_LOGIN));
         } else {
           dispatch({
             type: AUTH_LOGOUT_FAIL
@@ -78,11 +82,42 @@ const AuthActions = {
         }
       });
   },
+  
+  success: () => async (dispatch, getState) => {
+    dispatch(push(URL_LOADING));
+    const { success, payload } = await ProfileActions.getCurrentProfile()(dispatch, getState);
+    
+    // No profile: new user
+    if (!success) {
+      info('No profile');
+      return dispatch(push(URL_INTRODUCTION));
+    }
+    
+    const { profileId } = payload;
+    AuthActions.entrance(profileId)(dispatch, getState);
+  },
 
-  success: () => (dispatch, getState) => {
-    AccountActions.getInfo()(dispatch, getState);
-    SettingActions.getPrices()(dispatch, getState);
-    dispatch(push('/'));
+  entrance: (profileId, forceRedirect = false) => async (dispatch, getState) => {
+    const { success: activate } = await ProfileActions.select(profileId)(dispatch, getState);
+
+    // Error with profile: create new
+    if (!activate) {
+      info('Fail on activate profile', profileId)
+      return dispatch(push(URL_INTRODUCTION));
+    }
+    
+    Promise.all([
+      AccountActions.getInfo()(dispatch, getState),
+      SettingActions.getPrices()(dispatch, getState)
+    ]).then(() => {
+      const state: IPopup.AppState = getState();
+      const url = forceRedirect
+        ? URL_MAIN
+        : (state && state.router && state.router.url ? state.router.url : URL_MAIN);
+      
+      info('Restore url > ', url);
+      dispatch(push(url));
+    })
   },
 
   fail: () => (dispatch, getState) => {

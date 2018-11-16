@@ -1,11 +1,12 @@
 export interface IEosAccountPermission {
   account_name: string;
   permission: string;
-  parent: string;
-  core_liquid_balance: string;
+  parent?: string;
+  core_liquid_balance?: string;
 }
 
 export const prettyAccount = (account: IEosAccountPermission) => `${account.account_name}@${account.permission}`;
+export const parsePrettyAccount = (account: string) => account.split('@');
 
 export const parseAccounts = (accountInfo: any[], publicKey): IEosAccountPermission[] => {
   if (!accountInfo) {
