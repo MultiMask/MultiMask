@@ -17,6 +17,8 @@ class EOSSender implements ISender {
   public readonly from: string;
   public readonly data: string;
   public readonly amount: number;
+  public readonly blockchainType: BCType;
+  public readonly chainId: number;
 
   constructor ({ from, to, data, amount }: ISenderParams) {
     this.from = from;
