@@ -3,6 +3,7 @@ export interface ISender {
   from: string;
   data?: string;
   amount: number;
+  chainId: number | string;
   send<T>();
 }
 
@@ -12,11 +13,12 @@ export interface ISenderParams {
   amount: number;
   data?: string;
   blockchainType: BCType;
+  chainId: number | string;
 }
 
 export interface IIdentityProps {
   address: string;
   blockchain: BCType;
-  chainId: number;
+  chainId: number | string;
   amount: number;
 }

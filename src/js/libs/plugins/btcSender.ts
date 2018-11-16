@@ -7,12 +7,14 @@ class BTCSender implements ISender {
   public readonly from: string;
   public readonly data: string;
   public readonly amount: number;
+  public readonly chainId: number;
 
   constructor ({ from, to, data, amount }: ISenderParams) {
     this.from = from;
     this.to = to;
     this.data = data;
     this.amount = amount * 1e8; // convert to Satoshi
+    this.chainId = this.chainId;
   }
 
   public async send (): Promise<string | Error> {

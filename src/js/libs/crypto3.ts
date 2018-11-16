@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import { ACCOUNT_INFO_DOMAIN } from '../constants/account';
+import blockchainsConfig from '../blockchain/index';
 import BTC from './plugins/btcPlugin';
 import Eth from './plugins/ethPlugin';
 import EOS from './plugins/eosPlugin';
@@ -73,14 +74,20 @@ export class Crypto3 {
 
   public async getIdentity (entity: IIdentityProps): Promise<ISenderParams | Error> {
     const accounts = (await _send(ACCOUNT_INFO_DOMAIN)) as WalletInfo[];
-    const account = accounts.find(item => item.blockchain === entity.blockchain && item.info.balance >= entity.amount);
+    const account = accounts.find(
+      item =>
+        item.blockchain === entity.blockchain &&
+        item.info.balance >= entity.amount &&
+        entity.chainId === blockchainsConfig[item.blockchain].network[item.info.network].chainId
+    );
 
     if (account) {
       return {
         to: entity.address,
         from: account.info.address,
         amount: entity.amount,
-        blockchainType: account.blockchain
+        blockchainType: account.blockchain,
+        chainId: entity.chainId
       };
     }
 

@@ -48,9 +48,9 @@ class EOSSender implements ISender {
             }
           ],
           data: {
-            from: 'ducone',
-            to: 'eosio',
-            quantity: '0.1300 EOS',
+            from: this.from,
+            to: this.to,
+            quantity: this.amount, // '0.1300 EOS',
             memo: ''
           }
         }
