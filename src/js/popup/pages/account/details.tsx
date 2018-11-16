@@ -71,9 +71,9 @@ class AccountInfo extends React.Component<IProps, any> {
                 {this.bcMenuItems()}
                 <MenuItem>View Account</MenuItem>
                 <MenuItem>Show QR-code</MenuItem>
-                <MenuItem component={Link} to="/account/exportpk">
+                {/* <MenuItem component={Link} to="/account/exportpk">
                   Export Private Key
-                </MenuItem>
+                </MenuItem> */}
               </Menu>
             </React.Fragment>
           }
