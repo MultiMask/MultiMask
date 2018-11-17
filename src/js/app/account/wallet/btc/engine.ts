@@ -1,5 +1,6 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { isString } from 'lodash';
+import { NetworkType, BIP32 } from 'bip32';
 
 interface IWalletCrypto {
   private: string;
@@ -8,18 +9,33 @@ interface IWalletCrypto {
 }
 
 export class BTCEngine {
-  public static createWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
-    const keyPair = isString(pk)
-      ? bitcoin.ECPair.fromWIF(pk)
-      : bitcoin.bip32.fromSeed(pk, network).keyPair;
+  public static createWallet (pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
+    console.log(pk);
+    if (isString(pk)) {
 
-    return Promise.resolve({
-      private: keyPair.toWIF(),
-      address: keyPair.getAddress(),
-    });
+    } else {
+      const privateKey = pk.privateKey;
+      const publicKey = pk.publicKey;
+
+      const address = bitcoin.payments.p2pkh({ pubkey: publicKey, network }).address;
+
+      console.log(privateKey.toString('hex'))
+      console.log(publicKey.toString('hex'))
+      console.log(address)
+
+      return Promise.resolve({
+        private: privateKey.toString('hex'),
+        address,
+      });
+    }
+
+
+    // const keyPair = isString(pk)
+    //   ? bitcoin.ECPair.fromWIF(pk)
+    //   : bitcoin.bip32.fromSeed(pk, network);
   }
 
-  public static createSegWitWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
+  public static createSegWitWallet (pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
     const keyPair = isString(pk)
       ? bitcoin.ECPair.fromWIF(pk)
       : bitcoin.bip32.fromSeed(pk, network).keyPair;
@@ -36,5 +52,24 @@ export class BTCEngine {
       address,
       scriptPubkey
     });
+
+    // console.log(pk);
+    // if (isString(pk)) {
+
+    // } else {
+    //   const privateKey = pk.privateKey;
+    //   const publicKey = pk.publicKey;
+
+    //   const address = bitcoin.payments.p2pkh({ pubkey: publicKey, network }).address;
+
+    //   console.log(privateKey.toString('hex'))
+    //   console.log(publicKey.toString('hex'))
+    //   console.log(address)
+
+    //   return Promise.resolve({
+    //     private: privateKey.toString('hex'),
+    //     address,
+    //   });
+    // }
   }
 }

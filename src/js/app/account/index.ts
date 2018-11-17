@@ -6,7 +6,7 @@ export default class Account {
   public wallet: any;
   
   public bc: string;
-  public network: string;
+  public network: any;
   
   public name: string;
   public extra: any;
@@ -32,7 +32,11 @@ export default class Account {
    * Create 
    * @param privateKey 
    */
-  public init (privateKey): Promise<Account> {
+  public init (privateKey, net?): Promise<Account> {
+    if (net) {
+      this.network = net;
+    }
+
     return this.wallet.create(privateKey, this.network)
       .then(() => this);
   }

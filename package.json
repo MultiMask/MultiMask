@@ -68,6 +68,7 @@
     "@babel/preset-stage-0": "^7.0.0",
     "@babel/runtime": "^7.0.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/bip32": "^1.0.0",
     "@types/bip39": "^2.4.0",
     "@types/ethereumjs-tx": "^1.0.0",
     "@types/ethereumjs-util": "^5.2.0",

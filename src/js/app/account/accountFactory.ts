@@ -26,7 +26,8 @@ export class AccountFactory {
   public static create (opts: IAccountFactory) {
     const { bc, network: forceNetwork } = opts;
     const wallet = createWallet({ bc });
-    const network = forceNetwork || ntx[bc].network[0].sign;
+    const networkSign = forceNetwork || ntx[bc].network[0].sign;
+    const network = ntx[bc].network.find(nt => nt.sign === networkSign);
 
     return new Account({ ...opts, wallet, network });
   }

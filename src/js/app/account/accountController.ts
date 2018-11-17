@@ -2,6 +2,7 @@ import { info } from 'loglevel';
 
 import Account from './';
 import { AccountFactory } from './accountFactory';
+import ntx from 'bcnetwork';
 
 import { BusController } from 'app/busController';
 import { MessageController } from 'app/messageController';
@@ -72,7 +73,10 @@ export class AccountController {
   private responseChangeNetwork = (sendResponse: InternalResponseFn, {address, network}): void => {
     const account = this.getAccount({ address });
 
-    account.changeNetwork(network, this.keyController.derivePrivateKey(account));
+    const net = ntx[account.bc].network.find(nt => nt.sign === network);
+  
+    account.init(this.keyController.derivePrivateKey(account), net);
+    // account.changeNetwork(network, this.keyController.derivePrivateKey(account));
     this.cacheController.set(`wallet.${account.key}.network`, network);
 
     sendResponse({
