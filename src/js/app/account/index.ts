@@ -37,7 +37,7 @@ export default class Account {
     if (net) {
       this.network = net;
     }
-
+    
     return this.wallet.create(privateKey, this.network)
       .then(() => this);
   }

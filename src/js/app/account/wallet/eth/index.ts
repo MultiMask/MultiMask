@@ -1,10 +1,9 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
-import EthEngine from './engine';
-import networks from 'bcnetwork'
 import { BIP32 } from 'bip32';
 
 import { IWallet, INetwork } from 'types/accounts';
+import EthEngine from './engine';
 
 const web3 = new Web3();
 

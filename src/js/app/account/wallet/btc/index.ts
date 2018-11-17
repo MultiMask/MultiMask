@@ -14,7 +14,7 @@ export class BitcoinWallet implements IWallet {
   public address: any;
   public scriptPubkey;      // segWit scriptPubkey
 
-  public segWit = true;
+  public segWit = false;
 
   /**
    * Create PK, address

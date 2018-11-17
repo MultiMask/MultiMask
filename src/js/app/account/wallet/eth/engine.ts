@@ -28,10 +28,6 @@ export default class Engine {
     } else {
       const pkHex = ethUtil.bufferToHex(pk.privateKey);
 
-      console.log('private', pkHex);
-      console.log('public', ethUtil.bufferToHex(ethUtil.privateToPublic(pk.privateKey)))
-      console.log('address', ethUtil.bufferToHex(ethUtil.privateToAddress(pk.privateKey)))
-
       return {
         address: this.getEthereumAddress(pkHex),
         privateKey: pk

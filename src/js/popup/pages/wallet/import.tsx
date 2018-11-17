@@ -108,7 +108,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
     return (
       <FormLayout
         onSubmit={this.handleCheck}
-        title="Input your Seed or PrivateKey:"
+        title="Input your PrivateKey:"
         onBack={this.props.onBack}
         submitButtonTitle="Check"
       >
