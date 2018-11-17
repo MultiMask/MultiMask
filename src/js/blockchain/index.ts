@@ -16,13 +16,15 @@ export default {
         name: 'Mainnet',
         sign: 'mainnet',
         url: 'https://blockchain.info',
-        btc: bitcoin.networks.bitcoin
+        btc: bitcoin.networks.bitcoin,
+        chainId: 'mainnet'
       },
       {
         name: 'Testnet',
         sign: 'testnet',
         url: 'https://testnet.blockchain.info',
-        btc: bitcoin.networks.testnet
+        btc: bitcoin.networks.testnet,
+        chainId: 'testnet'
       }
     ]
   },
@@ -33,6 +35,7 @@ export default {
       // {
       //   name: 'Main',
       //   sign: 'main',
+      //   url: 'https://mainnet.infura.io/',
       //   chainId: 1
       // },
       {

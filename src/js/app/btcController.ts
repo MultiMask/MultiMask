@@ -15,10 +15,10 @@ export class BtcController {
   constructor (opts) {
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
-    
+
     this.startListening();
   }
-  
+
   /**
    * Messaging
    */
@@ -29,7 +29,7 @@ export class BtcController {
 
   /**
    * Enhance TX and send to
-   * @param data 
+   * @param data
    */
   private responseApproveTx = (sendResponse: InternalResponseFn, data) => {
     const account = this.accountController.getAccount({ address: data.tx.from });
@@ -42,21 +42,28 @@ export class BtcController {
     }
 
     const responder = approval => {
-      if(approval && approval.tx) {
-        
-        account.sendTX(approval.tx).then(TxHash => {
-          sendResponse({
-            success: true,
-            payload: {
-              TxHash
-            }
+      if (approval && approval.tx) {
+        account
+          .sendTX(approval.tx)
+          .then(TxHash => {
+            sendResponse({
+              success: true,
+              payload: {
+                TxHash
+              }
+            });
           })
-        })
+          .catch(error => {
+            sendResponse({
+              success: false,
+              error
+            });
+          });
       }
-    }
+    };
 
     NotificationService.open(new Prompt(APPROVAL, { data, responder }));
-  }
+  };
 
   /**
    * Return list of BTC wallets
@@ -65,5 +72,5 @@ export class BtcController {
     const accounts = this.accountController.getAccounts({ bc: ntx.BTC.sign, domain });
 
     sendReponse(accounts.map(acc => acc.getAddress()));
-  }
+  };
 }
