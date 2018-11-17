@@ -1,5 +1,3 @@
-import { info } from 'loglevel';
-
 import { BusController } from 'app/busController';
 import { KeyController } from 'app/keyController';
 import { AccessController } from 'app/accessController';
@@ -27,7 +25,7 @@ export class ProfileController {
     this.busController = opts.busController;
     this.messageController = opts.messageController;
     this.keyController = opts.keyController;
-    
+
     this.accountController = opts.accountController;
 
     this.startListening();
@@ -46,33 +44,33 @@ export class ProfileController {
 
   /**
    * Create new account in with profile with data
-   * @param sendResponse 
-   * @param accountData 
+   * @param sendResponse
+   * @param accountData
    */
-  private responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc }}) => {   
+  private responseAddAccount = (sendResponse: InternalResponseFn, { payload: { bc } }) => {
     this.profile.addWallet(bc);
     this.updateKeysAndAccounts();
 
     this.save(this.profile);
 
     sendResponse({
-      success: true,
+      success: true
     });
-  }
+  };
 
   /**
-   * Import seed or PK 
+   * Import seed or PK
    */
-  private responseImportAccount = (sendResponse: InternalResponseFn, { payload: {bc, privateKey}}) => {
+  private responseImportAccount = (sendResponse: InternalResponseFn, { payload: { bc, privateKey } }) => {
     this.profile.addWallet(bc, privateKey);
-    
+
     this.updateKeysAndAccounts();
     this.save(this.profile);
 
     sendResponse({
-      success: true,
+      success: true
     });
-  }
+  };
 
   /**
    * Update account params (name)
@@ -86,7 +84,7 @@ export class ProfileController {
     if (cb) {
       cb();
     }
-  }
+  };
 
   /**
    * Response profile seed
@@ -109,11 +107,11 @@ export class ProfileController {
    */
   private updateKeysAndAccounts () {
     const profileData = this.profile.getKeysAndAccounts();
-    
-    this.keyController.assignKeys( profileData.keys );
-    this.accountController.assignAccounts( profileData.accounts );
+
+    this.keyController.assignKeys(profileData.keys);
+    this.accountController.assignAccounts(profileData.accounts);
   }
-      
+
   /**
    * Restore all accounts from Profile
    * @param {Profile} profile
@@ -124,11 +122,11 @@ export class ProfileController {
 
     this.updateKeysAndAccounts();
     return this.profile.id;
-  }
+  };
 
   /**
    * Save profile in storage
-   * @param profile 
+   * @param profile
    */
   public save (profile: Profile) {
     const encodedProfile = profile.getEncodedData(this.accessController.encode);
@@ -138,20 +136,19 @@ export class ProfileController {
 
   /**
    * Updaate profile name in current instane and in storage
-   * @param id 
-   * @param name 
+   * @param id
+   * @param name
    */
   public updateName (id: string, name: string) {
     if (id === this.profile.id) {
       this.profile.name = name;
     }
 
-    return StorageService.Entities.get(id)
-      .then((profile) => {
-        profile.name = name;
-        
-        return StorageService.Entities.set(id, profile);
-      })
+    return StorageService.Entities.get(id).then(profile => {
+      profile.name = name;
+
+      return StorageService.Entities.set(id, profile);
+    });
   }
 
   /**
@@ -166,15 +163,14 @@ export class ProfileController {
 
   /**
    * Return encrypted profile
-   * @param id 
+   * @param id
    */
   public export (id: string): Promise<string> {
-    return StorageService.Entities.get(id)
-      .then(profileData => {
-        const profile = Profile.fromJSON(profileData);
-        profile.decode(this.accessController.decode);
+    return StorageService.Entities.get(id).then(profileData => {
+      const profile = Profile.fromJSON(profileData);
+      profile.decode(this.accessController.decode);
 
-        return this.accessController.encode(JSON.stringify(profile));
-      })
+      return this.accessController.encode(JSON.stringify(profile));
+    });
   }
 }

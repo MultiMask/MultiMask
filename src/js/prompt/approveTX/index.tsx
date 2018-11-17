@@ -36,12 +36,6 @@ interface IAppState {
 
   accounts?: any[];
   account?: any;
-  selectValue?: ISelectOption;
-}
-
-interface ISelectOption {
-  value: string;
-  label: string;
 }
 
 interface IApproveProps {
@@ -55,20 +49,21 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     tx: null,
     blockchain: null,
     accounts: [],
-    account: null,
-    selectValue: null
+    account: null
   };
 
   public componentDidMount () {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
       .then(({ isReady }) => {
-        if (!isReady) { throw new Error('You need to authorize'); }
+        if (!isReady) {
+          throw new Error('You need to authorize');
+        }
 
         return InternalMessage.signal(ACCOUNT_INFO).send();
       })
-      .then(accounts => {
-        this.setAccounts(accounts);
+      .then(res => {
+        this.setAccounts(res.payload.accounts);
         this.setTxInfo(this.props.prompt.data);
       })
       .catch(e => {
@@ -92,8 +87,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       tx: data.tx,
       blockchain: data.blockchain,
       accounts,
-      account,
-      selectValue: this.getOption(account)
+      account
     }));
   }
 
@@ -107,20 +101,10 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       ...state,
       accounts,
       account,
-      selectValue: this.getOption(account),
       isLoaded: true,
       isReady: true
     }));
   }
-
-  public getOption = (account): ISelectOption => {
-    return { value: account.id, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
-  };
-
-  public handleChooseAccount = e => {
-    const { accounts } = this.state;
-    this.setState({ account: accounts.find(account => account.id === e.value), selectValue: e });
-  };
 
   public onSubmit = payload => {
     const { tx } = this.state;
@@ -134,16 +118,6 @@ export default class App extends React.Component<IApproveProps, IAppState> {
   public onReject = () => {
     window.close();
   };
-
-  get options () {
-    if (this.state.accounts) {
-      return this.state.accounts.map((account, idx) => {
-        return this.getOption(account);
-      });
-    }
-
-    return [];
-  }
 
   get amount () {
     const { tx, blockchain } = this.state;
@@ -195,7 +169,9 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public render () {
     // TODO: return loader
-    if (!this.state.isLoaded) { return null; }
+    if (!this.state.isLoaded) {
+      return null;
+    }
 
     // TODO: style this caption
     if (!this.state.isReady || !this.state.tx) {
@@ -209,12 +185,10 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const {
       account: {
         info: { address, balance },
-        blockchain,
-        id
+        blockchain
       },
-      tx: { to, amount, data },
-      tx,
-      selectValue
+      tx: { to, data },
+      tx
     } = this.state;
     const isEth = blockchain === networks.ETH.sign;
 
@@ -228,18 +202,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
               display: flex;
               flex-direction: column;
             `}
-          >
-            <Typography
-              className={css`
-                margin-right: 10px;
-              `}
-              color="main"
-              variant="subheading"
-            >
-              Select wallet:
-            </Typography>
-            <Select options={this.options} onChange={value => this.handleChooseAccount(value)} value={selectValue} />
-          </div>
+          />
           <Typography color="main" variant="subheading">
             Send TX with params:
           </Typography>

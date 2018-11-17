@@ -10,24 +10,22 @@ interface IWalletCrypto {
 export class BTCEngine {
   public static createWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
     const keyPair = isString(pk)
-      ? bitcoin.ECPair.fromWIF(pk)
-      : bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
+      ? bitcoin.ECPair.fromWIF(pk as string)
+      : bitcoin.HDNode.fromSeedBuffer(pk as Buffer, network).keyPair;
 
     return Promise.resolve({
       private: keyPair.toWIF(),
-      address: keyPair.getAddress(),
+      address: keyPair.getAddress()
     });
   }
 
   public static createSegWitWallet (pk: Buffer | string, network?: bitcoin.Network): Promise<IWalletCrypto> {
     const keyPair = isString(pk)
-      ? bitcoin.ECPair.fromWIF(pk)
-      : bitcoin.HDNode.fromSeedBuffer(pk, network).keyPair;
+      ? bitcoin.ECPair.fromWIF(pk as string)
+      : bitcoin.HDNode.fromSeedBuffer(pk as Buffer, network).keyPair;
 
     const scriptPubkey = bitcoin.script.witnessPubKeyHash.output.encode(
-      bitcoin.crypto.hash160(	
-        keyPair.getPublicKeyBuffer()
-      )
+      bitcoin.crypto.hash160(keyPair.getPublicKeyBuffer())
     );
     const address = bitcoin.address.fromOutputScript(scriptPubkey, network);
 

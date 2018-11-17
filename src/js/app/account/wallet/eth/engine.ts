@@ -42,14 +42,14 @@ export default class Engine {
     return ethUtil.privateToPublic(privKey);
   }
 
-  public signEthTx ({ privKey, amount, from, to }) {
+  public signEthTx ({ privKey, amount, from, to, nonce }) {
     const tx = new ethTx({
       to,
       from,
       value: web3.utils.toHex(web3.utils.toBN(amount)),
       gasLimit: web3.utils.toHex(web3.utils.toBN('21000')),
-      gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'gwei')),
-      nonce: web3.utils.toHex(0)
+      gasPrice: web3.utils.toHex(web3.utils.toWei('5', 'gwei')),
+      nonce: web3.utils.toHex(nonce)
     });
     tx.sign(privKey);
     const txSerialized = '0x' + tx.serialize().toString('hex');
