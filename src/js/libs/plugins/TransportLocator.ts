@@ -1,6 +1,6 @@
 import BTCSender from './btcSender';
 import ETHSender from './ethSender';
-import { ISenderParams } from './types';
+import { ISender, ISenderParams } from 'types/crypto3';
 
 enum BlockchainsTypes {
   Eth = 'ETH',

@@ -1,9 +1,11 @@
+import { BCSign } from 'bcnetwork'
+
 export interface ISender {
   to: string;
   from: string;
   data?: string;
   amount: number;
-  send<T>();
+  send<T> ();
 }
 
 export interface ISenderParams {
@@ -11,12 +13,12 @@ export interface ISenderParams {
   to: string;
   amount: number;
   data?: string;
-  blockchainType: BCType;
+  blockchainType: BCSign;
 }
 
 export interface IIdentityProps {
   address: string;
-  blockchain: BCType;
+  blockchain: BCSign;
   chainId: number | string;
   amount: number;
 }

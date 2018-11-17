@@ -1,6 +1,6 @@
 import BTC from './btcPlugin';
 import { _send } from '../crypto3';
-import { ISender, ISenderParams } from './types';
+import { ISender, ISenderParams } from 'types/crypto3';
 
 class BTCSender implements ISender {
   public readonly to: string;

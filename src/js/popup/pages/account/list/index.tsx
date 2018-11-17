@@ -2,6 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { IWalletInfo } from 'types/accounts';
+
 import Icon from 'ui/components/Icon';
 import priceActions from 'popup/actions/prices';
 
@@ -12,12 +14,12 @@ const actions = {
 };
 type IPropsActions = Actions<typeof actions>;
 interface IProps extends IPropsActions {
-  accounts: WalletInfo[];
+  accounts: IWalletInfo[];
   showTotal: boolean;
 }
 
 class AccountList extends React.Component<IProps, {}> {
-  public render () {
+  public render() {
     const { getPrice, getPriceInBTC } = this.props;
 
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {

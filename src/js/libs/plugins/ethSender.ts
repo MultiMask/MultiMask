@@ -1,7 +1,7 @@
 import ETH from './ethPlugin';
 import { _send } from '../crypto3';
 import Web3 from 'web3';
-import { ISenderParams, ISender } from './types';
+import { ISender, ISenderParams } from 'types/crypto3';
 
 class ETHSender implements ISender {
   public readonly to: string;

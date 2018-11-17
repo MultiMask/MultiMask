@@ -1,3 +1,4 @@
+import * as bitcoin from 'bitcoinjs-lib';
 export { BCList } from './bp44list';
 
 export enum BCSign {
@@ -15,18 +16,16 @@ export default {
         name: 'Mainnet',
         sign: 'mainnet',
         url: 'https://blockchain.info',
+        btc: bitcoin.networks.bitcoin,
         chainId: 'mainnet'
       },
       {
         name: 'Testnet',
         sign: 'testnet',
         url: 'https://testnet.blockchain.info',
+        btc: bitcoin.networks.testnet,
         chainId: 'testnet'
       }
-      // {
-      //   name: 'Livenet',
-      //   sign: 'livenet'
-      // }
     ]
   },
   ETH: {

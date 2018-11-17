@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
+import { IWalletInfo } from 'types/accounts';
 import DialogLayout from 'popup/layouts/DialogLayout';
 import { Prompt } from 'models/Prompt';
 import { processForm } from 'helpers/forms';
@@ -19,7 +20,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     return account.blockchain ? <Icon type={account.blockchain} /> : null;
   };
 
-  public renderSingleAccount = (account: WalletInfo) => {
+  public renderSingleAccount = (account: IWalletInfo) => {
     const permissions: string[] = this.props.prompt.data.permissions || [];
 
     return (
@@ -61,7 +62,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     window.close();
   };
 
-  public render() {
+  public render () {
     return (
       <DialogLayout>
         <Title>

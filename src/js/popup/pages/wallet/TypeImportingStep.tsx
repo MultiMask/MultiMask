@@ -36,7 +36,7 @@ class TypeImportingStep extends React.Component<any, any> {
         <label className={styles.label}>
           <input onChange={this.handleChange} type="radio" value="import" name="import" checked={type === 'import'} />
           <Typography className={styles.text} color="main">
-            Import Seed Phrase
+            Import Private Key
           </Typography>
         </label>
       </FormLayout>

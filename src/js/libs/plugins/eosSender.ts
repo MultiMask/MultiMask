@@ -1,7 +1,8 @@
 import EOS from './eosPlugin';
 import Eos from 'eosjs';
 import { _send } from '../crypto3';
-import { ISenderParams, ISender } from './types';
+import { ISender, ISenderParams } from 'types/crypto3';
+import { BCSign } from 'bcnetwork';
 
 const chainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca';
 const networkEOS = {
@@ -17,7 +18,7 @@ class EOSSender implements ISender {
   public readonly from: string;
   public readonly data: string;
   public readonly amount: number;
-  public readonly blockchainType: BCType;
+  public readonly blockchainType: BCSign;
   public readonly chainId: number;
 
   constructor ({ from, to, data, amount }: ISenderParams) {

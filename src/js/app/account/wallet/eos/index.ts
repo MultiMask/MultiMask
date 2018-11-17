@@ -1,6 +1,10 @@
 import wif from 'wif';
 import Eos from 'eosjs';
+import { isString } from 'lodash';
 const {ecc, Fcbuffer} = Eos.modules;
+import { BIP32 } from 'bip32';
+
+import { IWallet, INetwork } from 'types/accounts';
 
 import {prettyAccount, parsePrettyAccount, IEosAccountPermission} from 'helpers/eos';
 import ntx from 'bcnetwork';
@@ -20,22 +24,22 @@ export class EosWallet implements IWallet {
     this.network = network;
   }
 
-  public changeNetwork (network: string, seed: string): void {
+  public changeNetwork (network: INetwork): void {
     const net = findNetwork(network);
 
     if (net) {
       this.eos = Eos({
-        keyProvider: seed,
+        keyProvider: this.private,
         httpEndpoint: net.url,
         chainId: net.chainId,
       });
     }
   }
 
-  public create (pk: Buffer | string) {
-    const privateKey = Buffer.isBuffer(pk)
-      ? wif.encode(128, pk, false)
-      : pk;
+  public create (pk: BIP32 | string) {
+    const privateKey = isString(pk)
+      ? pk
+      : wif.encode(128, pk.privateKey, false);
 
     const promise = Promise.resolve(privateKey);
 

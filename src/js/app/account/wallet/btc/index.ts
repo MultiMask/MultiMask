@@ -2,8 +2,9 @@ import { info } from 'loglevel';
 import * as bitcoin from 'bitcoinjs-lib';
 import axios from 'axios';
 
+import { IWallet } from 'types/accounts';
 import { BTCEngine } from './engine';
-import ntx from 'bcnetwork';
+import { BIP32 } from 'bip32';
 
 const DEFAULT_FEE = 5000; // Satoshi
 
@@ -12,7 +13,6 @@ export class BitcoinWallet implements IWallet {
   public network: any;
   public address: any;
   public scriptPubkey;      // segWit scriptPubkey
-  public networkUrl: string;
 
   public segWit = false;
 
@@ -20,9 +20,10 @@ export class BitcoinWallet implements IWallet {
    * Create PK, address
    * @param pk 
    */
-  public create (pk: Buffer | string, network?: string) {
-    this.setNewNetwork(network);
-    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
+  public create (pk: BIP32 | string, network?: string) {
+    this.changeNetwork(network);
+
+    return this.createFactory(pk, this.network.btc).then(secret => {
       Object.assign(this, secret);
       
       return true;
@@ -34,7 +35,7 @@ export class BitcoinWallet implements IWallet {
    * @param pk 
    * @param network 
    */
-  private createFactory (pk: Buffer | string, network: bitcoin.Network) {
+  private createFactory (pk: BIP32 | string, network: bitcoin.Network) {
     return this.segWit
     ? BTCEngine.createSegWitWallet(pk, network)
     : BTCEngine.createWallet(pk, network);
@@ -45,21 +46,7 @@ export class BitcoinWallet implements IWallet {
    * @param network 
    * @param pk 
    */
-  public changeNetwork (network: string, pk: Buffer) {
-    this.network = network;
-    
-    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
-      Object.assign(this, secret);
-
-      this.setNewNetwork(network)
-      return network;
-    });
-  }
-
-  private setNewNetwork (network) {
-    const networkProps = ntx.BTC.network.find(item => item.sign === network);
-
-    this.networkUrl = networkProps.url;
+  public changeNetwork (network: any) {
     this.network = network;
   }
 
@@ -71,7 +58,7 @@ export class BitcoinWallet implements IWallet {
    * Return info about blockchain
    */
   public getInfo () {
-    return axios.get(`${this.networkUrl}/rawaddr/${this.address}`)
+    return axios.get(`${this.network.url}/rawaddr/${this.address}`)
         .then(res => {
         const outputs = [];
 
@@ -90,7 +77,7 @@ export class BitcoinWallet implements IWallet {
           address: res.data.address,
           outputs,
           balance: res.data.final_balance / 1e8,
-          network: this.network,
+          network: this.network.sign,
           txs: res.data.txs
         };
       })
@@ -107,7 +94,7 @@ export class BitcoinWallet implements IWallet {
       .then(signedTX => {
         info('TX = ', signedTX);
 
-        return axios.post(`${this.networkUrl}/pushtx`, 'tx=' + signedTX).then(hash => {
+        return axios.post(`${this.network.url}/pushtx`, 'tx=' + signedTX).then(hash => {
           info('TX hash:', hash);
     
           return { hash };

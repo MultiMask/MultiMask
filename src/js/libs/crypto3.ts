@@ -10,7 +10,8 @@ import { DanglingResolver } from 'models/DanglingResolver';
 
 import { CONTENT_APP } from 'constants/apps';
 import TransportLocator from './plugins/TransportLocator';
-import { IIdentityProps, ISenderParams } from './plugins/types';
+import { ISenderParams, IIdentityProps } from 'types/crypto3';
+import { IWalletInfo } from 'types/accounts';
 
 let stream;
 let resolvers;
@@ -79,7 +80,7 @@ export class Crypto3 {
       return Error(`MultiMask don't support chainId ${entity.chainId} of ${entity.blockchain}`);
     }
 
-    const response = (await _send(ACCOUNT_INFO_DOMAIN)) as { success: boolean; payload: { accounts: WalletInfo[] } };
+    const response = (await _send(ACCOUNT_INFO_DOMAIN)) as { success: boolean; payload: { accounts: IWalletInfo[] } };
 
     if (!response.success) {
       return Error('Not found allowed accounts for this site ');
