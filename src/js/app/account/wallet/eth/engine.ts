@@ -1,10 +1,12 @@
 import Web3 = require('web3');
 import ethTx = require('ethereumjs-tx');
+import { isString } from 'lodash';
 
 import * as ethUtil from 'ethereumjs-util';
 import { isHexString } from 'helpers/func';
 
 import EtherApi from 'etherscan-api';
+import { BIP32 } from 'bip32';
 
 const web3 = new Web3();
 
@@ -15,24 +17,24 @@ export default class Engine {
     this.etherApi = EtherApi.init(etherscanApiKey, network, '10000');
   }
 
-  public getPrivKeyFromSeed (pk: Buffer | string) {
-    if (Buffer.isBuffer(pk)) {
-      const pkHex = ethUtil.bufferToHex(pk);
-
-      console.log('private', pkHex);
-      console.log('public', ethUtil.bufferToHex(ethUtil.privateToPublic(pk)))
-      console.log('address', ethUtil.bufferToHex(ethUtil.privateToAddress(pk)))
-
-      return {
-        address: this.getEthereumAddress(pkHex),
-        privateKey: pk
-      }
-    } else {
+  public getPrivKeyFromSeed (pk: BIP32 | string) {
+    if (isString(pk)) {
       const rightPk = isHexString(pk) ? pk : `0x${pk}`;
 
       return {
         address: this.getEthereumAddress(rightPk),
         privateKey: Buffer.from(rightPk, 'hex'),
+      }
+    } else {
+      const pkHex = ethUtil.bufferToHex(pk.privateKey);
+
+      console.log('private', pkHex);
+      console.log('public', ethUtil.bufferToHex(ethUtil.privateToPublic(pk.privateKey)))
+      console.log('address', ethUtil.bufferToHex(ethUtil.privateToAddress(pk.privateKey)))
+
+      return {
+        address: this.getEthereumAddress(pkHex),
+        privateKey: pk
       }
     }
   }

@@ -1,4 +1,5 @@
 import { info } from 'loglevel';
+import { IAccountCreate, INetwork, IWalletInfo } from 'types/accounts';
 
 const DEFAULT_DATA = '020';     // mean use profile seed and index 0
 
@@ -6,7 +7,7 @@ export default class Account {
   public wallet: any;
   
   public bc: string;
-  public network: any;
+  public network: INetwork;
   
   public name: string;
   public extra: any;
@@ -41,7 +42,7 @@ export default class Account {
       .then(() => this);
   }
 
-  public changeNetwork (network: string, privateKey) {
+  public changeNetwork (network: INetwork, privateKey) {
     this.network = network;
     this.wallet.changeNetwork(network, privateKey)
   }
@@ -70,7 +71,7 @@ export default class Account {
   /**
    * Return info about this wallet wrapped into Promise
    */
-  public getInfo (): Promise<WalletInfo> {
+  public getInfo (): Promise<IWalletInfo> {
     return this.wallet.getInfo().then(info => ({
       key: this.key,
       name: this.name,

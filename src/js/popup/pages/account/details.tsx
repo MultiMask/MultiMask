@@ -8,6 +8,7 @@ import CopyToClipboard = require('react-copy-to-clipboard');
 import { getCurrentWallet } from './../../select';
 
 import ntx from 'bcnetwork';
+import { IWalletInfo } from 'types/accounts';
 
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
@@ -22,7 +23,7 @@ const TXContainer = styled('div')`
 `;
 
 interface IProps extends RouteComponentProps {
-  account: WalletInfo;
+  account: IWalletInfo;
 }
 
 class AccountInfo extends React.Component<IProps, any> {

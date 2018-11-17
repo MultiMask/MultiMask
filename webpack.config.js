@@ -29,6 +29,7 @@ var alias = {
   'app': path.resolve(__dirname, 'src/js/app'),
   'popup': path.resolve(__dirname, 'src/js/popup'),
   'prompt': path.resolve(__dirname, 'src/js/prompt'),
+  'types': path.resolve(__dirname, 'src/js/types'),
   'mock': path.resolve(__dirname, 'utils/mock'),
   'img': path.resolve(__dirname, 'src/img'),
 };

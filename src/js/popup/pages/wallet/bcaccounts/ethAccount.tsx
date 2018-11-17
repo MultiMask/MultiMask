@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styled, { css } from 'react-emotion';
 
+import { IWalletInfo } from 'types/accounts';
 import Account from 'app/account';
 import Typography from 'ui/Typography';
 import Button from 'ui/Button';
 
 interface IProps {
-  data: WalletInfo;
+  data: IWalletInfo;
   onImport: (extra: any) => void;
 }
 

@@ -90,12 +90,12 @@ export class KeyController {
       console.log('master', root.toWIF());
 
       const path = getPath(bp44number, parseInt(link, 10));
-      const key = root.derivePath(path);
+      const bip32 = root.derivePath(path);
       
       console.log('path', path);
-      console.log('key', key.toWIF());
+      console.log('bip32', bip32.toWIF());
       
-      return key;
+      return bip32;
     } else if (type === '00') {
       return this.keys.pk[id];
     } else if (type === '01') {

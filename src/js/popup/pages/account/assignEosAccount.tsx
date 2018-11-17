@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
+import { IWalletInfo } from 'types/accounts';
 import { getCurrentWallet } from './../../select';
 import Wallet from './common/Wallet';
 import { eosActions } from '../../actions/eos';
@@ -15,7 +16,7 @@ interface IState {
 }
 
 interface IProps extends Actions<typeof eosActions> {
-  account: WalletInfo;
+  account: IWalletInfo;
 }
 
 class Assign extends React.Component<IProps, IState> {
@@ -25,13 +26,13 @@ class Assign extends React.Component<IProps, IState> {
     this.props.setAccountToKey(this.props.account.key, account);
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.getKeyAccounts(this.props.account.key).then(response => {
       this.setState({ accounts: response.payload });
     });
   }
 
-  public render() {
+  public render () {
     const { account } = this.props;
     const { accounts } = this.state;
 

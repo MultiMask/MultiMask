@@ -1,11 +1,12 @@
 import * as React from 'react';
-import ntx from 'bcnetwork';
 
+import ntx from 'bcnetwork';
+import { IWalletInfo } from 'types/accounts';
 import BTC from './btc';
 import ETH from './eth';
 
 interface IProps {
-  account: WalletInfo;
+  account: IWalletInfo;
 }
 
 const TXList: React.SFC<IProps> = ({

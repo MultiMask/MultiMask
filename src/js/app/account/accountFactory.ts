@@ -1,9 +1,11 @@
-import ntx, { BCSign } from 'bcnetwork';
+import ntx from 'bcnetwork';
 
 import Account from '.';
 import { BitcoinWallet } from './wallet/btc';
 import EthWallet from './wallet/eth';
 import { EosWallet } from './wallet/eos';
+
+import { IAccountFactory, INetwork } from 'types/accounts';
 
 const createWallet = ({ bc }) => {
   if (bc === ntx.BTC.sign) {
@@ -27,7 +29,7 @@ export class AccountFactory {
     const { bc, network: forceNetwork } = opts;
     const wallet = createWallet({ bc });
     const networkSign = forceNetwork || ntx[bc].network[0].sign;
-    const network = ntx[bc].network.find(nt => nt.sign === networkSign);
+    const network: INetwork = ntx[bc].network.find(nt => nt.sign === networkSign);
 
     return new Account({ ...opts, wallet, network });
   }

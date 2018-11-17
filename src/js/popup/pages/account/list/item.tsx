@@ -8,13 +8,13 @@ import accountActions from 'popup/actions/account';
 import priceActions from 'popup/actions/prices';
 
 class AccountFastView extends React.Component<any, any> {
-  get image () {
+  get image() {
     const { account } = this.props;
 
     return account.blockchain ? <Icon type={account.blockchain} /> : null;
   }
 
-  get balance () {
+  get balance() {
     const { account } = this.props;
     return `${account.info.balance} ${account.blockchain}`;
   }
@@ -25,7 +25,7 @@ class AccountFastView extends React.Component<any, any> {
     setActive(account.key);
   };
 
-  public render () {
+  public render() {
     const { account, getPrice } = this.props;
 
     return (

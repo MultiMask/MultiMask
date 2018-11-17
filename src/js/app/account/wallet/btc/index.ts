@@ -2,8 +2,8 @@ import { info } from 'loglevel';
 import * as bitcoin from 'bitcoinjs-lib';
 import axios from 'axios';
 
+import { IWallet } from 'types/accounts';
 import { BTCEngine } from './engine';
-import ntx from 'bcnetwork';
 import { BIP32 } from 'bip32';
 
 const DEFAULT_FEE = 5000; // Satoshi
@@ -14,7 +14,7 @@ export class BitcoinWallet implements IWallet {
   public address: any;
   public scriptPubkey;      // segWit scriptPubkey
 
-  public segWit = false;
+  public segWit = true;
 
   /**
    * Create PK, address
