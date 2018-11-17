@@ -25,6 +25,8 @@ export class BitcoinWallet implements IWallet {
 
     return this.createFactory(pk, this.network.btc).then(secret => {
       Object.assign(this, secret);
+
+      console.log(secret)
       
       return true;
     });
@@ -61,6 +63,8 @@ export class BitcoinWallet implements IWallet {
     return axios.get(`${this.network.url}/rawaddr/${this.address}`)
         .then(res => {
         const outputs = [];
+
+        console.log(res.data);
 
         res.data.txs.forEach(tx => {
           tx.out.forEach((out, idx) => {
@@ -102,7 +106,7 @@ export class BitcoinWallet implements IWallet {
       })
   }
 
-  private buildTX ({ to, amount, data, fee }) {
+  private buildTX ({ to, amount, data, fee = DEFAULT_FEE }) {
     return this.getInfo().then(({ outputs, balance }) => {
       info('create TX with >> ');
       info('to: ', to);
@@ -133,8 +137,7 @@ export class BitcoinWallet implements IWallet {
         txb.addOutput(dataScript, 0);
       }
       
-      const minorFee = fee || DEFAULT_FEE;
-      const amountToReturn = balanceInSatoshi - amountInSatoshi - minorFee;
+      const amountToReturn = balanceInSatoshi - amountInSatoshi - fee;
       
       txb.addOutput(to, amountInSatoshi);
       txb.addOutput(this.address, +amountToReturn.toFixed(0));
@@ -157,14 +160,5 @@ export class BitcoinWallet implements IWallet {
 
   private BuildToHex = (txb) => {
     return txb.build().toHex();
-  }
-}
-
-const mapNetwork = (network: string) => {
-  switch (network) {
-    case 'testnet':
-      return bitcoin.networks.testnet;
-    case 'mainnet':
-      return bitcoin.networks.bitcoin;
   }
 }
