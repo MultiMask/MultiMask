@@ -784,14 +784,9 @@
 "@types/bip32@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/bip32/-/bip32-1.0.0.tgz#792b26521267effbee4cb048f3425d114ad1e4f8"
+  integrity sha512-BXLhOIsl6vzm+OOHmb5aHMs/eCt3xY7sO9xDfMtNoQl5UyrUMR+QREFLZ1zDl0jt0mkFBhhp5mtEefUOQDTuRA==
   dependencies:
     "@types/node" "*"
-
-"@types/bigi@*":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@types/bigi/-/bigi-1.4.2.tgz#8dda60612e689e5769047568d0ce8b8fa83db953"
-  integrity sha512-St8Vm0x1ApYlU9yNaFx3jBis5JVU6oR/5Xtgvn8+N8Ts8f3ze6kOvAAg0aNkbGMGhhG6PrP0nMOgDI9NMFETkA==
-
 
 "@types/bip39@^2.4.0":
   version "2.4.0"
@@ -799,7 +794,6 @@
   integrity sha512-qxJBGh55SPbSGv+91D6H3WOR8vKdA/p8Oc58oK/DTbORgjO6Ebuo8MRzdy2OWi+dw/lxtX4VWJkkCUTSQvhAnw==
   dependencies:
     "@types/node" "*"
-
 
 "@types/bn.js@*":
   version "4.11.1"
@@ -831,6 +825,7 @@
 "@types/lodash@^4.14.118":
   version "4.14.118"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.118.tgz#247bab39bfcc6d910d4927c6e06cbc70ec376f27"
+  integrity sha512-iiJbKLZbhSa6FYRip/9ZDX6HXhayXLDGY2Fqws9cOkEQ6XeKfaxB0sC541mowZJueYyMnVUmmG+al5/4fCDrgw==
 
 "@types/loglevel@^1.5.3":
   version "1.5.3"
@@ -886,6 +881,7 @@
 "@types/react-redux@^6.0.9":
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-6.0.9.tgz#96aa7f5b0716bcc3bfb36ceaa1223118d509f79a"
+  integrity sha512-LatgnnZ7bG63SmzEqGMjAIP1bN36iaXpb4G7UW3SqpHyo+OQ97MnMXm9BoNi720r61+PvseyIUJN4el4GVhAAg==
   dependencies:
     "@types/react" "*"
     redux "^4.0.0"
@@ -2138,6 +2134,7 @@ bindings@^1.2.1, bindings@^1.3.0:
 bip32@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bip32/-/bip32-1.0.2.tgz#982e2ad2cae6fc6a2f53dda3e6c3be9364674b28"
+  integrity sha512-kedLYj8yvYzND+EfzeoMSlGiN7ImiRBF/MClJSZPkMfcU+OQO7ZpL5L/Yg+TunebBZIHhunstiQF//KLKSF5rg==
   dependencies:
     bs58check "^2.1.1"
     create-hash "^1.2.0"
@@ -2185,6 +2182,7 @@ bitcoin-ops@^1.3.0, bitcoin-ops@^1.4.0:
 bitcoinjs-lib@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-4.0.2.tgz#84fc9d14774c07581ad1795f2444706fc3f7a666"
+  integrity sha512-Y6AW91WPDoDQQLy4FejVoH4NvENqvMy+Q/8mnakEzckG1NXiLo0VgnEZyuvZb6lkhE2+YxzTCgpqzbnerOSpEg==
   dependencies:
     bech32 "^1.1.2"
     bip32 "^1.0.0"
@@ -2438,12 +2436,7 @@ bs58@=4.0.1, bs58@^4.0.0, bs58@^4.0.1:
   dependencies:
     base-x "^3.0.2"
 
-bs58@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/bs58/-/bs58-2.0.1.tgz#55908d58f1982aba2008fa1bed8f91998a29bf8d"
-  integrity sha1-VZCNWPGYKrogCPob7Y+RmYopv40=
-
-bs58check@<3.0.0, bs58check@^2.0.0:
+bs58check@<3.0.0, bs58check@^2.0.0, bs58check@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/bs58check/-/bs58check-2.1.2.tgz#53b018291228d82a5aa08e7d796fdafda54aebfc"
   integrity sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA==
@@ -2777,14 +2770,6 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
-
-coinstring@^2.0.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/coinstring/-/coinstring-2.3.0.tgz#cdb63363a961502404a25afb82c2e26d5ff627a4"
-  integrity sha1-zbYzY6lhUCQEolr7gsLibV/2J6Q=
-  dependencies:
-    bs58 "^2.0.1"
-    create-hash "^1.1.1"
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -6525,7 +6510,7 @@ nan@2.10.0:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
   integrity sha512-bAdJv7fBLhWC+/Bls0Oza+mvTaNQtP+1RyhhhvD95pgUJz6XM5IzgmxOkItJ9tkoCiplvAnXI1tNmmUD/eScyA==
 
-nan@^2.0.8, nan@^2.3.3:
+nan@^2.0.8, nan@^2.10.0, nan@^2.3.3:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
   integrity sha512-iji6k87OSXa0CcrLl9z+ZiYSuR2o+c0bGuNmXdrhTQTakxytAFsC56SArGYoiHlJlFoHSnvmhpceZJaXkVuOtA==
@@ -6534,10 +6519,6 @@ nan@^2.2.1, nan@^2.9.2:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.0.tgz#574e360e4d954ab16966ec102c0c049fd961a099"
   integrity sha512-F4miItu2rGnV2ySkXOQoA8FKz/SR2Q2sWP0sbTxNxz/tuokeC8WxOhPMcwi0qIyGtVn/rrSeLbvVkznqCdwYnw==
-
-nan@^2.10.0:
-  version "2.11.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
 
 nano-json-stream-parser@^0.1.2:
   version "0.1.2"
@@ -9191,6 +9172,7 @@ timers-browserify@^2.0.4:
 tiny-secp256k1@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/tiny-secp256k1/-/tiny-secp256k1-1.0.1.tgz#fc6f96529c22b92be91e12de4040fdd9245f7835"
+  integrity sha512-Wz2kMPWtCI5XBftFeF3bUL8uz2+VlasniKwOkRPjvL7h1QVd9rbhrve/HWUu747kJKzVf1XHonzcdM4Ut8fvww==
   dependencies:
     bindings "^1.3.0"
     bn.js "^4.11.8"
@@ -9405,6 +9387,7 @@ typeforce@^1.11.3:
 typeforce@^1.11.5:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.16.0.tgz#060f871420f4ed90d411e0606bebc62a0889ad55"
+  integrity sha512-V60F7OHPH7vPlgIU73vYyeebKxWjQqCTlge+MvKlVn09PIhCOi/ZotowYdgREHB5S1dyHOr906ui6NheYXjlVQ==
 
 typescript@^3.0.1:
   version "3.0.3"
