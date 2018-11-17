@@ -84,9 +84,10 @@ export class AccountController {
     const account = this.getAccount({ address });
 
     const net = ntx[account.bc].network.find(nt => nt.sign === network);
-  
-    account.init(this.keyController.derivePrivateKey(account), net);
-    // account.changeNetwork(network, this.keyController.derivePrivateKey(account));
+
+    account.changeNetwork(net);
+    account.init(this.keyController.derivePrivateKey(account));
+    
     this.cacheController.set(`wallet.${account.key}.network`, network);
 
     sendResponse({
