@@ -2,6 +2,8 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { NetworkType, BIP32 } from 'bip32';
 import { isString } from 'lodash';
 
+console.log(bitcoin);
+
 const toSatoshi = str => Math.floor(parseFloat(str) * 1e8);
 
 interface IWalletCrypto {
@@ -71,45 +73,52 @@ export class BTCEngine {
 
   public static getAddressFromKeys (wallet) {
     if (wallet.segwit === true) {
-      const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network })
-      return bitcoin.payments.p2sh({ redeem: p2wpkh, network: wallet.keys.network }).address
+      const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network });
+      return bitcoin.payments.p2sh({ redeem: p2wpkh, network: wallet.keys.network }).address;
     } else {
-        return bitcoin.payments.p2pkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network }).address;
+      return bitcoin.payments.p2pkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network }).address;
     }
   }
 
-  public static getTxHash (wallet, inputs, to, amount, fee, version?) {
-    let pay2
+  public static getTxHash ({ wallet, inputs, to, amount, fee, version, data }) {
+    let pay2;
     if (wallet.segwit === true) {
-        const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network })
-        pay2 = bitcoin.payments.p2sh({ redeem: p2wpkh, network: wallet.keys.network })
+      const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network });
+      pay2 = bitcoin.payments.p2sh({ redeem: p2wpkh, network: wallet.keys.network });
     } else {
-        pay2 = bitcoin.payments.p2pkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network })
+      pay2 = bitcoin.payments.p2pkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network });
     }
 
     const txb = new bitcoin.TransactionBuilder(wallet.keys.network);
     if (version) {
-      txb.setVersion(version)
+      txb.setVersion(version);
     }
 
-    let total = 0
+    let total = 0;
     inputs.forEach(element => {
-        txb.addInput(element.txid, element.output_no)
-        total += toSatoshi(element.value)
+        txb.addInput(element.txid, element.output_no);
+        total += toSatoshi(element.value);
     });
 
-    txb.addOutput(to, amount)
-    txb.addOutput(pay2.address, total - amount - fee)
+    if (data) {
+      const bitcoinPayload = Buffer.from(data, 'utf8');
+      const embed = bitcoin.payments.embed({ data: [bitcoinPayload] })
+      
+      txb.addOutput(embed.output, 0);
+    }
+
+    txb.addOutput(to, amount);
+    txb.addOutput(pay2.address, total - amount - fee);
 
     inputs.forEach((element, index) => {
-        if (wallet.segwit === true) {
-            txb.sign(index, wallet.keys, pay2.redeem.output, null, toSatoshi(element.value))
-        } else {
-            txb.sign(index, wallet.keys)
-        }
+      if (wallet.segwit === true) {
+        txb.sign(index, wallet.keys, pay2.redeem.output, null, toSatoshi(element.value));
+      } else {
+        txb.sign(index, wallet.keys);
+      }
     });
 
-    const t = txb.build()
+    const t = txb.build();
 
     return {
         "id": t.getId(),

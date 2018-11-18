@@ -106,7 +106,15 @@ export class BitcoinWallet implements IWallet {
         const inputs = res.data.data.txs;
         const fee = opts.fee || DEFAULT_FEE
 
-        tx = BTCEngine.getTxHash(this.walletKeys, inputs, opts.to, toSatoshi(opts.amount), fee, getTBVersion(this.bc));
+        tx = BTCEngine.getTxHash({
+          wallet: this.walletKeys, 
+          inputs, 
+          to: opts.to, 
+          amount: toSatoshi(opts.amount), 
+          fee, 
+          version: getTBVersion(this.bc),
+          data: opts.data
+        });
 
         return explorer.pushTX(tx.hex, mapNetToExplore(this.bc, this.network));
       })
