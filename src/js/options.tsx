@@ -2,6 +2,8 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from 'emotion-theming';
 import QrReader from 'react-qr-reader';
+import styled from 'react-emotion';
+import '../css/options.less';
 
 import { theme } from './config/theme';
 // import { APPROVAL, SIGNATURE, NOAUTH, DOMAIN } from 'constants/promptTypes';
@@ -9,44 +11,59 @@ import { theme } from './config/theme';
 
 import { Prompt } from 'models/Prompt';
 
-const prompt = window.data as Prompt;
-console.log(JSON.stringify(prompt));
+const Container = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-// const getApp = () => {
-//   switch (prompt.routeName()) {
-//     default:
-//       return <QRCodeView />;
-//     // case APPROVAL:
-//     //   return <ApproveTX prompt={prompt} />;
-//   }
-// };
+const Wrapper = styled('div')`
+  width: 500px;
+  height: 500px;
+`;
 
 class ImportProfile extends React.Component<any, {}> {
   public state = {
     encryptedProfile: null,
-    delay: 500
+    delay: 500,
+    done: false
+  };
+  public componentDidMount () {}
+  public handleScan = encryptedProfile => {
+    if (encryptedProfile) {
+      this.setState({
+        encryptedProfile,
+        done: true
+      });
+    }
   };
 
-  public handleScan (encryptedProfile) {
-    console.log(encryptedProfile);
-  }
-
-  public handleError (err) {
+  public handleError = err => {
     console.error(err);
-  }
+  };
 
   public render () {
     const { encryptedProfile, delay } = this.state;
     return (
-      <div>
-        {encryptedProfile}
-        <QrReader
-          delay={delay}
-          onError={this.handleError}
-          onScan={this.handleScan}
-          style={{ width: '100%', marginBottom: 16 }}
-        />
-      </div>
+      <Container>
+        {!this.state.done && (
+          <Wrapper>
+            {encryptedProfile}
+            <QrReader
+              delay={delay}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              style={{ width: '100%', marginBottom: 16 }}
+            />
+          </Wrapper>
+        )}
+        {this.state.done && (
+          <Wrapper>
+            <h1>Done</h1>
+            <div>{this.state.encryptedProfile}</div>
+          </Wrapper>
+        )}
+      </Container>
     );
   }
 }
