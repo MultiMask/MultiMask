@@ -30,7 +30,7 @@ export default class Engine {
 
       return {
         address: this.getEthereumAddress(pkHex),
-        privateKey: pk
+        privateKey: pk.privateKey
       };
     }
   }
