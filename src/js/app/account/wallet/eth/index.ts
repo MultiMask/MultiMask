@@ -57,12 +57,11 @@ export default class EthWallet implements IWallet {
   }
 
   public async sendCoins ({ to, amount, data, gasLimit, gasPrice }) {
-    const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
     const nonce = await web3.eth.getTransactionCount(this.address);
 
     const tx = this.engine.signEthTx({
       privKey: this.privateKey,
-      amount: amountInWei,
+      amount,
       to,
       from: this.address,
       nonce,
