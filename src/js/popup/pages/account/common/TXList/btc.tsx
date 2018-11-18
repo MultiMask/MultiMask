@@ -12,7 +12,7 @@ const findAmount = ({ tx, addr }) => {
   return calcTxBalance(tx);
 };
 
-const BTCList = ({ txs, address, linkToExplorer }) =>
+const BTCList = ({ txs, address, linkToExplorer, bc }) =>
   txs.map(tx => (
     <Root key={tx.txid}>
       <Header>
@@ -37,7 +37,7 @@ const BTCList = ({ txs, address, linkToExplorer }) =>
           {findAmount({ tx, addr: address })}
         </Typography>
         <Typography className={styles.rowItem} color="primary">
-          BTC
+          {bc}
         </Typography>
       </div>
     </Root>

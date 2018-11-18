@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { openUrlToTab, LinkTypes } from 'helpers/links';
-import ntx from 'bcnetwork';
+import ntx, { BCSign } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import BTC from './btc';
 import ETH from './eth';
@@ -15,14 +15,16 @@ const TXList: React.SFC<IProps> = ({ account }) => {
     blockchain,
     info: { address, txs }
   } = account;
-  // TODO: make one tx item component
+
   switch (blockchain) {
-    case ntx.BTC.sign: {
-      return <BTC txs={txs} address={account} linkToExplorer={linkToExplorer(account)} />;
-    }
-    case ntx.ETH.sign: {
+    case BCSign.LTC:
+    case BCSign.DOGE:
+    case BCSign.BTC:
+      return <BTC txs={txs} address={account} linkToExplorer={linkToExplorer(account)} bc={blockchain} />;
+
+    case BCSign.EOS:
       return <ETH txs={txs} address={address} linkToExplorer={linkToExplorer(account)} />;
-    }
+
     default:
       return null;
   }
