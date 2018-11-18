@@ -25,11 +25,10 @@ export default class EthWallet implements IWallet {
   public changeNetwork (network: INetwork) {
     this.network = network;
 
-
-    web3.setProvider(new Web3.providers.HttpProvider(this.network.url))
+    web3.setProvider(new Web3.providers.HttpProvider(this.network.url));
     this.engine = new EthEngine(this.network.sign);
   }
-  
+
   public getAddress () {
     return this.address;
   }
@@ -57,16 +56,18 @@ export default class EthWallet implements IWallet {
     this.nonce++;
   }
 
-  public async sendCoins ({ to, amount, data}) {
+  public async sendCoins ({ to, amount, data, gasLimit, gasPrice }) {
     const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
-    const nonce = await web3.eth.getTransactionCount(this.address)
-  
+    const nonce = await web3.eth.getTransactionCount(this.address);
+
     const tx = this.engine.signEthTx({
       privKey: this.privateKey,
       amount: amountInWei,
       to,
       from: this.address,
-      nonce
+      nonce,
+      gasPrice,
+      gasLimit
     });
 
     info(tx);

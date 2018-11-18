@@ -6,7 +6,6 @@ import Web3 = require('web3');
 
 import networks from 'bcnetwork';
 import InternalMessage from 'services/InternalMessage';
-
 import { AUTH_IS_READY } from 'constants/auth';
 import { ACCOUNT_INFO } from 'constants/account';
 
@@ -15,9 +14,11 @@ import Control from './Control';
 
 import DialogLayout from '../../popup/layouts/DialogLayout';
 import Typography from '../../popup/ui/Typography';
-import Select from '../../popup/ui/Select';
 import Divider from '../../popup/ui/Divider';
 import Button from '../../popup/ui/Button';
+import getPrice from 'helpers/getPrice';
+import { getTotalGas } from 'helpers/eth';
+import { SETTINGS_LOAD_CURRENCY_PRICE, SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS } from 'constants/settings';
 
 const web3 = new Web3();
 
@@ -36,6 +37,8 @@ interface IAppState {
 
   accounts?: any[];
   account?: any;
+
+  prices: any;
 }
 
 interface IApproveProps {
@@ -49,7 +52,8 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     tx: null,
     blockchain: null,
     accounts: [],
-    account: null
+    account: null,
+    prices: null
   };
 
   public componentDidMount () {
@@ -65,6 +69,27 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       .then(res => {
         this.setAccounts(res.payload.accounts);
         this.setTxInfo(this.props.prompt.data);
+      })
+      .catch(e => {
+        info(e);
+        this.setState(state => ({
+          ...state,
+          isLoaded: true,
+          isReady: false
+        }));
+      });
+
+    InternalMessage.signal(SETTINGS_LOAD_CURRENCY_PRICE)
+      .send()
+      .then(result => {
+        const {
+          type,
+          payload: { prices, providers }
+        } = result;
+
+        if (type === SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS && prices && Array.isArray(providers)) {
+          this.setState({ prices });
+        }
       })
       .catch(e => {
         info(e);
@@ -137,11 +162,16 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
     const handlePrice = e => this.handleUpdateTX('gasPrice', e);
     const handleLimit = e => this.handleUpdateTX('gasLimit', e);
+    const totalGas = getTotalGas(+gasPrice, +this.state.tx.gasLimit);
 
     return (
       <React.Fragment>
         <Control label="Gas Price:" value={gasPrice} onChange={handlePrice} secondLabel="gwei" />
         <Control label="Gas Limit:" value={gasLimit} onChange={handleLimit} />
+        <Typography variant="body1" color="main">
+          Cost transaction:
+          {getPrice(this.state.prices, this.state.account.blockchain, +totalGas)} USD
+        </Typography>
       </React.Fragment>
     );
   }

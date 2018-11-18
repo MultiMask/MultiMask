@@ -23,15 +23,15 @@ export default class Engine {
 
       return {
         address: this.getEthereumAddress(rightPk),
-        privateKey: Buffer.from(rightPk, 'hex'),
-      }
+        privateKey: Buffer.from(rightPk, 'hex')
+      };
     } else {
       const pkHex = ethUtil.bufferToHex(pk.privateKey);
 
       return {
         address: this.getEthereumAddress(pkHex),
         privateKey: pk
-      }
+      };
     }
   }
 
@@ -44,13 +44,13 @@ export default class Engine {
     return ethUtil.privateToPublic(privKey);
   }
 
-  public signEthTx ({ privKey, amount, from, to, nonce }) {
+  public signEthTx ({ privKey, amount, from, to, nonce, gasLimit, gasPrice }) {
     const tx = new ethTx({
       to,
       from,
       value: web3.utils.toHex(web3.utils.toBN(amount)),
-      gasLimit: web3.utils.toHex(web3.utils.toBN('21000')),
-      gasPrice: web3.utils.toHex(web3.utils.toWei('5', 'gwei')),
+      gasLimit: web3.utils.toHex(web3.utils.toBN(gasLimit)),
+      gasPrice: web3.utils.toHex(web3.utils.toWei(gasPrice, 'gwei')),
       nonce: web3.utils.toHex(nonce)
     });
     tx.sign(privKey);
