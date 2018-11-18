@@ -9,9 +9,12 @@ import { BCSign } from 'bcnetwork';
 
 const DEFAULT_FEE = 5000; // Satoshi
 const mapNetToExplore = (bc: BCSign, net: INetwork) => { 
-
   if (bc === BCSign.LTC) {
     return explorer.coinsigns.LTC;
+  }
+
+  if (bc === BCSign.DOGE) {
+    return explorer.coinsigns.DOGE;
   }
 
   if (net.sign === 'testnet') {
@@ -21,6 +24,13 @@ const mapNetToExplore = (bc: BCSign, net: INetwork) => {
   if (net.sign === 'mainnet') {
     return explorer.coinsigns.BTC;
   }
+}
+const getTBVersion = (bc: BCSign) => {
+  if (bc === BCSign.DOGE) {
+    return 1;
+  }
+
+  return null;
 }
 
 export class BitcoinWallet implements IWallet {
@@ -96,8 +106,8 @@ export class BitcoinWallet implements IWallet {
         const inputs = res.data.data.txs;
         const fee = opts.fee || DEFAULT_FEE
 
-        tx = BTCEngine.getTxHash(this.walletKeys, inputs, opts.to, toSatoshi(opts.amount), fee);
-        
+        tx = BTCEngine.getTxHash(this.walletKeys, inputs, opts.to, toSatoshi(opts.amount), fee, getTBVersion(this.bc));
+
         return explorer.pushTX(tx.hex, mapNetToExplore(this.bc, this.network));
       })
       .then(res => {

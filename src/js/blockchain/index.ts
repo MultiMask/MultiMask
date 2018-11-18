@@ -96,7 +96,7 @@ export default {
   },
   DOGE: {
     name: 'DOGE',
-    sign: BCSign.LTC,
+    sign: BCSign.DOGE,
     network: [
       {
         name: 'Mainnet',
