@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { getExplorerLink, LinkTypes } from 'helpers/links';
 import ntx from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import BTC from './btc';
@@ -9,18 +9,19 @@ interface IProps {
   account: IWalletInfo;
 }
 
-const TXList: React.SFC<IProps> = ({
-  account: {
-    info: { txs, address },
-    blockchain
-  }
-}) => {
+const TXList: React.SFC<IProps> = ({ account }) => {
+  const linkToExplorer = wallet => hash => getExplorerLink(wallet, hash, LinkTypes.TX);
+  const {
+    blockchain,
+    info: { address, txs }
+  } = account;
+  // TODO: make one tx item component
   switch (blockchain) {
     case ntx.BTC.sign: {
-      return <BTC txs={txs} address={address} />;
+      return <BTC txs={txs} address={account} linkToExplorer={linkToExplorer(account)} />;
     }
     case ntx.ETH.sign: {
-      return <ETH txs={txs} address={address} />;
+      return <ETH txs={txs} address={address} linkToExplorer={linkToExplorer(account)} />;
     }
     default:
       return null;

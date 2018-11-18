@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
@@ -9,6 +8,7 @@ import { getCurrentWallet } from './../../select';
 
 import ntx from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
+import { getExplorerLink, LinkTypes } from 'helpers/links';
 
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
@@ -47,7 +47,6 @@ class AccountInfo extends React.Component<IProps, any> {
 
   public render () {
     const { account } = this.props;
-
     return (
       <React.Fragment>
         <Wallet
@@ -70,7 +69,9 @@ class AccountInfo extends React.Component<IProps, any> {
                 iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
               >
                 {this.bcMenuItems()}
-                <MenuItem>View Account</MenuItem>
+                <MenuItem onClick={() => getExplorerLink(account, account.info.address, LinkTypes.Address)}>
+                  View Account
+                </MenuItem>
                 <MenuItem>Show QR-code</MenuItem>
                 {/* <MenuItem component={Link} to="/account/exportpk">
                   Export Private Key

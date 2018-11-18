@@ -10,14 +10,22 @@ const web3 = new Web3();
 
 import { DATE_FORMAT, Header, Root, styles } from './elements';
 
-const ETHList = ({ txs, address }) =>
+const ETHList = ({ txs, address, linkToExplorer }) =>
   txs.map(tx => (
     <Root key={tx.hash}>
       <Header>
         <Typography color="main">{format(tx.timeStamp * 1000, DATE_FORMAT)}</Typography>
-        <CopyToClipboard text={tx.hash}>
-          <Icon className={styles.icon} name="clone" color="secondary" />
-        </CopyToClipboard>
+        <div>
+          <CopyToClipboard text={tx.hash}>
+            <Icon className={styles.icon} name="clone" color="secondary" />
+          </CopyToClipboard>
+          <Icon
+            className={`${styles.icon} ${styles.left}`}
+            onClick={() => linkToExplorer(tx.hash)}
+            name="link"
+            color="secondary"
+          />
+        </div>
       </Header>
       <div>
         <Typography className={styles.rowItem} color="hint">
