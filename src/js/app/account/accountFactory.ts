@@ -9,7 +9,11 @@ import { IAccountFactory, INetwork } from 'types/accounts';
 
 const createWallet = ({ bc }) => {
   if (bc === ntx.BTC.sign) {
-    return new BitcoinWallet();
+    return new BitcoinWallet(bc);
+  }
+
+  if (bc === ntx.LTC.sign) {
+    return new BitcoinWallet(bc);
   }
 
   if (bc === ntx.ETH.sign) {

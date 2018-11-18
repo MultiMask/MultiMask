@@ -5,8 +5,9 @@ import styled from 'react-emotion';
 const iconTypes = {
   BTC: require('./Icon_type_btc.svg'),
   ETH: require('./Icon_type_eth.svg'),
-  DVC: require('./Icon_type_dvc.svg'),
   EOS: require('./Icon_type_eos.svg'),
+  LTC: require('./Icon_type_ltc.svg'),
+  DOGE: require('./Icon_type_doge.svg'),
   'no-wallets': require('./Icon_type_no-wallets.png')
 };
 
@@ -35,22 +36,22 @@ const IconImg = styled('img')`
 `;
 
 export class Icon extends React.Component<any, any> {
-  get icon() {
+  get icon () {
     return this.props.type ? <IconImg src={iconTypes[this.props.type]} alt={this.props.type} /> : null;
   }
 
-  render() {
+  public render () {
     const { size } = this.props;
 
     return <IconInner {...{ size }}>{this.icon}</IconInner>;
   }
 
-  static defaultProps = {
+  public static defaultProps = {
     size: 'm'
   };
 
-  static propTypes = {
-    type: PropTypes.oneOf(['BTC', 'DVC', 'ETH', 'EOS', 'no-wallets']).isRequired,
+  public static propTypes = {
+    type: PropTypes.oneOf(['BTC', 'ETH', 'EOS', 'LTC', 'DOGE', 'no-wallets']).isRequired,
     size: PropTypes.oneOf(['s', 'm', 'l', 'xl'])
   };
 }
