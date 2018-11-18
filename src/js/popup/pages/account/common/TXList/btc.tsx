@@ -12,14 +12,22 @@ const findAmount = ({ tx, addr }) => {
   return calcTxBalance(tx);
 };
 
-const BTCList = ({ txs, address }) =>
+const BTCList = ({ txs, address, linkToExplorer }) =>
   txs.map(tx => (
     <Root key={tx.txid}>
       <Header>
         <Typography color="main">{format(tx.time * 1000, DATE_FORMAT)}</Typography>
-        <CopyToClipboard text={tx.txid}>
-          <Icon className={styles.icon} name="clone" color="secondary" />
-        </CopyToClipboard>
+        <div>
+          <CopyToClipboard text={tx.txid}>
+            <Icon className={styles.icon} name="clone" color="secondary" />
+          </CopyToClipboard>
+          <Icon
+            className={`${styles.icon} ${styles.left}`}
+            onClick={() => linkToExplorer(tx.txid)}
+            name="link"
+            color="secondary"
+          />
+        </div>
       </Header>
       <div>
         <Typography className={styles.rowItem} color="hint">
