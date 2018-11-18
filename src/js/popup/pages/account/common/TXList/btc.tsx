@@ -2,17 +2,14 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
-import Typography from '../../../../ui/Typography';
-import Icon from '../../../../ui/Icon';
+import Typography from 'ui/Typography';
+import Icon from 'ui/Icon';
+import { calcTxBalance } from 'helpers/btc';
 
 import { DATE_FORMAT, Header, Root, styles } from './elements';
 
 const findAmount = ({ tx, addr }) => {
-  // const output = out.find(oneOut => oneOut.addr === addr);
-  // if (output) {
-  //   return output.value / 1e8;
-  // }
-  return 'trans';
+  return calcTxBalance(tx);
 };
 
 const BTCList = ({ txs, address }) =>

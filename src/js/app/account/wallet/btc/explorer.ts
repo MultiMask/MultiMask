@@ -14,7 +14,7 @@ const Explorer = {
   },
 
   pushTX: (tx, network) => {
-    return axios.post(`https://chain.so/api/v2/send_tx/${network}`, tx)
+    return axios.post(`https://chain.so/api/v2/send_tx/${network}`, { tx_hex: tx })
   },
 
   coinsigns: {
