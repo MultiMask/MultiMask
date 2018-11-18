@@ -12,9 +12,26 @@ import Wallet from './common/Wallet';
 import Button from '../../ui/Button';
 import TextField from '../../ui/TextField';
 import Typography from '../../ui/Typography';
+import { IWalletInfo } from 'types/accounts';
 
-class Send extends React.Component<any, any> {
-  constructor (props) {
+const actions = {
+  ...txActions,
+  ...priceActions
+};
+type IPropsActions = Actions<typeof actions>;
+interface IProps extends IPropsActions {
+  account: IWalletInfo;
+}
+
+interface IState {
+  to?: string;
+  amount?: string;
+  data?: string;
+  errors?: any;
+}
+
+class Send extends React.Component<IProps, IState> {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -37,14 +54,14 @@ class Send extends React.Component<any, any> {
     if (Object.keys(errors).length === 0) {
       this.props.createTx({
         tx: this.formatTX(this.state),
-        id: this.props.account.id
+        key: this.props.account.key
       });
     } else {
       this.setState({ errors });
     }
   };
 
-  public formatTX ({ to, amount, data }: any) {
+  public formatTX({ to, amount, data }: any) {
     return {
       to,
       data,
@@ -65,7 +82,7 @@ class Send extends React.Component<any, any> {
     return errors;
   };
 
-  public render () {
+  public render() {
     const { account } = this.props;
     const {
       errors: { to: toError, amount: amountError },
@@ -106,7 +123,7 @@ class Send extends React.Component<any, any> {
             <TextField
               type="text"
               name="usd"
-              value={`${this.props.getPrice(amount, account.blockchain)} USD`}
+              value={`${this.props.getPrice(+amount, account.blockchain)} USD`}
               readOnly
             />
           </div>
@@ -122,17 +139,13 @@ class Send extends React.Component<any, any> {
 }
 
 export default connect(
-  (state: any) => ({
+  (state: IPopup.AppState) => ({
     account: getCurrentWallet(state)
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        ...txActions,
-        ...priceActions
-      },
-      dispatch
-    )
+  {
+    ...txActions,
+    ...priceActions
+  }
 )(Send);
 
 const Form = styled('form')`

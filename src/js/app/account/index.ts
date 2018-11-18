@@ -42,7 +42,7 @@ export default class Account {
       .then(() => this);
   }
 
-  public changeNetwork (network: INetwork, privateKey) {
+  public changeNetwork (network: INetwork, privateKey?) {
     this.network = network;
     this.wallet.changeNetwork(network, privateKey)
   }

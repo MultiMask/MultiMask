@@ -30,18 +30,25 @@ export class TransactionController {
    */
   private responseSendTx = (sendResponse, { key, tx }) => {
     const account = this.accountController.getAccount({ key });
-    
-    account.sendTX(tx).then(txHash => {
-      sendResponse({
-        result: 'success',
-        txHash
+
+    if (account) {
+      account.sendTX(tx).then(txHash => {
+        sendResponse({
+          result: 'success',
+          txHash
+        })
       })
-    })
-    .catch(error => {
+      .catch(error => {
+        sendResponse({
+          result: 'error',
+          error
+        })
+      })
+    } else {
       sendResponse({
         result: 'error',
-        error
+        error: 'Account not found'
       })
-    })
+    }
   }
 }
