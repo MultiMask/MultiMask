@@ -2,8 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import web3 = require('web3');
-
 import txActions from '../../actions/tx';
 import priceActions from '../../actions/prices';
 import { getCurrentWallet } from './../../select';
