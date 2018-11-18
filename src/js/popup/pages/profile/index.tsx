@@ -162,7 +162,8 @@ class Profiles extends React.Component<IProps, IState> {
             <MenuItem component={Link} to={`/profiles/${profile.id}/seed`}>
               Export Seed
             </MenuItem>
-            <MenuItem component={Link} to={`/profiles/${profile.id}/qrcode`}>
+            {/* <MenuItem component={Link} to={`/profiles/${profile.id}/qrcode`}> */}
+            <MenuItem onClick={() => chrome.runtime.openOptionsPage(console.log('Option opened'))}>
               Show QR-code
             </MenuItem>
             <MenuItem onClick={onRemove}>Delete</MenuItem>

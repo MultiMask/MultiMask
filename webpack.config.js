@@ -18,19 +18,19 @@ function getConfigParams(params) {
 }
 
 var alias = {
-  'bcnetwork': path.resolve(__dirname, 'src/js/blockchain/index.ts'),
-  'constants': path.resolve(__dirname, 'src/js/constants'),
-  'config': path.resolve(__dirname, 'src/js/config'),
-  'helpers': path.resolve(__dirname, 'src/js/helpers'),
-  'libs': path.resolve(__dirname, 'src/js/libs'),
-  'models': path.resolve(__dirname, 'src/js/models'),
-  'services': path.resolve(__dirname, 'src/js/services'),
-  'ui': path.resolve(__dirname, 'src/js/popup/ui'),
-  'app': path.resolve(__dirname, 'src/js/app'),
-  'popup': path.resolve(__dirname, 'src/js/popup'),
-  'prompt': path.resolve(__dirname, 'src/js/prompt'),
-  'mock': path.resolve(__dirname, 'utils/mock'),
-  'img': path.resolve(__dirname, 'src/img'),
+  bcnetwork: path.resolve(__dirname, 'src/js/blockchain/index.ts'),
+  constants: path.resolve(__dirname, 'src/js/constants'),
+  config: path.resolve(__dirname, 'src/js/config'),
+  helpers: path.resolve(__dirname, 'src/js/helpers'),
+  libs: path.resolve(__dirname, 'src/js/libs'),
+  models: path.resolve(__dirname, 'src/js/models'),
+  services: path.resolve(__dirname, 'src/js/services'),
+  ui: path.resolve(__dirname, 'src/js/popup/ui'),
+  app: path.resolve(__dirname, 'src/js/app'),
+  popup: path.resolve(__dirname, 'src/js/popup'),
+  prompt: path.resolve(__dirname, 'src/js/prompt'),
+  mock: path.resolve(__dirname, 'utils/mock'),
+  img: path.resolve(__dirname, 'src/img')
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
@@ -47,7 +47,7 @@ var options = {
     popup: path.join(__dirname, 'src', 'js', 'popup.tsx'),
     prompt: path.join(__dirname, 'src', 'js', 'prompt.tsx'),
     inpage: path.join(__dirname, 'src', 'js', 'inpage.ts'),
-    options: path.join(__dirname, 'src', 'js', 'options.ts'),
+    options: path.join(__dirname, 'src', 'js', 'options.tsx'),
     content: path.join(__dirname, 'src', 'js', 'content.ts'),
     background: path.join(__dirname, 'src', 'js', 'background.ts')
   },
