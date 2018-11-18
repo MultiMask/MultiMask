@@ -78,7 +78,7 @@ export class BTCEngine {
     }
   }
 
-  public static getTxHash (wallet, inputs, to, amount, fee) {
+  public static getTxHash (wallet, inputs, to, amount, fee, version?) {
     let pay2
     if (wallet.segwit === true) {
         const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network })
@@ -88,7 +88,9 @@ export class BTCEngine {
     }
 
     const txb = new bitcoin.TransactionBuilder(wallet.keys.network);
-    // txb.setVersion(version)
+    if (version) {
+      txb.setVersion(version)
+    }
 
     let total = 0
     inputs.forEach(element => {

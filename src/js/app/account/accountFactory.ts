@@ -1,4 +1,4 @@
-import ntx from 'bcnetwork';
+import ntx, { BCSign } from 'bcnetwork';
 
 import Account from '.';
 import { BitcoinWallet } from './wallet/btc';
@@ -8,8 +8,11 @@ import { EosWallet } from './wallet/eos';
 import { IAccountFactory, INetwork } from 'types/accounts';
 
 const createWallet = ({ bc }) => {
-  if (bc === ntx.BTC.sign) {
-    return new BitcoinWallet();
+  if (bc === BCSign.BTC
+      || bc === BCSign.LTC
+      || bc === BCSign.DOGE
+    ) {
+    return new BitcoinWallet(bc);
   }
 
   if (bc === ntx.ETH.sign) {

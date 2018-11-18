@@ -5,9 +5,18 @@ import explorer from './explorer';
 import { IWallet, INetwork } from 'types/accounts';
 import { BTCEngine } from './engine';
 import { toSatoshi } from 'helpers/btc';
+import { BCSign } from 'bcnetwork';
 
 const DEFAULT_FEE = 5000; // Satoshi
-const mapNetToExplore = (net: INetwork) => { 
+const mapNetToExplore = (bc: BCSign, net: INetwork) => { 
+  if (bc === BCSign.LTC) {
+    return explorer.coinsigns.LTC;
+  }
+
+  if (bc === BCSign.DOGE) {
+    return explorer.coinsigns.DOGE;
+  }
+
   if (net.sign === 'testnet') {
     return explorer.coinsigns.BTCTEST;
   }
@@ -16,13 +25,25 @@ const mapNetToExplore = (net: INetwork) => {
     return explorer.coinsigns.BTC;
   }
 }
+const getTBVersion = (bc: BCSign) => {
+  if (bc === BCSign.DOGE) {
+    return 1;
+  }
+
+  return null;
+}
 
 export class BitcoinWallet implements IWallet {
   private walletKeys = null;
   public address = null;
 
+  public bc: BCSign;
   public network: INetwork;
   public segWit = false;
+
+  constructor (bc: BCSign) {
+    this.bc = bc;
+  }
 
   /**
    * Create PK, address
@@ -61,7 +82,7 @@ export class BitcoinWallet implements IWallet {
    * Return info about blockchain
    */
   public getInfo () {
-    return explorer.getInfo(this.address, mapNetToExplore(this.network))
+    return explorer.getInfo(this.address, mapNetToExplore(this.bc, this.network))
       .then(({ data }) => {
         const payload = data.data;
 
@@ -80,14 +101,14 @@ export class BitcoinWallet implements IWallet {
    */
   public sendCoins (opts) {
     let tx;
-    return explorer.getUnspentTX(this.address, mapNetToExplore(this.network))
+    return explorer.getUnspentTX(this.address, mapNetToExplore(this.bc, this.network))
       .then(res => {
         const inputs = res.data.data.txs;
         const fee = opts.fee || DEFAULT_FEE
 
-        tx = BTCEngine.getTxHash(this.walletKeys, inputs, opts.to, toSatoshi(opts.amount), fee);
-        
-        return explorer.pushTX(tx.hex, mapNetToExplore(this.network));
+        tx = BTCEngine.getTxHash(this.walletKeys, inputs, opts.to, toSatoshi(opts.amount), fee, getTBVersion(this.bc));
+
+        return explorer.pushTX(tx.hex, mapNetToExplore(this.bc, this.network));
       })
       .then(res => {
         const payload = res.data;
