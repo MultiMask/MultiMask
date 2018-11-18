@@ -30,7 +30,7 @@ export default class Engine {
 
       return {
         address: this.getEthereumAddress(pkHex),
-        privateKey: pk
+        privateKey: pk.privateKey
       };
     }
   }
@@ -48,9 +48,9 @@ export default class Engine {
     const tx = new ethTx({
       to,
       from,
-      value: web3.utils.toHex(web3.utils.toBN(amount)),
-      gasLimit: web3.utils.toHex(web3.utils.toBN(gasLimit)),
-      gasPrice: web3.utils.toHex(web3.utils.toWei(gasPrice, 'gwei')),
+      value: web3.utils.toHex(web3.utils.toBN(web3.utils.toWei(amount.toString(), 'ether'))),
+      gasLimit: web3.utils.toHex(web3.utils.toBN(gasLimit.toString())),
+      gasPrice: web3.utils.toHex(web3.utils.toWei(gasPrice.toString(), 'gwei')),
       nonce: web3.utils.toHex(nonce)
     });
     tx.sign(privKey);

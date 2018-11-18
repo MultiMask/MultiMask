@@ -18,6 +18,7 @@ import ExportPK from './pages/account/exportpk';
 import Details from './pages/account/details';
 import QrCodeLink from './pages/account/QRCodeLink';
 import Send from './pages/account/send';
+import SendResult from './pages/account/SendResult';
 import ChangeNetwork from './pages/account/changeNetwork';
 import Assign from './pages/account/assignEosAccount';
 import CreateWallet from './pages/wallet';
@@ -37,7 +38,8 @@ import {
   URL_PROFILE_EXPORT,
   URL_PROFILE_MAIN,
   URL_PROFILE_QRCODE,
-  URL_PROFILE_SEED
+  URL_PROFILE_SEED,
+  URL_ACCOUNT_SEND_RESULT
 } from 'constants/popupUrl';
 
 const routes = () => {
@@ -49,6 +51,7 @@ const routes = () => {
       <AppRoute exact path="/account/details/qrcodelink" component={QrCodeLink} layout={MainLayout} />
       <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
       <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_SEND_RESULT} component={SendResult} layout={MainLayout} />
       <AppRoute exact path="/account/edit/:id" component={ChangeNetwork} layout={MainLayout} />
       <AppRoute exact path="/account/assign" component={Assign} layout={MainLayout} />
 
