@@ -8,7 +8,7 @@ import { getCurrentWallet } from './../../select';
 
 import ntx from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
-import { getExplorerLink, LinkTypes } from 'helpers/links';
+import { openUrlToTab, LinkTypes } from 'helpers/links';
 
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
@@ -69,10 +69,12 @@ class AccountInfo extends React.Component<IProps, any> {
                 iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
               >
                 {this.bcMenuItems()}
-                <MenuItem onClick={() => getExplorerLink(account, account.info.address, LinkTypes.Address)}>
+                <MenuItem onClick={() => openUrlToTab(account, account.info.address, LinkTypes.Address)}>
                   View Account
                 </MenuItem>
-                <MenuItem>Show QR-code</MenuItem>
+                <MenuItem component={Link} to="/account/details/qrcodelink">
+                  Show QR-code
+                </MenuItem>
                 {/* <MenuItem component={Link} to="/account/exportpk">
                   Export Private Key
                 </MenuItem> */}
