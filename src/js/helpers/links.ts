@@ -6,8 +6,12 @@ export enum LinkTypes {
   Address = 'address'
 }
 
-export const getExplorerLink = (account: IWalletInfo, hash: string, linkType: LinkTypes): void => {
-  const url = `${getBaseExplorerUrl(account)}${linkType}/${hash}`;
+export const getExplorerLink = (account: IWalletInfo, hash: string, linkType: LinkTypes): string => {
+  return `${getBaseExplorerUrl(account)}${linkType}/${hash}`;
+};
+
+export const openUrlToTab = (account: IWalletInfo, hash: string, linkType: LinkTypes) => {
+  const url = getExplorerLink(account, hash, linkType);
   chrome.tabs.create({ url });
 };
 

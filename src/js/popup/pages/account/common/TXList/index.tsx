@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getExplorerLink, LinkTypes } from 'helpers/links';
+import { openUrlToTab, LinkTypes } from 'helpers/links';
 import ntx from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import BTC from './btc';
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const TXList: React.SFC<IProps> = ({ account }) => {
-  const linkToExplorer = wallet => hash => getExplorerLink(wallet, hash, LinkTypes.TX);
+  const linkToExplorer = wallet => hash => openUrlToTab(wallet, hash, LinkTypes.TX);
   const {
     blockchain,
     info: { address, txs }
