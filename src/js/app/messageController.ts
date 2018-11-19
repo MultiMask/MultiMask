@@ -30,7 +30,7 @@ export class MessageController extends EventEmitter {
 
   constructor (opts) {
     super();
-    
+
     this.busController = opts.busController;
     this.domainController = opts.domainController;
 
@@ -49,7 +49,7 @@ export class MessageController extends EventEmitter {
       const cb = (...args) => {
         info('responsed >> ', ...args, request);
         sendResponse(...args);
-      }
+      };
 
       // Set current open domain
       if (payload.domain) {
@@ -71,26 +71,26 @@ export class MessageController extends EventEmitter {
         // check user is login
         this.checkAuth(payload.type, isReady => {
           if (isReady) {
-
             // check domain is allow
-            this.domainController.checkDomain(payload.domain)
+            this.domainController
+              .checkDomain(payload.domain)
               .then(approve => {
                 if (approve) {
                   this.emit(payload.type, cb, payload.payload, { domain: payload.domain });
                 } else {
-                  sendResponse({ error: 'Denied by user', type: 'error' });      
+                  sendResponse({ error: 'Denied by user', type: 'error' });
                 }
               })
-              .catch(error => { 
+              .catch(error => {
                 sendResponse({ error, type: 'error' });
-              })
+              });
           } else {
             this.showNoAuthPrompt();
             sendResponse({ error: 'No auth', type: 'error' });
           }
         });
 
-      // msg from trusted source 
+        // msg from trusted source
       } else if (!message.from) {
         // info('trusted sourse');
         this.checkAuth(payload.type, isReady => {
@@ -99,14 +99,13 @@ export class MessageController extends EventEmitter {
           }
         });
       }
-
     });
   }
 
   private checkAuth (type: string, cb: AuthCheckFn) {
     // If is auth query
     if (CHECKER_IS_AUTH.test(type)) {
-      cb(true)
+      cb(true);
     }
 
     this.busController.emit(CHECK_IS_READY, isReady => cb(isReady));
