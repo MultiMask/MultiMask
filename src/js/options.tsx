@@ -6,10 +6,9 @@ import styled from 'react-emotion';
 import '../css/options.less';
 
 import { theme } from './config/theme';
-// import { APPROVAL, SIGNATURE, NOAUTH, DOMAIN } from 'constants/promptTypes';
-// import QRCodeView from 'popup/pages/profile/QRCodeView';
 
-import { Prompt } from 'models/Prompt';
+import InternalMessage from 'services/InternalMessage';
+import { PROFILE_IMPORT_QRCODE } from 'constants/profile';
 
 const Container = styled('div')`
   display: flex;
@@ -35,6 +34,12 @@ class ImportProfile extends React.Component<any, {}> {
         encryptedProfile,
         done: true
       });
+
+      InternalMessage.payload(PROFILE_IMPORT_QRCODE, { payload: { encryptedProfile: JSON.parse(encryptedProfile) } })
+        .send()
+        .then(response => {
+          console.log(response);
+        });
     }
   };
 
@@ -60,7 +65,6 @@ class ImportProfile extends React.Component<any, {}> {
         {this.state.done && (
           <Wrapper>
             <h1>Done</h1>
-            <div>{this.state.encryptedProfile}</div>
           </Wrapper>
         )}
       </Container>

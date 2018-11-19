@@ -15,6 +15,7 @@ export const PROFILE_GETLIST_RESULT = 'profile:getlist:result';
 export const PROFILE_UPDATE = 'profile:update';
 
 export const PROFILE_IMPORT = 'profile:import';
+export const PROFILE_IMPORT_QRCODE = 'profile:import:qrcode';
 
 export const PROFILE_SELECT = 'profile:select';
 export const PROFILE_SELECT_RESULT = 'profile:select:result';
