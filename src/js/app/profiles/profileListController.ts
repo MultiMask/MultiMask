@@ -147,7 +147,7 @@ export class ProfileListController extends EventEmitter {
    * Import qrcode profile
    */
   private responseImportFromOptions = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
-    const rawProfile = JSON.parse(this.accessController.decode(encryptedProfile));
+    const rawProfile = JSON.parse(this.accessController.decodeWithPassword(encryptedProfile, pass));
 
     const profile = Profile.fromJSON(rawProfile);
 
@@ -162,7 +162,7 @@ export class ProfileListController extends EventEmitter {
    * Import file profile
    */
   private responseImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
-    const rawProfile = JSON.parse(this.accessController.decode(encryptedProfile));
+    const rawProfile = JSON.parse(this.accessController.decodeWithPassword(encryptedProfile, pass));
     const profile = Profile.fromJSON(rawProfile);
 
     this.addProfile(profile);
