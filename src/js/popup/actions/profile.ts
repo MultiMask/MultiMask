@@ -79,8 +79,12 @@ const ProfileActions = {
   import: (pass, encryptedProfile) => (dispatch, getState) => {
     return InternalMessage.payload(PROFILE_IMPORT, { payload: { pass, encryptedProfile } })
       .send()
-      .then(() => {
-        updateProfileListFn(dispatch);
+      .then(res => {
+        dispatch({
+          type: PROFILE_GETLIST_RESULT,
+          payload: res.payload
+        });
+
         dispatch(goBack());
       });
   },

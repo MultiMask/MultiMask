@@ -54,8 +54,8 @@ export class ProfileListController extends EventEmitter {
     this.messageController.on(PROFILE_REMOVE, this.responseRemove);
 
     this.messageController.on(PROFILE_EXPORT, this.responseExport);
-    this.messageController.on(PROFILE_IMPORT, this.responseFileImport);
-    this.messageController.on(PROFILE_IMPORT_QRCODE, this.responseQrCodeImport);
+    this.messageController.on(PROFILE_IMPORT, this.responseImport);
+    this.messageController.on(PROFILE_IMPORT_QRCODE, this.responseImportFromOptions);
   }
 
   /**
@@ -146,7 +146,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Import qrcode profile
    */
-  private responseQrCodeImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
+  private responseImportFromOptions = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
     const rawProfile = JSON.parse(this.accessController.decode(encryptedProfile));
 
     const profile = Profile.fromJSON(rawProfile);
@@ -161,7 +161,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Import file profile
    */
-  private responseFileImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
+  private responseImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
     const rawProfile = JSON.parse(this.accessController.decode(encryptedProfile));
     const profile = Profile.fromJSON(rawProfile);
 

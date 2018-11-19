@@ -9,6 +9,10 @@ import { theme } from './config/theme';
 
 import InternalMessage from 'services/InternalMessage';
 import { PROFILE_IMPORT_QRCODE } from 'constants/profile';
+import AuthForm from 'ui/components/NeedAuth/AuthForm';
+import { formToJson } from 'helpers/forms';
+import Button from 'ui/Button';
+import Typography from 'ui/Typography';
 
 const Container = styled('div')`
   display: flex;
@@ -31,16 +35,32 @@ class ImportProfile extends React.Component<any, {}> {
   public handleScan = encryptedProfile => {
     if (encryptedProfile) {
       this.setState({
-        encryptedProfile,
-        done: true
+        encryptedProfile
       });
-
-      InternalMessage.payload(PROFILE_IMPORT_QRCODE, { payload: { encryptedProfile: JSON.parse(encryptedProfile) } })
-        .send()
-        .then(response => {
-          console.log(response);
-        });
     }
+  };
+
+  public handleImportProfile = e => {
+    e.preventDefault();
+    const { encryptedProfile } = this.state;
+
+    const pass = (formToJson(e.target) as any).password;
+
+    InternalMessage.payload(PROFILE_IMPORT_QRCODE, { payload: { encryptedProfile, pass } })
+      .send()
+      .then(response => {
+        if (response.success) {
+          this.setState({ done: true });
+        }
+
+        console.log(response);
+      });
+  };
+
+  public handleClose = () => {
+    chrome.tabs.getCurrent(function (tab) {
+      chrome.tabs.remove(tab.id);
+    });
   };
 
   public handleError = err => {
@@ -48,7 +68,25 @@ class ImportProfile extends React.Component<any, {}> {
   };
 
   public render () {
-    const { encryptedProfile, delay } = this.state;
+    const { encryptedProfile, delay, done } = this.state;
+    if (done) {
+      return (
+        <Wrapper>
+          <Typography color="main" variant="headline" align="center">
+            Import Succes!
+          </Typography>
+          <Typography color="main" variant="subheading" align="center">
+            Close page and reopen extension.
+          </Typography>
+          <Button onClick={this.handleClose}>Check</Button>
+        </Wrapper>
+      );
+    }
+
+    if (encryptedProfile) {
+      return <AuthForm handleSubmit={this.handleImportProfile} />;
+    }
+
     return (
       <Container>
         {!this.state.done && (
@@ -71,6 +109,7 @@ class ImportProfile extends React.Component<any, {}> {
     );
   }
 }
+
 render(
   <ThemeProvider theme={theme}>
     <ImportProfile />

@@ -7,6 +7,8 @@ import { css } from 'emotion';
 const styles = {
   form: css`
     padding: 20px;
+    max-width: 400px;
+    margin: auto;
   `,
   textField: css`
     margin-top: 20px;

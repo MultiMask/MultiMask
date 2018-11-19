@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+const DetectRTC = require('detectrtc');
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import QrReader from 'react-qr-reader';
@@ -13,18 +14,26 @@ import { readFile } from 'helpers/files';
 class ImportProfile extends Component<any, {}> {
   public state = {
     encryptedProfile: null,
-    delay: 500
+    delay: 500,
+    isScan: false
   };
-
-  public handleScan (encryptedProfile) {
+  public componentDidMount = () => {
+    const setScan = isScan => {
+      this.setState({ isScan });
+    };
+    DetectRTC.load(() => {
+      setScan(DetectRTC.hasWebcam && DetectRTC.isWebsiteHasWebcamPermissions);
+    });
+  };
+  public handleScan = encryptedProfile => {
     if (encryptedProfile) {
       this.setState({ encryptedProfile });
     }
-  }
+  };
 
-  public handleError (err) {
+  public handleError = err => {
     console.error(err);
-  }
+  };
 
   public handleUploadProfile = () => {
     const setEncryptedProfile = encryptedProfile => this.setState({ encryptedProfile });
@@ -42,21 +51,35 @@ class ImportProfile extends Component<any, {}> {
     handleImport(pass, encryptedProfile);
   };
 
+  public handleOpenOptionsPage = () => {
+    chrome.runtime.openOptionsPage(console.log('Option opened'));
+  };
+
   public render () {
-    const { encryptedProfile, delay } = this.state;
+    const { encryptedProfile, delay, isScan } = this.state;
+
     if (!encryptedProfile) {
       return (
         <Container>
           <Typography align="center" color="main" variant="title">
             Scan QR code or upload your profile
           </Typography>
-          <QrReader
-            delay={delay}
-            onError={this.handleError}
-            onScan={this.handleScan}
-            style={{ width: '100%', marginBottom: 16 }}
-          />
-          <Button onClick={this.handleUploadProfile}>Upload</Button>
+          {isScan && (
+            <QrReader
+              delay={delay}
+              onError={this.handleError}
+              onScan={this.handleScan}
+              style={{ width: '100%', marginBottom: 16 }}
+            />
+          )}
+          <Footer>
+            {!isScan && (
+              <Button style={{ marginBottom: 12 }} onClick={this.handleOpenOptionsPage}>
+                Scan qrcode
+              </Button>
+            )}
+            <Button onClick={this.handleUploadProfile}>Upload</Button>
+          </Footer>
         </Container>
       );
     }
@@ -73,6 +96,13 @@ export default withRouter(connect(
 
 const Container = styled('div')`
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const Footer = styled('div')`
+  margin-top: auto;
   display: flex;
   flex-direction: column;
 `;
