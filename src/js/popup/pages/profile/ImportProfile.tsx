@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import QrReader from 'react-qr-reader';
 import AuthForm from '../../ui/components/NeedAuth/AuthForm';
 import profileActions from '../../actions/profile';
+import routingActions from '../../actions/routing';
 import { formToJson } from 'helpers/forms';
 import styled from 'react-emotion';
 import Typography from 'ui/Typography';
@@ -52,6 +53,8 @@ class ImportProfile extends Component<any, {}> {
   };
 
   public handleOpenOptionsPage = () => {
+    // TODO: go to profiles router. Fix this hack
+    this.props.goBack();
     chrome.runtime.openOptionsPage(console.log('Option opened'));
   };
 
@@ -90,7 +93,8 @@ class ImportProfile extends Component<any, {}> {
 export default withRouter(connect(
   null,
   {
-    handleImport: profileActions.import
+    handleImport: profileActions.import,
+    goBack: routingActions.goBack
   }
 )(ImportProfile) as any);
 

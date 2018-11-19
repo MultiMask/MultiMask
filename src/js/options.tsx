@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from 'emotion-theming';
 import QrReader from 'react-qr-reader';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import '../css/options.less';
 
 import { theme } from './config/theme';
@@ -18,6 +18,8 @@ const Container = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  height: 100%;
 `;
 
 const Wrapper = styled('div')`
@@ -71,42 +73,52 @@ class ImportProfile extends React.Component<any, {}> {
     const { encryptedProfile, delay, done } = this.state;
     if (done) {
       return (
-        <Wrapper>
+        <Container>
           <Typography color="main" variant="headline" align="center">
-            Import Succes!
+            Import Succes
           </Typography>
           <Typography color="main" variant="subheading" align="center">
             Close page and reopen extension.
           </Typography>
-          <Button onClick={this.handleClose}>Check</Button>
-        </Wrapper>
+          <Button onClick={this.handleClose}>Close page</Button>
+        </Container>
       );
     }
 
     if (encryptedProfile) {
-      return <AuthForm handleSubmit={this.handleImportProfile} />;
+      return (
+        <AuthForm
+          handleSubmit={this.handleImportProfile}
+          className={css`
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100%;
+          `}
+        />
+      );
     }
 
-    return (
-      <Container>
-        {!this.state.done && (
-          <Wrapper>
-            {encryptedProfile}
-            <QrReader
-              delay={delay}
-              onError={this.handleError}
-              onScan={this.handleScan}
-              style={{ width: '100%', marginBottom: 16 }}
-            />
-          </Wrapper>
-        )}
-        {this.state.done && (
-          <Wrapper>
-            <h1>Done</h1>
-          </Wrapper>
-        )}
-      </Container>
-    );
+    if (!this.state.done) {
+      return (
+        <Container>
+          <React.Fragment>
+            <Typography color="main" variant="headline" align="center">
+              Scan you qr-code
+            </Typography>
+            <Wrapper>
+              <QrReader
+                delay={delay}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                style={{ width: '100%', marginBottom: 16 }}
+              />
+            </Wrapper>
+          </React.Fragment>
+        </Container>
+      );
+    }
   }
 }
 

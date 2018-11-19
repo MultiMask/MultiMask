@@ -18,8 +18,8 @@ const styles = {
   `
 };
 
-const AuthForm: React.SFC<any> = ({ handleSubmit, error }) => (
-  <form onSubmit={handleSubmit} className={styles.form}>
+const AuthForm: React.SFC<any> = ({ handleSubmit, error, className }) => (
+  <form onSubmit={handleSubmit} className={`${styles.form} ${className}`}>
     <Typography color="main" variant="subheading" align="center">
       Confirm password:
     </Typography>
