@@ -24,9 +24,9 @@ export default function accountReducer (state: IPopup.State.Accounts = initialSt
      */
     case ACCOUNT_UPDATE: {
       const account = action.payload;
-
+      
       if (account) {
-        const idx = state.accounts.findIndex(acc => acc.id === account.id);
+        const idx = state.accounts.findIndex(acc => acc.key === account.key);
 
         if (idx !== -1) {
           const list = state.accounts.slice();

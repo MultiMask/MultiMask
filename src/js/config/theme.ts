@@ -6,7 +6,8 @@ export const theme = {
     hint: '#DEE3EC',
     background: '#FBFBFB',
     error: '#FF3433',
-    multi: '#008bff'
+    multi: '#008bff',
+    success: '#63ba3c'
   },
   shadows: {
     0: '0px 0px 40px 0px rgba(44,66,119,0.05)',

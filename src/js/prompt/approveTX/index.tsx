@@ -6,7 +6,6 @@ import Web3 = require('web3');
 
 import networks from 'bcnetwork';
 import InternalMessage from 'services/InternalMessage';
-
 import { AUTH_IS_READY } from 'constants/auth';
 import { ACCOUNT_INFO } from 'constants/account';
 
@@ -15,9 +14,11 @@ import Control from './Control';
 
 import DialogLayout from '../../popup/layouts/DialogLayout';
 import Typography from '../../popup/ui/Typography';
-import Select from '../../popup/ui/Select';
 import Divider from '../../popup/ui/Divider';
 import Button from '../../popup/ui/Button';
+import getPrice from 'helpers/getPrice';
+import { getTotalGas } from 'helpers/eth';
+import { SETTINGS_LOAD_CURRENCY_PRICE, SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS } from 'constants/settings';
 
 const web3 = new Web3();
 
@@ -36,12 +37,8 @@ interface IAppState {
 
   accounts?: any[];
   account?: any;
-  selectValue?: ISelectOption;
-}
 
-interface ISelectOption {
-  value: string;
-  label: string;
+  prices: any;
 }
 
 interface IApproveProps {
@@ -56,20 +53,43 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     blockchain: null,
     accounts: [],
     account: null,
-    selectValue: null
+    prices: null
   };
 
   public componentDidMount () {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
       .then(({ isReady }) => {
-        if (!isReady) { throw new Error('You need to authorize'); }
+        if (!isReady) {
+          throw new Error('You need to authorize');
+        }
 
         return InternalMessage.signal(ACCOUNT_INFO).send();
       })
-      .then(accounts => {
-        this.setAccounts(accounts);
+      .then(res => {
+        this.setAccounts(res.payload.accounts);
         this.setTxInfo(this.props.prompt.data);
+      })
+      .catch(e => {
+        info(e);
+        this.setState(state => ({
+          ...state,
+          isLoaded: true,
+          isReady: false
+        }));
+      });
+
+    InternalMessage.signal(SETTINGS_LOAD_CURRENCY_PRICE)
+      .send()
+      .then(result => {
+        const {
+          type,
+          payload: { prices, providers }
+        } = result;
+
+        if (type === SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS && prices && Array.isArray(providers)) {
+          this.setState({ prices });
+        }
       })
       .catch(e => {
         info(e);
@@ -92,8 +112,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       tx: data.tx,
       blockchain: data.blockchain,
       accounts,
-      account,
-      selectValue: this.getOption(account)
+      account
     }));
   }
 
@@ -107,20 +126,10 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       ...state,
       accounts,
       account,
-      selectValue: this.getOption(account),
       isLoaded: true,
       isReady: true
     }));
   }
-
-  public getOption = (account): ISelectOption => {
-    return { value: account.id, label: `${account.info.address} - ${account.info.balance} ${account.blockchain}` };
-  };
-
-  public handleChooseAccount = e => {
-    const { accounts } = this.state;
-    this.setState({ account: accounts.find(account => account.id === e.value), selectValue: e });
-  };
 
   public onSubmit = payload => {
     const { tx } = this.state;
@@ -134,16 +143,6 @@ export default class App extends React.Component<IApproveProps, IAppState> {
   public onReject = () => {
     window.close();
   };
-
-  get options () {
-    if (this.state.accounts) {
-      return this.state.accounts.map((account, idx) => {
-        return this.getOption(account);
-      });
-    }
-
-    return [];
-  }
 
   get amount () {
     const { tx, blockchain } = this.state;
@@ -163,11 +162,16 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
     const handlePrice = e => this.handleUpdateTX('gasPrice', e);
     const handleLimit = e => this.handleUpdateTX('gasLimit', e);
+    const totalGas = getTotalGas(+gasPrice, +this.state.tx.gasLimit);
 
     return (
       <React.Fragment>
         <Control label="Gas Price:" value={gasPrice} onChange={handlePrice} secondLabel="gwei" />
         <Control label="Gas Limit:" value={gasLimit} onChange={handleLimit} />
+        <Typography variant="body1" color="main">
+          Cost transaction:
+          {getPrice(this.state.prices, this.state.account.blockchain, +totalGas)} USD
+        </Typography>
       </React.Fragment>
     );
   }
@@ -195,7 +199,9 @@ export default class App extends React.Component<IApproveProps, IAppState> {
 
   public render () {
     // TODO: return loader
-    if (!this.state.isLoaded) { return null; }
+    if (!this.state.isLoaded) {
+      return null;
+    }
 
     // TODO: style this caption
     if (!this.state.isReady || !this.state.tx) {
@@ -209,12 +215,10 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     const {
       account: {
         info: { address, balance },
-        blockchain,
-        id
+        blockchain
       },
-      tx: { to, amount, data },
-      tx,
-      selectValue
+      tx: { to, data },
+      tx
     } = this.state;
     const isEth = blockchain === networks.ETH.sign;
 
@@ -228,18 +232,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
               display: flex;
               flex-direction: column;
             `}
-          >
-            <Typography
-              className={css`
-                margin-right: 10px;
-              `}
-              color="main"
-              variant="subheading"
-            >
-              Select wallet:
-            </Typography>
-            <Select options={this.options} onChange={value => this.handleChooseAccount(value)} value={selectValue} />
-          </div>
+          />
           <Typography color="main" variant="subheading">
             Send TX with params:
           </Typography>

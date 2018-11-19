@@ -81,12 +81,8 @@ class CreateProfile extends Component<IProps, IState> {
 
   public handleDone = () => {
     this.setState({ show: true }, () => {
-      this.props.done();
+      this.props.done(this.state.seed);
     });
-  };
-
-  public handleUserConfirm = () => {
-    this.props.done(this.state.seed);
   };
 
   public handleVerify = () => {
@@ -158,7 +154,7 @@ class CreateProfile extends Component<IProps, IState> {
         <BtnRow className={styles.confirm}>
           {!isIn && <Button onClick={this.handleDone}>I saved my Mnemonic Phrase</Button>}
           {isIn && !valid && <Button onClick={this.handleVerify}>Verify</Button>}
-          {isIn && valid && <Button onClick={this.handleUserConfirm}>Confirm</Button>}
+          {isIn && valid && <Button onClick={this.handleDone}>Confirm</Button>}
         </BtnRow>
       </Wrapper>
     );

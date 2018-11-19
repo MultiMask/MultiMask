@@ -9,6 +9,9 @@ export const styles = {
   `,
   icon: css`
     cursor: pointer;
+  `,
+  left: css`
+    margin-left: 8px;
   `
 };
 

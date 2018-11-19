@@ -1,65 +1,76 @@
 import { info } from 'loglevel';
-import * as bitcoin from 'bitcoinjs-lib';
-import axios from 'axios';
+import { BIP32 } from 'bip32';
 
+import explorer from './explorer';
+import { IWallet, INetwork } from 'types/accounts';
 import { BTCEngine } from './engine';
-import ntx from 'bcnetwork';
+import { toSatoshi } from 'helpers/btc';
+import { BCSign } from 'bcnetwork';
 
 const DEFAULT_FEE = 5000; // Satoshi
+const mapNetToExplore = (bc: BCSign, net: INetwork) => { 
+  if (bc === BCSign.LTC) {
+    return explorer.coinsigns.LTC;
+  }
+
+  if (bc === BCSign.DOGE) {
+    return explorer.coinsigns.DOGE;
+  }
+
+  if (net.sign === 'testnet') {
+    return explorer.coinsigns.BTCTEST;
+  }
+
+  if (net.sign === 'mainnet') {
+    return explorer.coinsigns.BTC;
+  }
+}
+const getTBVersion = (bc: BCSign) => {
+  if (bc === BCSign.DOGE) {
+    return 1;
+  }
+
+  return null;
+}
 
 export class BitcoinWallet implements IWallet {
-  private private: any;
-  public network: any;
-  public address: any;
-  public scriptPubkey;      // segWit scriptPubkey
-  public networkUrl: string;
+  private walletKeys = null;
+  public address = null;
 
+  public bc: BCSign;
+  public network: INetwork;
   public segWit = false;
+
+  constructor (bc: BCSign) {
+    this.bc = bc;
+  }
 
   /**
    * Create PK, address
    * @param pk 
    */
-  public create (pk: Buffer | string, network?: string) {
-    this.setNewNetwork(network);
-    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
-      Object.assign(this, secret);
-      
-      return true;
-    });
+  public create (pk: BIP32 | string, network?: string) {
+    this.changeNetwork(network);
+
+
+    this.walletKeys = {
+      keys: BTCEngine.getWallet(pk),
+      segwit: this.segWit,
+    }
+
+
+    this.address = BTCEngine.getAddressFromKeys(this.walletKeys);
+
+    return Promise.resolve();
   }
 
-  /**
-   * Choose segwit or not
-   * @param pk 
-   * @param network 
-   */
-  private createFactory (pk: Buffer | string, network: bitcoin.Network) {
-    return this.segWit
-    ? BTCEngine.createSegWitWallet(pk, network)
-    : BTCEngine.createWallet(pk, network);
-  }
  
   /**
    * Change network
    * @param network 
    * @param pk 
    */
-  public changeNetwork (network: string, pk: Buffer) {
-    this.network = network;
-    
-    return this.createFactory(pk, mapNetwork(this.network)).then(secret => {
-      Object.assign(this, secret);
-
-      this.setNewNetwork(network)
-      return network;
-    });
-  }
-
-  private setNewNetwork (network) {
-    const networkProps = ntx.BTC.network.find(item => item.sign === network);
-
-    this.networkUrl = networkProps.url;
+  public changeNetwork (network: any) {
     this.network = network;
   }
 
@@ -71,28 +82,16 @@ export class BitcoinWallet implements IWallet {
    * Return info about blockchain
    */
   public getInfo () {
-    return axios.get(`${this.networkUrl}/rawaddr/${this.address}`)
-        .then(res => {
-        const outputs = [];
-
-        res.data.txs.forEach(tx => {
-          tx.out.forEach((out, idx) => {
-            if (out.addr === this.address && !out.spent) {
-              outputs.push({
-                hash: tx.hash,
-                idx
-              })
-            }
-          })
-        })
+    return explorer.getInfo(this.address, mapNetToExplore(this.bc, this.network))
+      .then(({ data }) => {
+        const payload = data.data;
 
         return {
-          address: res.data.address,
-          outputs,
-          balance: res.data.final_balance / 1e8,
-          network: this.network,
-          txs: res.data.txs
-        };
+          address: this.getAddress(),
+          balance: payload.balance,
+          network: this.network.sign,
+          txs: payload.txs
+        }
       })
   }
 
@@ -101,83 +100,31 @@ export class BitcoinWallet implements IWallet {
    * @param opts 
    */
   public sendCoins (opts) {
-    return this.buildTX(opts)
-      .then(this.signTX)
-      .then(this.BuildToHex)
-      .then(signedTX => {
-        info('TX = ', signedTX);
+    let tx;
+    return explorer.getUnspentTX(this.address, mapNetToExplore(this.bc, this.network))
+      .then(res => {
+        const inputs = res.data.data.txs;
+        const fee = opts.fee || DEFAULT_FEE
 
-        return axios.post(`${this.networkUrl}/pushtx`, 'tx=' + signedTX).then(hash => {
-          info('TX hash:', hash);
-    
-          return { hash };
+        tx = BTCEngine.getTxHash({
+          wallet: this.walletKeys, 
+          inputs, 
+          to: opts.to, 
+          amount: toSatoshi(opts.amount), 
+          fee, 
+          version: getTBVersion(this.bc),
+          data: opts.data
         });
+
+        return explorer.pushTX(tx.hex, mapNetToExplore(this.bc, this.network));
       })
-  }
+      .then(res => {
+        const payload = res.data;
+        const status = payload.status;
 
-  private buildTX ({ to, amount, data, fee }) {
-    return this.getInfo().then(({ outputs, balance }) => {
-      info('create TX with >> ');
-      info('to: ', to);
-      info('data: ', data);
-      info('outputs: ', outputs);
-      
-      const amountInSatoshi = amount * 1e8;
-      const balanceInSatoshi = balance * 1e8;
-      info('amount: ', amountInSatoshi);
-      info('balance:', balanceInSatoshi);
-
-      const testnet = bitcoin.networks.testnet;
-      const txb = new bitcoin.TransactionBuilder(testnet);
-
-      outputs.forEach(out => {
-        if (this.segWit) {
-          txb.addInput(out.hash, out.idx, null, this.scriptPubkey);
-        } else {
-          txb.addInput(out.hash, out.idx);
+        if (status === 'success') {
+          return tx.id;
         }
       })
-      
-      // Put data in hex to OP_RETURN 
-      if (data) {
-        const bitcoinPayload = Buffer.from(data, 'utf8');
-        const dataScript = bitcoin.script.nullData.output.encode(bitcoinPayload);
-        
-        txb.addOutput(dataScript, 0);
-      }
-      
-      const minorFee = fee || DEFAULT_FEE;
-      const amountToReturn = balanceInSatoshi - amountInSatoshi - minorFee;
-      
-      txb.addOutput(to, amountInSatoshi);
-      txb.addOutput(this.address, +amountToReturn.toFixed(0));
-
-      return txb;
-    });
-  }
-
-  private signTX = (txb) => {
-    const testnet = bitcoin.networks.testnet;
-    const keyPair = bitcoin.ECPair.fromWIF(this.private, testnet);
-
-    // Sign all inputs
-    txb.inputs.forEach((input, idx) => {
-      txb.sign(idx, keyPair);
-    });
-
-    return txb;
-  }
-
-  private BuildToHex = (txb) => {
-    return txb.build().toHex();
-  }
-}
-
-const mapNetwork = (network: string) => {
-  switch (network) {
-    case 'testnet':
-      return bitcoin.networks.testnet;
-    case 'mainnet':
-      return bitcoin.networks.bitcoin;
   }
 }

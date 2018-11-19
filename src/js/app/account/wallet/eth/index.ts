@@ -1,34 +1,34 @@
 import Web3 = require('web3');
 import { info } from 'loglevel';
+import { BIP32 } from 'bip32';
+
+import { IWallet, INetwork } from 'types/accounts';
 import EthEngine from './engine';
-import networks from 'bcnetwork'
 
 const web3 = new Web3();
 
 export default class EthWallet implements IWallet {
   public engine: EthEngine;
-  public network: any;
+  public network: INetwork;
   private privateKey: any;
   public address: any;
   public nonce: any;
   public networkUrl: string;
 
-  public create (pk: Buffer | string, network?: string) {
+  public create (pk: BIP32 | string, network?: INetwork) {
     this.changeNetwork(network);
     ({ address: this.address, privateKey: this.privateKey } = this.engine.getPrivKeyFromSeed(pk));
 
     return Promise.resolve();
   }
 
-  public changeNetwork (network: string) {
+  public changeNetwork (network: INetwork) {
     this.network = network;
-    const networkProps = networks.ETH.network.find(item => item.sign === network)
-    this.networkUrl = networkProps.url;
 
-    web3.setProvider(new Web3.providers.HttpProvider(this.networkUrl))
-    this.engine = new EthEngine(network);
+    web3.setProvider(new Web3.providers.HttpProvider(this.network.url));
+    this.engine = new EthEngine(this.network.sign);
   }
-  
+
   public getAddress () {
     return this.address;
   }
@@ -41,7 +41,7 @@ export default class EthWallet implements IWallet {
         return {
           address: this.address,
           balance: +web3.utils.fromWei(amountInWei, 'ether'),
-          network: this.network,
+          network: this.network.sign,
           txs
         };
       }
@@ -56,14 +56,17 @@ export default class EthWallet implements IWallet {
     this.nonce++;
   }
 
-  public sendCoins ({ to, amount, data }) {
-    const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
+  public async sendCoins ({ to, amount, data, gasLimit, gasPrice }) {
+    const nonce = await web3.eth.getTransactionCount(this.address);
 
     const tx = this.engine.signEthTx({
       privKey: this.privateKey,
-      amount: amountInWei,
+      amount,
       to,
-      from: this.address
+      from: this.address,
+      nonce,
+      gasPrice,
+      gasLimit
     });
 
     info(tx);

@@ -1,16 +1,15 @@
-import { info } from 'loglevel';
-
 import Account from './';
 import { AccountFactory } from './accountFactory';
+import ntx from 'bcnetwork';
 
 import { BusController } from 'app/busController';
 import { MessageController } from 'app/messageController';
-import { DomainController} from 'app/domainController';
+import { DomainController } from 'app/domainController';
 import { KeyController } from 'app/keyController';
 import { CacheController } from 'app/cacheController';
 
 import { GET_ACCOUNTS } from 'constants/appInternal';
-import { ACCOUNT_INFO, ACCOUNT_NETWORK_UPDATE } from 'constants/account';
+import { ACCOUNT_INFO, ACCOUNT_NETWORK_UPDATE, ACCOUNT_INFO_DOMAIN } from 'constants/account';
 
 interface IGetAccountOptions {
   key?: string;
@@ -20,6 +19,7 @@ interface IGetAccountOptions {
 interface IGetAccountsOptions {
   bc?: string;
   domain?: string;
+  chainId?: string;
 }
 
 export class AccountController {
@@ -48,6 +48,7 @@ export class AccountController {
     this.busController.on(GET_ACCOUNTS, cb => cb(this.getAccounts()));
 
     this.messageController.on(ACCOUNT_INFO, this.responseAccountInfo);
+    this.messageController.on(ACCOUNT_INFO_DOMAIN, this.getDomainAccounts);
     this.messageController.on(ACCOUNT_NETWORK_UPDATE, this.responseChangeNetwork);
   }
 
@@ -55,34 +56,49 @@ export class AccountController {
    * Return accountInfo
    */
   private responseAccountInfo = (sendResponse: InternalResponseFn) => {
-    Promise.all(this.accounts.map(acc => acc.getInfo()))
-      .then(accountsInfo => {
-        sendResponse({
-          success: true,
-          payload: {
-            accounts: accountsInfo
-          }
-        })
-      })
-  }
+    Promise.all(this.accounts.map(acc => acc.getInfo())).then(accountsInfo => {
+      sendResponse({
+        success: true,
+        payload: {
+          accounts: accountsInfo
+        }
+      });
+    });
+  };
 
+  public getDomainAccounts = (sendResponse: InternalResponseFn, req, { domain }) => {
+    const accounts = this.getAccounts({ domain });
+
+    Promise.all(accounts.map(acc => acc.getInfo())).then(accountsInfo => {
+      sendResponse({
+        success: true,
+        payload: {
+          accounts: accountsInfo
+        }
+      });
+    });
+  };
   /**
    * Update account's wallet network
    */
-  private responseChangeNetwork = (sendResponse: InternalResponseFn, {address, network}): void => {
+  private responseChangeNetwork = (sendResponse: InternalResponseFn, { address, network }): void => {
     const account = this.getAccount({ address });
 
-    account.changeNetwork(network, this.keyController.derivePrivateKey(account));
+    const net = ntx[account.bc].network.find(nt => nt.sign === network);
+
+    account.changeNetwork(net);
+    account.init(this.keyController.derivePrivateKey(account));
+    
     this.cacheController.set(`wallet.${account.key}.network`, network);
 
     sendResponse({
       success: true
-    })
-  }
+    });
+  };
 
   /**
    * Set new plenty of accounts
-   * @param accounts 
+   * @param accounts
    */
   public assignAccounts (accounts: IAccountKeyData[]) {
     this.accounts = accounts.map(accountLink => {
@@ -109,7 +125,7 @@ export class AccountController {
         return found;
       }
     }
-    
+
     if (opts && opts.address) {
       const found = this.accounts.find(acc => acc.getAddress() === opts.address);
 
@@ -128,11 +144,15 @@ export class AccountController {
     let list = this.accounts.slice();
 
     if (opts && opts.bc) {
-      list = list.filter(acc => acc.bc  === opts.bc);
+      list = list.filter(acc => acc.bc === opts.bc);
     }
-    
+
     if (opts && opts.domain) {
-      list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, '1'));
+      list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, acc.key));
+    }
+
+    if (opts && opts.chainId) {
+      list = list.filter(acc => acc.network.chainId === opts.chainId);
     }
 
     return list;

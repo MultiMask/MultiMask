@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-
 import txActions from '../../actions/tx';
 import priceActions from '../../actions/prices';
 import { getCurrentWallet } from './../../select';
@@ -12,8 +10,28 @@ import Wallet from './common/Wallet';
 import Button from '../../ui/Button';
 import TextField from '../../ui/TextField';
 import Typography from '../../ui/Typography';
+import { IWalletInfo } from 'types/accounts';
+import { getTotalGas } from 'helpers/eth';
 
-class Send extends React.Component<any, any> {
+const actions = {
+  ...txActions,
+  ...priceActions
+};
+type IPropsActions = Actions<typeof actions>;
+interface IProps extends IPropsActions {
+  account: IWalletInfo;
+}
+
+interface IState {
+  to?: string;
+  amount?: string;
+  data?: string;
+  errors?: any;
+  gasPrice?: number;
+  gasLimit?: number;
+}
+
+class Send extends React.Component<IProps, IState> {
   constructor (props) {
     super(props);
 
@@ -21,7 +39,9 @@ class Send extends React.Component<any, any> {
       to: '',
       amount: '',
       data: '',
-      errors: {}
+      errors: {},
+      gasPrice: 5,
+      gasLimit: 21000
     };
   }
 
@@ -37,19 +57,34 @@ class Send extends React.Component<any, any> {
     if (Object.keys(errors).length === 0) {
       this.props.createTx({
         tx: this.formatTX(this.state),
-        id: this.props.account.id
+        key: this.props.account.key
       });
     } else {
       this.setState({ errors });
     }
   };
 
-  public formatTX ({ to, amount, data }: any) {
-    return {
-      to,
-      data,
-      amount: parseFloat(amount)
-    };
+  public formatTX ({ to, amount, data, gasPrice, gasLimit }: any) {
+    const {
+      account: { blockchain }
+    } = this.props;
+    switch (blockchain) {
+      case 'ETH':
+        return {
+          to,
+          data,
+          amount: parseFloat(amount),
+          gasPrice,
+          gasLimit
+        };
+
+      default:
+        return {
+          to,
+          data,
+          amount: parseFloat(amount)
+        };
+    }
   }
 
   public validate = values => {
@@ -66,12 +101,14 @@ class Send extends React.Component<any, any> {
   };
 
   public render () {
-    const { account } = this.props;
+    const { account, getPrice } = this.props;
     const {
       errors: { to: toError, amount: amountError },
       to,
       amount,
-      data
+      data,
+      gasPrice,
+      gasLimit
     } = this.state;
 
     return (
@@ -102,14 +139,42 @@ class Send extends React.Component<any, any> {
             <Typography variant="subheading" color="main" className={styles.sign}>
               =
             </Typography>
-
             <TextField
               type="text"
               name="usd"
-              value={`${this.props.getPrice(amount, account.blockchain)} USD`}
+              value={`${this.props.getPrice(+amount, account.blockchain)} USD`}
               readOnly
             />
           </div>
+          {/* TODO: make blockchain enum */}
+          {account.blockchain === 'ETH' && (
+            <React.Fragment>
+              <div className={styles.rowContainer}>
+                <TextField
+                  fullWidth
+                  min="1"
+                  label="Gas prise"
+                  type="number"
+                  name="gasPrice"
+                  onChange={this.handleInput}
+                  value={gasPrice}
+                />
+                <Typography variant="subheading" color="main" className={styles.sign} />
+                <TextField
+                  fullWidth
+                  label="Gas limit"
+                  type="number"
+                  name="gasLimit"
+                  onChange={this.handleInput}
+                  value={gasLimit}
+                />
+              </div>
+              <Typography variant="body1" color="main" className={styles.title}>
+                Cost transaction:
+                {getPrice(getTotalGas(gasPrice, gasLimit), account.blockchain)} USD
+              </Typography>
+            </React.Fragment>
+          )}
           <Typography variant="subheading" color="main" className={styles.title}>
             Transaction data (optional)
           </Typography>
@@ -122,17 +187,13 @@ class Send extends React.Component<any, any> {
 }
 
 export default connect(
-  (state: any) => ({
+  (state: IPopup.AppState) => ({
     account: getCurrentWallet(state)
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        ...txActions,
-        ...priceActions
-      },
-      dispatch
-    )
+  {
+    ...txActions,
+    ...priceActions
+  }
 )(Send);
 
 const Form = styled('form')`
@@ -149,6 +210,7 @@ const styles = {
   title: css`
     margin-bottom: 10px;
     width: 100%;
+    margin-top: 0;
   `,
   sign: css`
     margin: 0 10px;

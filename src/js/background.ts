@@ -13,7 +13,7 @@ import { ProfileListController } from 'app/profiles/profileListController';
 
 import { TransactionController } from 'app/transactionController';
 import { EthereumController } from 'app/ethereumController';
-import { EosController } from 'app/eos';
+import { EosController } from 'app/eosController';
 import { BtcController } from 'app/btcController';
 
 import { SettingsController } from 'app/settings/settingsController';

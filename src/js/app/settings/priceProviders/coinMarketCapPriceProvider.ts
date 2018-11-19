@@ -1,19 +1,22 @@
 import axios from 'axios';
 import basePriceProvider from './basePriceProvider';
+import { BCSign } from 'bcnetwork';
 
-let signToIdEnum = {};
-(function(obj) {
+const signToIdEnum = {};
+(function (obj) {
   Object.entries({
-    1: 'BTC',
-    1027: 'ETH',
-    1765: 'EOS'
+    1: BCSign.BTC,
+    2: BCSign.LTC,
+    74: BCSign.DOGE,
+    1027: BCSign.ETH,
+    1765: BCSign.EOS
   }).map(entry => {
     obj[(obj[entry[0]] = entry[1])] = entry[0];
   });
 })(signToIdEnum);
 
 export default class CoinMarketCapPriceProvider extends basePriceProvider {
-  getBCPrice(sign, params) {
+  public getBCPrice (sign, params) {
     if (!signToIdEnum[sign]) {
       return Promise.reject('Coin not found on Mapping in priceProvider');
     }
@@ -48,7 +51,7 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
     });
   }
 
-  getTickerById(tickerId, params) {
+  public getTickerById (tickerId, params) {
     return new Promise((resolve, reject) => {
       const prs = [];
       params && params.convert && prs.push(`convert=${params.convert}`);

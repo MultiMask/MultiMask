@@ -1,3 +1,8 @@
+import Eos from 'eosjs'
+const {ecc} = Eos.modules;
+
+import { flatten } from 'helpers/func';
+
 export interface IEosAccountPermission {
   account_name: string;
   permission: string;
@@ -7,6 +12,14 @@ export interface IEosAccountPermission {
 
 export const prettyAccount = (account: IEosAccountPermission) => `${account.account_name}@${account.permission}`;
 export const parsePrettyAccount = (account: string) => account.split('@');
+
+export const actionParticipants = (payload) => {
+  return flatten<string>(
+      payload.messages
+          .map(message => message.authorization
+              .map(auth => `${auth.actor}@${auth.permission}`))
+  );
+}
 
 export const parseAccounts = (accountInfo: any[], publicKey): IEosAccountPermission[] => {
   if (!accountInfo) {

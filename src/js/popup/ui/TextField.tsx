@@ -61,6 +61,7 @@ interface ITextFieldProps {
   inputRef?: any;
   autoFocus?: any;
   onBlur?: any;
+  min?: any;
 }
 const TextField: React.SFC<ITextFieldProps> = ({
   className,
