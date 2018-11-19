@@ -3,6 +3,7 @@ import * as ricardianParser from 'eos-rc-parser';
 import Network from 'models/Network';
 import {IdentityRequiredFields} from 'models/Identity';
 import { strippedHost } from 'helpers/net';
+import ntx from 'bcnetwork';
 
 import { REQUEST_SIGNATURE, EOS_GET_ACCOUNTS } from 'constants/blockchains/eos';
 
@@ -14,8 +15,10 @@ export default sender => {
   messageSender = sender;
 
   return {
-    getIdentity: () => {
-      return messageSender(EOS_GET_ACCOUNTS);
+    JUNGLE: ntx.EOS.network[0].chainId,
+
+    getIdentity: (chainId) => {
+      return messageSender(EOS_GET_ACCOUNTS, {  chainId });
     },
 
     getEos: (network, _eos, _options: any = {}, protocol = 'http') => {

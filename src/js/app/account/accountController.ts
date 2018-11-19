@@ -19,6 +19,7 @@ interface IGetAccountOptions {
 interface IGetAccountsOptions {
   bc?: string;
   domain?: string;
+  chainId?: string;
 }
 
 export class AccountController {
@@ -148,6 +149,10 @@ export class AccountController {
 
     if (opts && opts.domain) {
       list = list.filter(acc => this.domainController.domainAccess.isAllowedAccount(opts.domain, acc.key));
+    }
+
+    if (opts && opts.chainId) {
+      list = list.filter(acc => acc.network.chainId === opts.chainId);
     }
 
     return list;
