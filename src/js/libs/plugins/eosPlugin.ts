@@ -4,7 +4,7 @@ import Network from 'models/Network';
 import {IdentityRequiredFields} from 'models/Identity';
 import { strippedHost } from 'helpers/net';
 
-import { REQUEST_SIGNATURE } from 'constants/blockchains/eos';
+import { REQUEST_SIGNATURE, EOS_GET_ACCOUNTS } from 'constants/blockchains/eos';
 
 const proxy = (dummy, handler) => new Proxy(dummy, handler);
 
@@ -13,100 +13,107 @@ let messageSender;
 export default sender => {
   messageSender = sender;
 
-  return (network, _eos, _options: any = {}, protocol = 'http') => {
-    if(!['http', 'https', 'ws'].includes(protocol)) {
+  return {
+    getIdentity: () => {
+      return messageSender(EOS_GET_ACCOUNTS);
+    },
+
+    getEos: (network, _eos, _options: any = {}, protocol = 'http') => {
+      if(!['http', 'https', 'ws'].includes(protocol)) {
         throw new Error('Protocol must be either http, https, or ws');
-    }
+      }
 
-    // Backwards compatibility: Networks now have protocols, but some older dapps still use the argument
-    if(!network.hasOwnProperty('protocol') || !network.protocol.length) {
+      // Backwards compatibility: Networks now have protocols, but some older dapps still use the argument
+      if(!network.hasOwnProperty('protocol') || !network.protocol.length) {
         network.protocol = protocol;
-    }
+      }
 
-    network = Network.fromJson(network);
-    if(!network.isValid()) throw new Error('Invalid network');
-    const httpEndpoint = `${network.protocol}://${network.hostport()}`;
+      network = Network.fromJson(network);
+      if(!network.isValid()) { throw new Error('Invalid network'); }
+      const httpEndpoint = `${network.protocol}://${network.hostport()}`;
 
-    // The proxy stands between the eosjs object and scatter.
-    // This is used to add special functionality like adding `requiredFields` arrays to transactions
-    return proxy(_eos({httpEndpoint, chainId:_options.chainId}), {
+      // The proxy stands between the eosjs object and scatter.
+      // This is used to add special functionality like adding `requiredFields` arrays to transactions
+      return proxy(_eos({httpEndpoint, chainId:_options.chainId}), {
         get (eosInstance, method) {
 
-            const returnedFields = null;
+          const returnedFields = null;
 
             return (...args) => {
 
-                if(args.find(arg => arg.hasOwnProperty('keyProvider'))) throw new Error("Already use keyProvider");
+              if(args.find(arg => arg.hasOwnProperty('keyProvider'))) { throw new Error("Already use keyProvider"); }
 
-                let requiredFields = args.find(arg => arg.hasOwnProperty('requiredFields'));
-                requiredFields = IdentityRequiredFields.fromJson(requiredFields ? requiredFields.requiredFields : {});
-                if(!requiredFields.isValid()) throw new Error("Required fields is invalid");
+              let requiredFields = args.find(arg => arg.hasOwnProperty('requiredFields'));
+              requiredFields = IdentityRequiredFields.fromJson(requiredFields ? requiredFields.requiredFields : {});
+              if(!requiredFields.isValid()) { throw new Error("Required fields is invalid"); }
 
-                // The signature provider which gets elevated into the user's MultiMask
-                const signProvider = async signargs => {
-                    // TODO: Check Identity
+              // The signature provider which gets elevated into the user's MultiMask
+              const signProvider = async signargs => {
+                // TODO: Check Identity
 
-                    // Friendly formatting
-                    signargs.messages = await requestParser(_eos, signargs, httpEndpoint, args[0], _options.chainId);
+                // Friendly formatting
+                signargs.messages = await requestParser(_eos, signargs, httpEndpoint, args[0], _options.chainId);
 
-                    const payload = Object.assign(signargs, { domain:strippedHost(), network, requiredFields });
-                    const result = await messageSender(REQUEST_SIGNATURE, payload);
+                const payload = Object.assign(signargs, { domain:strippedHost(), network, requiredFields });
+                const result = await messageSender(REQUEST_SIGNATURE, payload);
 
-                    // No signature
-                    if(!result) return null;
+                // No signature
+                if(!result) { return null; }
 
-                    if(result.hasOwnProperty('signatures')){
-                        // Holding onto the returned fields for the final result
-                        // returnedFields = result.returnedFields;
+                if(result.hasOwnProperty('signatures')){
+                  // Holding onto the returned fields for the final result
+                  // returnedFields = result.returnedFields;
 
-                        // Grabbing buf signatures from local multi sig sign provider
-                        const multiSigKeyProvider = args.find(arg => arg.hasOwnProperty('signProvider'));
-                        if(multiSigKeyProvider){
-                            result.signatures.push(multiSigKeyProvider.signProvider(signargs.buf, signargs.sign));
-                        }
+                  // Grabbing buf signatures from local multi sig sign provider
+                  const multiSigKeyProvider = args.find(arg => arg.hasOwnProperty('signProvider'));
+                  if(multiSigKeyProvider){
+                      result.signatures.push(multiSigKeyProvider.signProvider(signargs.buf, signargs.sign));
+                  }
 
-                        // Returning only the signatures to eosjs
-                        return result.signatures;
+                  // Returning only the signatures to eosjs
+                  return result.signatures;
+                }
+
+                return result;
+              };
+
+              // TODO: We need to check about the implications of multiple eosjs instances
+              return new Promise((resolve, reject) => {
+                _eos(Object.assign(_options, {httpEndpoint, signProvider}))[method](...args)
+                  .then(result => {
+
+                    // Standard method ( ie. not contract )
+                    if(!result.hasOwnProperty('fc')){
+                      result = Object.assign(result, {returnedFields});
+                      resolve(result);
+                      return;
                     }
 
-                    return result;
-                };
-
-                // TODO: We need to check about the implications of multiple eosjs instances
-                return new Promise((resolve, reject) => {
-                    _eos(Object.assign(_options, {httpEndpoint, signProvider}))[method](...args)
-                        .then(result => {
-
-                            // Standard method ( ie. not contract )
-                            if(!result.hasOwnProperty('fc')){
-                                result = Object.assign(result, {returnedFields});
-                                resolve(result);
-                                return;
-                            }
-
-                            // Catching chained promise methods ( contract .then action )
-                            const contractProxy = proxy(result, {
-                                get (instance,method){
-                                    if(method === 'then') return instance[method];
-                                    return (...args) => {
-                                        return new Promise(async (res, rej) => {
-                                            instance[method](...args).then(actionResult => {
-                                                res(Object.assign(actionResult, {returnedFields}));
-                                            }).catch(rej);
-                                        })
-
-                                    }
-                                }
-                            });
-
-                            resolve(contractProxy);
+                    // Catching chained promise methods ( contract .then action )
+                    const contractProxy = proxy(result, {
+                      get (instance,method){
+                        if(method === 'then') { return instance[method]; }
+                          return (...args) => {
+                            return new Promise(async (res, rej) => {
+                              instance[method](...args)
+                                .then(actionResult => {
+                                  res(Object.assign(actionResult, {returnedFields}));
+                                })
+                                .catch(rej);
+                            })
+                          }
                         }
-                        ).catch(error => reject(error))
-                })
+                    });
+
+                    resolve(contractProxy);
+                  })
+                  .catch(error => reject(error))
+              })
             }
-        }
-    }); // Proxy
-}
+          }
+      }); // Proxy
+    }
+  }
 }
 
 const requestParser = async (_eos, signargs, httpEndpoint, possibleSigner, chainId) => {
@@ -115,7 +122,7 @@ const requestParser = async (_eos, signargs, httpEndpoint, possibleSigner, chain
 
   const contracts = signargs.transaction.actions.map(action => action.account)
       .reduce((acc, contract) => {
-          if(!acc.includes(contract)) acc.push(contract);
+          if(!acc.includes(contract)) { acc.push(contract); }
           return acc;
   }, []);
 

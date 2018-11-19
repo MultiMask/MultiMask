@@ -16,6 +16,12 @@ interface IProps {
   onImport: (extra: any) => void;
 }
 
+const styles = {
+  radio: css`
+    margin: 0;
+  `
+};
+
 export class EosAccount extends React.Component<IProps, IState> {
   public state: IState = {
     selectedAccount: ''
@@ -42,10 +48,10 @@ export class EosAccount extends React.Component<IProps, IState> {
             checked={selectedAccount === prettyAccount(account)}
           />
           <Label>
-            <Typography variant="body1" color="main">
-              Account:
+            <Typography variant="body1" color="main" className={styles.radio}>
+              Account:&nbsp;&nbsp;
               <Emphasis>{prettyAccount(account)}</Emphasis> <br />
-              Balance:
+              Balance:&nbsp;&nbsp;
               <Emphasis>{account.core_liquid_balance}</Emphasis>
             </Typography>
           </Label>
@@ -56,7 +62,7 @@ export class EosAccount extends React.Component<IProps, IState> {
         <Container key={idx}>
           <Radio type="radio" name="account" value={''} onChange={this.handleRadio} checked={selectedAccount === ''} />
           <Label>
-            <Typography variant="body1" color="main">
+            <Typography variant="body1" color="main" className={styles.radio}>
               <Emphasis>Without account</Emphasis>
             </Typography>
           </Label>
@@ -80,14 +86,16 @@ export class EosAccount extends React.Component<IProps, IState> {
           Choose your account:
         </Typography>
         {accountList.map(this.accountViewRender)}
-        <Button
-          onClick={this.handleSave}
-          className={css`
-            margin-top: 20px;
-          `}
-        >
-          Import
-        </Button>
+        <BtnContainer>
+          <Button
+            onClick={this.handleSave}
+            className={css`
+              margin-top: 20px;
+            `}
+          >
+            Import
+          </Button>
+        </BtnContainer>
       </React.Fragment>
     );
   }
@@ -99,10 +107,14 @@ const Emphasis = styled('span')`
 
 const Container = styled('label')`
   display: flex;
+  font-size: 13px;
+  margin-bottom: 20px;
 `;
 
-const Radio = styled('input')`
-  margin: 13px 13px 0 0;
+const Radio = styled('input')``;
+const Label = styled('div')`
+  margin-left: 10px;
 `;
-
-const Label = styled('div')``;
+const BtnContainer = styled('div')`
+  text-align: center;
+`;
