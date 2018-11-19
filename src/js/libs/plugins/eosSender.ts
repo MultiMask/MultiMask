@@ -29,7 +29,7 @@ class EOSSender implements ISender {
   }
 
   public async send () {
-    const eos = EOS(_send)(
+    const eos = EOS(_send).getEos(
       networkEOS,
       Eos,
       {
