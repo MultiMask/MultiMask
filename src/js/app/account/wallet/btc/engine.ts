@@ -2,8 +2,6 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { NetworkType, BIP32 } from 'bip32';
 import { isString } from 'lodash';
 
-console.log(bitcoin);
-
 const toSatoshi = str => Math.floor(parseFloat(str) * 1e8);
 
 interface IWalletCrypto {
