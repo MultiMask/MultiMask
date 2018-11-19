@@ -1,3 +1,6 @@
+import Eos from 'eosjs'
+const {ecc} = Eos.modules;
+
 import { BusController } from 'app/busController';
 import { MessageController } from 'app/messageController';
 import { AccountController } from 'app/account/accountController';
@@ -8,9 +11,8 @@ import { ACCOUNT_UPDATE } from 'constants/account';
 
 import {Prompt} from 'models/Prompt';
 import {NotificationService} from 'services/NotificationService';
-import {parseAccounts, prettyAccount, parsePrettyAccount} from 'helpers/eos';
+import {parseAccounts, prettyAccount, parsePrettyAccount, actionParticipants} from 'helpers/eos';
 
-import { EosEngine } from './engine';
 import { BCSign } from 'bcnetwork';
 
 export class EosController {
@@ -81,18 +83,18 @@ export class EosController {
    * When need to sign transaction
    */
   private responseRequestSignature = (sendResponse, data) => {
-    const requiredAccounts = EosEngine.actionParticipants(data);
+    const requiredAccounts = actionParticipants(data);
     const requiredAccount = requiredAccounts ? requiredAccounts[0].split('@')[0] : null;
 
     // TODO: check network
 
     const account = this.findByAccountName(requiredAccount);
+    // console.log(account);
     if (account) {
       const responder = approval => {
         const signature = approval.success 
-          // TODO: put PrivateKey
-          // ? EosEngine.sign(data, account.getSeed())
-          // : null
+          ? this.sign(data, account.wallet.private)
+          : null
         
         sendResponse({
           signatures:[signature],
@@ -107,8 +109,8 @@ export class EosController {
   /**
    * Return allowed accounts
    */
-  private responseGetAccounts = (sendResponse, payload, { domain }) => {
-    const accountsInstance = this.accountController.getAccounts({ bc: BCSign.EOS, domain });
+  private responseGetAccounts = (sendResponse, { chainId }, { domain }) => {
+    const accountsInstance = this.accountController.getAccounts({ bc: BCSign.EOS, chainId, domain });
     const accounts = accountsInstance
       .map(acc => {
         const idenity = parsePrettyAccount(acc.extra);
@@ -132,5 +134,9 @@ export class EosController {
    */
   private findByAccountName (address: string) {
     return this.accountController.getAccount({ address });
+  }
+
+  private sign (payload, privateKey) {
+    return ecc.sign(Buffer.from( payload.buf.data, 'utf8'), privateKey);
   }
 }
