@@ -42,22 +42,17 @@ export class MessageController extends EventEmitter {
       const message = InternalMessage.fromJson(request);
       const payload = message.payload ? message.payload : message;
       payload.type = message.type;
-      
+
       const cb = (...args) => {
         info('responsed >> ', ...args, request);
         sendResponse(...args);
-<<<<<<< HEAD
       };
 
-=======
-      }
-      
->>>>>>> origin/develop
       // Set current open domain
       if (payload.domain) {
         this.busController.emit(SET_CURRENT_DOMAIN, payload.domain);
       }
-      
+
       // Miss sync messages
       if (payload.type === 'sync') {
         return;
