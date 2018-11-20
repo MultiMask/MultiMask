@@ -81,8 +81,8 @@ export class AccountController {
   /**
    * Update account's wallet network
    */
-  private responseChangeNetwork = (sendResponse: InternalResponseFn, { address, network }): void => {
-    const account = this.getAccount({ address });
+  private responseChangeNetwork = (sendResponse: InternalResponseFn, { key, network }): void => {
+    const account = this.getAccount({ key });
 
     const net = ntx[account.bc].network.find(nt => nt.sign === network);
 

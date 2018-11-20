@@ -64,6 +64,13 @@ export default {
     sign: BCSign.EOS,
     network: [
       {
+        name: 'Mainnet',
+        sign: 'mainnet',
+        chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
+        url: 'http://mainnet.eoscalgary.io:80',
+        explorerUrl: 'https://eospark.com/MainNet/'
+      },
+      {
         name: 'Jungle Testnet',
         sign: 'testnet',
         chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
