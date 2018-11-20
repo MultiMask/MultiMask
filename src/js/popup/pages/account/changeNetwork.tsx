@@ -81,16 +81,14 @@ class ChangeNetwork extends React.Component<any, any> {
 
     const {
       changeNetwork,
-      account: {
-        info: { address }
-      },
+      account: { key },
       match: {
         params: { id }
       }
     } = this.props;
 
     const { selectValue } = this.state;
-    changeNetwork(address, selectValue.value);
+    changeNetwork(key, selectValue.value);
   };
 
   public handleChooseNetwork = e => {

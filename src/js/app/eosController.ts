@@ -72,6 +72,7 @@ export class EosController {
 
     if (account) {
       this.busController.emit(ACCOUNT_UPDATE, key, { extra: prettyAccount(accountPermission)}, () => {
+        account.setExtra(prettyAccount(accountPermission));
         account.getInfo().then(sendResponse);  
       });
     } else {
@@ -89,7 +90,6 @@ export class EosController {
     // TODO: check network
 
     const account = this.findByAccountName(requiredAccount);
-    // console.log(account);
     if (account) {
       const responder = approval => {
         const signature = approval.success 

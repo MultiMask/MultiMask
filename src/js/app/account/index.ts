@@ -1,5 +1,6 @@
 import { info } from 'loglevel';
 import { IAccountCreate, INetwork, IWalletInfo } from 'types/accounts';
+import { BCSign } from 'bcnetwork';
 
 const DEFAULT_DATA = '020';     // mean use profile seed and index 0
 
@@ -44,7 +45,11 @@ export default class Account {
 
   public changeNetwork (network: INetwork, privateKey?) {
     this.network = network;
-    this.wallet.changeNetwork(network, privateKey)
+    this.wallet.changeNetwork(network, privateKey);
+
+    if (this.bc === BCSign.EOS) {
+      this.setExtra(null);
+    }
   }
 
   public setExtra (data: any): void {

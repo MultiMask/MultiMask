@@ -45,8 +45,8 @@ const AccountActions = {
       });
   },
 
-  changeNetwork: (address, network) => (dispatch, getState) => {
-    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { address, network })
+  changeNetwork: (key, network) => (dispatch, getState) => {
+    return InternalMessage.payload(ACCOUNT_NETWORK_UPDATE, { key, network })
       .send()
       .then(payload => {
         return AccountActions.getInfo()(dispatch, getState);

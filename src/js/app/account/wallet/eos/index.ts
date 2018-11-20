@@ -87,6 +87,14 @@ export class EosWallet implements IWallet {
           txs: data.transactions
         }
       })
+      .catch(() => {
+        return {
+          address: this.public,
+          balance: 0,
+          network: this.network.sign,
+          txs: []
+        }
+      })
     } else {
       return Promise.resolve({
         address: this.public,
@@ -98,7 +106,11 @@ export class EosWallet implements IWallet {
   }
 
   public getAddress () {
-    return this.accountPermission.account_name;
+    if (this.accountPermission) {
+      return this.accountPermission.account_name;
+    }
+
+    return this.public;
   }
 
   public setExtra (data: any) {
@@ -108,10 +120,14 @@ export class EosWallet implements IWallet {
         account_name,
         permission
       };
+    } else {
+      this.accountPermission = null;
     }
   }
 
   public sendCoins ({ to, amount, data, token = 'EOS' }) {
-    return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} ${token}`, data);
+    if (this.accountPermission) {
+      return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} ${token}`, data);
+    }
   }
 }
