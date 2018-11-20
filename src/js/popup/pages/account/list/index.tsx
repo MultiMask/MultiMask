@@ -19,7 +19,7 @@ interface IProps extends IPropsActions {
 }
 
 class AccountList extends React.Component<IProps, {}> {
-  public render() {
+  public render () {
     const { getPrice, getPriceInBTC } = this.props;
 
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {
@@ -42,7 +42,7 @@ class AccountList extends React.Component<IProps, {}> {
             {this.props.showTotal ? (
               <div className="Wallets-Total">
                 <div className="Wallets-Label">total:</div>
-                <div className="Wallets-Value">{total.balanceInBTC} BTC</div>
+                <div className="Wallets-Value">{total.balanceInBTC.toFixed(8)} BTC</div>
                 <div className="Wallets-Label">{getPrice(total.balanceInBTC, 'BTC')} USD</div>
               </div>
             ) : null}
