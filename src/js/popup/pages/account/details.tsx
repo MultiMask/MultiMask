@@ -6,7 +6,7 @@ import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
 import { getCurrentWallet } from './../../select';
 
-import ntx from 'bcnetwork';
+import ntx, { BCSign } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import { openUrlToTab, LinkTypes } from 'helpers/links';
 
@@ -45,6 +45,13 @@ class AccountInfo extends React.Component<IProps, any> {
     }
   }
 
+  public handleOpenDetails = () => {
+    const { account } = this.props;
+    const type = account.blockchain === BCSign.EOS ? LinkTypes.Account : LinkTypes.Address;
+
+    openUrlToTab(account, account.info.address, type);
+  };
+
   public render () {
     const { account } = this.props;
     return (
@@ -69,9 +76,7 @@ class AccountInfo extends React.Component<IProps, any> {
                 iconProps={{ color: 'secondary', name: 'ellipsis-h' }}
               >
                 {this.bcMenuItems()}
-                <MenuItem onClick={() => openUrlToTab(account, account.info.address, LinkTypes.Address)}>
-                  View Account
-                </MenuItem>
+                <MenuItem onClick={this.handleOpenDetails}>View Account</MenuItem>
                 <MenuItem component={Link} to="/account/details/qrcodelink">
                   Show QR-code
                 </MenuItem>

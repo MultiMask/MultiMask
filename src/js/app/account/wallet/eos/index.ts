@@ -5,6 +5,7 @@ const {ecc, Fcbuffer} = Eos.modules;
 import { BIP32 } from 'bip32';
 
 import { IWallet, INetwork } from 'types/accounts';
+import explorer from './explorer';
 
 import {prettyAccount, parsePrettyAccount, IEosAccountPermission} from 'helpers/eos';
 import ntx from 'bcnetwork';
@@ -20,10 +21,6 @@ export class EosWallet implements IWallet {
 
   public accountPermission: IEosAccountPermission;
 
-  constructor (network) {
-    this.network = network;
-  }
-
   public changeNetwork (network: INetwork): void {
     const net = findNetwork(network);
 
@@ -36,7 +33,11 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public create (pk: BIP32 | string) {
+  public create (pk: BIP32 | string, network?: INetwork) {
+    if (network) {
+      this.network = network;
+    }
+
     const privateKey = isString(pk)
       ? pk
       : wif.encode(128, pk.privateKey, false);
@@ -75,12 +76,15 @@ export class EosWallet implements IWallet {
 
   public getInfo (): Promise<any> {
     if (this.accountPermission) {
-      return this._getInfoByAccount(this.accountPermission.account_name).then(accountInfo => {
+      return Promise.all([
+        this._getInfoByAccount(this.accountPermission.account_name),
+        explorer.getInfo(this.accountPermission.account_name, this.network.sign)
+      ]).then(([info, data]) => {
         return {
-          address: prettyAccount(this.accountPermission),
-          balance: accountInfo.core_liquid_balance.split(' ')[0],
+          address: this.accountPermission.account_name,
+          balance: info.core_liquid_balance.split(' ')[0],
           network: this.network.sign,
-          txs: []
+          txs: data.transactions
         }
       })
     } else {
