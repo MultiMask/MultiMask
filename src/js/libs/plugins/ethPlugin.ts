@@ -11,7 +11,7 @@ import SubscriptionsSubprovider from 'web3-provider-engine/subproviders/subscrip
 
 export default messageSender => {
   return {
-    getProvider: chainId => {
+    getProvider: (chainId = 1) => {
       const engine = new ProviderEngine();
 
       // static results

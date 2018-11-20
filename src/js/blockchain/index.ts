@@ -36,13 +36,13 @@ export default {
     name: 'Ethereum',
     sign: BCSign.ETH,
     network: [
-      // {
-      //   name: 'Main',
-      //   sign: 'main',
-      //   url: 'wss://mainnet.infura.io/ws',
-      //   explorerUrl: 'https://etherscan.io/',
-      //   chainId: 1
-      // },
+      {
+        name: 'Main',
+        sign: 'main',
+        url: 'wss://mainnet.infura.io/ws',
+        explorerUrl: 'https://etherscan.io/',
+        chainId: 1
+      },
       {
         name: 'Ropsten',
         sign: 'ropsten',
