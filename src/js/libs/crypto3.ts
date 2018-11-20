@@ -110,6 +110,10 @@ export class Crypto3 {
   public async pay (params): Promise<string | Error> {
     const sender = TransportLocator.create(params);
 
+    if (sender === Error) {
+      return sender;
+    }
+
     const result = await sender.send();
     console.log('txhash', result);
 
