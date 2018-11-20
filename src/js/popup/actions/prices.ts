@@ -35,7 +35,7 @@ const priceActions = {
       btc = parseFloat((prices[sign].BTC * amount) as any);
     }
 
-    return isNaN(btc) ? 0 : parseFloat(btc.toFixed(2));
+    return isNaN(btc) ? 0 : parseFloat(btc.toFixed(6));
   }
 };
 
