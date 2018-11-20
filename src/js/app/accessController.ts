@@ -28,25 +28,25 @@ export class AccessController {
     this.startListening();
   }
 
-  /** 
+  /**
    * Listen message
    */
   private startListening () {
     // TODO: Maybe use AUTH_CHECK for this purpuse
-    this.messageController.on(AUTH_IS_READY, (sendResponse) => {
+    this.messageController.on(AUTH_IS_READY, sendResponse => {
       sendResponse({
         isReady: this.isAuth()
       });
-    })
+    });
 
     /**
      * Check authorize user
      */
-    this.messageController.on(AUTH_CHECK, (sendResponse) => {
+    this.messageController.on(AUTH_CHECK, sendResponse => {
       sendResponse({
         isAuth: this.isAuth()
       });
-    })
+    });
 
     /**
      * Create new Password for new User
@@ -54,7 +54,7 @@ export class AccessController {
     this.messageController.on(AUTH_INIT, (sendResponse, { pass }) => {
       this.create(pass);
       sendResponse({ result: true });
-    })
+    });
 
     /**
      * Try login
@@ -62,15 +62,15 @@ export class AccessController {
     this.messageController.on(AUTH_LOGIN, (sendResponse, { pass }) => {
       this.login(pass).then(isLogin => {
         sendResponse({ isLogin });
-      })
-    })
+      });
+    });
 
     /**
      * Try logout
      */
-    this.messageController.on(AUTH_LOGOUT, (sendResponse) => {
+    this.messageController.on(AUTH_LOGOUT, sendResponse => {
       sendResponse({ isLogout: this.logout() });
-    })
+    });
 
     /**
      * Check Auth from app
@@ -80,7 +80,7 @@ export class AccessController {
 
   /**
    * Create new pass
-   * @param pass 
+   * @param pass
    */
   private create (pass: string) {
     StorageService.Pass.set(pass);
@@ -90,7 +90,7 @@ export class AccessController {
 
   /**
    * Try login, check pass
-   * @param pass 
+   * @param pass
    */
   private async login (pass: string) {
     const isAuth = await StorageService.Pass.check(pass);
@@ -127,17 +127,20 @@ export class AccessController {
 
   /**
    * Encode any data with master pass
-   * @param data 
+   * @param data
    */
   public encode = (data: any): string => {
     return encode(this.password, JSON.stringify(data));
-  }
+  };
 
   /**
    * Decode encrypted data
-   * @param data 
+   * @param data
    */
   public decode = (data: string): any => {
     return JSON.parse(decode(this.password, data));
-  }
+  };
+  public decodeWithPassword = (data: string, password: string): any => {
+    return JSON.parse(decode(password, data));
+  };
 }

@@ -11,19 +11,18 @@ declare namespace IPopup.State {
       hash: string;
       search: string;
       state: string;
-    }
+    };
     url?: string;
   }
 
   export interface UI {
     profileCreate: {
       seed: string;
-    }
+    };
   }
 
   export interface Profile {
     list: ProfileInfo[];
     current: string;
-    onImport: any;
   }
 }

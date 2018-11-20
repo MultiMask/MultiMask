@@ -12,7 +12,7 @@ import TextField from 'ui/TextField';
 
 import profileActions from 'popup/actions/profile';
 import accountActions from 'popup/actions/account';
-import { readFile } from 'helpers/files';
+import { URL_PROFILE_IMPORT } from 'constants/popupUrl';
 
 const Wrapper = styled('div')`
   flex-grow: 1;
@@ -113,12 +113,6 @@ class Profiles extends React.Component<IProps, IState> {
     this.setState({ editProfileId: null });
   };
 
-  public handleImportProfile = () => {
-    const onImport = encryptedProfile => this.props.setImportingProfile(encryptedProfile);
-
-    readFile(onImport);
-  };
-
   public handleSelect = profileId => event => {
     event.preventDefault();
 
@@ -186,7 +180,9 @@ class Profiles extends React.Component<IProps, IState> {
           <Button outlined onClick={this.onAdd}>
             Add
           </Button>
-          <Button onClick={this.handleImportProfile}>Import</Button>
+          <Link to={URL_PROFILE_IMPORT}>
+            <Button>Import</Button>
+          </Link>
         </Bottom>
       </Wrapper>
     );

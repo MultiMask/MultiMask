@@ -9,16 +9,17 @@ import { ProfileController } from 'app/profiles/profileController';
 
 import { getWalletsCount } from 'helpers/profiles';
 
-import { 
+import {
   PROFILE_GET_CURRENT,
   PROFILE_CREATE_DONE,
-  PROFILE_GETLIST, 
-  PROFILE_SELECT, 
+  PROFILE_GETLIST,
+  PROFILE_SELECT,
   PROFILE_UPDATE,
-  PROFILE_REMOVE, 
+  PROFILE_REMOVE,
   PROFILE_EXPORT,
-  PROFILE_IMPORT
- } from 'constants/profile';
+  PROFILE_IMPORT,
+  PROFILE_IMPORT_QRCODE
+} from 'constants/profile';
 import { Profile } from 'models/Profile';
 
 export class ProfileListController extends EventEmitter {
@@ -51,33 +52,34 @@ export class ProfileListController extends EventEmitter {
 
     this.messageController.on(PROFILE_UPDATE, this.responseUpdate);
     this.messageController.on(PROFILE_REMOVE, this.responseRemove);
-    
+
     this.messageController.on(PROFILE_EXPORT, this.responseExport);
     this.messageController.on(PROFILE_IMPORT, this.responseImport);
+    this.messageController.on(PROFILE_IMPORT_QRCODE, this.responseImportFromOptions);
   }
 
   /**
    * Get active profile
    */
   private responseGetCurrent = (sendResponse: InternalResponseFn) => {
-    const data = this.current ?
-     { 
-        success: true, 
-        payload: {
-          profileId: this.current 
+    const data = this.current
+      ? {
+          success: true,
+          payload: {
+            profileId: this.current
+          }
         }
-      }
       : { success: false };
-    
+
     sendResponse(data);
-  }
-  
+  };
+
   /**
    * Create new Profile on seed
    */
-  private responseCreateDone = (sendResponse: InternalResponseFn, { payload: { seed }}) => {
+  private responseCreateDone = (sendResponse: InternalResponseFn, { payload: { seed } }) => {
     const profile = new Profile(seed);
-    
+
     this.addProfile(profile);
 
     sendResponse({
@@ -85,86 +87,100 @@ export class ProfileListController extends EventEmitter {
       payload: {
         profileId: profile.id
       }
-    })
-  }
-   
+    });
+  };
+
   /**
    * Select certain Profile and emit event that Profile changed
    */
-  private responseSelect = async (sendResponse: InternalResponseFn, {payload: { profileId }}) => {
+  private responseSelect = async (sendResponse: InternalResponseFn, { payload: { profileId } }) => {
     sendResponse({
       success: true,
       payload: {
         current: await this.activate(profileId)
       }
     });
-  }
+  };
 
   /**
    * Return list of profiles with info
    */
   private responseGetList = (sendResponse: InternalResponseFn) => {
-    this.loadProfilesAndCurrent()
-      .then(payload => {
-        sendResponse({
-          success: true,
-          payload
-        })
-      })
-  }
+    this.loadProfilesAndCurrent().then(payload => {
+      sendResponse({
+        success: true,
+        payload
+      });
+    });
+  };
 
   /**
    * Update certain Profile
    */
-  private responseUpdate = (sendResponse: InternalResponseFn, { payload: { id, data }}) => {
-    this.profileController.updateName(id, data.name)
+  private responseUpdate = (sendResponse: InternalResponseFn, { payload: { id, data } }) => {
+    this.profileController
+      .updateName(id, data.name)
       .then(this.loadProfilesAndCurrent)
       .then(payload => {
         sendResponse({
           success: true,
           payload
-        })
-      })
-  }
+        });
+      });
+  };
 
   /**
    * Export profile
    */
-  private responseExport = (sendResponse: InternalResponseFn, { payload: { id }}) => {
-    this.profileController.export(id)
-      .then(encodedProfile => {
-        sendResponse({
-          success: true,
-          payload: {
-            encodedProfile
-          }
-        });
-      })
-  }
+  private responseExport = (sendResponse: InternalResponseFn, { payload: { id } }) => {
+    this.profileController.export(id).then(encodedProfile => {
+      sendResponse({
+        success: true,
+        payload: {
+          encodedProfile
+        }
+      });
+    });
+  };
 
   /**
-   * Import new profile
+   * Import qrcode profile
    */
-  private responseImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile }}) => {
-    const rawProfile = JSON.parse(this.accessController.decode(encryptedProfile));
+  private responseImportFromOptions = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
+    const rawProfile = JSON.parse(this.accessController.decodeWithPassword(encryptedProfile, pass));
+
     const profile = Profile.fromJSON(rawProfile);
 
     this.addProfile(profile);
-    
-    this.responseGetList(sendResponse)
-  }
+
+    sendResponse({
+      success: true
+    });
+  };
+
+  /**
+   * Import file profile
+   */
+  private responseImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
+    const rawProfile = JSON.parse(this.accessController.decodeWithPassword(encryptedProfile, pass));
+    const profile = Profile.fromJSON(rawProfile);
+
+    this.addProfile(profile);
+
+    this.responseGetList(sendResponse);
+  };
 
   /**
    * Remove certain Profile
    */
-  private responseRemove = (sendResponse: InternalResponseFn, { payload: { id }}) => {
+  private responseRemove = (sendResponse: InternalResponseFn, { payload: { id } }) => {
     if (id === this.current) {
       this.profileController.clear();
       this.current = null;
 
       StorageService.ProfileList.setCurrnet(null);
     }
-    
+
     this.list = this.list.filter(prId => prId !== id);
 
     StorageService.ProfileList.set(this.list)
@@ -181,33 +197,32 @@ export class ProfileListController extends EventEmitter {
         sendResponse({
           success: true,
           payload
-        })
-      })
-  }
+        });
+      });
+  };
 
   /**
    * Read profile list from storage and restore all profiles
    */
   public init (): Promise<string[]> {
-    return Promise.all([
-      StorageService.ProfileList.get(),
-      StorageService.ProfileList.getCurrent(),
-    ]).then(([list, current]) => {
-      this.list = list || this.list;
+    return Promise.all([StorageService.ProfileList.get(), StorageService.ProfileList.getCurrent()]).then(
+      ([list, current]) => {
+        this.list = list || this.list;
 
-      if (current) {
-        this.current = current;
-      } else {
-        if (list && list[0]) {
-          const first = list[0];
+        if (current) {
+          this.current = current;
+        } else {
+          if (list && list[0]) {
+            const first = list[0];
 
-          this.setCurrrent(first);
+            this.setCurrrent(first);
+          }
         }
-      }
 
-      info('load profiles complete');
-      return this.current;
-    })
+        info('load profiles complete');
+        return this.current;
+      }
+    );
   }
 
   /**
@@ -225,26 +240,27 @@ export class ProfileListController extends EventEmitter {
 
   /**
    * Activate Profile
-   * @param profileId 
+   * @param profileId
    */
   private async activate (profileId: string): Promise<any> {
     return new Promise((res, rej) => {
       if (!this.list.includes(profileId)) {
         return rej(false);
       }
-  
-      this.profileController.activateProfile(profileId)
+
+      this.profileController
+        .activateProfile(profileId)
         .then(() => {
           this.setCurrrent(profileId);
           res(profileId);
         })
         .catch(rej);
-    })
+    });
   }
 
   /**
    * Set new current account
-   * @param profile 
+   * @param profile
    */
   private setCurrrent (profileId: string) {
     this.current = profileId;
@@ -255,24 +271,22 @@ export class ProfileListController extends EventEmitter {
    * Load common information about profiles
    */
   private loadProfiles (): Promise<ProfileInfo[]> {
-    return Promise.all(this.list.map(id => StorageService.Entities.get(id)))
-      .then(profiles => {
-        return profiles.map((profile: Profile) => ({
-          name: profile.name,
-          id: profile.id,
-          wallets: getWalletsCount(profile)
-        }))
-      })
+    return Promise.all(this.list.map(id => StorageService.Entities.get(id))).then(profiles => {
+      return profiles.map((profile: Profile) => ({
+        name: profile.name,
+        id: profile.id,
+        wallets: getWalletsCount(profile)
+      }));
+    });
   }
 
   /**
    * Hooks to enrich data
    */
   private loadProfilesAndCurrent = () => {
-    return this.loadProfiles()
-      .then(list => ({
-        list,
-        current: this.current
-      }))
-  }
+    return this.loadProfiles().then(list => ({
+      list,
+      current: this.current
+    }));
+  };
 }
