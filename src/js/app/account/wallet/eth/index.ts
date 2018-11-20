@@ -25,7 +25,7 @@ export default class EthWallet implements IWallet {
   public changeNetwork (network: INetwork) {
     this.network = network;
 
-    web3.setProvider(new Web3.providers.HttpProvider(this.network.url));
+    web3.setProvider(new Web3.providers.WebsocketProvider(this.network.url));
     this.engine = new EthEngine(this.network.sign);
   }
 

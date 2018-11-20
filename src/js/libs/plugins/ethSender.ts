@@ -18,7 +18,7 @@ class ETHSender implements ISender {
   }
 
   public async send () {
-    const web3 = new Web3(ETH(_send));
+    const web3 = new Web3(ETH(_send).getProvider(this.chainId));
     const result = await web3.eth.sendTransaction(
       {
         from: this.from,
