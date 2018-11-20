@@ -3,7 +3,8 @@ import { IWalletInfo } from 'types/accounts';
 
 export enum LinkTypes {
   TX = 'tx',
-  Address = 'address'
+  Address = 'address',
+  Account = 'account'
 }
 
 export const getExplorerLink = (account: IWalletInfo, hash: string, linkType: LinkTypes): string => {

@@ -20,8 +20,7 @@ const createWallet = ({ bc }) => {
   }
 
   if (bc === ntx.EOS.sign) {
-    const defaultEOSNetwork = ntx.EOS.network[0];
-    return new EosWallet(defaultEOSNetwork);
+    return new EosWallet();
   }
 
   throw new Error(`No support blockchain: ${bc}`);
