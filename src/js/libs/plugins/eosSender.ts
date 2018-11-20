@@ -1,17 +1,9 @@
 import EOS from './eosPlugin';
 import Eos from 'eosjs';
 import { _send } from '../crypto3';
+import networks from '../../blockchain/index';
 import { ISender, ISenderParams } from 'types/crypto3';
 import { BCSign } from 'bcnetwork';
-
-const chainId = '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca';
-const networkEOS = {
-  protocol: 'http',
-  blockchain: 'eos',
-  host: 'jungle.cryptolions.io',
-  port: 18888,
-  chainId
-};
 
 class EOSSender implements ISender {
   public readonly to: string;
@@ -19,46 +11,73 @@ class EOSSender implements ISender {
   public readonly data: string;
   public readonly amount: number;
   public readonly blockchainType: BCSign;
-  public readonly chainId: number;
+  public readonly chainId: string;
 
-  constructor ({ from, to, data, amount }: ISenderParams) {
+  constructor ({ from, to, data, amount, chainId }: ISenderParams) {
     this.from = from;
     this.to = to;
     this.data = data;
     this.amount = amount;
+    this.chainId = chainId as string;
   }
 
   public async send () {
+    const network = networks.EOS.network.find(item => item.chainId === this.chainId);
+    const networkEOS = this.getNetworkEOS(network);
+
     const eos = EOS(_send).getEos(
       networkEOS,
       Eos,
       {
-        chainId: networkEOS.chainId,
-        httpEndpoint: `http://${networkEOS.host}:${networkEOS.port}`
+        chainId: this.chainId,
+        httpEndpoint: network.url
       },
       'http'
     );
 
-    return await eos.transaction({
-      actions: [
-        {
-          account: 'eosio.token',
-          name: 'transfer',
-          authorization: [
+    return await eos
+      .getIdentity(this.chainId)
+      .then(res => {
+        const currentUser = res.accounts.find(item => item.address === this.to);
+
+        const transData = {
+          actions: [
             {
-              actor: 'ducone',
-              permission: 'active'
+              account: 'eosio.token',
+              name: 'transfer',
+              authorization: [
+                {
+                  actor: currentUser.name,
+                  permission: currentUser.authority
+                }
+              ],
+              data: {
+                from: this.from,
+                to: this.to,
+                quantity: '0.1300 EOS',
+                memo: this.data
+              }
             }
-          ],
-          data: {
-            from: this.from,
-            to: this.to,
-            quantity: this.amount, // '0.1300 EOS',
-            memo: ''
-          }
-        }
-      ]
-    });
+          ]
+        };
+
+        return eos.transaction(transData);
+      })
+      .then(txHash => {
+        console.log('tx hash', txHash);
+        return txHash;
+      });
+  }
+
+  private getNetworkEOS (network) {
+    const url = new URL(network.url);
+    return {
+      protocol: url.protocol,
+      blockchain: 'eos',
+      host: url.hostname,
+      port: url.port,
+      chainid: this.chainId
+    };
   }
 }
 
