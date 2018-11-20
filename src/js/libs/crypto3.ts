@@ -99,7 +99,8 @@ export class Crypto3 {
         to: entity.address,
         from: account.info.address,
         amount: entity.amount,
-        blockchainType: account.blockchain
+        blockchainType: account.blockchain,
+        chainId: entity.chainId
       };
     }
 
