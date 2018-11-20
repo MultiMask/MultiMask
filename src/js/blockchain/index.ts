@@ -39,21 +39,21 @@ export default {
       // {
       //   name: 'Main',
       //   sign: 'main',
-      //   url: 'https://mainnet.infura.io/',
+      //   url: 'wss://mainnet.infura.io/ws',
       //   explorerUrl: 'https://etherscan.io/',
       //   chainId: 1
       // },
       {
         name: 'Ropsten',
         sign: 'ropsten',
-        url: 'https://ropsten.infura.io/',
+        url: 'wss://ropsten.infura.io/ws',
         explorerUrl: 'https://ropsten.etherscan.io/',
         chainId: 3
       },
       {
         name: 'Rinkeby',
         sign: 'rinkeby',
-        url: 'https://rinkeby.infura.io',
+        url: 'wss://rinkeby.infura.io/ws',
         explorerUrl: 'https://rinkeby.etherscan.io/',
         chainId: 4
       }
@@ -104,8 +104,8 @@ export default {
         btc: {
           messagePrefix: '\x19Dogecoin Signed Message:\n',
           bip32: {
-              public: 0x02facafd,
-              private: 0x02fac398
+            public: 0x02facafd,
+            private: 0x02fac398
           },
           pubKeyHash: 0x1e,
           scriptHash: 0x16,
