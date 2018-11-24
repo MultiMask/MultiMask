@@ -21,7 +21,7 @@ export class AccessController {
   private busController: BusController;
   private messageController: MessageController;
 
-  constructor (opts: IAccessControllerProps) {
+  constructor(opts: IAccessControllerProps) {
     this.busController = opts.busController;
     this.messageController = opts.messageController;
 
@@ -31,7 +31,7 @@ export class AccessController {
   /**
    * Listen message
    */
-  private startListening () {
+  private startListening() {
     // TODO: Maybe use AUTH_CHECK for this purpuse
     this.messageController.on(AUTH_IS_READY, sendResponse => {
       sendResponse({
@@ -82,7 +82,7 @@ export class AccessController {
    * Create new pass
    * @param pass
    */
-  private create (pass: string) {
+  private create(pass: string) {
     StorageService.Pass.set(pass);
     this.password = pass;
     this.inited = true;
@@ -92,7 +92,7 @@ export class AccessController {
    * Try login, check pass
    * @param pass
    */
-  private async login (pass: string) {
+  private async login(pass: string) {
     const isAuth = await StorageService.Pass.check(pass);
 
     if (isAuth) {
@@ -107,21 +107,21 @@ export class AccessController {
    * Check hash pass without send password
    * @param hashedPass password hash
    */
-  private async check (hashedPass: string) {
+  private async check(hashedPass: string) {
     return StorageService.Pass.check(hashedPass);
   }
 
   /**
    * Logout user from App
    */
-  private logout () {
+  private logout() {
     return delete this.password;
   }
 
   /**
    * Check that user is authorize
    */
-  public isAuth () {
+  public isAuth() {
     return !!this.password;
   }
 

@@ -37,7 +37,7 @@ const Sing = styled('div')`
 `;
 
 class Wallet extends React.Component<any, any> {
-  public render () {
+  public render() {
     const {
       data: {
         info: { address, balance, network },

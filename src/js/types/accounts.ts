@@ -1,5 +1,5 @@
-import { BIP32 } from "bip32";
-import { BCSign } from 'bcnetwork'
+import { BIP32 } from 'bip32';
+import { BCSign } from 'bcnetwork';
 
 /**
  * Props Wallet with info about balances
@@ -17,15 +17,14 @@ export interface IWalletInfo {
  * Common interface for all blockchain wallets
  */
 export interface IWallet {
-  
-  changeNetwork (network: INetwork): void;
-  
-  create (pk: BIP32): Promise<any>;
-  
-  getAddress (): string;
-  getInfo (): Promise<BCInfo>;
-  
-  sendCoins ({ to, amount, data }): Promise<any>;
+  changeNetwork(network: INetwork): void;
+
+  create(pk: BIP32): Promise<any>;
+
+  getAddress(): string;
+  getInfo(): Promise<BCInfo>;
+
+  sendCoins({ to, amount, data }): Promise<any>;
 }
 
 /**

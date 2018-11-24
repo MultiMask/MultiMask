@@ -3,8 +3,7 @@ export const downloadFile = (data, filename = 'Default.mm', type = 'text/plain;c
   if (window.navigator.msSaveOrOpenBlob) {
     // IE10+
     window.navigator.msSaveOrOpenBlob(file, filename);
-  }
-  else {
+  } else {
     // Others
     const a = document.createElement('a'),
       url = URL.createObjectURL(file);
@@ -12,7 +11,7 @@ export const downloadFile = (data, filename = 'Default.mm', type = 'text/plain;c
     a.download = filename;
     document.body.appendChild(a);
     a.click();
-    setTimeout(function () {
+    setTimeout(function() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     }, 0);
@@ -26,13 +25,13 @@ const clickElem = elem => {
 };
 
 export const readFile = callBack => {
-  const readFile = function (e) {
+  const readFile = function(e) {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
     const reader = new FileReader();
-    reader.onload = function (e: any) {
+    reader.onload = function(e: any) {
       const contents = e.target.result;
       fileInput.func(contents);
       document.body.removeChild(fileInput);

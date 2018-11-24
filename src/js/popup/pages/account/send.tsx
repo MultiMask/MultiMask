@@ -32,7 +32,7 @@ interface IState {
 }
 
 class Send extends React.Component<IProps, IState> {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -64,7 +64,7 @@ class Send extends React.Component<IProps, IState> {
     }
   };
 
-  public formatTX ({ to, amount, data, gasPrice, gasLimit }: any) {
+  public formatTX({ to, amount, data, gasPrice, gasLimit }: any) {
     const {
       account: { blockchain }
     } = this.props;
@@ -100,7 +100,7 @@ class Send extends React.Component<IProps, IState> {
     return errors;
   };
 
-  public render () {
+  public render() {
     const { account, getPrice } = this.props;
     const {
       errors: { to: toError, amount: amountError },

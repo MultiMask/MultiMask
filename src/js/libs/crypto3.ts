@@ -62,7 +62,7 @@ export class Crypto3 {
   public eos;
   public eth;
 
-  constructor (_stream) {
+  constructor(_stream) {
     stream = _stream;
 
     resolvers = [];
@@ -73,7 +73,7 @@ export class Crypto3 {
     this.eos = EOS(_send);
   }
 
-  public async getIdentity (entity: IIdentityProps): Promise<ISenderParams | Error> {
+  public async getIdentity(entity: IIdentityProps): Promise<ISenderParams | Error> {
     const entityNetwork = this.getEntityNetwork(entity);
 
     if (!entityNetwork) {
@@ -107,7 +107,7 @@ export class Crypto3 {
     return Error('not found account for payment');
   }
 
-  public async pay (params): Promise<string | Error> {
+  public async pay(params): Promise<string | Error> {
     const sender = TransportLocator.create(params);
 
     if (sender === Error) {
@@ -120,7 +120,7 @@ export class Crypto3 {
     return result;
   }
 
-  private getEntityNetwork (entity) {
+  private getEntityNetwork(entity) {
     return networks[entity.blockchain].network.find(item => item.chainId === entity.chainId);
   }
 }

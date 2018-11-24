@@ -17,7 +17,7 @@ class ExportProfile extends Component<any, any> {
     handleExport(id);
   };
 
-  public render () {
+  public render() {
     return <NeedAuth onSubmit={this.handleExportProfile} />;
   }
 }

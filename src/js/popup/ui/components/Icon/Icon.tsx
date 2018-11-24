@@ -36,11 +36,11 @@ const IconImg = styled('img')`
 `;
 
 export class Icon extends React.Component<any, any> {
-  get icon () {
+  get icon() {
     return this.props.type ? <IconImg src={iconTypes[this.props.type]} alt={this.props.type} /> : null;
   }
 
-  public render () {
+  public render() {
     const { size } = this.props;
 
     return <IconInner {...{ size }}>{this.icon}</IconInner>;

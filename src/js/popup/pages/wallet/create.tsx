@@ -14,11 +14,11 @@ interface IProps extends Props, React.Props<{}> {
   blockchain?: BCSign;
 }
 class CreateWallet extends React.Component<IProps, {}> {
-  public componentDidMount () {
+  public componentDidMount() {
     this.props.create(this.props.blockchain);
   }
 
-  public render () {
+  public render() {
     return <Loading />;
   }
 }

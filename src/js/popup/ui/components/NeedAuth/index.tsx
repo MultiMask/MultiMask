@@ -12,11 +12,11 @@ class NeedAuth extends React.Component<any, any> {
     onSubmit: null
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     this.props.start();
   }
 
-  public componentWillUnmount () {
+  public componentWillUnmount() {
     this.props.start();
   }
 
@@ -29,7 +29,7 @@ class NeedAuth extends React.Component<any, any> {
     this.props.check(this.pass);
   };
 
-  public render () {
+  public render() {
     const { onSubmit, children, isAuth, error } = this.props;
     if (isAuth) {
       if (onSubmit) {

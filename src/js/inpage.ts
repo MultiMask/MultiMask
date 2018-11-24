@@ -6,7 +6,7 @@ import { Randomizer } from 'services/Randomizer';
 import { CONTENT_APP, INPAGE_APP } from 'constants/apps';
 
 class Inpage {
-  constructor () {
+  constructor() {
     setLevel(logLevel);
 
     const stream = new EncryptedStream(INPAGE_APP, Randomizer.text(64)) as any;

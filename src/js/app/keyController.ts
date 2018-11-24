@@ -15,7 +15,7 @@ const getBip32FromMnemonic = mnemonic => {
 
   const seed = bip39.mnemonicToSeed(mnemonic);
   return bitcoin.bip32.fromSeed(seed);
-}
+};
 
 /**
  * Store HD key in memory and devire key for wallets
@@ -25,13 +25,13 @@ export class KeyController {
   private masterSeed = null;
   private seed: Record<string, BIP32> = {};
   private root: any;
-  
+
   /**
    * Generate key by seed phase or private key
-   * @param mnemonic 
-   * @param bc 
+   * @param mnemonic
+   * @param bc
    */
-  public static generateKeyFromSeedOrPK (mnemonic: string, bc: string): Buffer | string {
+  public static generateKeyFromSeedOrPK(mnemonic: string, bc: string): Buffer | string {
     if (isSeed(mnemonic)) {
       return getBip32FromMnemonic(mnemonic);
     } else {
@@ -41,9 +41,9 @@ export class KeyController {
 
   /**
    * Assign plenty of keys to generate PK
-   * @param keys 
+   * @param keys
    */
-  public assignKeys (keys: IKeyStore): void {
+  public assignKeys(keys: IKeyStore): void {
     this.keys = keys;
     this.masterSeed = bip39.mnemonicToSeed(this.keys.master);
     this.root = bitcoin.bip32.fromSeed(this.masterSeed);
@@ -60,25 +60,21 @@ export class KeyController {
 
   /**
    * Derive PrivateKey from root by blockchain and index
-   * @param account 
+   * @param account
    */
-  public derivePrivateKey (account: Account, network?: NetworkType): BIP32 | string {
+  public derivePrivateKey(account: Account, network?: NetworkType): BIP32 | string {
     const bp44number = BCList[account.bc];
 
     const [type, link] = getParams(account.data);
     const id = generateId(account.bc, account.data);
 
     if (type === '02') {
-      const root = account.network.btc
-        ? bitcoin.bip32.fromSeed(this.masterSeed, account.network.btc)
-        : this.root;
-      
+      const root = account.network.btc ? bitcoin.bip32.fromSeed(this.masterSeed, account.network.btc) : this.root;
+
       const path = getPath(bp44number, parseInt(link, 10));
       return root.derivePath(path);
-
     } else if (type === '00') {
       return this.keys.pk[id];
-
     } else if (type === '01') {
       return this.seed[id];
     }
@@ -87,7 +83,7 @@ export class KeyController {
   /**
    * Erase all credentionals
    */
-  public clear () {
+  public clear() {
     this.keys = null;
     this.root = null;
     this.seed = null;

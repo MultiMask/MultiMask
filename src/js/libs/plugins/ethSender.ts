@@ -10,14 +10,14 @@ class ETHSender implements ISender {
   public readonly amount: number;
   public readonly chainId: number;
 
-  constructor ({ from, to, data, amount }: ISenderParams) {
+  constructor({ from, to, data, amount }: ISenderParams) {
     this.from = from;
     this.to = to;
     this.data = data;
     this.amount = amount;
   }
 
-  public async send () {
+  public async send() {
     const web3 = new Web3(ETH(_send).getProvider(this.chainId));
     const result = await web3.eth.sendTransaction(
       {

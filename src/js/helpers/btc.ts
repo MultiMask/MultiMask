@@ -5,4 +5,4 @@ export const calcTxBalance = tx => {
   const out = tx.outgoing && tx.outgoing.value ? tx.outgoing.value : 0;
 
   return inbox - out;
-}
+};

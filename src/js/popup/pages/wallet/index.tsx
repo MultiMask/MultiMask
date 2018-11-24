@@ -10,7 +10,7 @@ import TypeImportingStep from './TypeImportingStep';
 class WalletCreate extends React.Component<any, any> {
   public state = {
     type: '',
-    step: null,
+    step: null
   };
 
   public onNext = () => {
@@ -31,7 +31,7 @@ class WalletCreate extends React.Component<any, any> {
     this.setState({ type: '' });
   };
 
-  public render () {
+  public render() {
     if (this.state.type === 'create') {
       return (
         <ChooseNetwork onBack={this.goBack}>

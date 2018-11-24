@@ -7,13 +7,12 @@ import { MessageController } from './messageController';
 
 import { AccountController } from './account/accountController';
 
-
 export class TransactionController {
   private accessController: AccessController;
   private messageController: MessageController;
   private accountController: AccountController;
 
-  constructor (opts) {
+  constructor(opts) {
     this.accessController = opts.accessController;
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
@@ -21,10 +20,10 @@ export class TransactionController {
     this.startListening();
   }
 
-  private startListening () {
+  private startListening() {
     this.messageController.on(TX_SEND, this.responseSendTx);
   }
-  
+
   /**
    * Send TX via popup
    */
@@ -32,23 +31,25 @@ export class TransactionController {
     const account = this.accountController.getAccount({ key });
 
     if (account) {
-      account.sendTX(tx).then(txHash => {
-        sendResponse({
-          result: 'success',
-          txHash
+      account
+        .sendTX(tx)
+        .then(txHash => {
+          sendResponse({
+            result: 'success',
+            txHash
+          });
         })
-      })
-      .catch(error => {
-        sendResponse({
-          result: 'error',
-          error
-        })
-      })
+        .catch(error => {
+          sendResponse({
+            result: 'error',
+            error
+          });
+        });
     } else {
       sendResponse({
         result: 'error',
         error: 'Account not found'
-      })
+      });
     }
-  }
+  };
 }

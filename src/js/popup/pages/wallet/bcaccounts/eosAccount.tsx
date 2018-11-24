@@ -76,7 +76,7 @@ export class EosAccount extends React.Component<IProps, IState> {
     this.setState(state => ({ ...state, selectedAccount: value }));
   };
 
-  public render () {
+  public render() {
     const emptyAccount = null;
     const accountList = [emptyAccount, ...this.props.accounts];
 

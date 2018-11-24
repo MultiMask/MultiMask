@@ -62,7 +62,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     window.close();
   };
 
-  public render () {
+  public render() {
     return (
       <DialogLayout>
         <Title>

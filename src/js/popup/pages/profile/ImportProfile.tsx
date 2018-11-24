@@ -58,7 +58,7 @@ class ImportProfile extends Component<any, {}> {
     chrome.runtime.openOptionsPage(console.log('Option opened'));
   };
 
-  public render () {
+  public render() {
     const { encryptedProfile, delay, isScan } = this.state;
 
     if (!encryptedProfile) {

@@ -8,10 +8,7 @@ import { EosWallet } from './wallet/eos';
 import { IAccountFactory, INetwork } from 'types/accounts';
 
 const createWallet = ({ bc }) => {
-  if (bc === BCSign.BTC
-      || bc === BCSign.LTC
-      || bc === BCSign.DOGE
-    ) {
+  if (bc === BCSign.BTC || bc === BCSign.LTC || bc === BCSign.DOGE) {
     return new BitcoinWallet(bc);
   }
 
@@ -27,7 +24,7 @@ const createWallet = ({ bc }) => {
 };
 
 export class AccountFactory {
-  public static create (opts: IAccountFactory) {
+  public static create(opts: IAccountFactory) {
     const { bc, network: forceNetwork } = opts;
     const wallet = createWallet({ bc });
     const networkSign = forceNetwork || ntx[bc].network[0].sign;
@@ -35,4 +32,4 @@ export class AccountFactory {
 
     return new Account({ ...opts, wallet, network });
   }
-};
+}

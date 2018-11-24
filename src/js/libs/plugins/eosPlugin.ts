@@ -41,7 +41,7 @@ export default sender => {
       // The proxy stands between the eosjs object and scatter.
       // This is used to add special functionality like adding `requiredFields` arrays to transactions
       return proxy(_eos({ httpEndpoint, chainId: _options.chainId }), {
-        get (eosInstance, method) {
+        get(eosInstance, method) {
           const returnedFields = null;
 
           return (...args) => {
@@ -101,7 +101,7 @@ export default sender => {
 
                   // Catching chained promise methods ( contract .then action )
                   const contractProxy = proxy(result, {
-                    get (instance, method) {
+                    get(instance, method) {
                       if (method === 'then') {
                         return instance[method];
                       }

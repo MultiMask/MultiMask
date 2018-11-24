@@ -5,7 +5,12 @@
   "scripts": {
     "postinstall": "rm -f node_modules/web3/*.d.ts",
     "build": "node utils/build.js",
-    "start": "node utils/webserver.js"
+    "start": "node utils/webserver.js",
+    "test": "tsc --noEmit",
+    "pre-commit": "yarn tslint:fix && yarn prettier && yarn build && yarn test",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "tslint": "tslint --project tsconfig.json",
+    "tslint:fix": "tslint --project tsconfig.json --fix"
   },
   "dependencies": {
     "aes256": "^1.0.3",

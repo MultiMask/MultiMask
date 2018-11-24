@@ -12,7 +12,7 @@ export class BtcController {
   private messageController: MessageController;
   private accountController: AccountController;
 
-  constructor (opts) {
+  constructor(opts) {
     this.messageController = opts.messageController;
     this.accountController = opts.accountController;
 
@@ -22,7 +22,7 @@ export class BtcController {
   /**
    * Messaging
    */
-  private startListening () {
+  private startListening() {
     this.messageController.on(BTC_APPROVE, this.responseApproveTx);
     this.messageController.on(BTC_GET_ACCOUNTS, this.responseGetAccounts);
   }

@@ -26,13 +26,13 @@ class Assign extends React.Component<IProps, IState> {
     this.props.setAccountToKey(this.props.account.key, account);
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     this.props.getKeyAccounts(this.props.account.key).then(response => {
       this.setState({ accounts: response.payload });
     });
   }
 
-  public render () {
+  public render() {
     const { account } = this.props;
     const { accounts } = this.state;
 

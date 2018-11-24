@@ -1,18 +1,12 @@
-import { 
-  ACCOUNT_SET, 
-  ACCOUNT_ACTIVE, 
-  ACCOUNT_UPDATE,
-  ACCOUNT_GETSEED_RESULT 
-} from '../../constants/account';
+import { ACCOUNT_SET, ACCOUNT_ACTIVE, ACCOUNT_UPDATE, ACCOUNT_GETSEED_RESULT } from '../../constants/account';
 
 const initialState: IPopup.State.Accounts = {
   accounts: null,
   seed: null
 };
 
-export default function accountReducer (state: IPopup.State.Accounts = initialState, action) {
+export default function accountReducer(state: IPopup.State.Accounts = initialState, action) {
   switch (action.type) {
-    
     case ACCOUNT_SET: {
       return {
         ...state,
@@ -24,7 +18,7 @@ export default function accountReducer (state: IPopup.State.Accounts = initialSt
      */
     case ACCOUNT_UPDATE: {
       const account = action.payload;
-      
+
       if (account) {
         const idx = state.accounts.findIndex(acc => acc.key === account.key);
 
@@ -34,7 +28,7 @@ export default function accountReducer (state: IPopup.State.Accounts = initialSt
 
           return {
             ...state,
-            accounts: list,
+            accounts: list
           };
         }
       }
@@ -55,7 +49,6 @@ export default function accountReducer (state: IPopup.State.Accounts = initialSt
         seed: action.payload.seed
       };
     }
-
   }
 
   return state;

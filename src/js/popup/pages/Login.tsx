@@ -25,7 +25,7 @@ class Auth extends React.Component<any, any> {
     pass: ''
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     this.input.current.focus();
   }
 
@@ -38,7 +38,7 @@ class Auth extends React.Component<any, any> {
     this.props.login(this.state.pass);
   };
 
-  public render () {
+  public render() {
     return (
       <React.Fragment>
         <Typography color="main" variant="subheading" align="center">

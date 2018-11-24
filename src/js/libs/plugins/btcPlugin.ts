@@ -12,11 +12,11 @@ export default _sender => {
       return messageSender(BTC_GET_ACCOUNTS);
     },
 
-    send: (tx) => {
+    send: tx => {
       return messageSender(BTC_APPROVE, {
         blockchain: ntx.BTC.sign,
         tx
       });
     }
-  }
-}
+  };
+};

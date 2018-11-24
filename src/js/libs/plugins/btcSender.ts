@@ -9,7 +9,7 @@ class BTCSender implements ISender {
   public readonly amount: number;
   public readonly chainId: number;
 
-  constructor ({ from, to, data, amount }: ISenderParams) {
+  constructor({ from, to, data, amount }: ISenderParams) {
     this.from = from;
     this.to = to;
     this.data = data;
@@ -17,7 +17,7 @@ class BTCSender implements ISender {
     this.chainId = this.chainId;
   }
 
-  public async send (): Promise<string | Error> {
+  public async send(): Promise<string | Error> {
     const tx = {
       from: this.from,
       to: this.to,

@@ -10,21 +10,20 @@ const NeedAuthActions = {
   },
 
   check: pass => (dispatch, getState) => {
-    StorageService.Pass.check(pass)
-      .then(isAuth => {
-        if (isAuth) {
-          dispatch({
-            type: NEEDAUTH_SUCCESS
-          });
-        } else {
-          dispatch({
-            type: NEEDAUTH_FAIL,
-            payload: {
-              error: 'Wrong password'
-            }
-          });
-        }
-      });
+    StorageService.Pass.check(pass).then(isAuth => {
+      if (isAuth) {
+        dispatch({
+          type: NEEDAUTH_SUCCESS
+        });
+      } else {
+        dispatch({
+          type: NEEDAUTH_FAIL,
+          payload: {
+            error: 'Wrong password'
+          }
+        });
+      }
+    });
   }
 };
 

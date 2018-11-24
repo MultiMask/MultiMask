@@ -12,7 +12,7 @@ const INJECT_FILENAME = 'inpage.bundle.js';
 class Content {
   public stream;
 
-  constructor () {
+  constructor() {
     setLevel(logLevel);
 
     this.setupInpageStream();
@@ -24,17 +24,17 @@ class Content {
   /**
    * Create encrypted strem to inject script in user page
    */
-  public setupInpageStream () {
+  public setupInpageStream() {
     this.stream = new EncryptedStream(CONTENT_APP, Randomizer.text(256));
     this.stream.listenWith(msg => this.contentListener(msg));
 
-    this.stream.onSync(() => { });
+    this.stream.onSync(() => {});
   }
 
   /**
    * Inject script to user page
    */
-  public injectScript () {
+  public injectScript() {
     const s = document.createElement('script');
     const container = document.head || document.documentElement;
 
@@ -48,7 +48,7 @@ class Content {
    * Listing injected messages
    * @param message
    */
-  public contentListener (message) {
+  public contentListener(message) {
     const nonSyncMessage = NetworkMessage.fromJson({
       ...message,
       domain: strippedHost()
@@ -56,7 +56,7 @@ class Content {
     this.sendBackground(nonSyncMessage);
   }
 
-  public sendBackground (message: NetworkMessage) {
+  public sendBackground(message: NetworkMessage) {
     InternalMessage.payload(message.type, message)
       .send()
       .then(res => this.respond(message, res));
@@ -67,10 +67,11 @@ class Content {
    * @param message
    * @param response
    */
-  public respond (message, backResponse) {
-    const response = backResponse && backResponse.type === 'error'
-      ? message.error({ error: backResponse.error })
-      : message.respond(backResponse);
+  public respond(message, backResponse) {
+    const response =
+      backResponse && backResponse.type === 'error'
+        ? message.error({ error: backResponse.error })
+        : message.respond(backResponse);
 
     this.stream.send(response, INPAGE_APP);
   }

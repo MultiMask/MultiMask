@@ -1,5 +1,5 @@
-import Eos from 'eosjs'
-const {ecc} = Eos.modules;
+import Eos from 'eosjs';
+const { ecc } = Eos.modules;
 
 import { flatten } from 'helpers/func';
 
@@ -13,13 +13,11 @@ export interface IEosAccountPermission {
 export const prettyAccount = (account: IEosAccountPermission) => `${account.account_name}@${account.permission}`;
 export const parsePrettyAccount = (account: string) => account.split('@');
 
-export const actionParticipants = (payload) => {
+export const actionParticipants = payload => {
   return flatten<string>(
-      payload.messages
-          .map(message => message.authorization
-              .map(auth => `${auth.actor}@${auth.permission}`))
+    payload.messages.map(message => message.authorization.map(auth => `${auth.actor}@${auth.permission}`))
   );
-}
+};
 
 export const parseAccounts = (accountInfo: any[], publicKey): IEosAccountPermission[] => {
   if (!accountInfo) {
@@ -35,11 +33,11 @@ export const parseAccounts = (accountInfo: any[], publicKey): IEosAccountPermiss
           account_name: acc.account_name,
           core_liquid_balance: acc.core_liquid_balance,
           permission: permission.perm_name,
-          parent: permission.parent,
-        })
+          parent: permission.parent
+        });
       }
     });
 
     return list;
   }, []);
-}
+};

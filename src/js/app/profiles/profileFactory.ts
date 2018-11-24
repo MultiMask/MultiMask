@@ -8,7 +8,7 @@ import { Profile } from 'models/Profile';
 const blockCipher = new BlockCipher(cipherTypes.AES256);
 
 export default class ProfileFactory {
-  public static save (pass, profile) {
+  public static save(pass, profile) {
     const key = profile.getId();
 
     const encodedProfile = blockCipher.encrypt(pass, profile.serialize());
@@ -18,7 +18,7 @@ export default class ProfileFactory {
     return StorageService.Entities.set(key, encodedProfile);
   }
 
-  public static load (pass, key) {
+  public static load(pass, key) {
     return StorageService.Entities.get(key).then(encodedStr => {
       const profileData = blockCipher.decrypt(pass, encodedStr);
 
@@ -28,11 +28,11 @@ export default class ProfileFactory {
     });
   }
 
-  public static remove (id) {
+  public static remove(id) {
     return StorageService.Entities.remove(id);
   }
 
-  public static create (pass, data) {
+  public static create(pass, data) {
     let profile;
     if (data instanceof Profile) {
       profile = data;
@@ -44,7 +44,7 @@ export default class ProfileFactory {
     return ProfileFactory.save(pass, profile);
   }
 
-  public static createDefault (data?: any) {
+  public static createDefault(data?: any) {
     return new Profile({
       // TODO: repair it
       id: 0,
@@ -55,11 +55,11 @@ export default class ProfileFactory {
     });
   }
 
-  public static encryptFullProfile (pass, fullProfile, full) {
+  public static encryptFullProfile(pass, fullProfile, full) {
     return blockCipher.encrypt(pass, fullProfile, full);
   }
 
-  public static decryptFullProfile (pass, fullProfile) {
+  public static decryptFullProfile(pass, fullProfile) {
     return blockCipher.decrypt(pass, fullProfile);
   }
 }

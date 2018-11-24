@@ -5,7 +5,7 @@ const initialState: IPopup.State.Profile = {
   current: ''
 };
 
-export default function accountReducer (state: IPopup.State.Profile = initialState, action) {
+export default function accountReducer(state: IPopup.State.Profile = initialState, action) {
   switch (action.type) {
     case PROFILE_GETLIST_RESULT:
       return {

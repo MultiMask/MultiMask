@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import DialogLayout from './../popup/layouts/DialogLayout';
 
 export class NoAuth extends React.Component<any, any> {
-  public render () {
+  public render() {
     return (
       <DialogLayout>
         <Title>You need to authorize in MultiMask</Title>

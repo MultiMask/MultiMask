@@ -22,7 +22,7 @@ class TypeImportingStep extends React.Component<any, any> {
     this.setState({ type: event.target.value });
   };
 
-  public render () {
+  public render() {
     const { onSubmit } = this.props;
     const { type } = this.state;
     return (

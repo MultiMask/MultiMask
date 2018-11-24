@@ -15,7 +15,7 @@ export class SignEosTX extends React.Component<any, any> {
     window.close();
   };
 
-  public renderMessages () {
+  public renderMessages() {
     return this.props.prompt.data.messages.map((msg, idx) => {
       return (
         <Canvas key={idx}>
@@ -39,7 +39,7 @@ export class SignEosTX extends React.Component<any, any> {
     });
   }
 
-  public render () {
+  public render() {
     return (
       <DialogLayout>
         {this.renderMessages()}

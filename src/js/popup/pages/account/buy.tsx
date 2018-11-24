@@ -1,9 +1,9 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class Buy extends React.Component {
-  render() {
+  public render() {
     return <div>buy</div>;
   }
 }

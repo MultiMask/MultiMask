@@ -25,7 +25,7 @@ class Controller {
   private domainController: DomainController;
   private keyController: KeyController;
   private cacheController: CacheController;
-  
+
   private accountController: AccountController;
   private profileController: ProfileController;
   private profileListController: ProfileListController;
@@ -34,10 +34,10 @@ class Controller {
   private ethereumController: EthereumController;
   private eosController: EosController;
   private btcController: BtcController;
-  
+
   private settingsController: SettingsController;
 
-  constructor () {
+  constructor() {
     // Webpack provide this from ./config.json
     setLevel(logLevel);
 
@@ -53,7 +53,7 @@ class Controller {
 
     this.accessController = new AccessController({
       busController: this.busController,
-      messageController: this.messageController,
+      messageController: this.messageController
     });
 
     this.keyController = new KeyController();
@@ -85,15 +85,15 @@ class Controller {
     this.settingsController = new SettingsController({
       busController: this.busController,
       messageController: this.messageController,
-      accessController: this.accessController,
+      accessController: this.accessController
     });
 
     this.transactionController = new TransactionController({
       messageController: this.messageController,
       accessController: this.accessController,
-      accountController: this.accountController,
+      accountController: this.accountController
     });
-    
+
     this.btcController = new BtcController({
       messageController: this.messageController,
       accountController: this.accountController
@@ -109,12 +109,12 @@ class Controller {
       accountController: this.accountController,
       busController: this.busController,
       keyController: this.keyController
-    })
+    });
 
     this.booststrap();
   }
 
-  private booststrap () {
+  private booststrap() {
     this.profileListController.init();
     this.cacheController.init();
   }

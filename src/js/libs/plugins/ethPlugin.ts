@@ -33,19 +33,19 @@ export default messageSender => {
 
       engine.addProvider(
         new HookedWalletSubprovider({
-          getAccounts (cb) {
+          getAccounts(cb) {
             messageSender(ETH_GET_ACCOUNTS, chainId).then(payload => {
               // console.log(payload);
               cb(null, payload);
             });
           },
-          approveTransaction (txdata, cb) {
+          approveTransaction(txdata, cb) {
             messageSender(ETH_APPROVE_TX, txdata).then(({ payload }) => {
               // console.log('approveTransaction', payload);
               cb(null, payload);
             });
           },
-          signTransaction (txdata, cb) {
+          signTransaction(txdata, cb) {
             messageSender(ETH_SIGN_TX, txdata).then(payload => {
               // console.log('signTransaction > ', txdata, payload);
               // if(error) throw new Error(error);

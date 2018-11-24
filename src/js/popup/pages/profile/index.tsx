@@ -78,7 +78,7 @@ class Profiles extends React.Component<IProps, IState> {
     profileName: ''
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     this.props.getList();
   }
 
@@ -121,7 +121,7 @@ class Profiles extends React.Component<IProps, IState> {
     });
   };
 
-  get list () {
+  get list() {
     const { list, current } = this.props;
     const { editProfileId, profileName } = this.state;
 
@@ -172,7 +172,7 @@ class Profiles extends React.Component<IProps, IState> {
     });
   }
 
-  public render () {
+  public render() {
     return (
       <Wrapper>
         <List>{this.list}</List>

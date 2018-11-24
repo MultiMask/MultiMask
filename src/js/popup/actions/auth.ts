@@ -14,7 +14,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
-import { URL_MAIN, URL_LOADING, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl'
+import { URL_MAIN, URL_LOADING, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl';
 
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
@@ -82,17 +82,17 @@ const AuthActions = {
         }
       });
   },
-  
+
   success: () => async (dispatch, getState) => {
     dispatch(push(URL_LOADING));
     const { success, payload } = await ProfileActions.getCurrentProfile()(dispatch, getState);
-    
+
     // No profile: new user
     if (!success) {
       info('No profile');
       return dispatch(push(URL_INTRODUCTION));
     }
-    
+
     const { profileId } = payload;
     AuthActions.entrance(profileId)(dispatch, getState);
   },
@@ -102,22 +102,19 @@ const AuthActions = {
 
     // Error with profile: create new
     if (!activate) {
-      info('Fail on activate profile', profileId)
+      info('Fail on activate profile', profileId);
       return dispatch(push(URL_INTRODUCTION));
     }
-    
-    Promise.all([
-      AccountActions.getInfo()(dispatch, getState),
-      SettingActions.getPrices()(dispatch, getState)
-    ]).then(() => {
-      const state: IPopup.AppState = getState();
-      const url = forceRedirect
-        ? URL_MAIN
-        : (state && state.router && state.router.url ? state.router.url : URL_MAIN);
-      
-      info('Restore url > ', url);
-      dispatch(push(url));
-    })
+
+    Promise.all([AccountActions.getInfo()(dispatch, getState), SettingActions.getPrices()(dispatch, getState)]).then(
+      () => {
+        const state: IPopup.AppState = getState();
+        const url = forceRedirect ? URL_MAIN : state && state.router && state.router.url ? state.router.url : URL_MAIN;
+
+        info('Restore url > ', url);
+        dispatch(push(url));
+      }
+    );
   },
 
   fail: () => (dispatch, getState) => {
@@ -130,8 +127,8 @@ export default AuthActions;
 
 /**
  * Check that App initiated
- * @param cb 
+ * @param cb
  */
-function isPassExist (cb) {
+function isPassExist(cb) {
   StorageService.Pass.get().then(result => cb(!!result));
 }

@@ -18,13 +18,13 @@ const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
       .send()
-      .then(({payload: { accounts }}) => {
+      .then(({ payload: { accounts } }) => {
         AccountActions.setAccount(accounts)(dispatch, getState);
       });
   },
 
   create: bc => (dispatch, getState) => {
-    return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc }})
+    return InternalMessage.payload(ACCOUNT_CREATE, { payload: { bc } })
       .send()
       .then(payload => {
         return AccountActions.getInfo()(dispatch, getState);
@@ -35,7 +35,7 @@ const AccountActions = {
   },
 
   import: ({ bc, privateKey }) => (dispatch, getState) => {
-    return InternalMessage.payload(ACCOUNT_IMPORT, { payload: { bc, privateKey }})
+    return InternalMessage.payload(ACCOUNT_IMPORT, { payload: { bc, privateKey } })
       .send()
       .then(payload => {
         return AccountActions.getInfo()(dispatch, getState);
@@ -53,7 +53,7 @@ const AccountActions = {
       })
       .then(() => {
         dispatch(goBack());
-      })
+      });
   },
 
   /**
@@ -88,7 +88,7 @@ const AccountActions = {
     dispatch(action);
 
     dispatch(push('/account/details'));
-  },
+  }
 
   // getSeed: (pass, id) => (dispatch, getState) => {
   //   return InternalMessage.payload(ACCOUNT_GETSEED, id)

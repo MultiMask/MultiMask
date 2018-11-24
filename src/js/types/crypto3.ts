@@ -5,7 +5,7 @@ export interface ISender {
   from: string;
   data?: string;
   amount: number;
-  send<T> ();
+  send<T>();
 }
 
 export interface ISenderParams {

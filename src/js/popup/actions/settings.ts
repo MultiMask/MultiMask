@@ -11,8 +11,7 @@ import InternalMessage from 'services/InternalMessage';
 
 const settingsActions = {
   openDomainControl: () => (dispatch, getState) => {
-    return InternalMessage.signal(SETTING_OPEN_DOMAINS)
-      .send();
+    return InternalMessage.signal(SETTING_OPEN_DOMAINS).send();
   },
   getPrices: () => (dispatch, getState) => {
     return InternalMessage.signal(SETTINGS_LOAD_CURRENCY_PRICE)

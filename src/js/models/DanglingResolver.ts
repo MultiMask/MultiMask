@@ -7,7 +7,7 @@ export class DanglingResolver {
   public resolve;
   public reject;
 
-  constructor (id, resolve, reject) {
+  constructor(id, resolve, reject) {
     this.id = id;
     this.resolve = resolve;
     this.reject = reject;

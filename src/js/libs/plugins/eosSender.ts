@@ -13,7 +13,7 @@ class EOSSender implements ISender {
   public readonly blockchainType: BCSign;
   public readonly chainId: string;
 
-  constructor ({ from, to, data, amount, chainId }: ISenderParams) {
+  constructor({ from, to, data, amount, chainId }: ISenderParams) {
     this.from = from;
     this.to = to;
     this.data = data;
@@ -21,7 +21,7 @@ class EOSSender implements ISender {
     this.chainId = chainId as string;
   }
 
-  public async send () {
+  public async send() {
     const network = networks.EOS.network.find(item => item.chainId === this.chainId);
     const networkEOS = this.getNetworkEOS(network);
 
@@ -69,7 +69,7 @@ class EOSSender implements ISender {
       });
   }
 
-  private getNetworkEOS (network) {
+  private getNetworkEOS(network) {
     const url = new URL(network.url);
     return {
       protocol: url.protocol,

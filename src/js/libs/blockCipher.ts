@@ -5,7 +5,7 @@ class BlockCipher {
   public ciphers;
   public sign;
 
-  constructor (type) {
+  constructor(type) {
     this.type = type;
     this.ciphers = {
       aes256
@@ -13,11 +13,13 @@ class BlockCipher {
     this.sign = 'MM';
   }
 
-  public encrypt (key, profile, full = false) {
+  public encrypt(key, profile, full = false) {
     try {
       // encryptEntities setting in config.json
       // eslint-disable-next-line
-      if (!encryptEntities) return JSON.stringify(profile);
+      if (!encryptEntities) {
+        return JSON.stringify(profile);
+      }
 
       const iv = `${this.sign}:${full ? profile.data.version : profile.version}:${this.type}:`;
       const stringifyData = JSON.stringify(profile);
@@ -30,15 +32,19 @@ class BlockCipher {
     }
   }
 
-  public decrypt (key, data) {
+  public decrypt(key, data) {
     try {
       // eslint-disable-next-line
-      if (!encryptEntities) return JSON.parse(data);
+      if (!encryptEntities) {
+        return JSON.parse(data);
+      }
 
       // [sign, version, decipherType, data ]
       const dataParts = data.split(':');
 
-      if (dataParts[0] !== this.sign) throw new Error('Incorrect sign to Multimask File');
+      if (dataParts[0] !== this.sign) {
+        throw new Error('Incorrect sign to Multimask File');
+      }
 
       const decipherType = dataParts[2];
       const decipher = this.ciphers[decipherType];

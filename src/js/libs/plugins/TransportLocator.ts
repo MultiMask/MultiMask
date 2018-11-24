@@ -9,15 +9,15 @@ enum BlockchainsTypes {
 }
 
 class TransportLocator {
-  private [BlockchainsTypes.Btc] (params: ISenderParams) {
+  private [BlockchainsTypes.Btc](params: ISenderParams) {
     return new BTCSender(params);
   }
 
-  private [BlockchainsTypes.Eth] (params: ISenderParams) {
+  private [BlockchainsTypes.Eth](params: ISenderParams) {
     return new ETHSender(params);
   }
 
-  public create (props) {
+  public create(props) {
     const creator = this[props.blockchainType];
     if (!creator) {
       return Error('Not support this blockchain');

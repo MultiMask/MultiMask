@@ -20,7 +20,7 @@ const actions = {
 type IPropsActions = Actions<typeof actions>;
 interface IProps extends IPropsActions {
   blockchain: BCSign;
-  onBack (): void;
+  onBack(): void;
 }
 
 interface IWalletState {
@@ -50,7 +50,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
     });
   };
 
-  public createAccount () {
+  public createAccount() {
     const { blockchain } = this.props;
     const account = AccountFactory.create({
       bc: blockchain
@@ -102,7 +102,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
     });
   };
 
-  public render () {
+  public render() {
     const { error, seed } = this.state;
 
     return (

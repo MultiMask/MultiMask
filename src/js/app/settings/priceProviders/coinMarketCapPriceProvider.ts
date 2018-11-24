@@ -3,7 +3,7 @@ import basePriceProvider from './basePriceProvider';
 import { BCSign } from 'bcnetwork';
 
 const signToIdEnum = {};
-(function (obj) {
+(function(obj) {
   Object.entries({
     1: BCSign.BTC,
     2: BCSign.LTC,
@@ -16,7 +16,7 @@ const signToIdEnum = {};
 })(signToIdEnum);
 
 export default class CoinMarketCapPriceProvider extends basePriceProvider {
-  public getBCPrice (sign, params) {
+  public getBCPrice(sign, params) {
     if (!signToIdEnum[sign]) {
       return Promise.reject('Coin not found on Mapping in priceProvider');
     }
@@ -51,7 +51,7 @@ export default class CoinMarketCapPriceProvider extends basePriceProvider {
     });
   }
 
-  public getTickerById (tickerId, params) {
+  public getTickerById(tickerId, params) {
     return new Promise((resolve, reject) => {
       const prs = [];
       params && params.convert && prs.push(`convert=${params.convert}`);

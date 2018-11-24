@@ -62,7 +62,7 @@ class CreateProfile extends Component<IProps, IState> {
     seed: ''
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     if (!this.props.seed) {
       this.handleGenerete();
     }
@@ -102,7 +102,7 @@ class CreateProfile extends Component<IProps, IState> {
     this.setState({ seed: e.target.value });
   };
 
-  public render () {
+  public render() {
     const isIn = this.state.input;
     const valid = this.state.verified;
     const hasValidated = !isNull(valid);

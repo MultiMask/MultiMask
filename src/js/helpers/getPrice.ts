@@ -1,4 +1,4 @@
-export default function getPrice (prices, sign, amount: number): number {
+export default function getPrice(prices, sign, amount: number): number {
   if (!prices || !sign || !(prices && prices[sign] && prices[sign].USD)) {
     return 0;
   }

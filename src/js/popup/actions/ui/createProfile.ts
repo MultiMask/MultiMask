@@ -15,11 +15,11 @@ const ProfileCreateAction = {
     });
   },
 
-  done: (userSeed?: string) => (dispatch, getState: GetStateFn) => {    
+  done: (userSeed?: string) => (dispatch, getState: GetStateFn) => {
     const seed = userSeed || getState().ui.profileCreate.seed;
-    InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed }})
+    InternalMessage.payload(PROFILE_CREATE_DONE, { payload: { seed } })
       .send()
-      .then(({ success, payload: { profileId} }) => {
+      .then(({ success, payload: { profileId } }) => {
         if (!success) {
           throw new Error('Error on create new profile');
         }
@@ -30,10 +30,10 @@ const ProfileCreateAction = {
       })
       .then(() => {
         dispatch({
-          type: PROFILE_CREATE_DONE,
+          type: PROFILE_CREATE_DONE
         });
       });
-    }
+  }
 };
 
 export default ProfileCreateAction;

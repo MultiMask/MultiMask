@@ -19,7 +19,7 @@ interface IProps extends IPropsActions {
 }
 
 class AccountList extends React.Component<IProps, {}> {
-  public render () {
+  public render() {
     const { getPrice, getPriceInBTC } = this.props;
 
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {

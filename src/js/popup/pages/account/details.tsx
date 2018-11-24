@@ -27,7 +27,7 @@ interface IProps extends RouteComponentProps {
 }
 
 class AccountInfo extends React.Component<IProps, any> {
-  private bcMenuItems () {
+  private bcMenuItems() {
     const { account } = this.props;
 
     switch (account.blockchain) {
@@ -52,7 +52,7 @@ class AccountInfo extends React.Component<IProps, any> {
     openUrlToTab(account, account.info.address, type);
   };
 
-  public render () {
+  public render() {
     const { account } = this.props;
     return (
       <React.Fragment>

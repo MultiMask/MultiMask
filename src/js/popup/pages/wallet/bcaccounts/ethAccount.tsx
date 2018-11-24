@@ -18,7 +18,7 @@ interface IState {
 }
 
 export class EthAccount extends React.Component<IProps, IState> {
-  public render () {
+  public render() {
     const { address, balance } = this.props.data.info;
 
     return (

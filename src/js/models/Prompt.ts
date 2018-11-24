@@ -5,12 +5,7 @@ export class Prompt implements IPrompt {
   public data;
   public responder;
 
-  constructor (type = '', {
-    domain = '',
-    network = null,
-    data = {},
-    responder = null}: IPromptConstruct = {}
-  ){
+  constructor(type = '', { domain = '', network = null, data = {}, responder = null }: IPromptConstruct = {}) {
     this.type = type;
     this.domain = domain;
     this.network = network;
@@ -18,10 +13,14 @@ export class Prompt implements IPrompt {
     this.responder = responder;
   }
 
-  public static placeholder (){ return new Prompt(); }
-  public static fromJson (json){ return Object.assign(this.placeholder(), json); }
+  public static placeholder() {
+    return new Prompt();
+  }
+  public static fromJson(json) {
+    return Object.assign(this.placeholder(), json);
+  }
 
-  public routeName (){
-      return this.type;
+  public routeName() {
+    return this.type;
   }
 }

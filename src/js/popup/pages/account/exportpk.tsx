@@ -7,17 +7,17 @@ import actions from './../../actions/account';
 import { decode } from './../../../libs/cipher';
 
 class ExportPK extends React.Component<any, any> {
-  state = {
+  public state = {
     seed: ''
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     const { getSeed, pass, wallet } = this.props;
 
     getSeed(pass, wallet.id);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  public static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.pass && nextProps.seed) {
       return {
         seed: decode(nextProps.pass, nextProps.seed)
@@ -29,7 +29,7 @@ class ExportPK extends React.Component<any, any> {
     };
   }
 
-  render() {
+  public render() {
     return (
       <div className="balance">
         <div>

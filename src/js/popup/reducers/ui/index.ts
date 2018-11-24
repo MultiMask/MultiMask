@@ -6,4 +6,4 @@ import profileCreate from './createProfile';
 export default combineReducers({
   needauth,
   profileCreate
-})
+});

@@ -23,15 +23,15 @@ const MenuContainer = styled('div')`
 class Menu extends React.Component<any, any> {
   private dropdownMenu;
 
-  state = {
+  public state = {
     showMenu: false
   };
 
-  static defaultProps = {
+  public static defaultProps = {
     name: 'plus-circle'
   };
 
-  showMenu = event => {
+  public showMenu = event => {
     event.preventDefault();
 
     this.setState({ showMenu: true }, () => {
@@ -39,7 +39,7 @@ class Menu extends React.Component<any, any> {
     });
   };
 
-  closeMenu = event => {
+  public closeMenu = event => {
     if (this.dropdownMenu && !this.dropdownMenu.contains(event.target)) {
       this.setState({ showMenu: false }, () => {
         document.removeEventListener('click', this.closeMenu);
@@ -47,7 +47,7 @@ class Menu extends React.Component<any, any> {
     }
   };
 
-  render() {
+  public render() {
     const { className, name, children, iconProps } = this.props;
     return (
       <Root className={className}>

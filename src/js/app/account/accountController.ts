@@ -31,7 +31,7 @@ export class AccountController {
   private keyController: KeyController;
   private cacheController: CacheController;
 
-  constructor (opts) {
+  constructor(opts) {
     this.busController = opts.busController;
     this.messageController = opts.messageController;
     this.domainController = opts.domainController;
@@ -44,7 +44,7 @@ export class AccountController {
   /**
    * Listen internal bus
    */
-  private listening () {
+  private listening() {
     this.busController.on(GET_ACCOUNTS, cb => cb(this.getAccounts()));
 
     this.messageController.on(ACCOUNT_INFO, this.responseAccountInfo);
@@ -88,7 +88,7 @@ export class AccountController {
 
     account.changeNetwork(net);
     account.init(this.keyController.derivePrivateKey(account));
-    
+
     this.cacheController.set(`wallet.${account.key}.network`, network);
 
     sendResponse({
@@ -100,7 +100,7 @@ export class AccountController {
    * Set new plenty of accounts
    * @param accounts
    */
-  public assignAccounts (accounts: IAccountKeyData[]) {
+  public assignAccounts(accounts: IAccountKeyData[]) {
     this.accounts = accounts.map(accountLink => {
       const network = this.cacheController.get(`wallet.${accountLink.key}.network`);
       const accountInstane = AccountFactory.create({
@@ -117,7 +117,7 @@ export class AccountController {
   /**
    * Get single account by filter
    */
-  public getAccount (opts: IGetAccountOptions): Account {
+  public getAccount(opts: IGetAccountOptions): Account {
     if (opts && opts.key) {
       const found = this.accounts.find(acc => acc.key === opts.key);
 
@@ -140,7 +140,7 @@ export class AccountController {
   /**
    * Get filtred accounts
    */
-  public getAccounts (opts?: IGetAccountsOptions): Account[] {
+  public getAccounts(opts?: IGetAccountsOptions): Account[] {
     let list = this.accounts.slice();
 
     if (opts && opts.bc) {
@@ -161,7 +161,7 @@ export class AccountController {
   /**
    * Clear all account instances
    */
-  public clearList (): void {
+  public clearList(): void {
     this.accounts = [];
   }
 }

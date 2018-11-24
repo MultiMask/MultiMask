@@ -2,20 +2,20 @@ import { info } from 'loglevel';
 import { IAccountCreate, INetwork, IWalletInfo } from 'types/accounts';
 import { BCSign } from 'bcnetwork';
 
-const DEFAULT_DATA = '020';     // mean use profile seed and index 0
+const DEFAULT_DATA = '020'; // mean use profile seed and index 0
 
 export default class Account {
   public wallet: any;
-  
+
   public bc: string;
   public network: INetwork;
-  
+
   public name: string;
   public extra: any;
   public data: string;
   public key: string;
 
-  constructor ({ bc, name, extra, key, wallet, network, data = '020'}: IAccountCreate) {
+  constructor({ bc, name, extra, key, wallet, network, data = '020' }: IAccountCreate) {
     this.name = name ? name : Date.now().toString();
 
     this.bc = bc;
@@ -31,19 +31,18 @@ export default class Account {
   }
 
   /**
-   * Create 
-   * @param privateKey 
+   * Create
+   * @param privateKey
    */
-  public init (privateKey, net?): Promise<Account> {
+  public init(privateKey, net?): Promise<Account> {
     if (net) {
       this.network = net;
     }
-    
-    return this.wallet.create(privateKey, this.network)
-      .then(() => this);
+
+    return this.wallet.create(privateKey, this.network).then(() => this);
   }
 
-  public changeNetwork (network: INetwork, privateKey?) {
+  public changeNetwork(network: INetwork, privateKey?) {
     this.network = network;
     this.wallet.changeNetwork(network, privateKey);
 
@@ -52,7 +51,7 @@ export default class Account {
     }
   }
 
-  public setExtra (data: any): void {
+  public setExtra(data: any): void {
     this.extra = data;
 
     if (this.wallet.setExtra) {
@@ -62,21 +61,21 @@ export default class Account {
 
   /**
    * Send transaction with params to pay
-   * @param tx 
+   * @param tx
    */
-  public sendTX (tx): Promise<any> {
+  public sendTX(tx): Promise<any> {
     info('Sending tx > ', this.bc, this.name, tx);
     return this.wallet.sendCoins(tx);
   }
 
-  public getAddress (): string {
+  public getAddress(): string {
     return this.wallet.getAddress();
   }
 
   /**
    * Return info about this wallet wrapped into Promise
    */
-  public getInfo (): Promise<IWalletInfo> {
+  public getInfo(): Promise<IWalletInfo> {
     return this.wallet.getInfo().then(info => ({
       key: this.key,
       name: this.name,

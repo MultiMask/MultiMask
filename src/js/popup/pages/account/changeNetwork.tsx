@@ -47,7 +47,7 @@ interface ISelectOption {
 }
 
 class ChangeNetwork extends React.Component<any, any> {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -55,14 +55,14 @@ class ChangeNetwork extends React.Component<any, any> {
     };
   }
 
-  public componentDidMount () {
+  public componentDidMount() {
     const { account } = this.props;
 
     const currentSelectValue = networks[account.blockchain].network.find(item => item.sign === account.info.network);
     this.setState({ selectValue: { value: currentSelectValue.sign, label: currentSelectValue.name } });
   }
 
-  get options () {
+  get options() {
     const { account } = this.props;
     if (account) {
       return networks[account.blockchain].network.map(network => {
@@ -95,7 +95,7 @@ class ChangeNetwork extends React.Component<any, any> {
     this.setState({ selectValue: e });
   };
 
-  public render () {
+  public render() {
     const { account, settings } = this.props;
     const { selectValue } = this.state;
 

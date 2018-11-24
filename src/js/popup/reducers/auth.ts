@@ -5,7 +5,7 @@ const initialState = {
   error: false
 };
 
-export default function accountReducer (state = initialState, action) {
+export default function accountReducer(state = initialState, action) {
   switch (action.type) {
     case AUTH_LOGIN_FAIL:
       return {

@@ -11,36 +11,34 @@ interface IWalletCrypto {
 }
 
 export class BTCEngine {
-  public static createWallet (pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
-    let privateKey,
-      publicKey;
+  public static createWallet(pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
+    let privateKey, publicKey;
 
     if (isString(pk)) {
       const keyPair = bitcoin.ECPair.fromWIF(pk);
-      
+
       privateKey = keyPair.privateKey;
       publicKey = keyPair.publicKey;
     } else {
       privateKey = pk.privateKey;
       publicKey = pk.publicKey;
     }
-    
+
     const address = bitcoin.payments.p2pkh({ pubkey: publicKey, network }).address;
 
     return Promise.resolve({
       private: privateKey.toString('hex'),
-      public:  publicKey.toString('hex'),
-      address,
+      public: publicKey.toString('hex'),
+      address
     });
   }
 
-  public static createSegWitWallet (pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
-    let privateKey,
-      publicKey;
+  public static createSegWitWallet(pk: BIP32 | string, network?: NetworkType): Promise<IWalletCrypto> {
+    let privateKey, publicKey;
 
     if (isString(pk)) {
       const keyPair = bitcoin.ECPair.fromWIF(pk);
-      
+
       privateKey = keyPair.privateKey;
       publicKey = keyPair.publicKey;
     } else {
@@ -49,19 +47,17 @@ export class BTCEngine {
     }
 
     const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: publicKey, network }),
-        address = bitcoin.payments.p2sh({ redeem: p2wpkh, network }).address;
+      address = bitcoin.payments.p2sh({ redeem: p2wpkh, network }).address;
 
     return Promise.resolve({
       private: privateKey.toString('hex'),
-      public:  publicKey.toString('hex'),
+      public: publicKey.toString('hex'),
       scriptPubkey: p2wpkh,
-      address,
+      address
     });
   }
 
-
-
-  public static getWallet (pk: BIP32 | string) {
+  public static getWallet(pk: BIP32 | string) {
     if (isString(pk)) {
       return bitcoin.ECPair.fromWIF(pk);
     }
@@ -69,7 +65,7 @@ export class BTCEngine {
     return pk;
   }
 
-  public static getAddressFromKeys (wallet) {
+  public static getAddressFromKeys(wallet) {
     if (wallet.segwit === true) {
       const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network });
       return bitcoin.payments.p2sh({ redeem: p2wpkh, network: wallet.keys.network }).address;
@@ -78,7 +74,7 @@ export class BTCEngine {
     }
   }
 
-  public static getTxHash ({ wallet, inputs, to, amount, fee, version, data }) {
+  public static getTxHash({ wallet, inputs, to, amount, fee, version, data }) {
     let pay2;
     if (wallet.segwit === true) {
       const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: wallet.keys.publicKey, network: wallet.keys.network });
@@ -94,14 +90,14 @@ export class BTCEngine {
 
     let total = 0;
     inputs.forEach(element => {
-        txb.addInput(element.txid, element.output_no);
-        total += toSatoshi(element.value);
+      txb.addInput(element.txid, element.output_no);
+      total += toSatoshi(element.value);
     });
 
     if (data) {
       const bitcoinPayload = Buffer.from(data, 'utf8');
-      const embed = bitcoin.payments.embed({ data: [bitcoinPayload] })
-      
+      const embed = bitcoin.payments.embed({ data: [bitcoinPayload] });
+
       txb.addOutput(embed.output, 0);
     }
 
@@ -119,8 +115,8 @@ export class BTCEngine {
     const t = txb.build();
 
     return {
-        "id": t.getId(),
-        "hex": t.toHex()
-    }
+      id: t.getId(),
+      hex: t.toHex()
+    };
   }
 }

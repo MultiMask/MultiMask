@@ -28,7 +28,7 @@ export class MessageController extends EventEmitter {
   private busController: BusController;
   private domainController: DomainController;
 
-  constructor (opts) {
+  constructor(opts) {
     super();
 
     this.busController = opts.busController;
@@ -37,7 +37,7 @@ export class MessageController extends EventEmitter {
     this.listening();
   }
 
-  public listening () {
+  public listening() {
     LocalStream.watch((request: IMessageType, sendResponse) => {
       const message = InternalMessage.fromJson(request);
       const payload = message.payload ? message.payload : message;
@@ -102,7 +102,7 @@ export class MessageController extends EventEmitter {
     });
   }
 
-  private checkAuth (type: string, cb: AuthCheckFn) {
+  private checkAuth(type: string, cb: AuthCheckFn) {
     // If is auth query
     if (CHECKER_IS_AUTH.test(type)) {
       cb(true);
@@ -111,7 +111,7 @@ export class MessageController extends EventEmitter {
     this.busController.emit(CHECK_IS_READY, isReady => cb(isReady));
   }
 
-  private showNoAuthPrompt () {
+  private showNoAuthPrompt() {
     NotificationService.open(new Prompt(NOAUTH));
   }
 }

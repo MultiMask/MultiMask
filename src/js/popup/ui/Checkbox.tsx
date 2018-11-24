@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
 class Checkbox extends React.Component<any, any> {
-  constructor (props) {
+  constructor(props) {
     super(props);
   }
 
@@ -11,7 +11,7 @@ class Checkbox extends React.Component<any, any> {
     typeof this.props.onChange === 'function' && this.props.onChange(e);
   };
 
-  public render () {
+  public render() {
     const { name, checked, label, onChange } = this.props;
 
     return (

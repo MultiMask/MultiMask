@@ -6,7 +6,6 @@ import { hashPass, checkPass } from 'libs/cipher';
  * Provide all query to read or write in storage
  */
 export const StorageService = {
-
   /**
    * Profiles and Wallets
    */
@@ -26,7 +25,7 @@ export const StorageService = {
     get: () => storage.get(CONST.PROFILES),
     set: (list: string[]) => storage.set(CONST.PROFILES, list),
     getCurrent: () => storage.get(CONST.PROFILE_CURRENT),
-    setCurrnet: (current: string) => storage.set(CONST.PROFILE_CURRENT, current),
+    setCurrnet: (current: string) => storage.set(CONST.PROFILE_CURRENT, current)
   },
 
   Settings: {
@@ -48,4 +47,4 @@ export const StorageService = {
     get: () => storage.get(CONST.CACHE),
     set: state => storage.set(CONST.CACHE, state)
   }
-}
+};

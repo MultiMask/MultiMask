@@ -8,7 +8,7 @@ import { toSatoshi } from 'helpers/btc';
 import { BCSign } from 'bcnetwork';
 
 const DEFAULT_FEE = 5000; // Satoshi
-const mapNetToExplore = (bc: BCSign, net: INetwork) => { 
+const mapNetToExplore = (bc: BCSign, net: INetwork) => {
   if (bc === BCSign.LTC) {
     return explorer.coinsigns.LTC;
   }
@@ -24,14 +24,14 @@ const mapNetToExplore = (bc: BCSign, net: INetwork) => {
   if (net.sign === 'mainnet') {
     return explorer.coinsigns.BTC;
   }
-}
+};
 const getTBVersion = (bc: BCSign) => {
   if (bc === BCSign.DOGE) {
     return 1;
   }
 
   return null;
-}
+};
 
 export class BitcoinWallet implements IWallet {
   private walletKeys = null;
@@ -41,77 +41,74 @@ export class BitcoinWallet implements IWallet {
   public network: INetwork;
   public segWit = false;
 
-  constructor (bc: BCSign) {
+  constructor(bc: BCSign) {
     this.bc = bc;
   }
 
   /**
    * Create PK, address
-   * @param pk 
+   * @param pk
    */
-  public create (pk: BIP32 | string, network?: string) {
+  public create(pk: BIP32 | string, network?: string) {
     this.changeNetwork(network);
-
 
     this.walletKeys = {
       keys: BTCEngine.getWallet(pk),
-      segwit: this.segWit,
-    }
-
+      segwit: this.segWit
+    };
 
     this.address = BTCEngine.getAddressFromKeys(this.walletKeys);
 
     return Promise.resolve();
   }
 
- 
   /**
    * Change network
-   * @param network 
-   * @param pk 
+   * @param network
+   * @param pk
    */
-  public changeNetwork (network: any) {
+  public changeNetwork(network: any) {
     this.network = network;
   }
 
-  public getAddress () {
+  public getAddress() {
     return this.address;
   }
 
   /**
    * Return info about blockchain
    */
-  public getInfo () {
-    return explorer.getInfo(this.address, mapNetToExplore(this.bc, this.network))
-      .then(({ data }) => {
-        const payload = data.data;
+  public getInfo() {
+    return explorer.getInfo(this.address, mapNetToExplore(this.bc, this.network)).then(({ data }) => {
+      const payload = data.data;
 
-        return {
-          address: this.getAddress(),
-          balance: payload.balance,
-          network: this.network.sign,
-          txs: payload.txs
-        }
-      })
+      return {
+        address: this.getAddress(),
+        balance: payload.balance,
+        network: this.network.sign,
+        txs: payload.txs
+      };
+    });
   }
 
   /**
    * Send some coins
-   * @param opts 
+   * @param opts
    */
-  public sendCoins (opts) {
+  public sendCoins(opts) {
     let tx;
-    return explorer.getUnspentTX(this.address, mapNetToExplore(this.bc, this.network))
+    return explorer
+      .getUnspentTX(this.address, mapNetToExplore(this.bc, this.network))
       .then(res => {
         const inputs = res.data.data.txs;
-        const fee = opts.fee || DEFAULT_FEE
+        const fee = opts.fee || DEFAULT_FEE;
 
         tx = BTCEngine.getTxHash({
-          wallet: this.walletKeys, 
-          inputs, 
-          to: opts.to, 
-          amount: toSatoshi(opts.amount), 
-          fee, 
+          wallet: this.walletKeys,
+          inputs,
+          to: opts.to,
+          amount: toSatoshi(opts.amount),
+          fee,
           version: getTBVersion(this.bc),
           data: opts.data
         });
@@ -125,6 +122,6 @@ export class BitcoinWallet implements IWallet {
         if (status === 'success') {
           return tx.id;
         }
-      })
+      });
   }
 }

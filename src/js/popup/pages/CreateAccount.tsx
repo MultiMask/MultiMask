@@ -22,7 +22,7 @@ const styles = {
 };
 
 class Auth extends React.Component<any, any> {
-  constructor (opts) {
+  constructor(opts) {
     super(opts);
 
     this.state = {
@@ -62,7 +62,7 @@ class Auth extends React.Component<any, any> {
     return errors;
   };
 
-  public render () {
+  public render() {
     const {
       password,
       errors: { password: passwordError, confirmPassword: confirmPasswordError },

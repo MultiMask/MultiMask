@@ -32,7 +32,7 @@ export class SettingsController {
     show_total: true
   };
 
-  constructor (opts) {
+  constructor(opts) {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
@@ -43,8 +43,8 @@ export class SettingsController {
     this.startListening();
   }
 
-  private startListening () {
-    this.messageController.on(SETTINGS_LOAD_CURRENCY_PRICE, async (sendResponse) => {
+  private startListening() {
+    this.messageController.on(SETTINGS_LOAD_CURRENCY_PRICE, async sendResponse => {
       try {
         const signs = Object.values(ntx).map(i => i.sign);
         let prices;
@@ -84,29 +84,29 @@ export class SettingsController {
 
         this.busController.emit(SETTING_OPEN_DOMAINS, url);
       });
-    })
+    });
   }
 
-  public loadPrice (sign, convertTo) {
-    if (!this.priceProvider) { return Promise.reject('priceProvider not defined'); }
+  public loadPrice(sign, convertTo) {
+    if (!this.priceProvider) {
+      return Promise.reject('priceProvider not defined');
+    }
 
     return this.priceProvider.getBCPrice(sign, convertTo);
   }
 
-  public getAll () {
-    const {
-      price_provider = this.defaultSettings.price_provider,
-      show_total = this.defaultSettings.show_total
-    } = this.settings as any;
+  public getAll() {
+    const { price_provider = this.defaultSettings.price_provider, show_total = this.defaultSettings.show_total } = this
+      .settings as any;
     return { price_provider, show_total };
   }
 
-  public getByKey (settingKey) {
+  public getByKey(settingKey) {
     const settings = this.getAll();
     return settings && settings[settingKey];
   }
 
-  public setByKey (settingKey, settingValue) {
+  public setByKey(settingKey, settingValue) {
     switch (settingKey) {
       case 'price_provider':
       case 'show_total':
@@ -116,27 +116,27 @@ export class SettingsController {
     }
   }
 
-  public setAll (nextSettings) {
+  public setAll(nextSettings) {
     if (this.checkAuth) {
       this.settings = nextSettings;
     }
   }
 
-  public clearAll () {
+  public clearAll() {
     if (this.checkAuth) {
       this.settings = {};
     }
   }
 
-  get checkAuth () {
+  get checkAuth() {
     return this.accessController && this.accessController.isAuth();
   }
 
-  public getPriceProviders () {
+  public getPriceProviders() {
     return Object.entries(this.priceProviders).map((ent: any) => ({ value: ent[0], label: ent[1].title }));
   }
 
-  public usePriceProvider () {
+  public usePriceProvider() {
     const price_provider = this.getByKey('price_provider');
 
     if (price_provider && this.priceProviders[price_provider]) {
