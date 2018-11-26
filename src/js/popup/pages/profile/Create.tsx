@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
 import FA from 'react-fontawesome';
-import { isNull } from 'lodash';
+import { isNull, trim } from 'lodash';
 
 import * as bip39 from 'bip39';
 
@@ -62,7 +62,7 @@ class CreateProfile extends Component<IProps, IState> {
     seed: ''
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     if (!this.props.seed) {
       this.handleGenerete();
     }
@@ -86,7 +86,7 @@ class CreateProfile extends Component<IProps, IState> {
   };
 
   public handleVerify = () => {
-    const verified = bip39.validateMnemonic(this.state.seed);
+    const verified = bip39.validateMnemonic(trim(this.state.seed));
     this.setState({ verified });
   };
 
@@ -102,7 +102,7 @@ class CreateProfile extends Component<IProps, IState> {
     this.setState({ seed: e.target.value });
   };
 
-  public render() {
+  public render () {
     const isIn = this.state.input;
     const valid = this.state.verified;
     const hasValidated = !isNull(valid);
