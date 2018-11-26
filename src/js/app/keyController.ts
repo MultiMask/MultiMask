@@ -31,7 +31,7 @@ export class KeyController {
    * @param mnemonic
    * @param bc
    */
-  public static generateKeyFromSeedOrPK(mnemonic: string, bc: string): Buffer | string {
+  public static generateKeyFromSeedOrPK (mnemonic: string, bc: string): Buffer | string {
     if (isSeed(mnemonic)) {
       return getBip32FromMnemonic(mnemonic);
     } else {
@@ -43,7 +43,7 @@ export class KeyController {
    * Assign plenty of keys to generate PK
    * @param keys
    */
-  public assignKeys(keys: IKeyStore): void {
+  public assignKeys (keys: IKeyStore): void {
     this.keys = keys;
     this.masterSeed = bip39.mnemonicToSeed(this.keys.master);
     this.root = bitcoin.bip32.fromSeed(this.masterSeed);
@@ -62,7 +62,7 @@ export class KeyController {
    * Derive PrivateKey from root by blockchain and index
    * @param account
    */
-  public derivePrivateKey(account: Account, network?: NetworkType): BIP32 | string {
+  public derivePrivateKey (account: Account, network?: NetworkType): BIP32 | string {
     const bp44number = BCList[account.bc];
 
     const [type, link] = getParams(account.data);
@@ -83,7 +83,7 @@ export class KeyController {
   /**
    * Erase all credentionals
    */
-  public clear() {
+  public clear () {
     this.keys = null;
     this.root = null;
     this.seed = null;
