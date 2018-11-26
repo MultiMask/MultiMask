@@ -13,11 +13,11 @@ const web3 = new Web3();
 export default class Engine {
   public etherApi: any;
 
-  constructor(network) {
+  constructor (network) {
     this.etherApi = EtherApi.init(etherscanApiKey, network, '10000');
   }
 
-  public getPrivKeyFromSeed(pk: BIP32 | string) {
+  public getPrivKeyFromSeed (pk: BIP32 | string) {
     if (isString(pk)) {
       const rightPk = isHexString(pk) ? pk : `0x${pk}`;
 
@@ -35,16 +35,16 @@ export default class Engine {
     }
   }
 
-  public getEthereumAddress(privKey) {
+  public getEthereumAddress (privKey) {
     const addressHex = ethUtil.privateToAddress(privKey);
     return ethUtil.bufferToHex(addressHex);
   }
 
-  public getPublic(privKey) {
+  public getPublic (privKey) {
     return ethUtil.privateToPublic(privKey);
   }
 
-  public signEthTx({ privKey, amount, from, to, nonce, gasLimit, gasPrice }) {
+  public signEthTx ({ privKey, amount, from, to, nonce, gasLimit, gasPrice }) {
     const tx = new ethTx({
       to,
       from,
@@ -58,14 +58,14 @@ export default class Engine {
     return txSerialized;
   }
 
-  public signRawTx(data, privKey) {
+  public signRawTx (data, privKey) {
     const tx = new ethTx(data);
     tx.sign(privKey);
     const txSerialized = '0x' + tx.serialize().toString('hex');
     return txSerialized;
   }
 
-  public sendERC20Tx(privKey, amount, tokenAbi, tokenAddress, receiverAddress) {
+  public sendERC20Tx (privKey, amount, tokenAbi, tokenAddress, receiverAddress) {
     const senderAddress = this.getEthereumAddress(privKey);
     const contract = new web3.eth.Contract(tokenAbi, tokenAddress);
     const bytecode = contract.methods.transfer(receiverAddress, amount).encodeABI();
@@ -83,7 +83,7 @@ export default class Engine {
     return txSerialized;
   }
 
-  public getTransactions(address) {
+  public getTransactions (address) {
     return new Promise((res, rej) => {
       this.etherApi.account
         .txlist(address, 0, 9999999999999, 'desc')

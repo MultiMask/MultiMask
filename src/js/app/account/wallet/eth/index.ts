@@ -15,25 +15,25 @@ export default class EthWallet implements IWallet {
   public nonce: any;
   public networkUrl: string;
 
-  public create(pk: BIP32 | string, network?: INetwork) {
+  public create (pk: BIP32 | string, network?: INetwork) {
     this.changeNetwork(network);
     ({ address: this.address, privateKey: this.privateKey } = this.engine.getPrivKeyFromSeed(pk));
 
     return Promise.resolve();
   }
 
-  public changeNetwork(network: INetwork) {
+  public changeNetwork (network: INetwork) {
     this.network = network;
 
     web3.setProvider(new Web3.providers.WebsocketProvider(this.network.url));
     this.engine = new EthEngine(this.network.sign);
   }
 
-  public getAddress() {
+  public getAddress () {
     return this.address;
   }
 
-  public getInfo(): any {
+  public getInfo (): any {
     return Promise.all([web3.eth.getBalance(this.address), this.engine.getTransactions(this.address)]).then(
       ([amountInWei, txs]) => {
         this.nonce = txs && txs[0] ? +txs[0].nonce : 0;
@@ -48,15 +48,15 @@ export default class EthWallet implements IWallet {
     );
   }
 
-  public getNextNonce() {
+  public getNextNonce () {
     return this.nonce + 1;
   }
 
-  public updateNonce() {
+  public updateNonce () {
     this.nonce++;
   }
 
-  public async sendCoins({ to, amount, data, gasLimit, gasPrice }) {
+  public async sendCoins ({ to, amount, data, gasLimit, gasPrice }) {
     const nonce = await web3.eth.getTransactionCount(this.address);
 
     const tx = this.engine.signEthTx({
@@ -72,7 +72,7 @@ export default class EthWallet implements IWallet {
     info(tx);
 
     return new Promise((res, rej) => {
-      web3.eth.sendSignedTransaction(tx, function(err, transactionHash) {
+      web3.eth.sendSignedTransaction(tx, function (err, transactionHash) {
         if (err) {
           rej(err);
         }
@@ -84,7 +84,7 @@ export default class EthWallet implements IWallet {
   }
 
   // TODO: provide to Account entity
-  public signRawTx(data) {
+  public signRawTx (data) {
     return this.engine.signRawTx(data, this.privateKey);
   }
 }

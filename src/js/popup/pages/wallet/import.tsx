@@ -2,17 +2,19 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import FormLayout from './FormLayout';
 import styled, { css } from 'react-emotion';
-
-import { isSeed } from 'helpers/checkers';
-import { AccountFactory } from 'app/account/accountFactory';
-import Account from 'app/account';
-import accountsActions from 'popup/actions/account';
-import ntx, { BCSign } from 'bcnetwork';
-
-import { EthAccount } from './bcaccounts/ethAccount';
-import { EosAccount } from './bcaccounts/eosAccount';
+import { trim } from 'lodash';
 
 import { KeyController } from 'app/keyController';
+import Account from 'app/account';
+import { AccountFactory } from 'app/account/accountFactory';
+import { BCSign } from 'bcnetwork';
+
+import accountsActions from 'popup/actions/account';
+
+import { EosAccount } from './bcaccounts/eosAccount';
+import { EthAccount } from './bcaccounts/ethAccount';
+import Modal from 'ui/Modal';
+import Loading from 'popup/pages/Loading';
 
 const actions = {
   import: accountsActions.import
@@ -20,10 +22,11 @@ const actions = {
 type IPropsActions = Actions<typeof actions>;
 interface IProps extends IPropsActions {
   blockchain: BCSign;
-  onBack(): void;
+  onBack (): void;
 }
 
 interface IWalletState {
+  loading: boolean;
   seed?: string;
   error?: string;
   success?: boolean;
@@ -35,6 +38,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
   private account: Account;
 
   public state: IWalletState = {
+    loading: false,
     seed: '',
     bc: null
   };
@@ -46,18 +50,23 @@ class Wallet extends React.Component<IProps, IWalletState> {
   public handleCheck = e => {
     e.preventDefault();
     this.createAccount().then(data => {
-      this.setState({ success: true, bc: this.account.bc, data });
+      this.setState({
+        success: true,
+        bc: this.account.bc,
+        error: null,
+        data
+      });
     });
   };
 
-  public createAccount() {
+  public createAccount () {
     const { blockchain } = this.props;
     const account = AccountFactory.create({
       bc: blockchain
     });
 
     try {
-      const pk = KeyController.generateKeyFromSeedOrPK(this.state.seed, blockchain);
+      const pk = KeyController.generateKeyFromSeedOrPK(trim(this.state.seed), blockchain);
 
       return account.init(pk).then(acc => {
         this.account = acc;
@@ -69,7 +78,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
       });
     } catch (e) {
       this.setState({
-        error: `Wrong wordlist: ${e}`
+        error: `Error: ${e}`
       });
       return Promise.reject();
     }
@@ -92,30 +101,42 @@ class Wallet extends React.Component<IProps, IWalletState> {
   };
 
   public handleSave = data => {
-    if (data && this.account.bc === BCSign.EOS) {
-      this.account.setExtra({ account: data.account_name });
-    }
+    this.setState(
+      {
+        loading: true
+      },
+      () => {
+        if (data && this.account.bc === BCSign.EOS) {
+          this.account.setExtra({ account: data.account_name });
+        }
 
-    this.props.import({
-      bc: this.props.blockchain,
-      privateKey: this.state.seed
-    });
+        this.props.import({
+          bc: this.props.blockchain,
+          privateKey: this.state.seed
+        });
+      }
+    );
   };
 
-  public render() {
+  public render () {
     const { error, seed } = this.state;
 
     return (
-      <FormLayout
-        onSubmit={this.handleCheck}
-        title="Input your PrivateKey:"
-        onBack={this.props.onBack}
-        submitButtonTitle="Check"
-      >
-        <Textaria name="seed" type="text" value={seed} onChange={this.handleInput} cols={40} rows={5} />
-        {error && <div>{error}</div>}
-        {this.bcAccountRender()}
-      </FormLayout>
+      <Container>
+        <FormLayout
+          onSubmit={this.handleCheck}
+          title="Input your PrivateKey:"
+          onBack={this.props.onBack}
+          submitButtonTitle="Check"
+        >
+          <Textaria name="seed" type="text" value={seed} onChange={this.handleInput} cols={40} rows={5} />
+          {error && <ErrorEl>{error}</ErrorEl>}
+          {!error && this.bcAccountRender()}
+        </FormLayout>
+        <Modal show={this.state.loading}>
+          <Loading />
+        </Modal>
+      </Container>
     );
   }
 }
@@ -133,4 +154,13 @@ const Textaria = styled('textarea')`
   border: 1px solid ${(props: TextariaProps) => props.theme.colors.secondary};
   border-radius: 5px;
   resize: none;
+`;
+const ErrorEl = styled('div')`
+  margin-top: 10px;
+  font-size: 120%;
+`;
+const Container = styled('div')`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;

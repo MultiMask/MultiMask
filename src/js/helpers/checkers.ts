@@ -1,3 +1,5 @@
+import * as bip39 from 'bip39';
+
 /**
  * Check that string is seed Phrase
  * @param seed
@@ -8,5 +10,7 @@ export const isSeed = (seed: string, size: number = 12): boolean => {
     return false;
   }
 
-  return seed.match(/([a-z]{1,})/g).length === size;
+  const words = seed.split(' ');
+    
+  return words.every(word => bip39.wordlists.EN.includes(word)) && words.length >= 12;
 };

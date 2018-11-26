@@ -38,7 +38,7 @@ export default {
     network: [
       {
         name: 'Mainnet',
-        sign: 'main',
+        sign: 'mainnet',
         url: 'wss://mainnet.infura.io/ws',
         explorerUrl: 'https://etherscan.io/',
         chainId: 1
