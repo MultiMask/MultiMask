@@ -37,7 +37,7 @@ export default {
     sign: BCSign.ETH,
     network: [
       {
-        name: 'Main',
+        name: 'Mainnet',
         sign: 'main',
         url: 'wss://mainnet.infura.io/ws',
         explorerUrl: 'https://etherscan.io/',
@@ -80,7 +80,7 @@ export default {
     ]
   },
   LTC: {
-    name: 'LTC',
+    name: 'Litecoin',
     sign: BCSign.LTC,
     network: [
       {
@@ -102,7 +102,7 @@ export default {
     ]
   },
   DOGE: {
-    name: 'DOGE',
+    name: 'Dogecoin',
     sign: BCSign.DOGE,
     network: [
       {
