@@ -13,7 +13,7 @@ const actions = {
 };
 type IPropsActions = Actions<typeof actions>;
 interface IProps extends IPropsActions, RouteComponentProps<any> {
-  onBack(): void;
+  onBack (): void;
 }
 
 class ExportSeed extends React.Component<IProps, any> {
@@ -21,7 +21,7 @@ class ExportSeed extends React.Component<IProps, any> {
     seed: ''
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     const {
       getProfileSeed,
       match: {
@@ -34,7 +34,7 @@ class ExportSeed extends React.Component<IProps, any> {
     });
   }
 
-  public render() {
+  public render () {
     return (
       <Container>
         <Typography align="center" color="main" variant="title">
