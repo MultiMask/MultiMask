@@ -15,7 +15,7 @@ class QRCodeView extends React.Component<any, any> {
     profileId: null
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     const {
       getProfile,
       match: {
@@ -28,7 +28,7 @@ class QRCodeView extends React.Component<any, any> {
     });
   }
 
-  public render() {
+  public render () {
     const { profile } = this.state;
 
     return (
@@ -37,6 +37,9 @@ class QRCodeView extends React.Component<any, any> {
           QR - code
         </Typography>
         {profile && <QRCode value={profile} renderAs="svg" size={310} />}
+        <Typography align="center" color="main" variant="body1">
+          Scan this code by MultiMask Mobile to import profile
+        </Typography>
       </Container>
     );
   }
