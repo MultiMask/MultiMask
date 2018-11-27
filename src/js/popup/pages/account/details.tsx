@@ -12,10 +12,11 @@ import { openUrlToTab, LinkTypes } from 'helpers/links';
 
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
-import Menu from '../../ui/Menu';
-import MenuItem from '../../ui/MenuItem';
-import Button from '../../ui/Button';
-import Icon from '../../ui/Icon';
+import Menu from 'ui/Menu';
+import MenuItem from 'ui/MenuItem';
+import Button from 'ui/Button';
+import Icon from 'ui/Icon';
+import Notify from 'ui/Notify';
 
 const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
@@ -27,7 +28,7 @@ interface IProps extends RouteComponentProps {
 }
 
 class AccountInfo extends React.Component<IProps, any> {
-  private bcMenuItems() {
+  private bcMenuItems () {
     const { account } = this.props;
 
     switch (account.blockchain) {
@@ -52,7 +53,7 @@ class AccountInfo extends React.Component<IProps, any> {
     openUrlToTab(account, account.info.address, type);
   };
 
-  public render() {
+  public render () {
     const { account } = this.props;
     return (
       <React.Fragment>
@@ -60,15 +61,17 @@ class AccountInfo extends React.Component<IProps, any> {
           data={account}
           menu={
             <React.Fragment>
-              <CopyToClipboard text={account.info.address}>
-                <Icon
-                  className={css`
-                    margin: 0 7px;
-                  `}
-                  name="clone"
-                  color="secondary"
-                />
-              </CopyToClipboard>
+              <Notify>
+                <CopyToClipboard text={account.info.address}>
+                  <Icon
+                    className={css`
+                      margin: 0 7px;
+                    `}
+                    name="clone"
+                    color="secondary"
+                  />
+                </CopyToClipboard>
+              </Notify>
               <Menu
                 className={css`
                   margin-left: auto;

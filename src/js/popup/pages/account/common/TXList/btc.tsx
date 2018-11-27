@@ -2,9 +2,10 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
+import { calcTxBalance } from 'helpers/btc';
 import Typography from 'ui/Typography';
 import Icon from 'ui/Icon';
-import { calcTxBalance } from 'helpers/btc';
+import Notify from 'ui/Notify';
 
 import { DATE_FORMAT, Header, Root, styles } from './elements';
 
@@ -18,9 +19,11 @@ const BTCList = ({ txs, address, linkToExplorer, bc }) =>
       <Header>
         <Typography color="main">{format(tx.time * 1000, DATE_FORMAT)}</Typography>
         <div>
-          <CopyToClipboard text={tx.txid}>
-            <Icon className={styles.icon} name="clone" color="secondary" />
-          </CopyToClipboard>
+          <Notify>
+            <CopyToClipboard text={tx.txid}>
+              <Icon className={styles.icon} name="clone" color="secondary" />
+            </CopyToClipboard>
+          </Notify>
           <Icon
             className={`${styles.icon} ${styles.left}`}
             onClick={() => linkToExplorer(tx.txid)}
