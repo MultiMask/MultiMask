@@ -40,14 +40,12 @@ class Menu extends React.Component<any, any> {
   };
 
   public closeMenu = event => {
-    if (this.dropdownMenu && !this.dropdownMenu.contains(event.target)) {
-      this.setState({ showMenu: false }, () => {
-        document.removeEventListener('click', this.closeMenu);
-      });
-    }
+    this.setState({ showMenu: false }, () => {
+      document.removeEventListener('click', this.closeMenu);
+    });
   };
 
-  public render() {
+  public render () {
     const { className, name, children, iconProps } = this.props;
     return (
       <Root className={className}>
