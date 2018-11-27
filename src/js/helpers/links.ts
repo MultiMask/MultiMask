@@ -1,4 +1,4 @@
-import networks from '../blockchain';
+import { getBcNet } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 
 export enum LinkTypes {
@@ -17,6 +17,5 @@ export const openUrlToTab = (account: IWalletInfo, hash: string, linkType: LinkT
 };
 
 const getBaseExplorerUrl = ({ blockchain, info: { network: sign } }: IWalletInfo): string => {
-  // TODO: fix blockchain type conflic
-  return networks[blockchain as string].network.find(item => item.sign === sign).explorerUrl;
+  return getBcNet(blockchain, sign).explorerUrl;
 };
