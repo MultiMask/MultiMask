@@ -1,8 +1,7 @@
 import * as React from 'react';
-import TextField from '../../TextField';
-import Button from '../../Button';
-import Typography from '../../Typography';
 import { css } from 'emotion';
+
+import { TextField, Button, Typography } from '../.';
 
 const styles = {
   form: css`
