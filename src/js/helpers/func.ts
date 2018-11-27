@@ -5,7 +5,7 @@ import BN from 'bn.js';
  * @param array
  * @returns {*}
  */
-export function flatten<T>(array: T[][]): T[] {
+export function flatten<T> (array: T[][]): T[] {
   return array.reduce((a, b) => a.concat(Array.isArray(b) ? this.flatten(b) : b), []);
 }
 
@@ -14,7 +14,7 @@ export function flatten<T>(array: T[][]): T[] {
  * @param data
  * @returns {*}
  */
-export function toJSON(data: any): any {
+export function toJSON (data: any): any {
   return JSON.parse(JSON.stringify(data));
 }
 
@@ -113,7 +113,7 @@ export const toBuffer = (v): Buffer => {
  * @param {String} value
  * @return {String} output
  */
-export function padToEven(value) {
+export function padToEven (value) {
   let a = value;
 
   if (typeof a !== 'string') {
@@ -135,7 +135,7 @@ export function padToEven(value) {
  * @param {Number} length
  * @returns {Boolean} output the string is a hex string
  */
-export function isHexString(value, length?) {
+export function isHexString (value, length?) {
   if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
     return false;
   }
@@ -147,7 +147,7 @@ export function isHexString(value, length?) {
   return true;
 }
 
-export function stripHexPrefix(str) {
+export function stripHexPrefix (str) {
   if (typeof str !== 'string') {
     return str;
   }
@@ -160,7 +160,7 @@ export function stripHexPrefix(str) {
  * @param {Number} i
  * @return {Buffer}
  */
-function intToBuffer(i) {
+function intToBuffer (i) {
   const hex = intToHex(i);
 
   return new Buffer(padToEven(hex.slice(2)), 'hex');
@@ -171,7 +171,7 @@ function intToBuffer(i) {
  * @param {Number} i
  * @return {String}
  */
-function intToHex(i) {
+function intToHex (i) {
   const hex = i.toString(16);
 
   return `0x${hex}`;
