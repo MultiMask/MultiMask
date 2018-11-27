@@ -1,6 +1,5 @@
 export const URL_MAIN = '/';
 export const URL_LOGIN = '/login';
-export const URL_LOADING = '/loading';
 export const URL_INTRODUCTION = '/introduction';
 
 export const URL_PROFILE_ADD = '/profiles/add';

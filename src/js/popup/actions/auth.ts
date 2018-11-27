@@ -14,7 +14,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
-import { URL_MAIN, URL_LOADING, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl';
+import { URL_MAIN, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl';
 
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
@@ -84,7 +84,6 @@ const AuthActions = {
   },
 
   success: () => async (dispatch, getState) => {
-    dispatch(push(URL_LOADING));
     const { success, payload } = await ProfileActions.getCurrentProfile()(dispatch, getState);
 
     // No profile: new user
@@ -129,6 +128,6 @@ export default AuthActions;
  * Check that App initiated
  * @param cb
  */
-function isPassExist(cb) {
+function isPassExist (cb) {
   StorageService.Pass.get().then(result => cb(!!result));
 }

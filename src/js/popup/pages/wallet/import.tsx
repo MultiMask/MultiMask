@@ -13,8 +13,7 @@ import accountsActions from 'popup/actions/account';
 
 import { EosAccount } from './bcaccounts/eosAccount';
 import { EthAccount } from './bcaccounts/ethAccount';
-import Modal from 'ui/Modal';
-import Loading from 'popup/pages/Loading';
+import Splash from 'ui/SplashLoading';
 
 const actions = {
   import: accountsActions.import
@@ -133,9 +132,7 @@ class Wallet extends React.Component<IProps, IWalletState> {
           {error && <ErrorEl>{error}</ErrorEl>}
           {!error && this.bcAccountRender()}
         </FormLayout>
-        <Modal show={this.state.loading}>
-          <Loading />
-        </Modal>
+        <Splash show={this.state.loading} />
       </Container>
     );
   }

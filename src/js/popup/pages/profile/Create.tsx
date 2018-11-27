@@ -12,8 +12,7 @@ import ProfileCreateActions from 'popup/actions/ui/createProfile';
 import Button from 'ui/Button';
 import SeedView from 'ui/SeedView';
 import Typograhy from 'ui/Typography';
-import Modal from 'ui/Modal';
-import Loading from 'popup/pages/Loading';
+import Splash from 'ui/SplashLoading';
 import { IPropsThemed } from 'config/theme';
 
 const Wrapper = styled('div')`
@@ -109,9 +108,7 @@ class CreateProfile extends Component<IProps, IState> {
 
     return (
       <Wrapper>
-        <Modal show={this.state.show}>
-          <Loading />
-        </Modal>
+        <Splash show={this.state.show} />
         <Typograhy color="main" variant="headline" align="center">
           Create Profile
         </Typograhy>
