@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { BCSign } from 'bcnetwork';
 import accountActions from 'popup/actions/account';
-import Loading from 'popup/pages/Loading';
+import Loading from 'ui/Loading';
 
 const actions = {
   create: accountActions.create
@@ -14,11 +14,11 @@ interface IProps extends Props, React.Props<{}> {
   blockchain?: BCSign;
 }
 class CreateWallet extends React.Component<IProps, {}> {
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.create(this.props.blockchain);
   }
 
-  public render() {
+  public render () {
     return <Loading />;
   }
 }

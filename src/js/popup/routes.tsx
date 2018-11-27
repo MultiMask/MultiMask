@@ -23,14 +23,12 @@ import ChangeNetwork from './pages/account/changeNetwork';
 import Assign from './pages/account/assignEosAccount';
 import CreateWallet from './pages/wallet';
 
-import Loading from 'popup/pages/Loading';
 import Introduction from 'popup/pages/Introduction';
 import CreateProfile from 'popup/pages/profile/Create';
 
 import {
   URL_MAIN,
   URL_LOGIN,
-  URL_LOADING,
   URL_PROFILE_CREATE,
   URL_INTRODUCTION,
   URL_PROFILE_ADD,
@@ -68,7 +66,6 @@ const routes = () => {
       <AppRoute exact path={URL_PROFILE_CREATE} component={CreateProfile} layout={EmptyLayout} />
 
       <AppRoute exact path={URL_LOGIN} component={Login} layout={AuthLayout} />
-      <AppRoute exact path={URL_LOADING} component={Loading} layout={EmptyLayout} />
       <AppRoute exact path={URL_INTRODUCTION} component={Introduction} layout={EmptyLayout} />
     </Switch>
   );

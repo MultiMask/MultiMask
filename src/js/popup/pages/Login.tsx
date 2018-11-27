@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
-import TextField from '../ui/TextField';
-import Button from '../ui/Button';
-import Typography from '../ui/Typography';
-import authActions from '../actions/auth';
+import authActions from 'popup/actions/auth';
+
+import TextField from 'ui/TextField';
+import Button from 'ui/Button';
+import Typography from 'ui/Typography';
+import Splash from 'ui/SplashLoading';
 
 const styles = {
   textField: css`
@@ -19,26 +21,39 @@ const styles = {
   `
 };
 
-class Auth extends React.Component<any, any> {
+interface IState {
+  pass: string;
+  loading: boolean;
+}
+
+class Auth extends React.Component<any, IState> {
   private input = React.createRef<any>();
   public state = {
-    pass: ''
+    pass: '',
+    loading: false
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.input.current.focus();
   }
 
   public handleInput = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value } as IState);
   };
 
   public handleDone = e => {
     e.preventDefault();
-    this.props.login(this.state.pass);
+    this.setState(
+      {
+        loading: true
+      },
+      () => {
+        this.props.login(this.state.pass);
+      }
+    );
   };
 
-  public render() {
+  public render () {
     return (
       <React.Fragment>
         <Typography color="main" variant="subheading" align="center">
@@ -60,6 +75,7 @@ class Auth extends React.Component<any, any> {
             Login
           </Button>
         </form>
+        <Splash show={this.state.loading} />
       </React.Fragment>
     );
   }

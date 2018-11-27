@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
 
-import TextField from '../ui/TextField';
-import Button from '../ui/Button';
-import Typography from '../ui/Typography';
+import TextField from 'ui/TextField';
+import Button from 'ui/Button';
+import Typography from 'ui/Typography';
+import Splash from 'ui/SplashLoading';
 
 import authActions from '../actions/auth';
 
@@ -21,19 +22,27 @@ const styles = {
   `
 };
 
-class Auth extends React.Component<any, any> {
-  constructor(opts) {
+interface IState {
+  password: string;
+  confirmPassword: string;
+  errors: any;
+  loading: boolean;
+}
+
+class Auth extends React.Component<any, IState> {
+  constructor (opts) {
     super(opts);
 
     this.state = {
       password: '',
       confirmPassword: '',
-      errors: {}
+      errors: {},
+      loading: false
     };
   }
 
   public handleInput = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value } as IState);
   };
 
   public handleSubmit = event => {
@@ -41,7 +50,14 @@ class Auth extends React.Component<any, any> {
     const errors = this.validate(this.state);
 
     if (Object.keys(errors).length === 0) {
-      this.props.init(this.state.password);
+      this.setState(
+        {
+          loading: true
+        },
+        () => {
+          this.props.init(this.state.password);
+        }
+      );
     } else {
       this.setState({ errors });
     }
@@ -62,7 +78,7 @@ class Auth extends React.Component<any, any> {
     return errors;
   };
 
-  public render() {
+  public render () {
     const {
       password,
       errors: { password: passwordError, confirmPassword: confirmPasswordError },
@@ -98,6 +114,7 @@ class Auth extends React.Component<any, any> {
             Create
           </Button>
         </form>
+        <Splash show={this.state.loading} />
       </React.Fragment>
     );
   }
