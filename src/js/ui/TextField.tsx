@@ -63,7 +63,7 @@ interface ITextFieldProps {
   onBlur?: any;
   min?: any;
 }
-const TextField: React.SFC<ITextFieldProps> = ({
+export const TextField: React.SFC<ITextFieldProps> = ({
   className,
   label,
   name,

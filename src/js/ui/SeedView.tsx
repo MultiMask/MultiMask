@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-const SeedView = styled('div')`
+export const SeedView = styled('div')`
   height: 135px;
 
   font-size: 18px;

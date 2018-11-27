@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
-class Checkbox extends React.Component<any, any> {
-  constructor(props) {
+export class Checkbox extends React.Component<any, any> {
+  constructor (props) {
     super(props);
   }
 
@@ -11,7 +11,7 @@ class Checkbox extends React.Component<any, any> {
     typeof this.props.onChange === 'function' && this.props.onChange(e);
   };
 
-  public render() {
+  public render () {
     const { name, checked, label, onChange } = this.props;
 
     return (
@@ -41,13 +41,13 @@ const Input = styled('input')`
   opacity: 0;
 `;
 
-interface CheckboxIconProps {
+interface ICheckboxIconProps {
   theme?: any;
   color?: string;
 }
 const CheckboxIcon = styled('span')`
   font-size: 18px;
-  color: ${(props: CheckboxIconProps) => props.theme.colors[props.color] || props.theme.colors.primary};
+  color: ${(props: ICheckboxIconProps) => props.theme.colors[props.color] || props.theme.colors.primary};
 `;
 
 const CheckboxText = styled('span')`

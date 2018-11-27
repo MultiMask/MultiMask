@@ -1,22 +1,23 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import AuthForm from './AuthForm';
-import needAuthActions from '../../../actions/ui/needauth';
+import needAuthActions from 'popup/actions/ui/needauth';
 import { formToJson } from 'helpers/forms';
 
-class NeedAuth extends React.Component<any, any> {
+class NeedAuthComp extends React.Component<any, any> {
   private pass;
 
   public static defaultProps = {
     onSubmit: null
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.start();
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount () {
     this.props.start();
   }
 
@@ -29,7 +30,7 @@ class NeedAuth extends React.Component<any, any> {
     this.props.check(this.pass);
   };
 
-  public render() {
+  public render () {
     const { onSubmit, children, isAuth, error } = this.props;
     if (isAuth) {
       if (onSubmit) {
@@ -43,9 +44,10 @@ class NeedAuth extends React.Component<any, any> {
   }
 }
 
-export default connect(
+export const NeedAuth = connect(
   ({ ui }: any) => ({
     ...ui.needauth
   }),
   dispatch => bindActionCreators(needAuthActions, dispatch)
-)(NeedAuth) as any;
+)(NeedAuthComp) as any;
+export default NeedAuth;

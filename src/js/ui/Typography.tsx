@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-interface Typography {
+interface ITypography {
   children?: any;
   className?: any;
   headlineMapping?: any;
@@ -11,18 +11,18 @@ interface Typography {
   onClick?: any;
 }
 
-interface Props {
+interface IProps {
   theme?: any;
   align?: string;
   color?: string;
   onClick?: any;
 }
 
-const Typography: React.SFC<Typography> = ({ children, headlineMapping, variant, ...props }) => {
+export const Typography: React.SFC<ITypography> = ({ children, headlineMapping, variant, ...props }) => {
   const headline = headlineMapping[variant] || 'span';
   const Component = styled(headline)`
-    color: ${(props: Props) => props.theme.colors[props.color]};
-    text-align: ${(props: Props) => props.align};
+    color: ${(props: IProps) => props.theme.colors[props.color]};
+    text-align: ${(props: IProps) => props.align};
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

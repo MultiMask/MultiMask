@@ -9,7 +9,7 @@ const dynamicStyle = props =>
     cursor: pointer;
   `;
 
-const Icon = styled(FontAwesome)`
+export const Icon = styled(FontAwesome)`
   ${dynamicStyle};
   font-size: 16px;
 `;

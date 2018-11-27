@@ -35,7 +35,7 @@ const IconImg = styled('img')`
   width: auto;
 `;
 
-export class Icon extends React.Component<any, any> {
+export class BcIcon extends React.Component<any, any> {
   get icon() {
     return this.props.type ? <IconImg src={iconTypes[this.props.type]} alt={this.props.type} /> : null;
   }

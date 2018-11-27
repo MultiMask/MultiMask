@@ -17,7 +17,7 @@ const Wrapper = styled('div')`
   justify-content: center;
 `;
 
-const Loading: React.SFC<any> = ({ children }) => (
+export const Loading: React.SFC<any> = ({ children }) => (
   <Wrapper>
     <Icon name="spinner" spin />
   </Wrapper>

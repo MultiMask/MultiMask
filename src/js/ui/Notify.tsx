@@ -45,7 +45,7 @@ interface IState {
   showNotify: boolean;
 }
 
-class Notify extends React.Component<IOwnProps, IState> {
+export class Notify extends React.Component<IOwnProps, IState> {
   public static defaultProps = {
     title: 'Copy it',
     text: 'Copied',
@@ -71,7 +71,7 @@ class Notify extends React.Component<IOwnProps, IState> {
     );
   };
 
-  public render () {
+  public render() {
     const { text, title, children } = this.props;
 
     return (

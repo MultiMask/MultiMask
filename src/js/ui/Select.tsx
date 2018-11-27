@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseSelect from 'react-select';
 import { withTheme } from 'emotion-theming';
 
-const Select = props => {
+export const Select = props => {
   const { theme } = props;
 
   const customStyles = {

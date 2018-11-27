@@ -37,7 +37,7 @@ const LargeStyle = css`
   padding: 7px 25px;
 `;
 
-const Button: React.SFC<any> = ({ children, component: Component, componentProps, ...props }) => {
+export const Button: React.SFC<any> = ({ children, component: Component, componentProps, ...props }) => {
   if (Component) {
     return (
       <Component style={{ textDecoration: 'none' }} {...componentProps}>

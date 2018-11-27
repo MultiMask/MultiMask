@@ -6,7 +6,11 @@ import { IPropsThemed } from 'config/theme';
 interface IProps extends IPropsThemed {
   show: boolean;
 }
-const Modal = styled('div')`
+
+/**
+ * Create Modal element
+ */
+export const Modal = styled('div')`
   position: absolute;
   width: 100%;
   height: 100%;

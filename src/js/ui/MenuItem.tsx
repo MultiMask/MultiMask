@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import Typography from './Typography';
+import ITypography from './Typography';
 
-const Item = styled(Typography)`
+const Item = styled(ITypography)`
   &:hover {
     color: ${props => props.theme.colors.primary};
   }
@@ -17,7 +17,7 @@ const Root = styled('div')`
   }
 `;
 
-const MenuItem = props => {
+export const MenuItem = props => {
   const { children, theme, component: Component, ...other } = props;
   if (Component) {
     return (
