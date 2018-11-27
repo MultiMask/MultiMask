@@ -2,8 +2,9 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
-import Typography from '../../../../ui/Typography';
-import Icon from '../../../../ui/Icon';
+import Typography from 'ui/Typography';
+import Icon from 'ui/Icon';
+import Notify from 'ui/Notify';
 
 import Web3 = require('web3');
 const web3 = new Web3();
@@ -16,9 +17,11 @@ const ETHList = ({ txs, address, linkToExplorer }) =>
       <Header>
         <Typography color="main">{format(tx.timeStamp * 1000, DATE_FORMAT)}</Typography>
         <div>
-          <CopyToClipboard text={tx.hash}>
-            <Icon className={styles.icon} name="clone" color="secondary" />
-          </CopyToClipboard>
+          <Notify>
+            <CopyToClipboard text={tx.hash}>
+              <Icon className={styles.icon} name="clone" color="secondary" />
+            </CopyToClipboard>
+          </Notify>
           <Icon
             className={`${styles.icon} ${styles.left}`}
             onClick={() => linkToExplorer(tx.hash)}
