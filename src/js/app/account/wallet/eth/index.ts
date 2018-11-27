@@ -59,16 +59,21 @@ export default class EthWallet implements IWallet {
   public async sendCoins ({ to, amount, data, gasLimit, gasPrice }) {
     const nonce = await web3.eth.getTransactionCount(this.address);
 
-    const tx = this.engine.signEthTx({
-      privKey: this.privateKey,
+    const rawTx: any = {
       amount,
       to,
       from: this.address,
       nonce,
-      gasPrice,
-      gasLimit
-    });
+      gasPrice:  web3.utils.toHex(gasPrice),
+      gasLimit:  web3.utils.toHex(gasLimit)
+    };
 
+    if (data) {
+      rawTx.data = web3.utils.toHex(data);
+    }
+
+    info(rawTx);
+    const tx = this.engine.signRawTx(rawTx, this.privateKey);
     info(tx);
 
     return new Promise((res, rej) => {
@@ -83,7 +88,6 @@ export default class EthWallet implements IWallet {
     });
   }
 
-  // TODO: provide to Account entity
   public signRawTx (data) {
     return this.engine.signRawTx(data, this.privateKey);
   }

@@ -53,6 +53,8 @@ export const clearUrl = url => {
   switch (url) {
     case URL_LOGIN:
       return URL_MAIN;
+    case '/account/send/result/':
+      return '/account';
     default:
       return url;
   }
