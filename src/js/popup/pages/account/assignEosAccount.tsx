@@ -5,9 +5,9 @@ import styled from 'react-emotion';
 import { css } from 'emotion';
 
 import { IWalletInfo } from 'types/accounts';
-import { getCurrentWallet } from './../../select';
+import { getCurrentWallet } from 'popup/select';
+import { eosActions } from 'popup/actions/eos';
 import Wallet from './common/Wallet';
-import { eosActions } from '../../actions/eos';
 
 import { EosAccount } from './../wallet/bcaccounts/eosAccount';
 
@@ -26,13 +26,13 @@ class Assign extends React.Component<IProps, IState> {
     this.props.setAccountToKey(this.props.account.key, account);
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.getKeyAccounts(this.props.account.key).then(response => {
       this.setState({ accounts: response.payload });
     });
   }
 
-  public render() {
+  public render () {
     const { account } = this.props;
     const { accounts } = this.state;
 

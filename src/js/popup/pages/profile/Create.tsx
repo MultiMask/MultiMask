@@ -9,10 +9,7 @@ import * as bip39 from 'bip39';
 
 import ProfileCreateActions from 'popup/actions/ui/createProfile';
 
-import Button from 'ui/Button';
-import SeedView from 'ui/SeedView';
-import Typograhy from 'ui/Typography';
-import Splash from 'ui/SplashLoading';
+import { Button, SeedView, Splash, Typography } from 'ui';
 import { IPropsThemed } from 'config/theme';
 
 const Wrapper = styled('div')`
@@ -61,7 +58,7 @@ class CreateProfile extends Component<IProps, IState> {
     seed: ''
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     if (!this.props.seed) {
       this.handleGenerete();
     }
@@ -101,7 +98,7 @@ class CreateProfile extends Component<IProps, IState> {
     this.setState({ seed: e.target.value });
   };
 
-  public render () {
+  public render() {
     const isIn = this.state.input;
     const valid = this.state.verified;
     const hasValidated = !isNull(valid);
@@ -109,13 +106,13 @@ class CreateProfile extends Component<IProps, IState> {
     return (
       <Wrapper>
         <Splash show={this.state.show} />
-        <Typograhy color="main" variant="headline" align="center">
+        <Typography color="main" variant="headline" align="center">
           Create Profile
-        </Typograhy>
+        </Typography>
         <hr />
-        <Typograhy color="main" variant="subheading" align="center">
+        <Typography color="main" variant="subheading" align="center">
           Save your Mnemonic Phrase
-        </Typograhy>
+        </Typography>
         {!isIn && <SeedView>{this.props.seed}</SeedView>}
         {isIn && <InputArea onChange={this.handleInputMnemonic} readOnly={valid} />}
         {isIn &&

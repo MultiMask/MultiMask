@@ -5,9 +5,9 @@ import QRCode = require('qrcode.react');
 import styled from 'react-emotion';
 import { withRouter } from 'react-router';
 
-import Typography from '../../ui/Typography';
+import { Typography } from 'ui';
 
-import profileActions from './../../actions/profile';
+import profileActions from 'popup/actions/profile';
 
 class QRCodeView extends React.Component<any, any> {
   public state = {

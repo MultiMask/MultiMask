@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import NeedAuth from 'ui/components/NeedAuth';
+import { NeedAuth } from 'ui';
 import profileActions from 'popup/actions/profile';
 
 class ExportProfile extends Component<any, any> {
@@ -17,7 +17,7 @@ class ExportProfile extends Component<any, any> {
     handleExport(id);
   };
 
-  public render() {
+  public render () {
     return <NeedAuth onSubmit={this.handleExportProfile} />;
   }
 }

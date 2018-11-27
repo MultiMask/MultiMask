@@ -1,7 +1,8 @@
 import * as React from 'react';
 import FormLayout from './FormLayout';
-import Typography from '../../ui/Typography';
 import { css } from 'emotion';
+
+import { Typography } from 'ui';
 
 const styles = {
   text: css`
@@ -22,7 +23,7 @@ class TypeImportingStep extends React.Component<any, any> {
     this.setState({ type: event.target.value });
   };
 
-  public render() {
+  public render () {
     const { onSubmit } = this.props;
     const { type } = this.state;
     return (

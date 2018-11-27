@@ -7,11 +7,9 @@ import priceActions from '../../actions/prices';
 import { getCurrentWallet } from './../../select';
 
 import Wallet from './common/Wallet';
-import Button from '../../ui/Button';
-import TextField from '../../ui/TextField';
-import Typography from '../../ui/Typography';
 import { IWalletInfo } from 'types/accounts';
 import { getTotalGas } from 'helpers/eth';
+import { Button, TextField, Typography } from 'ui';
 
 const actions = {
   ...txActions,
@@ -32,7 +30,7 @@ interface IState {
 }
 
 class Send extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -64,7 +62,7 @@ class Send extends React.Component<IProps, IState> {
     }
   };
 
-  public formatTX({ to, amount, data, gasPrice, gasLimit }: any) {
+  public formatTX ({ to, amount, data, gasPrice, gasLimit }: any) {
     const {
       account: { blockchain }
     } = this.props;
@@ -100,7 +98,7 @@ class Send extends React.Component<IProps, IState> {
     return errors;
   };
 
-  public render() {
+  public render () {
     const { account, getPrice } = this.props;
     const {
       errors: { to: toError, amount: amountError },

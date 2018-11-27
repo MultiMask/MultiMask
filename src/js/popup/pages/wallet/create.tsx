@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { BCSign } from 'bcnetwork';
 import accountActions from 'popup/actions/account';
-import Loading from 'ui/Loading';
+import { Loading } from 'ui';
 
 const actions = {
   create: accountActions.create

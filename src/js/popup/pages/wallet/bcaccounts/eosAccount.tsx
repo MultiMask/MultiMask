@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled, { css } from 'react-emotion';
 
-import Typography from 'ui/Typography';
-import Button from 'ui/Button';
+import { Button, Typography } from 'ui';
 import { prettyAccount, IEosAccountPermission } from 'helpers/eos';
 
 interface IState {
@@ -76,7 +75,7 @@ export class EosAccount extends React.Component<IProps, IState> {
     this.setState(state => ({ ...state, selectedAccount: value }));
   };
 
-  public render() {
+  public render () {
     const emptyAccount = null;
     const accountList = [emptyAccount, ...this.props.accounts];
 

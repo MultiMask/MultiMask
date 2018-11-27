@@ -3,9 +3,7 @@ import { format } from 'date-fns';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
 import { calcTxBalance } from 'helpers/btc';
-import Typography from 'ui/Typography';
-import Icon from 'ui/Icon';
-import Notify from 'ui/Notify';
+import { Icon, Notify, Typography } from 'ui';
 
 import { DATE_FORMAT, Header, Root, styles } from './elements';
 

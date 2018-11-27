@@ -3,14 +3,14 @@ const DetectRTC = require('detectrtc');
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import QrReader from 'react-qr-reader';
-import AuthForm from '../../ui/components/NeedAuth/AuthForm';
-import profileActions from '../../actions/profile';
-import routingActions from '../../actions/routing';
-import { formToJson } from 'helpers/forms';
 import styled from 'react-emotion';
-import Typography from 'ui/Typography';
-import Button from 'ui/Button';
+
+import profileActions from 'popup/actions/profile';
+import routingActions from 'popup/actions/routing';
+import { formToJson } from 'helpers/forms';
 import { readFile } from 'helpers/files';
+
+import { AuthForm, Button, Typography } from 'ui';
 
 class ImportProfile extends Component<any, {}> {
   public state = {
@@ -58,7 +58,7 @@ class ImportProfile extends Component<any, {}> {
     chrome.runtime.openOptionsPage(console.log('Option opened'));
   };
 
-  public render() {
+  public render () {
     const { encryptedProfile, delay, isScan } = this.state;
 
     if (!encryptedProfile) {

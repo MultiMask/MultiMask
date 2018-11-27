@@ -12,11 +12,7 @@ import routingActions from 'popup/actions/routing';
 import settingsActions from 'popup/actions/settings';
 
 import { BaseContainer } from './BaseContainer';
-import Typography from 'ui/Typography';
-import Menu from 'ui/Menu';
-import MenuItem from 'ui/MenuItem';
-import Icon from 'ui/Icon';
-import NeedAuth from 'ui/components/NeedAuth';
+import { Menu, MenuItem, Icon, NeedAuth, Typography } from 'ui';
 
 const Container = styled(BaseContainer)`
   display: flex;

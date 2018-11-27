@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { getCurrentWallet } from './../../select';
 import { IWalletInfo } from 'types/accounts';
 
-import Typography from 'ui/Typography';
-import Notify from 'ui/Notify';
+import { Notify, Typography } from 'ui';
 
 interface IQRCodeLink {
   account: IWalletInfo;

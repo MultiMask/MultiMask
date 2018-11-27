@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
 
-import TextField from 'ui/TextField';
-import Button from 'ui/Button';
-import Typography from 'ui/Typography';
-import Splash from 'ui/SplashLoading';
+import { Button, Splash, TextField, Typography } from 'ui';
 
 import authActions from '../actions/auth';
 

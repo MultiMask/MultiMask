@@ -3,12 +3,12 @@ import styled, { css } from 'react-emotion';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import CopyToClipboard = require('react-copy-to-clipboard');
-import Typography from 'popup/ui/Typography';
+
 import { IWalletInfo } from 'types/accounts';
 import { openUrlToTab, LinkTypes } from 'helpers/links';
 import { getCurrentWallet } from 'popup/select';
-import Icon from 'popup/ui/Icon';
-import SeedView from 'ui/SeedView';
+
+import { Icon, SeedView, Typography } from 'ui';
 
 interface ISendResult {
   account: IWalletInfo;

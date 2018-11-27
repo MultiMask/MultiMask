@@ -12,10 +12,8 @@ import { ACCOUNT_INFO } from 'constants/account';
 import Info from './Info';
 import Control from './Control';
 
-import DialogLayout from '../../popup/layouts/DialogLayout';
-import Typography from '../../popup/ui/Typography';
-import Divider from '../../popup/ui/Divider';
-import Button from '../../popup/ui/Button';
+import DialogLayout from 'popup/layouts/DialogLayout';
+import { Divider, Button, Typography } from 'ui';
 import getPrice from 'helpers/getPrice';
 import { getTotalGas } from 'helpers/eth';
 import { SETTINGS_LOAD_CURRENCY_PRICE, SETTINGS_LOAD_CURRENCY_PRICE_SUCCESS } from 'constants/settings';
@@ -56,7 +54,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     prices: null
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     InternalMessage.signal(AUTH_IS_READY)
       .send()
       .then(({ isReady }) => {
@@ -101,7 +99,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
       });
   }
 
-  public setTxInfo(data: any) {
+  public setTxInfo (data: any) {
     const accounts = this.state.accounts.filter(acc => acc.blockchain === data.blockchain);
     const account = data.tx.from ? accounts.find(acc => acc.info.address === data.tx.from) : accounts[0];
 
@@ -116,7 +114,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     }));
   }
 
-  public setAccounts(accounts) {
+  public setAccounts (accounts) {
     let account;
     if (accounts && accounts.length > 0) {
       account = accounts[0];
@@ -144,7 +142,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     window.close();
   };
 
-  get amount() {
+  get amount () {
     const { tx, blockchain } = this.state;
 
     if (blockchain === networks.BTC.sign) {
@@ -157,7 +155,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     return null;
   }
 
-  get gasControls() {
+  get gasControls () {
     const gasPrice = web3.utils.fromWei(web3.utils.hexToNumber(this.state.tx.gasPrice).toString(), 'gwei');
     const gasLimit = web3.utils.hexToNumber(this.state.tx.gasLimit);
     const handlePrice = e => this.handleUpdateTX('gasPrice', e);
@@ -176,7 +174,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     );
   }
 
-  public handleUpdateTX(field, e) {
+  public handleUpdateTX (field, e) {
     const value = e && e.target ? e.target.value : e;
     const getValue = (prop, vl = 0) => {
       switch (prop) {
@@ -197,7 +195,7 @@ export default class App extends React.Component<IApproveProps, IAppState> {
     }));
   }
 
-  public render() {
+  public render () {
     // TODO: return loader
     if (!this.state.isLoaded) {
       return null;
