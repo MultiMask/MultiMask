@@ -30,7 +30,7 @@ export class ProfileListController extends EventEmitter {
   private messageController: MessageController;
   private profileController: ProfileController;
 
-  constructor(opts) {
+  constructor (opts) {
     super();
 
     this.accessController = opts.accessController;
@@ -43,7 +43,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Messages
    */
-  private startListening() {
+  private startListening () {
     this.messageController.on(PROFILE_GET_CURRENT, this.responseGetCurrent);
     this.messageController.on(PROFILE_CREATE_DONE, this.responseCreateDone);
 
@@ -204,7 +204,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Read profile list from storage and restore all profiles
    */
-  public init(): Promise<string[]> {
+  public init (): Promise<string[]> {
     return Promise.all([StorageService.ProfileList.get(), StorageService.ProfileList.getCurrent()]).then(
       ([list, current]) => {
         this.list = list || this.list;
@@ -229,11 +229,13 @@ export class ProfileListController extends EventEmitter {
    * Add Profile in List and save list in storage
    * @param profile ProfileData
    */
-  private addProfile(profile: Profile): string[] {
-    this.list.push(profile.id);
-    StorageService.ProfileList.set(this.list);
-
-    this.profileController.save(profile);
+  private addProfile (profile: Profile): string[] {
+    if (!this.list.includes(profile.id)) {
+      this.list.push(profile.id);
+      StorageService.ProfileList.set(this.list);
+  
+      this.profileController.save(profile);
+    }
 
     return this.list;
   }
@@ -242,7 +244,7 @@ export class ProfileListController extends EventEmitter {
    * Activate Profile
    * @param profileId
    */
-  private async activate(profileId: string): Promise<any> {
+  private async activate (profileId: string): Promise<any> {
     return new Promise((res, rej) => {
       if (!this.list.includes(profileId)) {
         return rej(false);
@@ -262,7 +264,7 @@ export class ProfileListController extends EventEmitter {
    * Set new current account
    * @param profile
    */
-  private setCurrrent(profileId: string) {
+  private setCurrrent (profileId: string) {
     this.current = profileId;
     return StorageService.ProfileList.setCurrnet(profileId);
   }
@@ -270,7 +272,7 @@ export class ProfileListController extends EventEmitter {
   /**
    * Load common information about profiles
    */
-  private loadProfiles(): Promise<ProfileInfo[]> {
+  private loadProfiles (): Promise<ProfileInfo[]> {
     return Promise.all(this.list.map(id => StorageService.Entities.get(id))).then(profiles => {
       return profiles.map((profile: Profile) => ({
         name: profile.name,
