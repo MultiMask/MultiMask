@@ -9,7 +9,24 @@ export enum BCSign {
   DOGE = 'DOGE'
 }
 
-export default {
+export const getBcNet = (bc: BCSign, net: string): INetwork => networks[bc].network.find(item => item.sign === net);
+
+export interface INetwork {
+  name: string,
+  sign: string,
+  url?: string,
+  btc?: any,
+  explorerUrl?: string,
+  chainId?: string | number;
+}
+
+export interface IBlockchain {
+  name: string,
+  sign: BCSign,
+  network: INetwork[]
+}
+export interface IBlockchains extends Record<BCSign, IBlockchain> {}
+const networks: IBlockchains = {
   BTC: {
     name: 'Bitcoin',
     sign: BCSign.BTC,
@@ -124,3 +141,4 @@ export default {
     ]
   }
 };
+export default networks;

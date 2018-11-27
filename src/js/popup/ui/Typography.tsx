@@ -38,7 +38,8 @@ Typography.defaultProps = {
     title: 'h2',
     subheading: 'h3',
     body2: 'aside',
-    body1: 'p'
+    body1: 'p',
+    div: 'div'
   },
   align: 'inherit'
 };
