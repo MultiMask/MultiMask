@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
-import { IWalletInfo } from 'types/accounts';
+import { Link } from 'react-router-dom';
+import { URL_ACCOUNT_CREATE } from 'constants/popupUrl';
 
 import { BcIcon } from 'ui';
 import priceActions from 'popup/actions/prices';
+import { IWalletInfo } from 'types/accounts';
 
 import Item from './item';
 
@@ -60,7 +61,7 @@ class AccountList extends React.Component<IProps, {}> {
           <span>No wallets</span>
         </div>
         <div className="NoWallets-Actions">
-          <Link className="Link" to="/wallets/create">
+          <Link className="Link" to={URL_ACCOUNT_CREATE}>
             Create new
           </Link>
         </div>

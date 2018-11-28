@@ -14,6 +14,7 @@ import modalActions from 'popup/actions/ui/modal';
 
 import { BaseContainer } from './BaseContainer';
 import { Menu, MenuItem, Icon, NeedAuth, Typography, Modal, Button, ButtonsLine, ModalContent, ModalWrap } from 'ui';
+import { URL_ACCOUNT_CREATE, URL_SETTING } from 'constants/popupUrl';
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -80,8 +81,8 @@ const MainLayout: React.SFC<IProps> = props => {
     <Container>
       <Header>
         <HeaderItem color="secondary">
-          {pathname !== '/wallets/create' && (
-            <Link to="wallets/create">
+          {pathname !== URL_ACCOUNT_CREATE && (
+            <Link to={URL_ACCOUNT_CREATE}>
               <Icon className={styles.icon} name="plus-circle" />
             </Link>
           )}
@@ -90,7 +91,7 @@ const MainLayout: React.SFC<IProps> = props => {
             <MenuItem component={Link} to="/profiles">
               Profiles
             </MenuItem>
-            <MenuItem component={Link} to="/settings">
+            <MenuItem component={Link} to={URL_SETTING}>
               Settings
             </MenuItem>
             <MenuItem onClick={logout}>Logout</MenuItem>

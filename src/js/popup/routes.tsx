@@ -39,13 +39,17 @@ import {
   URL_ACCOUNT_DETAIL,
   URL_ACCOUNT_QRCODE,
   URL_ACCOUNT_SEND,
+  URL_ACCOUNT_SEND_RESULT_HASH,
+  URL_ACCOUNT_CREATE,
+  URL_ACCOUNT_ASSIGN,
+  URL_ACCOUNT_EDIT,
   URL_PROFILE_ADD,
   URL_PROFILE_IMPORT,
   URL_PROFILE_EXPORT,
   URL_PROFILE_MAIN,
   URL_PROFILE_QRCODE,
   URL_PROFILE_SEED,
-  URL_ACCOUNT_SEND_RESULT_HASH
+  URL_SETTING
 } from 'constants/popupUrl';
 
 const routes = () => {
@@ -58,12 +62,12 @@ const routes = () => {
       {/* <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth /> */}
       <AppRoute exact path={URL_ACCOUNT_SEND} component={Send} layout={MainLayout} />
       <AppRoute exact path={URL_ACCOUNT_SEND_RESULT_HASH} component={SendResult} layout={MainLayout} />
-      <AppRoute exact path="/account/edit/:id" component={ChangeNetwork} layout={MainLayout} />
-      <AppRoute exact path="/account/assign" component={Assign} layout={MainLayout} />
+      <AppRoute exact path={`${URL_ACCOUNT_EDIT}/:id`} component={ChangeNetwork} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_ASSIGN} component={Assign} layout={MainLayout} />
 
-      <AppRoute exact path="/wallets/create" component={AccountCreate} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_CREATE} component={AccountCreate} layout={MainLayout} />
 
-      <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
+      <AppRoute exact path={URL_SETTING} component={Settings} layout={MainLayout} />
 
       <AppRoute exact path={URL_PROFILE_MAIN} component={Profiles} layout={MainLayout} />
       <AppRoute exact path={URL_PROFILE_QRCODE} component={ProfileQRCode} layout={MainLayout} needAuth />

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import priceActions from 'popup/actions/prices';
+import { URL_ACCOUNT_EDIT } from 'constants/popupUrl';
 
 import { BcIcon, Typography } from 'ui';
 
@@ -64,7 +65,7 @@ class Wallet extends React.Component<any, any> {
             className={css`
               text-decoration: none;
             `}
-            to={`/account/edit/${key}`}
+            to={`${URL_ACCOUNT_EDIT}/${key}`}
           >
             <Sing>{network}</Sing>
           </Link>

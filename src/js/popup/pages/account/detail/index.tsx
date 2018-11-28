@@ -15,7 +15,7 @@ import TXList from './common/TXList';
 import Wallet from './common/Wallet';
 import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
 
-import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND } from 'constants/popupUrl';
+import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND, URL_ACCOUNT_ASSIGN } from 'constants/popupUrl';
 
 const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
@@ -32,15 +32,13 @@ class AccountInfo extends React.Component<IProps, any> {
 
     switch (account.blockchain) {
       case ntx.EOS.sign: {
-        if (!(account.extra && account.extra.account)) {
-          return (
-            <React.Fragment>
-              <MenuItem component={Link} to="/account/assign">
-                Assign EOS Account
-              </MenuItem>
-            </React.Fragment>
-          );
-        }
+        return (
+          <React.Fragment>
+            <MenuItem component={Link} to={URL_ACCOUNT_ASSIGN}>
+              Assign EOS Account
+            </MenuItem>
+          </React.Fragment>
+        );
       }
     }
   }

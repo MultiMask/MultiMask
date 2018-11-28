@@ -48,12 +48,8 @@ class AccountFastView extends React.Component<any, any> {
 
 export default connect(
   null,
-  dispatch =>
-    bindActionCreators(
-      {
-        ...accountActions,
-        ...priceActions
-      },
-      dispatch
-    )
+  {
+    ...accountActions,
+    ...priceActions
+  }
 )(AccountFastView);
