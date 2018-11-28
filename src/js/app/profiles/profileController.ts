@@ -170,8 +170,6 @@ export class ProfileController {
       const profile = Profile.fromJSON(profileData);
       profile.decode(this.accessController.decode);
 
-      console.log(JSON.stringify(profile));
-
       return this.accessController.encode(JSON.stringify(profile));
     });
   }
