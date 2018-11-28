@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import priceActions from '../../../actions/prices';
+import priceActions from 'popup/actions/prices';
 
 import { BcIcon, Typography } from 'ui';
 

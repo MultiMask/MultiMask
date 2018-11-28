@@ -6,7 +6,6 @@ import EmptyLayout from './layouts/EmptyLayout';
 import MainLayout from './layouts/MainLayout';
 
 import Login from './pages/Login';
-import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
 
 import Profiles from './pages/profile';
@@ -15,16 +14,18 @@ import ProfileGetSeed from 'popup/pages/profile/GetMnemonic';
 import ProfileExport from './pages/profile/ExportProfile';
 import ImportProfile from './pages/profile/ImportProfile';
 
-import Account from './pages/walletDetail/list';
-import ExportPK from './pages/walletDetail/exportpk';
-import Details from './pages/walletDetail/details';
-import QrCodeLink from './pages/walletDetail/QRCodeLink';
-import Send from './pages/walletDetail/send';
-import SendResult from './pages/walletDetail/SendResult';
-import ChangeNetwork from './pages/walletDetail/changeNetwork';
-import Assign from './pages/walletDetail/assignEosAccount';
+import PasswordCreate from './pages/PasswordCreate';
+import AccountList from './pages/account/list';
 
-import CreateWallet from './pages/walletCreate';
+import Details from './pages/account/detail/';
+// import ExportPK from './pages/account/detail/exportpk';
+import QrCodeLink from './pages/account/detail/QRCodeLink';
+import Send from './pages/account/detail/send';
+import SendResult from './pages/account/detail/SendResult';
+import ChangeNetwork from './pages/account/detail/changeNetwork';
+import Assign from './pages/account/detail/assignEosAccount';
+
+import AccountCreate from './pages/account/create';
 
 import Introduction from 'popup/pages/Introduction';
 import CreateProfile from 'popup/pages/profile/Create';
@@ -32,31 +33,35 @@ import CreateProfile from 'popup/pages/profile/Create';
 import {
   URL_MAIN,
   URL_LOGIN,
+  URL_PASS_CREATE,
   URL_PROFILE_CREATE,
   URL_INTRODUCTION,
+  URL_ACCOUNT_DETAIL,
+  URL_ACCOUNT_QRCODE,
+  URL_ACCOUNT_SEND,
   URL_PROFILE_ADD,
   URL_PROFILE_IMPORT,
   URL_PROFILE_EXPORT,
   URL_PROFILE_MAIN,
   URL_PROFILE_QRCODE,
   URL_PROFILE_SEED,
-  URL_ACCOUNT_SEND_RESULT
+  URL_ACCOUNT_SEND_RESULT_HASH
 } from 'constants/popupUrl';
 
 const routes = () => {
   return (
     <Switch>
-      <AppRoute exact path={URL_MAIN} component={Account} layout={MainLayout} />
-      <AppRoute exact path="/create/account" component={CreateAccount} layout={AuthLayout} />
-      <AppRoute exact path="/account/details" component={Details} layout={MainLayout} />
-      <AppRoute exact path="/account/details/qrcodelink" component={QrCodeLink} layout={MainLayout} />
-      <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth />
-      <AppRoute exact path="/account/send" component={Send} layout={MainLayout} />
-      <AppRoute exact path={URL_ACCOUNT_SEND_RESULT} component={SendResult} layout={MainLayout} />
+      <AppRoute exact path={URL_MAIN} component={AccountList} layout={MainLayout} />
+      <AppRoute exact path={URL_PASS_CREATE} component={PasswordCreate} layout={AuthLayout} />
+      <AppRoute exact path={URL_ACCOUNT_DETAIL} component={Details} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_QRCODE} component={QrCodeLink} layout={MainLayout} />
+      {/* <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth /> */}
+      <AppRoute exact path={URL_ACCOUNT_SEND} component={Send} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_SEND_RESULT_HASH} component={SendResult} layout={MainLayout} />
       <AppRoute exact path="/account/edit/:id" component={ChangeNetwork} layout={MainLayout} />
       <AppRoute exact path="/account/assign" component={Assign} layout={MainLayout} />
 
-      <AppRoute exact path="/wallets/create" component={CreateWallet} layout={MainLayout} />
+      <AppRoute exact path="/wallets/create" component={AccountCreate} layout={MainLayout} />
 
       <AppRoute exact path="/settings" component={Settings} layout={MainLayout} />
 

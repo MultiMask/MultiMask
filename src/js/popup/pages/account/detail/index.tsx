@@ -4,7 +4,8 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
-import { getCurrentWallet } from './../../select';
+
+import { getCurrentWallet } from 'popup/select';
 
 import ntx, { BCSign } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
@@ -13,6 +14,8 @@ import { openUrlToTab, LinkTypes } from 'helpers/links';
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
 import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
+
+import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND } from 'constants/popupUrl';
 
 const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
@@ -76,7 +79,7 @@ class AccountInfo extends React.Component<IProps, any> {
               >
                 {this.bcMenuItems()}
                 <MenuItem onClick={this.handleOpenDetails}>View Account</MenuItem>
-                <MenuItem component={Link} to="/account/details/qrcodelink">
+                <MenuItem component={Link} to={URL_ACCOUNT_QRCODE}>
                   Show QR-code
                 </MenuItem>
                 {/* <MenuItem component={Link} to="/account/exportpk">
@@ -87,7 +90,7 @@ class AccountInfo extends React.Component<IProps, any> {
           }
           actions={
             <div>
-              <Button outlined small component={Link} componentProps={{ to: '/account/send' }}>
+              <Button outlined small component={Link} componentProps={{ to: URL_ACCOUNT_SEND }}>
                 Send
               </Button>
             </div>

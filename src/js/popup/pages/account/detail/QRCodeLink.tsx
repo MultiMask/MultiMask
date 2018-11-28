@@ -2,7 +2,8 @@ import * as React from 'react';
 import QRCode = require('qrcode.react');
 import styled, { css } from 'react-emotion';
 import { connect } from 'react-redux';
-import { getCurrentWallet } from './../../select';
+
+import { getCurrentWallet } from 'popup/select';
 import { IWalletInfo } from 'types/accounts';
 
 import { Notify, Typography } from 'ui';

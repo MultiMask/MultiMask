@@ -2,9 +2,10 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import txActions from '../../actions/tx';
-import priceActions from '../../actions/prices';
-import { getCurrentWallet } from './../../select';
+
+import txActions from 'popup/actions/tx';
+import priceActions from 'popup/actions/prices';
+import { getCurrentWallet } from 'popup/select';
 
 import Wallet from './common/Wallet';
 import { IWalletInfo } from 'types/accounts';

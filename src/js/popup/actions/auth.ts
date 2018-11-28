@@ -14,7 +14,7 @@ import {
   AUTH_LOGOUT_FAIL
 } from 'constants/auth';
 
-import { URL_MAIN, URL_LOGIN, URL_INTRODUCTION } from 'constants/popupUrl';
+import { URL_MAIN, URL_LOGIN, URL_PASS_CREATE, URL_INTRODUCTION } from 'constants/popupUrl';
 
 import { StorageService } from 'services/StorageService';
 import AccountActions from './account';
@@ -47,7 +47,7 @@ const AuthActions = {
                 hasPass
               }
             });
-            const next = hasPass ? URL_LOGIN : '/create/account';
+            const next = hasPass ? URL_LOGIN : URL_PASS_CREATE;
             dispatch(push(next));
           });
         }

@@ -9,7 +9,7 @@ import { getCurrentWallet } from 'popup/select';
 import { eosActions } from 'popup/actions/eos';
 import Wallet from './common/Wallet';
 
-import { EosAccount } from './../walletCreate/bcaccounts/eosAccount';
+import { EosAccount } from '../create/bcaccounts/eosAccount';
 
 interface IState {
   accounts?: any[];

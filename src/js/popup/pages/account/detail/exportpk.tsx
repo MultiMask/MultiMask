@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCurrentWallet } from '../../select';
 
+import { getCurrentWallet } from 'popup/select';
 import actions from 'popup/actions/account';
 import { decode } from 'libs/cipher';
 
@@ -11,13 +11,13 @@ class ExportPK extends React.Component<any, any> {
     seed: ''
   };
 
-  public componentDidMount () {
+  public componentDidMount() {
     const { getSeed, pass, wallet } = this.props;
 
     getSeed(pass, wallet.id);
   }
 
-  public static getDerivedStateFromProps (nextProps, prevState) {
+  public static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.pass && nextProps.seed) {
       return {
         seed: decode(nextProps.pass, nextProps.seed)
@@ -29,7 +29,7 @@ class ExportPK extends React.Component<any, any> {
     };
   }
 
-  public render () {
+  public render() {
     return (
       <div className="balance">
         <div>

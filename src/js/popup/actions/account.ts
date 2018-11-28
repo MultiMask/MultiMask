@@ -14,6 +14,10 @@ import {
   ACCOUNT_IMPORT
 } from 'constants/account';
 
+import {
+  URL_ACCOUNT_DETAIL
+} from 'constants/popupUrl';
+
 const AccountActions = {
   getInfo: () => (dispatch, getState) => {
     return InternalMessage.signal(ACCOUNT_INFO)
@@ -87,7 +91,7 @@ const AccountActions = {
 
     dispatch(action);
 
-    dispatch(push('/account/details'));
+    dispatch(push(URL_ACCOUNT_DETAIL));
   }
 
   // getSeed: (pass, id) => (dispatch, getState) => {
