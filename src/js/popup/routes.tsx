@@ -6,22 +6,25 @@ import EmptyLayout from './layouts/EmptyLayout';
 import MainLayout from './layouts/MainLayout';
 
 import Login from './pages/Login';
-import Account from './pages/account/list';
 import CreateAccount from './pages/CreateAccount';
 import Settings from './pages/Settings';
+
 import Profiles from './pages/profile';
 import ProfileQRCode from './pages/profile/QRCodeView';
 import ProfileGetSeed from 'popup/pages/profile/GetMnemonic';
 import ProfileExport from './pages/profile/ExportProfile';
 import ImportProfile from './pages/profile/ImportProfile';
-import ExportPK from './pages/account/exportpk';
-import Details from './pages/account/details';
-import QrCodeLink from './pages/account/QRCodeLink';
-import Send from './pages/account/send';
-import SendResult from './pages/account/SendResult';
-import ChangeNetwork from './pages/account/changeNetwork';
-import Assign from './pages/account/assignEosAccount';
-import CreateWallet from './pages/wallet';
+
+import Account from './pages/walletDetail/list';
+import ExportPK from './pages/walletDetail/exportpk';
+import Details from './pages/walletDetail/details';
+import QrCodeLink from './pages/walletDetail/QRCodeLink';
+import Send from './pages/walletDetail/send';
+import SendResult from './pages/walletDetail/SendResult';
+import ChangeNetwork from './pages/walletDetail/changeNetwork';
+import Assign from './pages/walletDetail/assignEosAccount';
+
+import CreateWallet from './pages/walletCreate';
 
 import Introduction from 'popup/pages/Introduction';
 import CreateProfile from 'popup/pages/profile/Create';
