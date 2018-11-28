@@ -1,11 +1,11 @@
-export { ButtonBase, Button } from './Button';
+export { ButtonBase, Button, ButtonsLine } from './Button';
 export { Checkbox } from './Checkbox';
 export { Divider } from './Divider';
 export { Icon } from './Icon';
 export { Loading } from './Loading';
 export { Menu } from './Menu';
 export { MenuItem } from './MenuItem';
-export { Modal } from './Modal';
+export { Modal, ModalContent, ModalWrap } from './Modal';
 export { Notify } from './Notify';
 export { SeedView } from './SeedView';
 export { Select } from './Select';

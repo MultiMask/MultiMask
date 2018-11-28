@@ -10,6 +10,11 @@ const dynamicStyle = props => css`
   box-shadow: ${props.outlined && 'none'};
 `;
 
+export const ButtonsLine = styled('div')`
+  display: flex;
+  justify-content: space-around;
+`;
+
 export const ButtonBase = styled('button')`
   outline: none;
   color: white;

@@ -23,6 +23,7 @@ export function configureStore (): Promise<PopupStore> {
       if (initialState) {
         if (initialState.timestamp && Date.now() - initialState.timestamp < TIMEOUT) {
           delete initialState.auth;
+          delete initialState.ui;
           initialState.router.url = clearUrl(initialState.router.location.pathname);
 
           info('Restore state', initialState);

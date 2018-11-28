@@ -19,6 +19,12 @@ declare namespace IPopup.State {
     profileCreate: {
       seed: string;
     };
+    modal: {
+      show: boolean;
+      res: () => void;
+      rej: () => void;
+      text: string;
+    }
   }
 
   export interface Profile {
