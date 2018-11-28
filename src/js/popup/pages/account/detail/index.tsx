@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, Route, Switch } from 'react-router-dom';
 import { css } from 'emotion';
 import styled from 'react-emotion';
 import CopyToClipboard = require('react-copy-to-clipboard');
@@ -10,23 +10,48 @@ import { getCurrentWallet } from 'popup/select';
 import ntx, { BCSign } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import { openUrlToTab, LinkTypes } from 'helpers/links';
+import { IPropsThemed } from 'config/theme';
 
 import TXList from './components/TXList';
 import Wallet from './components/Wallet';
+import { Tabs } from './components/Tabs';
 import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
 
-import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND, URL_ACCOUNT_ASSIGN } from 'constants/popupUrl';
+import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND, URL_ACCOUNT_ASSIGN, URL_ACCOUNT_DETAIL } from 'constants/popupUrl';
+
+const RESOURCES = 'resources';
 
 const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
   flex-grow: 1;
 `;
 
+const TabContainer = styled('div')`
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+`;
+
+const Tab = styled(Link)`
+  flex-grow: 1;
+  text-align: center;
+  padding: 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+
+  background: ${(props: IPropsThemed) => props.theme.colors.secondary};
+  :hover {
+    background: ${(props: IPropsThemed) => props.theme.colors.hint};
+  }
+  color: ${(props: IPropsThemed) => props.theme.colors.main};
+`;
+
 interface IProps extends RouteComponentProps {
   account: IWalletInfo;
 }
 
-class AccountInfo extends React.Component<IProps, any> {
+class AccountInfo extends React.Component<IProps, {}> {
   private bcMenuItems () {
     const { account } = this.props;
 
@@ -41,6 +66,26 @@ class AccountInfo extends React.Component<IProps, any> {
         );
       }
     }
+  }
+
+  private getTabs () {
+    const { account } = this.props;
+    const list = [];
+
+    switch (account.blockchain) {
+      case BCSign.EOS: {
+        list.push([
+          <Tab key="0" to={URL_ACCOUNT_DETAIL}>
+            Transactions
+          </Tab>,
+          <Tab key="1" to={`${URL_ACCOUNT_DETAIL}/${RESOURCES}`}>
+            Resources
+          </Tab>
+        ]);
+      }
+    }
+
+    return list ? <TabContainer>{list}</TabContainer> : null;
   }
 
   public handleOpenDetails = () => {
@@ -94,9 +139,17 @@ class AccountInfo extends React.Component<IProps, any> {
             </div>
           }
         />
-        <TXContainer>
-          <TXList account={account} />
-        </TXContainer>
+        {this.getTabs()}
+        <Route
+          exact
+          path={URL_ACCOUNT_DETAIL}
+          render={props => (
+            <TXContainer>
+              <TXList account={account} />
+            </TXContainer>
+          )}
+        />
+        <Route path={`${URL_ACCOUNT_DETAIL}/${RESOURCES}`} render={props => <div>resources</div>} />
       </React.Fragment>
     );
   }

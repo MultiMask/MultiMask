@@ -57,9 +57,10 @@ const routes = () => {
     <Switch>
       <AppRoute exact path={URL_MAIN} component={AccountList} layout={MainLayout} />
       <AppRoute exact path={URL_PASS_CREATE} component={PasswordCreate} layout={AuthLayout} />
-      <AppRoute exact path={URL_ACCOUNT_DETAIL} component={Details} layout={MainLayout} />
-      <AppRoute exact path={URL_ACCOUNT_QRCODE} component={QrCodeLink} layout={MainLayout} />
+
       {/* <AppRoute exact path="/account/exportpk" component={ExportPK} layout={MainLayout} needAuth /> */}
+      <AppRoute path={URL_ACCOUNT_DETAIL} component={Details} layout={MainLayout} />
+      <AppRoute exact path={URL_ACCOUNT_QRCODE} component={QrCodeLink} layout={MainLayout} />
       <AppRoute exact path={URL_ACCOUNT_SEND} component={Send} layout={MainLayout} />
       <AppRoute exact path={URL_ACCOUNT_SEND_RESULT_HASH} component={SendResult} layout={MainLayout} />
       <AppRoute exact path={`${URL_ACCOUNT_EDIT}/:id`} component={ChangeNetwork} layout={MainLayout} />
