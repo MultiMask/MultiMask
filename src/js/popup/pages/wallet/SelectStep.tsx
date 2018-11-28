@@ -1,9 +1,10 @@
 import * as React from 'react';
 import FormLayout from './FormLayout';
-import Select from '../../ui/Select';
+
+import { Select } from 'ui';
 
 class SelectStep extends React.Component<any, any> {
-  constructor(props) {
+  constructor (props) {
     super(props);
     const { options, selectedValue } = this.props;
     const item = selectedValue ? selectedValue : options[0];
@@ -12,7 +13,7 @@ class SelectStep extends React.Component<any, any> {
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount () {
     const { options, selectedValue, onChange } = this.props;
     if (!selectedValue) {
       onChange(options[0]);
@@ -24,7 +25,7 @@ class SelectStep extends React.Component<any, any> {
     this.props.onChange(event);
   };
 
-  public render() {
+  public render () {
     const { options, onChange, ...props } = this.props;
     const { selectedItem } = this.state;
     return (

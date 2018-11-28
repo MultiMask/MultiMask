@@ -9,10 +9,8 @@ import { theme } from './config/theme';
 
 import InternalMessage from 'services/InternalMessage';
 import { PROFILE_IMPORT_QRCODE } from 'constants/profile';
-import AuthForm from 'ui/components/NeedAuth/AuthForm';
 import { formToJson } from 'helpers/forms';
-import Button from 'ui/Button';
-import Typography from 'ui/Typography';
+import { Button, AuthForm, Typography } from 'ui';
 
 const Container = styled('div')`
   display: flex;
@@ -33,7 +31,7 @@ class ImportProfile extends React.Component<any, {}> {
     delay: 500,
     done: false
   };
-  public componentDidMount() {}
+  public componentDidMount () {}
   public handleScan = encryptedProfile => {
     if (encryptedProfile) {
       this.setState({
@@ -54,13 +52,11 @@ class ImportProfile extends React.Component<any, {}> {
         if (response.success) {
           this.setState({ done: true });
         }
-
-        console.log(response);
       });
   };
 
   public handleClose = () => {
-    chrome.tabs.getCurrent(function(tab) {
+    chrome.tabs.getCurrent(function (tab) {
       chrome.tabs.remove(tab.id);
     });
   };
@@ -69,7 +65,7 @@ class ImportProfile extends React.Component<any, {}> {
     console.error(err);
   };
 
-  public render() {
+  public render () {
     const { encryptedProfile, delay, done } = this.state;
     if (done) {
       return (

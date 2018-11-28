@@ -1,8 +1,7 @@
 import * as React from 'react';
-import TextField from '../../TextField';
-import Button from '../../Button';
-import Typography from '../../Typography';
 import { css } from 'emotion';
+
+import { TextField, Button, Typography } from '../.';
 
 const styles = {
   form: css`
@@ -18,7 +17,7 @@ const styles = {
   `
 };
 
-const AuthForm: React.SFC<any> = ({ handleSubmit, error, className }) => (
+export const AuthForm: React.SFC<any> = ({ handleSubmit, error, className }) => (
   <form onSubmit={handleSubmit} className={`${styles.form} ${className}`}>
     <Typography color="main" variant="subheading" align="center">
       Confirm password:

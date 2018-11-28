@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseSelect from 'react-select';
 import { withTheme } from 'emotion-theming';
 
-const Select = props => {
+const SelectComponent = props => {
   const { theme } = props;
 
   const customStyles = {
@@ -18,4 +18,5 @@ const Select = props => {
   return <BaseSelect styles={customStyles} {...props} />;
 };
 
-export default withTheme(Select);
+export const Select = withTheme(SelectComponent);
+export default Select;

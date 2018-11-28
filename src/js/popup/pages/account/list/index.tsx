@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { IWalletInfo } from 'types/accounts';
 
-import Icon from 'ui/components/Icon';
+import { BcIcon } from 'ui';
 import priceActions from 'popup/actions/prices';
 
 import Item from './item';
@@ -19,7 +19,7 @@ interface IProps extends IPropsActions {
 }
 
 class AccountList extends React.Component<IProps, {}> {
-  public render() {
+  public render () {
     const { getPrice, getPriceInBTC } = this.props;
 
     if (Array.isArray(this.props.accounts) && this.props.accounts.length) {
@@ -54,7 +54,7 @@ class AccountList extends React.Component<IProps, {}> {
     return (
       <div className="NoWallets">
         <div className="NoWallets-Icon">
-          <Icon className="Icon" type="no-wallets" size="xl" />
+          <BcIcon className="Icon" type="no-wallets" size="xl" />
         </div>
         <div className="NoWallets-Title">
           <span>No wallets</span>

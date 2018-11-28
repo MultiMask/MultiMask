@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import logo from 'img/logo.svg';
-import Typography from 'ui/Typography';
 import { Link } from 'react-router-dom';
 
-import Button from 'ui/Button';
+import { Button, Typography } from 'ui';
 import { URL_PROFILE_CREATE } from 'constants/popupUrl';
 
 const Header = styled('header')`

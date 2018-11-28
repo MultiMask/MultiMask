@@ -1,13 +1,12 @@
 import React from 'react';
 
-import Modal from 'ui/Modal';
-import Loading from 'ui/Loading';
+import { Modal, Loading } from './';
 
 interface IProps {
   show: boolean;
 }
 
-const Splash: React.SFC<IProps> = ({ show }) => {
+export const Splash: React.SFC<IProps> = ({ show }) => {
   return (
     <Modal show={show}>
       <Loading />

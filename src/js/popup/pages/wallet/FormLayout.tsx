@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import Button from '../../ui/Button';
-import Typography from '../../ui/Typography';
+
+import { Button, Typography } from 'ui';
 
 const FormLayout: React.SFC<any> = ({ children, title, onSubmit, onBack, submitButtonTitle, titleAlign }) => (
   <Container onSubmit={onSubmit}>

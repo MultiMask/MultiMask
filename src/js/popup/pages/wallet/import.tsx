@@ -13,7 +13,7 @@ import accountsActions from 'popup/actions/account';
 
 import { EosAccount } from './bcaccounts/eosAccount';
 import { EthAccount } from './bcaccounts/ethAccount';
-import Splash from 'ui/SplashLoading';
+import { Splash } from 'ui';
 
 const actions = {
   import: accountsActions.import

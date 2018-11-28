@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-import Button from '../popup/ui/Button';
-import DialogLayout from './../popup/layouts/DialogLayout';
+import { Button } from 'ui';
+import DialogLayout from 'popup/layouts/DialogLayout';
 
 export class SignEosTX extends React.Component<any, any> {
   public handleOnSubmit = () => {
@@ -15,7 +15,7 @@ export class SignEosTX extends React.Component<any, any> {
     window.close();
   };
 
-  public renderMessages() {
+  public renderMessages () {
     return this.props.prompt.data.messages.map((msg, idx) => {
       return (
         <Canvas key={idx}>
@@ -39,7 +39,7 @@ export class SignEosTX extends React.Component<any, any> {
     });
   }
 
-  public render() {
+  public render () {
     return (
       <DialogLayout>
         {this.renderMessages()}

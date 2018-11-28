@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 import logo from '../../../img/logo.svg';
-import Typography from '../ui/Typography';
+
+import { Typography } from 'ui';
 
 import { BaseContainer } from './BaseContainer';
 

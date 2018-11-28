@@ -3,8 +3,7 @@ import styled, { css } from 'react-emotion';
 
 import { IWalletInfo } from 'types/accounts';
 import Account from 'app/account';
-import Typography from 'ui/Typography';
-import Button from 'ui/Button';
+import { Button, Typography } from 'ui';
 
 interface IProps {
   data: IWalletInfo;
@@ -18,7 +17,7 @@ interface IState {
 }
 
 export class EthAccount extends React.Component<IProps, IState> {
-  public render() {
+  public render () {
     const { address, balance } = this.props.data.info;
 
     return (

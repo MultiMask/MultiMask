@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
-import Typography from 'ui/Typography';
-import Menu from 'ui/Menu';
-import MenuItem from 'ui/MenuItem';
-import BaseButton from 'ui/Button';
-import TextField from 'ui/TextField';
+import { ButtonBase, Menu, MenuItem, TextField, Typography } from 'ui';
 
 import profileActions from 'popup/actions/profile';
 import accountActions from 'popup/actions/account';
@@ -33,7 +29,7 @@ const Bottom = styled('div')`
   padding: 20px 0;
 `;
 
-const Button = styled(BaseButton)`
+const Button = styled(ButtonBase)`
   min-width: 80px;
 `;
 
@@ -78,7 +74,7 @@ class Profiles extends React.Component<IProps, IState> {
     profileName: ''
   };
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.props.getList();
   }
 
@@ -121,7 +117,7 @@ class Profiles extends React.Component<IProps, IState> {
     });
   };
 
-  get list() {
+  get list () {
     const { list, current } = this.props;
     const { editProfileId, profileName } = this.state;
 
@@ -172,7 +168,7 @@ class Profiles extends React.Component<IProps, IState> {
     });
   }
 
-  public render() {
+  public render () {
     return (
       <Wrapper>
         <List>{this.list}</List>

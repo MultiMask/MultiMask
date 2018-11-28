@@ -25,7 +25,7 @@ var alias = {
   libs: path.resolve(__dirname, 'src/js/libs'),
   models: path.resolve(__dirname, 'src/js/models'),
   services: path.resolve(__dirname, 'src/js/services'),
-  ui: path.resolve(__dirname, 'src/js/popup/ui'),
+  ui: path.resolve(__dirname, 'src/js/ui/index.ts'),
   app: path.resolve(__dirname, 'src/js/app'),
   popup: path.resolve(__dirname, 'src/js/popup'),
   prompt: path.resolve(__dirname, 'src/js/prompt'),

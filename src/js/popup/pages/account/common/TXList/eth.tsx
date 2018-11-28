@@ -2,9 +2,7 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import CopyToClipboard = require('react-copy-to-clipboard');
 
-import Typography from 'ui/Typography';
-import Icon from 'ui/Icon';
-import Notify from 'ui/Notify';
+import { Icon, Notify, Typography } from 'ui';
 
 import Web3 = require('web3');
 const web3 = new Web3();

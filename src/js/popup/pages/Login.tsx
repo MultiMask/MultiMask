@@ -2,12 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { css } from 'emotion';
+
 import authActions from 'popup/actions/auth';
 
-import TextField from 'ui/TextField';
-import Button from 'ui/Button';
-import Typography from 'ui/Typography';
-import Splash from 'ui/SplashLoading';
+import { Button, Splash, TextField, Typography } from 'ui';
 
 const styles = {
   textField: css`

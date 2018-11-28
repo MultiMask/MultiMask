@@ -1,5 +1,5 @@
 import * as React from 'react';
-import networks from './../../../blockchain';
+import networks from 'bcnetwork';
 import SelectStep from './SelectStep';
 
 export default class ChooseNetwork extends React.Component<any, any> {

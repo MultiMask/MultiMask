@@ -20,7 +20,7 @@ const MenuContainer = styled('div')`
   z-index: 1000;
 `;
 
-class Menu extends React.Component<any, any> {
+export class Menu extends React.Component<any, any> {
   private dropdownMenu;
 
   public state = {
@@ -45,7 +45,7 @@ class Menu extends React.Component<any, any> {
     });
   };
 
-  public render () {
+  public render() {
     const { className, name, children, iconProps } = this.props;
     return (
       <Root className={className}>

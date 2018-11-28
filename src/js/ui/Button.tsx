@@ -10,7 +10,7 @@ const dynamicStyle = props => css`
   box-shadow: ${props.outlined && 'none'};
 `;
 
-const ButtonBase = styled('button')`
+export const ButtonBase = styled('button')`
   outline: none;
   color: white;
   border-radius: 4px;
@@ -37,7 +37,7 @@ const LargeStyle = css`
   padding: 7px 25px;
 `;
 
-const Button: React.SFC<any> = ({ children, component: Component, componentProps, ...props }) => {
+export const Button: React.SFC<any> = ({ children, component: Component, componentProps, ...props }) => {
   if (Component) {
     return (
       <Component style={{ textDecoration: 'none' }} {...componentProps}>

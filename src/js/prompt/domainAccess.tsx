@@ -6,8 +6,7 @@ import DialogLayout from 'popup/layouts/DialogLayout';
 import { Prompt } from 'models/Prompt';
 import { processForm } from 'helpers/forms';
 
-import Icon from 'ui/components/Icon';
-import Button from 'ui/Button';
+import { Icon, Button } from 'ui';
 
 const INPUT_NAME = 'accounts';
 
@@ -62,7 +61,7 @@ export class DomainAccess extends React.Component<IProps, any> {
     window.close();
   };
 
-  public render() {
+  public render () {
     return (
       <DialogLayout>
         <Title>

@@ -2,21 +2,20 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Checkbox from '../../../popup/ui/Checkbox';
-import Select from '../../../popup/ui/Select';
-import Typography from '../../../popup/ui/Typography';
-import settingsActions from '../../actions/settings';
+
+import settingsActions from 'popup/actions/settings';
+import { Checkbox, Select, Typography } from 'ui';
 
 class Settings extends React.Component<any, any> {
   public onChangeCurrenciesDataProvider;
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.onChangeCurrenciesDataProvider = this.onChangeSelect.bind(this, 'price_provider');
   }
 
-  get selectedDataProvider() {
+  get selectedDataProvider () {
     const { settings } = this.props;
     const { price_providers = [] } = settings;
 
@@ -48,11 +47,11 @@ class Settings extends React.Component<any, any> {
     // }
   };
 
-  get debug() {
+  get debug () {
     return <pre>{JSON.stringify({ state: this.state, props: this.props }, null, 4)}</pre>;
   }
 
-  public render() {
+  public render () {
     const { settings } = this.props;
 
     return (

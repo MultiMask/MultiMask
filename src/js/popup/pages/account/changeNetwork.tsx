@@ -6,13 +6,11 @@ import { css } from 'emotion';
 import Wallet from './common/Wallet';
 import { withRouter } from 'react-router';
 
-import accountActions from '../../actions/account';
+import accountActions from 'popup/actions/account';
 import networks, { getBcNet } from 'bcnetwork';
-import { getCurrentWallet } from './../../select';
+import { getCurrentWallet } from 'popup/select';
 
-import Typography from 'ui/Typography';
-import Button from 'ui/Button';
-import Select from 'ui/Select';
+import { Button, Select, Typography } from 'ui';
 
 const Form = styled('form')`
   background-color: ${props => props.theme.colors.background};
@@ -48,7 +46,7 @@ interface ISelectOption {
 }
 
 class ChangeNetwork extends React.Component<any, any> {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -56,14 +54,14 @@ class ChangeNetwork extends React.Component<any, any> {
     };
   }
 
-  public componentDidMount () {
+  public componentDidMount() {
     const { account } = this.props;
 
     const currentSelectValue = getBcNet(account.blockchain, account.info.network);
     this.setState({ selectValue: { value: currentSelectValue.sign, label: currentSelectValue.name } });
   }
 
-  get options () {
+  get options() {
     const { account } = this.props;
     if (account) {
       return networks[account.blockchain].network.map(network => {
@@ -96,7 +94,7 @@ class ChangeNetwork extends React.Component<any, any> {
     this.setState({ selectValue: e });
   };
 
-  public render () {
+  public render() {
     const { account, settings } = this.props;
     const { selectValue } = this.state;
 

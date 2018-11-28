@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { withRouter, RouteComponentProps } from 'react-router';
 
-import Typography from 'ui/Typography';
-import SeedView from 'ui/SeedView';
-
+import { SeedView, Typography } from 'ui';
 import profileActions from 'popup/actions/profile';
 
 const actions = {

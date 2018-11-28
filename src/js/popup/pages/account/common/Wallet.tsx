@@ -7,8 +7,7 @@ import { bindActionCreators } from 'redux';
 
 import priceActions from '../../../actions/prices';
 
-import Icon from '../../../ui/components/Icon';
-import Typography from '../../../ui/Typography';
+import { BcIcon, Typography } from 'ui';
 
 const WalletContainer = styled('div')`
   padding: 10px 20px;
@@ -37,7 +36,7 @@ const Sing = styled('div')`
 `;
 
 class Wallet extends React.Component<any, any> {
-  public render() {
+  public render () {
     const {
       data: {
         info: { address, balance, network },
@@ -52,7 +51,7 @@ class Wallet extends React.Component<any, any> {
     return (
       <WalletContainer className="item">
         <WalletHeader>
-          <Icon type={blockchain} size="s" />
+          <BcIcon type={blockchain} size="s" />
           <Typography
             className={css`
               padding: 0 12px;

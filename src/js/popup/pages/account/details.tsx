@@ -12,11 +12,7 @@ import { openUrlToTab, LinkTypes } from 'helpers/links';
 
 import TXList from './common/TXList';
 import Wallet from './common/Wallet';
-import Menu from 'ui/Menu';
-import MenuItem from 'ui/MenuItem';
-import Button from 'ui/Button';
-import Icon from 'ui/Icon';
-import Notify from 'ui/Notify';
+import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
 
 const TXContainer = styled('div')`
   background-color: ${props => props.theme.colors.background};
