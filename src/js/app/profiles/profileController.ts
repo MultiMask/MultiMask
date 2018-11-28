@@ -20,7 +20,7 @@ export class ProfileController {
 
   private accountController: AccountController;
 
-  constructor(opts) {
+  constructor (opts) {
     this.accessController = opts.accessController;
     this.busController = opts.busController;
     this.messageController = opts.messageController;
@@ -34,7 +34,7 @@ export class ProfileController {
   /**
    * Messages
    */
-  private startListening() {
+  private startListening () {
     this.messageController.on(ACCOUNT_CREATE, this.responseAddAccount);
     this.messageController.on(ACCOUNT_IMPORT, this.responseImportAccount);
     this.messageController.on(PROFILE_GET_SEED, this.responseGetProfileSeed);
@@ -105,7 +105,7 @@ export class ProfileController {
   /**
    * Update accounts and keys
    */
-  private updateKeysAndAccounts() {
+  private updateKeysAndAccounts () {
     const profileData = this.profile.getKeysAndAccounts();
 
     this.keyController.assignKeys(profileData.keys);
@@ -128,7 +128,7 @@ export class ProfileController {
    * Save profile in storage
    * @param profile
    */
-  public save(profile: Profile) {
+  public save (profile: Profile) {
     const encodedProfile = profile.getEncodedData(this.accessController.encode);
 
     return StorageService.Entities.set(encodedProfile.id, encodedProfile);
@@ -139,7 +139,7 @@ export class ProfileController {
    * @param id
    * @param name
    */
-  public updateName(id: string, name: string) {
+  public updateName (id: string, name: string) {
     if (id === this.profile.id) {
       this.profile.name = name;
     }
@@ -154,7 +154,7 @@ export class ProfileController {
   /**
    * Unload profile from memory
    */
-  public clear() {
+  public clear () {
     this.accountController.clearList();
     this.keyController.clear();
 
@@ -165,7 +165,7 @@ export class ProfileController {
    * Return encrypted profile
    * @param id
    */
-  public export(id: string): Promise<string> {
+  public export (id: string): Promise<string> {
     return StorageService.Entities.get(id).then(profileData => {
       const profile = Profile.fromJSON(profileData);
       profile.decode(this.accessController.decode);
