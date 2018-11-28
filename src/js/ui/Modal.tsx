@@ -3,10 +3,25 @@ import styled from 'react-emotion';
 
 import { IPropsThemed } from 'config/theme';
 
+export const ModalWrap = styled('div')`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ModalContent = styled('div')`
+  width: 80%;
+  box-sizing: border-box;
+  padding: 10px;
+
+  background: white;
+  border: 1px solid ${(props: IPropsThemed) => props.theme.colors.secondary};
+`;
+
 interface IProps extends IPropsThemed {
   show: boolean;
 }
-
 /**
  * Create Modal element
  */
@@ -20,5 +35,3 @@ export const Modal = styled('div')`
 
   display: ${(props: IProps) => (props.show ? 'block' : 'none')};
 `;
-
-export default Modal;

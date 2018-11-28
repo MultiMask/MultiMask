@@ -8,6 +8,7 @@ import { ButtonBase, Menu, MenuItem, TextField, Typography } from 'ui';
 
 import profileActions from 'popup/actions/profile';
 import accountActions from 'popup/actions/account';
+import modalActions from 'popup/actions/ui/modal';
 import { URL_PROFILE_IMPORT } from 'constants/popupUrl';
 
 const Wrapper = styled('div')`
@@ -53,6 +54,7 @@ const ItemDescription = styled(Typography)`
 
 const actions = {
   ...profileActions,
+  ...modalActions,
   getInfo: accountActions.getInfo
 };
 type IPropsActions = Actions<typeof actions>;
@@ -83,7 +85,9 @@ class Profiles extends React.Component<IProps, IState> {
   };
 
   public onRemove = id => {
-    this.props.remove(id);
+    this.props.openModal().then(() => {
+      this.props.remove(id);
+    });
   };
 
   public onExport = id => {

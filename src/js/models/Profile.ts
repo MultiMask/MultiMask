@@ -28,17 +28,17 @@ export class Profile {
   public version = 0x0;
   public chains: IProfileChain[] = [];
 
-  constructor(seed: string) {
+  constructor (seed: string) {
     this.name = 'Default name';
     this.seed = seed;
     this.id = Randomizer.hex();
   }
 
-  public isEncoded(): boolean {
+  public isEncoded (): boolean {
     return !isSeed(this.seed);
   }
 
-  public decode(decodeFn: (payload) => any) {
+  public decode (decodeFn: (payload) => any) {
     if (this.isEncoded) {
       this.seed = decodeFn(this.seed);
 
@@ -52,7 +52,7 @@ export class Profile {
     }
   }
 
-  public getEncodedData(encodeFn: (payload) => string) {
+  public getEncodedData (encodeFn: (payload) => string) {
     const clone = cloneDeep(this);
     clone.seed = encodeFn(clone.seed);
 
@@ -67,14 +67,14 @@ export class Profile {
     return toJSON(clone);
   }
 
-  public getKeysAndAccounts(): IProfileData {
+  public getKeysAndAccounts (): IProfileData {
     return {
       keys: this.getKeys(),
       accounts: this.getAccounts()
     };
   }
 
-  private getAccounts(): IAccountKeyData[] {
+  private getAccounts (): IAccountKeyData[] {
     return this.chains.reduce((accounts, chain) => {
       chain.wallets.forEach(wallet => {
         accounts.push({
@@ -88,7 +88,7 @@ export class Profile {
     }, []);
   }
 
-  private getKeys() {
+  private getKeys () {
     const keys = {
       master: this.seed,
       seed: {},
@@ -112,7 +112,7 @@ export class Profile {
    * Add new Wallet into profile
    * @param bc
    */
-  public addWallet(bc: BCSign, pk?: string) {
+  public addWallet (bc: BCSign, pk?: string) {
     const chain = this.chains.find(ch => ch.id === bc);
     const idx = this.getNewIndex(bc);
     const idxImport = !isSeed(pk) ? `00${pk}` : `01${stringToHex(pk)}`;
@@ -137,7 +137,7 @@ export class Profile {
    * @param key
    * @param payload
    */
-  public updateWallet(key, payload) {
+  public updateWallet (key, payload) {
     if (payload.data) {
       delete payload.data;
     }
@@ -153,7 +153,7 @@ export class Profile {
    * Find max index in one chain to generate new wallet
    * @param bc
    */
-  private getNewIndex(bc: BCSign) {
+  private getNewIndex (bc: BCSign) {
     const chain = this.chains.find(ch => ch.id === bc);
 
     if (!chain) {
@@ -171,7 +171,7 @@ export class Profile {
    * Restore instance from json
    * @param data
    */
-  public static fromJSON(data): Profile {
+  public static fromJSON (data): Profile {
     return Object.assign(new Profile(''), data);
   }
 }

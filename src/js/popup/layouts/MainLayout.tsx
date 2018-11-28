@@ -10,9 +10,10 @@ import FontAwesome from 'react-fontawesome';
 import authAction from 'popup/actions/auth';
 import routingActions from 'popup/actions/routing';
 import settingsActions from 'popup/actions/settings';
+import modalActions from 'popup/actions/ui/modal';
 
 import { BaseContainer } from './BaseContainer';
-import { Menu, MenuItem, Icon, NeedAuth, Typography } from 'ui';
+import { Menu, MenuItem, Icon, NeedAuth, Typography, Modal, Button, ButtonsLine, ModalContent, ModalWrap } from 'ui';
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -53,7 +54,15 @@ const styles = {
   `
 };
 
-const MainLayout = props => {
+const actions = { ...authAction, ...routingActions, ...settingsActions, ...modalActions };
+type IPropsActions = Actions<typeof actions>;
+interface IProps extends IPropsActions {
+  needAuth: boolean;
+  location: any;
+  showModal: boolean;
+}
+
+const MainLayout: React.SFC<IProps> = props => {
   const {
     logout,
     children,
@@ -61,7 +70,10 @@ const MainLayout = props => {
     goMain,
     needAuth,
     location: { pathname },
-    openDomainControl
+    openDomainControl,
+    showModal,
+    cancelModal,
+    confirmModal
   } = props;
 
   return (
@@ -95,11 +107,28 @@ const MainLayout = props => {
         )}
       </Header>
       {needAuth ? <NeedAuth>{children}</NeedAuth> : children}
+      <Modal show={showModal}>
+        <ModalWrap>
+          <ModalContent>
+            <Typography align="center" variant="title" color="primary">
+              Are you sure?
+            </Typography>
+            <ButtonsLine>
+              <Button outlined onClick={cancelModal}>
+                Cancel
+              </Button>
+              <Button onClick={confirmModal}>Confirm</Button>
+            </ButtonsLine>
+          </ModalContent>
+        </ModalWrap>
+      </Modal>
     </Container>
   );
 };
 
 export default withRouter(connect(
-  null,
-  dispatch => bindActionCreators({ ...authAction, ...routingActions, ...settingsActions }, dispatch)
-)(MainLayout) as any);
+  (state: IPopup.AppState) => ({
+    showModal: state.ui.modal.show
+  }),
+  actions
+)(MainLayout as any) as any);
