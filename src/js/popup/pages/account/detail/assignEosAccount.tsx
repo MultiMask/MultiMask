@@ -4,10 +4,10 @@ import { withRouter } from 'react-router';
 import styled from 'react-emotion';
 import { css } from 'emotion';
 
+import Wallet from './components/Wallet';
 import { IWalletInfo } from 'types/accounts';
 import { getCurrentWallet } from 'popup/select';
 import { eosActions } from 'popup/actions/eos';
-import Wallet from './common/Wallet';
 
 import { EosAccount } from '../create/bcaccounts/eosAccount';
 

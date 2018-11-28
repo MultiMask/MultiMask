@@ -7,7 +7,7 @@ import txActions from 'popup/actions/tx';
 import priceActions from 'popup/actions/prices';
 import { getCurrentWallet } from 'popup/select';
 
-import Wallet from './common/Wallet';
+import Wallet from './components/Wallet';
 import { IWalletInfo } from 'types/accounts';
 import { getTotalGas } from 'helpers/eth';
 import { Button, TextField, Typography } from 'ui';

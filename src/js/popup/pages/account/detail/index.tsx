@@ -11,8 +11,8 @@ import ntx, { BCSign } from 'bcnetwork';
 import { IWalletInfo } from 'types/accounts';
 import { openUrlToTab, LinkTypes } from 'helpers/links';
 
-import TXList from './common/TXList';
-import Wallet from './common/Wallet';
+import TXList from './components/TXList';
+import Wallet from './components/Wallet';
 import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
 
 import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND, URL_ACCOUNT_ASSIGN } from 'constants/popupUrl';

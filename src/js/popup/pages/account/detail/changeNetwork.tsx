@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled from 'react-emotion';
 import { css } from 'emotion';
-import Wallet from './common/Wallet';
 import { withRouter } from 'react-router';
 
+import Wallet from './components/Wallet';
 import accountActions from 'popup/actions/account';
 import networks, { getBcNet } from 'bcnetwork';
 import { getCurrentWallet } from 'popup/select';
@@ -46,7 +46,7 @@ interface ISelectOption {
 }
 
 class ChangeNetwork extends React.Component<any, any> {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -54,14 +54,14 @@ class ChangeNetwork extends React.Component<any, any> {
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount () {
     const { account } = this.props;
 
     const currentSelectValue = getBcNet(account.blockchain, account.info.network);
     this.setState({ selectValue: { value: currentSelectValue.sign, label: currentSelectValue.name } });
   }
 
-  get options() {
+  get options () {
     const { account } = this.props;
     if (account) {
       return networks[account.blockchain].network.map(network => {
@@ -94,7 +94,7 @@ class ChangeNetwork extends React.Component<any, any> {
     this.setState({ selectValue: e });
   };
 
-  public render() {
+  public render () {
     const { account, settings } = this.props;
     const { selectValue } = this.state;
 
