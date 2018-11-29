@@ -162,9 +162,11 @@ export class ProfileListController extends EventEmitter {
    * Import file profile
    */
   private responseImport = (sendResponse: InternalResponseFn, { payload: { pass, encryptedProfile } }) => {
-    const rawProfile = JSON.parse(this.accessController.decodeWithPassword(encryptedProfile, pass));
+    const data: string = this.accessController.decodeWithPassword(encryptedProfile, pass);
+    const idx = data.lastIndexOf('}') + 1,
+      rawProfile = JSON.parse(data.substr(0, idx));
+    
     const profile = Profile.fromJSON(rawProfile);
-
     this.addProfile(profile);
 
     this.responseGetList(sendResponse);

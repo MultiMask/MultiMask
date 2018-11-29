@@ -141,6 +141,6 @@ export class AccessController {
     return decode(this.password, data);
   };
   public decodeWithPassword = (data: string, password: string): any => {
-    return JSON.parse(decode(password, data));
+    return decode(password, data);
   };
 }
