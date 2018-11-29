@@ -21,7 +21,7 @@ export class EosWallet implements IWallet {
 
   public accountPermission: IEosAccountPermission;
 
-  public changeNetwork(network: INetwork): void {
+  public changeNetwork (network: INetwork): void {
     const net = findNetwork(network);
 
     if (net) {
@@ -33,7 +33,7 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public create(pk: BIP32 | string, network?: INetwork) {
+  public create (pk: BIP32 | string, network?: INetwork) {
     if (network) {
       this.network = network;
     }
@@ -61,17 +61,17 @@ export class EosWallet implements IWallet {
       });
   }
 
-  public getKeyAccounts() {
+  public getKeyAccounts () {
     return this.eos.getKeyAccounts({ public_key: this.public }).then(({ account_names }) => {
       return Promise.all(account_names.map(name => this._getInfoByAccount(name)));
     });
   }
 
-  private _getInfoByAccount(accountName: string) {
+  private _getInfoByAccount (accountName: string) {
     return this.eos.getAccount(accountName);
   }
 
-  public getInfo(): Promise<any> {
+  public getInfo (): Promise<any> {
     if (this.accountPermission) {
       return Promise.all([
         this._getInfoByAccount(this.accountPermission.account_name),
@@ -82,6 +82,7 @@ export class EosWallet implements IWallet {
             address: this.accountPermission.account_name,
             balance: info.core_liquid_balance.split(' ')[0],
             network: this.network.sign,
+            raw: info,
             txs: data.transactions
           };
         })
@@ -103,7 +104,7 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public getAddress() {
+  public getAddress () {
     if (this.accountPermission) {
       return this.accountPermission.account_name;
     }
@@ -111,7 +112,7 @@ export class EosWallet implements IWallet {
     return this.public;
   }
 
-  public setExtra(data: any) {
+  public setExtra (data: any) {
     if (data) {
       const [account_name, permission] = parsePrettyAccount(data);
       this.accountPermission = {
@@ -123,7 +124,7 @@ export class EosWallet implements IWallet {
     }
   }
 
-  public sendCoins({ to, amount, data, token = 'EOS' }) {
+  public sendCoins ({ to, amount, data, token = 'EOS' }) {
     if (this.accountPermission) {
       return this.eos.transfer(this.accountPermission.account_name, to, `${amount.toFixed(4)} ${token}`, data);
     }

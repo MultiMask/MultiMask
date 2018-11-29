@@ -14,7 +14,7 @@ import { IPropsThemed } from 'config/theme';
 
 import TXList from './components/TXList';
 import Wallet from './components/Wallet';
-import { Tabs } from './components/Tabs';
+import { Resources } from './components/Resources';
 import { Button, Icon, Notify, Menu, MenuItem } from 'ui';
 
 import { URL_ACCOUNT_QRCODE, URL_ACCOUNT_SEND, URL_ACCOUNT_ASSIGN, URL_ACCOUNT_DETAIL } from 'constants/popupUrl';
@@ -52,7 +52,7 @@ interface IProps extends RouteComponentProps {
 }
 
 class AccountInfo extends React.Component<IProps, {}> {
-  private bcMenuItems () {
+  private bcMenuItems() {
     const { account } = this.props;
 
     switch (account.blockchain) {
@@ -68,7 +68,7 @@ class AccountInfo extends React.Component<IProps, {}> {
     }
   }
 
-  private getTabs () {
+  private getTabs() {
     const { account } = this.props;
     const list = [];
 
@@ -95,7 +95,7 @@ class AccountInfo extends React.Component<IProps, {}> {
     openUrlToTab(account, account.info.address, type);
   };
 
-  public render () {
+  public render() {
     const { account } = this.props;
     return (
       <React.Fragment>
@@ -149,7 +149,7 @@ class AccountInfo extends React.Component<IProps, {}> {
             </TXContainer>
           )}
         />
-        <Route path={`${URL_ACCOUNT_DETAIL}/${RESOURCES}`} render={props => <div>resources</div>} />
+        <Route path={`${URL_ACCOUNT_DETAIL}/${RESOURCES}`} render={props => <Resources account={account} />} />
       </React.Fragment>
     );
   }
